@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library - Micronesian Teachers Digital Library</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-navy: #1e3a8a;
+            --secondary-gold: #d97706;
+            --accent-burgundy: #7c2d12;
+            --neutral-gray: #6b7280;
+            --light-gray: #f8fafc;
+            --cream: #fefdf8;
+        }
+        
+        /* Theme 2 - Forest Academic */
+        [data-theme="forest"] {
+            --primary-navy: #14532d;
+            --secondary-gold: #84cc16;
+            --accent-burgundy: #365314;
+            --neutral-gray: #6b7280;
+            --light-gray: #f0fdf4;
+            --cream: #f7fee7;
+        }
+        
+        /* Theme 3 - Royal Purple */
+        [data-theme="royal"] {
+            --primary-navy: #581c87;
+            --secondary-gold: #facc15;
+            --accent-burgundy: #86198f;
+            --neutral-gray: #6b7280;
+            --light-gray: #faf5ff;
+            --cream: #fdf4ff;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: var(--cream);
+            color: #374151;
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            padding-top: 140px;
+            transition: all 0.3s ease;
+        }
+        
+        .page-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .serif-font {
+            font-family: 'Crimson Text', serif;
+        }
+
+        /* Sticky Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary-navy);
+            color: white;
+            padding: 0.75rem 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(30, 58, 138, 0.15);
+            height: 54px;
+            box-sizing: border-box;
+        }
+        
+        .top-bar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .library-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+        
+        .login-btn {
+            background: var(--secondary-gold);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid var(--secondary-gold);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background: transparent;
+            color: var(--secondary-gold);
+            border-color: var(--secondary-gold);
+        }
+
+        /* Theme Switcher Styles */
+        .theme-switcher-compact {
+            position: relative;
+        }
+
+        .theme-btn {
+            background: var(--secondary-gold);
+            color: white;
+            border: 2px solid var(--secondary-gold);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background: transparent;
+            color: var(--secondary-gold);
+        }
+
+        .theme-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 2px solid var(--primary-navy);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-top: 0.5rem;
+            display: none;
+            min-width: 180px;
+            z-index: 1002;
+        }
+
+        .theme-dropdown.active {
+            display: block;
+        }
+
+        .theme-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Source Sans Pro', sans-serif;
+            color: var(--neutral-gray);
+            font-weight: 500;
+        }
+
+        .theme-item:hover {
+            background: var(--light-gray);
+            color: var(--primary-navy);
+        }
+
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Sticky Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            top: 54px;
+            left: 0;
+            right: 0;
+            background: white;
+            border-bottom: 2px solid var(--primary-navy);
+            z-index: 999;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 86px;
+            box-sizing: border-box;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: var(--primary-navy);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--light-gray);
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-navy);
+            color: white;
+            border-color: var(--primary-navy);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 0.5rem 0;
+            min-width: 200px;
+            z-index: 1001;
+            display: none;
+            margin-top: 0.5rem;
+            border: 2px solid var(--primary-navy);
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--neutral-gray);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .dropdown-item:hover {
+            background: var(--light-gray);
+            color: var(--primary-navy);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .switch-container {
+            display: flex;
+            background: var(--light-gray);
+            border-radius: 0.5rem;
+            padding: 4px;
+            border: 2px solid var(--primary-navy);
+        }
+
+        .switch-option {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--primary-navy);
+            font-size: 0.95rem;
+            text-decoration: none;
+        }
+
+        .switch-option.active {
+            background: var(--primary-navy);
+            color: white;
+            box-shadow: 0 2px 4px rgba(30, 58, 138, 0.3);
+        }
+
+        .search-toggle {
+            background: var(--light-gray);
+            border: 2px solid var(--neutral-gray);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--neutral-gray);
+            font-weight: 600;
+        }
+
+        .search-toggle:hover {
+            border-color: var(--primary-navy);
+            color: var(--primary-navy);
+        }
+
+        .search-box {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 2px solid var(--primary-navy);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 320px;
+            margin-top: 0.5rem;
+        }
+
+        .search-box.active {
+            display: block;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--neutral-gray);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-navy);
+            outline: none;
+        }
+
+        /* Landing Bar */
+        .landing-bar {
+            background: white;
+            border-bottom: 3px solid var(--secondary-gold);
+            padding: 2rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .landing-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin: 0;
+            font-family: 'Crimson Text', serif;
+        }
+
+        .customer-logos {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo-item {
+            width: 60px;
+            height: 60px;
+            background: var(--light-gray);
+            border: 2px solid var(--neutral-gray);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-navy);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .logo-item:hover {
+            border-color: var(--primary-navy);
+            background: var(--primary-navy);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: grid;
+            grid-template-columns: 25% 75%;
+            gap: 2rem;
+        }
+
+        /* 25% Filter Block */
+        .filter-block {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .search-section {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--secondary-gold);
+        }
+
+        .search-input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input-main {
+            flex: 1;
+            padding: 0.875rem;
+            border: 2px solid var(--neutral-gray);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        .search-input-main:focus {
+            outline: none;
+            border-color: var(--primary-navy);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .search-btn-main {
+            padding: 0.875rem 1.25rem;
+            background: var(--primary-navy);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .search-btn-main:hover {
+            background: var(--accent-burgundy);
+            transform: translateY(-1px);
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--secondary-gold);
+        }
+
+        .filter-title {
+            color: var(--primary-navy);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-category {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 1rem;
+        }
+
+        .filter-category:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .filter-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary-navy);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .filter-header:hover {
+            color: var(--accent-burgundy);
+        }
+
+        .filter-options {
+            display: none;
+            padding: 0.5rem 0;
+        }
+
+        .filter-options.active {
+            display: block;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--neutral-gray);
+        }
+
+        .filter-option:hover {
+            color: var(--primary-navy);
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-navy);
+        }
+
+        /* 75% Content Block */
+        .content-block {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 6px solid var(--primary-navy);
+        }
+
+        .sorting-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-gold);
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .sort-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--light-gray);
+            border: 2px solid var(--neutral-gray);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--neutral-gray);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .sort-btn:hover {
+            border-color: var(--primary-navy);
+            color: var(--primary-navy);
+        }
+
+        .sort-btn.active {
+            background: var(--primary-navy);
+            color: white;
+            border-color: var(--primary-navy);
+        }
+
+        .results-count {
+            color: var(--neutral-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .resource-item {
+            background: var(--light-gray);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .resource-item:hover {
+            border-color: var(--secondary-gold);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .resource-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .resource-thumbnail {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .thumbnail-placeholder {
+            width: 70px;
+            height: 90px;
+            background: var(--primary-navy);
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 8px rgba(30, 58, 138, 0.3);
+        }
+
+        .resource-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .resource-title {
+            color: var(--primary-navy);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            font-family: 'Crimson Text', serif;
+        }
+
+        .resource-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            color: var(--neutral-gray);
+            font-size: 0.9rem;
+        }
+
+        .resource-meta span {
+            position: relative;
+        }
+
+        .resource-meta span:not(:last-child)::after {
+            content: '•';
+            position: absolute;
+            right: -0.6rem;
+            color: var(--secondary-gold);
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .expand-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--secondary-gold);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .expand-btn:hover {
+            background: var(--accent-burgundy);
+            transform: scale(1.1);
+        }
+
+        .expand-btn.expanded i {
+            transform: rotate(45deg);
+        }
+
+        .view-btn {
+            padding: 0.5rem 1.5rem;
+            background: var(--primary-navy);
+            color: white;
+            border: 2px solid var(--primary-navy);
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .view-btn:hover {
+            background: transparent;
+            color: var(--primary-navy);
+            transform: translateY(-1px);
+        }
+
+        .resource-description {
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--secondary-gold);
+            font-style: italic;
+            color: var(--neutral-gray);
+            line-height: 1.6;
+        }
+
+        .resource-description p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .content-section {
+            margin-bottom: 3rem;
+        }
+
+        .content-section h2 {
+            color: var(--primary-navy);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--secondary-gold);
+            font-family: 'Crimson Text', serif;
+        }
+
+        .content-section p {
+            line-height: 1.8;
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        /* 25% Sidebar Block */
+        .sidebar-block {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--secondary-gold);
+        }
+
+        .sidebar-card h3 {
+            color: var(--primary-navy);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-links,
+        .contributors-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .section-links li,
+        .contributors-list li {
+            margin: 0.5rem 0;
+        }
+
+        .section-links a,
+        .contributors-list a {
+            color: var(--neutral-gray);
+            text-decoration: none;
+            padding: 0.75rem 0;
+            display: block;
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .section-links a:hover,
+        .contributors-list a:hover {
+            color: var(--primary-navy);
+            padding-left: 0.5rem;
+        }
+
+        .contributors-list li {
+            font-size: 0.95rem;
+        }
+
+        .contributors-list a {
+            color: var(--accent-burgundy);
+        }
+
+        .contributors-list a:hover {
+            color: var(--primary-navy);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-navy);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+            position: relative;
+            z-index: 10;
+            clear: both;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--secondary-gold);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--secondary-gold);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .landing-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .customer-logos {
+                justify-content: center;
+            }
+            
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-right {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .search-box {
+                position: static;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .content-block {
+                padding: 1.5rem;
+            }
+            
+            .sidebar-card {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <h1 class="library-name">Micronesian Teachers Digital Library</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="theme-switcher-compact">
+                    <button class="theme-btn" onclick="toggleThemeDropdown(event)">
+                        <i class="fas fa-palette"></i>
+                    </button>
+                    <div class="theme-dropdown" id="themeDropdown">
+                        <button class="theme-item" onclick="applyTheme('default')">
+                            <span class="color-dot" style="background: linear-gradient(135deg, #1e3a8a, #7c2d12);"></span>
+                            <span>Classic Navy</span>
+                        </button>
+                        <button class="theme-item" onclick="applyTheme('forest')">
+                            <span class="color-dot" style="background: linear-gradient(135deg, #14532d, #365314);"></span>
+                            <span>Forest Academic</span>
+                        </button>
+                        <button class="theme-item" onclick="applyTheme('royal')">
+                            <span class="color-dot" style="background: linear-gradient(135deg, #581c87, #86198f);"></span>
+                            <span>Royal Purple</span>
+                        </button>
+                    </div>
+                </div>
+            <a href="login.html" class="login-btn">
+                <i class="fas fa-user"></i>
+                <span>Login</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Sticky Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-content">
+            <!-- Navigation Menu -->
+            <nav class="nav-menu">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link" onclick="toggleDropdown(event, 'resources')">
+                        <i class="fas fa-book"></i>
+                        <span>Resources</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu" id="resources-dropdown">
+                        <a href="#" class="dropdown-item">Teaching Materials</a>
+                        <a href="#" class="dropdown-item">Research Papers</a>
+                        <a href="#" class="dropdown-item">Lesson Plans</a>
+                        <a href="#" class="dropdown-item">Assessment Tools</a>
+                        <a href="#" class="dropdown-item">Multimedia Content</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link" onclick="toggleDropdown(event, 'subjects')">
+                        <i class="fas fa-flask"></i>
+                        <span>Subjects</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu" id="subjects-dropdown">
+                        <a href="#" class="dropdown-item">Marine Biology</a>
+                        <a href="#" class="dropdown-item">Environmental Science</a>
+                        <a href="#" class="dropdown-item">Chemistry</a>
+                        <a href="#" class="dropdown-item">Physics</a>
+                        <a href="#" class="dropdown-item">Mathematics</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link" onclick="toggleDropdown(event, 'grades')">
+                        <i class="fas fa-star"></i>
+                        <span>Grade Levels</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu" id="grades-dropdown">
+                        <a href="#" class="dropdown-item">Elementary (K-5)</a>
+                        <a href="#" class="dropdown-item">Middle School (6-8)</a>
+                        <a href="#" class="dropdown-item">High School (9-12)</a>
+                        <a href="#" class="dropdown-item">College/University</a>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="nav-right">
+                <div class="page-switch">
+                    <div class="switch-container">
+                        <a href="index.html" class="switch-option">Resource Guide</a>
+                        <a href="library.html" class="switch-option active">Resource Library</a>
+                    </div>
+                </div>
+                <div style="position: relative;">
+                    <button class="search-toggle" onclick="toggleSearch()">
+                        <i class="fas fa-search"></i>
+                        <span>Search</span>
+                    </button>
+                    <div class="search-box" id="searchBox">
+                        <input type="text" class="search-input" placeholder="Search resources...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Landing Bar -->
+    <div class="landing-bar">
+        <div class="landing-content">
+            <h1 class="page-title">Digital Library Collection</h1>
+            <div class="customer-logos">
+                <div class="logo-item" title="University of Guam">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="logo-item" title="College of Micronesia">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="logo-item" title="Palau Community College">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="logo-item" title="Pacific Research Institute">
+                    <i class="fas fa-microscope"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="main-container">
+        <!-- 25% Filter Block -->
+        <div class="filter-block">
+            <!-- Keyword Search -->
+            <div class="search-section">
+                <div class="search-input-container">
+                    <input type="text" class="search-input-main" placeholder="Search for resources..." id="keywordSearch">
+                    <button class="search-btn-main">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Results -->
+            <div class="filter-section">
+                <h3 class="filter-title">
+                    <i class="fas fa-filter"></i>
+                    FILTER RESULTS
+                </h3>
+
+                <!-- Subject Area Filter -->
+                <div class="filter-category">
+                    <button class="filter-header" onclick="toggleFilter('subject')">
+                        <span>Subject Area</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-options" id="subject-filter">
+                        <label class="filter-option">
+                            <input type="checkbox" name="subject" value="marine-biology">
+                            <span>Marine Biology</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="subject" value="environmental-science">
+                            <span>Environmental Science</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="subject" value="mathematics">
+                            <span>Mathematics</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="subject" value="language-arts">
+                            <span>Language Arts</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="subject" value="social-studies">
+                            <span>Social Studies</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Grade Level Filter -->
+                <div class="filter-category">
+                    <button class="filter-header" onclick="toggleFilter('grade')">
+                        <span>Grade Level</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-options" id="grade-filter">
+                        <label class="filter-option">
+                            <input type="checkbox" name="grade" value="elementary">
+                            <span>Elementary (K-5)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="grade" value="middle">
+                            <span>Middle School (6-8)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="grade" value="high">
+                            <span>High School (9-12)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="grade" value="higher">
+                            <span>Higher Education</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Resource Type Filter -->
+                <div class="filter-category">
+                    <button class="filter-header" onclick="toggleFilter('type')">
+                        <span>Resource Type</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-options" id="type-filter">
+                        <label class="filter-option">
+                            <input type="checkbox" name="type" value="textbook">
+                            <span>Textbook</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="type" value="research-paper">
+                            <span>Research Paper</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="type" value="lesson-plan">
+                            <span>Lesson Plan</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="type" value="multimedia">
+                            <span>Multimedia</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Language Filter -->
+                <div class="filter-category">
+                    <button class="filter-header" onclick="toggleFilter('language')">
+                        <span>Language</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-options" id="language-filter">
+                        <label class="filter-option">
+                            <input type="checkbox" name="language" value="english">
+                            <span>English</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="language" value="chuukese">
+                            <span>Chuukese</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="language" value="pohnpeian">
+                            <span>Pohnpeian</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="language" value="yapese">
+                            <span>Yapese</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Publication Year Filter -->
+                <div class="filter-category">
+                    <button class="filter-header" onclick="toggleFilter('year')">
+                        <span>Publication Year</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-options" id="year-filter">
+                        <label class="filter-option">
+                            <input type="checkbox" name="year" value="2020-2024">
+                            <span>2020-2024</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="year" value="2015-2019">
+                            <span>2015-2019</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="year" value="2010-2014">
+                            <span>2010-2014</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="year" value="before-2010">
+                            <span>Before 2010</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 75% Content Block -->
+        <div class="content-block">
+            <!-- Sorting Options -->
+            <div class="sorting-section">
+                <div class="sort-options">
+                    <button class="sort-btn active" onclick="sortResults('alphabetical')">
+                        <i class="fas fa-sort-alpha-down"></i>
+                        ALPHABETICAL ORDER
+                    </button>
+                    <button class="sort-btn" onclick="sortResults('chronological')">
+                        <i class="fas fa-sort-numeric-down"></i>
+                        CHRONOLOGICAL ORDER
+                    </button>
+                </div>
+                <div class="results-count">
+                    <span id="resultsCount">247 resources found</span>
+                </div>
+            </div>
+
+            <!-- Resource List -->
+            <div class="resource-list" id="resourceList">
+                <!-- Resource Item 1 -->
+                <div class="resource-item" data-subject="marine-biology" data-grade="high" data-type="textbook" data-year="2022">
+                    <div class="resource-thumbnail">
+                        <div class="thumbnail-placeholder">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <div class="resource-info">
+                        <h4 class="resource-title">Marine Ecosystems of Micronesia</h4>
+                        <div class="resource-meta">
+                            <span class="resource-year">2022</span>
+                            <span class="resource-publisher">Pacific Education Press</span>
+                            <span class="resource-format">Hardcover in English</span>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="expand-btn" onclick="toggleDescription(this)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="view-btn">
+                                View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="resource-description" style="display: none;">
+                        <p>A comprehensive guide to marine ecosystems throughout Micronesia, covering biodiversity, conservation efforts, and traditional knowledge systems. Includes detailed photographs and case studies from the region.</p>
+                    </div>
+                </div>
+
+                <!-- Resource Item 2 -->
+                <div class="resource-item" data-subject="mathematics" data-grade="middle" data-type="lesson-plan" data-year="2023">
+                    <div class="resource-thumbnail">
+                        <div class="thumbnail-placeholder">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                    </div>
+                    <div class="resource-info">
+                        <h4 class="resource-title">Applied Mathematics for Island Communities</h4>
+                        <div class="resource-meta">
+                            <span class="resource-year">2023</span>
+                            <span class="resource-publisher">Micronesian Education Center</span>
+                            <span class="resource-format">Digital PDF in English</span>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="expand-btn" onclick="toggleDescription(this)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="view-btn">
+                                View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="resource-description" style="display: none;">
+                        <p>Interactive lesson plans that connect mathematical concepts to daily life in Pacific Island communities. Focuses on practical applications in navigation, agriculture, and resource management.</p>
+                    </div>
+                </div>
+
+                <!-- Resource Item 3 -->
+                <div class="resource-item" data-subject="environmental-science" data-grade="elementary" data-type="multimedia" data-year="2021">
+                    <div class="resource-thumbnail">
+                        <div class="thumbnail-placeholder">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                    </div>
+                    <div class="resource-info">
+                        <h4 class="resource-title">Climate Change and Our Islands</h4>
+                        <div class="resource-meta">
+                            <span class="resource-year">2021</span>
+                            <span class="resource-publisher">Pacific Climate Institute</span>
+                            <span class="resource-format">Video Series in English</span>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="expand-btn" onclick="toggleDescription(this)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="view-btn">
+                                View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="resource-description" style="display: none;">
+                        <p>Age-appropriate video series explaining climate change impacts on Pacific Islands. Features local scientists and community leaders discussing adaptation strategies and environmental protection.</p>
+                    </div>
+                </div>
+
+                <!-- Resource Item 4 -->
+                <div class="resource-item" data-subject="language-arts" data-grade="high" data-type="textbook" data-year="2020">
+                    <div class="resource-thumbnail">
+                        <div class="thumbnail-placeholder">
+                            <i class="fas fa-pen"></i>
+                        </div>
+                    </div>
+                    <div class="resource-info">
+                        <h4 class="resource-title">Pacific Island Literature and Writing</h4>
+                        <div class="resource-meta">
+                            <span class="resource-year">2020</span>
+                            <span class="resource-publisher">Island Heritage Publications</span>
+                            <span class="resource-format">Paperback in English/Chuukese</span>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="expand-btn" onclick="toggleDescription(this)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="view-btn">
+                                View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="resource-description" style="display: none;">
+                        <p>Collection of contemporary and traditional Pacific Island literature with writing exercises. Bilingual text supports language preservation while developing English literacy skills.</p>
+                    </div>
+                </div>
+
+                <!-- Resource Item 5 -->
+                <div class="resource-item" data-subject="social-studies" data-grade="middle" data-type="research-paper" data-year="2019">
+                    <div class="resource-thumbnail">
+                        <div class="thumbnail-placeholder">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                    </div>
+                    <div class="resource-info">
+                        <h4 class="resource-title">Traditional Navigation Methods of Micronesia</h4>
+                        <div class="resource-meta">
+                            <span class="resource-year">2019</span>
+                            <span class="resource-publisher">Pacific Maritime Research</span>
+                            <span class="resource-format">Academic Journal in English</span>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="expand-btn" onclick="toggleDescription(this)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="view-btn">
+                                View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="resource-description" style="display: none;">
+                        <p>Research paper documenting traditional navigation techniques used by Micronesian seafarers. Includes interviews with master navigators and analysis of wayfinding methods passed down through generations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About the Library</h4>
+                <p>The Micronesian Teachers Digital Library serves educators and students across the Pacific Islands with high-quality educational resources.</p>
+                <p>Our mission is to support excellence in education through accessible, culturally relevant digital content.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#">Browse Resources</a>
+                <a href="#">Advanced Search</a>
+                <a href="#">Submit Resource</a>
+                <a href="#">Request Material</a>
+                <a href="#">Contact Support</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="#">User Guide</a>
+                <a href="#">Technical Help</a>
+                <a href="#">Training Materials</a>
+                <a href="#">Community Forum</a>
+                <a href="#">Feedback</a>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <a href="#">Newsletter</a>
+                <a href="#">Social Media</a>
+                <a href="#">Partner Institutions</a>
+                <a href="#">Professional Development</a>
+                <a href="#">Educational Networks</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Micronesian Teachers Digital Library. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSearch() {
+            const searchBox = document.getElementById('searchBox');
+            searchBox.classList.toggle('active');
+        }
+
+        function toggleDropdown(event, dropdownId) {
+            event.preventDefault();
+            const dropdown = document.getElementById(dropdownId + '-dropdown');
+
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.id !== dropdownId + '-dropdown') {
+                    menu.classList.remove('active');
+                }
+            });
+
+            dropdown.classList.toggle('active');
+        }
+
+        function toggleThemeDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('themeDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        function applyTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('selectedTheme', theme);
+            document.getElementById('themeDropdown').classList.remove('active');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.nav-item')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.remove('active');
+                });
+            }
+            if (!event.target.closest('.theme-switcher-compact')) {
+                document.getElementById('themeDropdown').classList.remove('active');
+            }
+        });
+
+        // Load saved theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('selectedTheme');
+            if (savedTheme && savedTheme !== 'default') {
+                document.body.setAttribute('data-theme', savedTheme);
+            }
+        });
+
+        // Filter functionality
+        function toggleFilter(filterId) {
+            const filterOptions = document.getElementById(filterId + '-filter');
+            const filterHeader = filterOptions.previousElementSibling;
+            const chevron = filterHeader.querySelector('i');
+            
+            filterOptions.classList.toggle('active');
+            
+            if (filterOptions.classList.contains('active')) {
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Sort functionality
+        function sortResults(sortType) {
+            // Update active sort button
+            document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const resourceList = document.getElementById('resourceList');
+            const resources = Array.from(resourceList.children);
+            
+            resources.sort((a, b) => {
+                if (sortType === 'alphabetical') {
+                    const titleA = a.querySelector('.resource-title').textContent.toLowerCase();
+                    const titleB = b.querySelector('.resource-title').textContent.toLowerCase();
+                    return titleA.localeCompare(titleB);
+                } else if (sortType === 'chronological') {
+                    const yearA = parseInt(a.querySelector('.resource-year').textContent);
+                    const yearB = parseInt(b.querySelector('.resource-year').textContent);
+                    return yearB - yearA; // Most recent first
+                }
+                return 0;
+            });
+            
+            // Clear and re-append sorted resources
+            resourceList.innerHTML = '';
+            resources.forEach(resource => resourceList.appendChild(resource));
+        }
+
+        // Toggle resource description
+        function toggleDescription(button) {
+            const resourceItem = button.closest('.resource-item');
+            const description = resourceItem.querySelector('.resource-description');
+            const icon = button.querySelector('i');
+            
+            if (description.style.display === 'none' || description.style.display === '') {
+                description.style.display = 'block';
+                icon.classList.remove('fa-plus');
+                icon.classList.add('fa-minus');
+                button.classList.add('expanded');
+            } else {
+                description.style.display = 'none';
+                icon.classList.remove('fa-minus');
+                icon.classList.add('fa-plus');
+                button.classList.remove('expanded');
+            }
+        }
+
+        // Search functionality
+        document.getElementById('keywordSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const resources = document.querySelectorAll('.resource-item');
+            let visibleCount = 0;
+            
+            resources.forEach(resource => {
+                const title = resource.querySelector('.resource-title').textContent.toLowerCase();
+                const description = resource.querySelector('.resource-description p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    resource.style.display = 'grid';
+                    visibleCount++;
+                } else {
+                    resource.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('resultsCount').textContent = `${visibleCount} resources found`;
+        });
+
+        // Filter functionality
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                filterResources();
+            }
+        });
+
+        function filterResources() {
+            const checkedFilters = {
+                subject: Array.from(document.querySelectorAll('input[name="subject"]:checked')).map(cb => cb.value),
+                grade: Array.from(document.querySelectorAll('input[name="grade"]:checked')).map(cb => cb.value),
+                type: Array.from(document.querySelectorAll('input[name="type"]:checked')).map(cb => cb.value),
+                language: Array.from(document.querySelectorAll('input[name="language"]:checked')).map(cb => cb.value),
+                year: Array.from(document.querySelectorAll('input[name="year"]:checked')).map(cb => cb.value)
+            };
+            
+            const resources = document.querySelectorAll('.resource-item');
+            let visibleCount = 0;
+            
+            resources.forEach(resource => {
+                let shouldShow = true;
+                
+                // Check each filter category
+                Object.keys(checkedFilters).forEach(category => {
+                    if (checkedFilters[category].length > 0) {
+                        const resourceValue = resource.getAttribute('data-' + category);
+                        if (!checkedFilters[category].includes(resourceValue)) {
+                            shouldShow = false;
+                        }
+                    }
+                });
+                
+                if (shouldShow) {
+                    resource.style.display = 'grid';
+                    visibleCount++;
+                } else {
+                    resource.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('resultsCount').textContent = `${visibleCount} resources found`;
+        }
+    </script>
+</body>
+</html>
