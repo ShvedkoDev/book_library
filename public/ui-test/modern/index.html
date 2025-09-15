@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micronesian Teachers Digital Library - Modern Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            background-attachment: fixed;
+            padding-top: 140px;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Sticky Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            color: #1e40af;
+            padding: 0.75rem 0;
+            z-index: 1000;
+        }
+        
+        .top-bar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .library-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: #1e40af;
+        }
+        
+        .login-btn {
+            background: rgba(59, 130, 246, 0.1);
+            color: #1e40af;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .login-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: #1e40af;
+            transform: translateY(-1px);
+        }
+        
+        /* Sticky Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            top: 54px;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 999;
+            padding: 1rem 0;
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .switch-container {
+            display: flex;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 30px;
+            padding: 6px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .switch-option {
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        
+        .switch-option.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .search-toggle {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #1e40af;
+            font-weight: 500;
+        }
+        
+        .search-toggle:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .search-box {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 320px;
+            margin-top: 0.5rem;
+        }
+        
+        .search-box.active {
+            display: block;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Landing Bar */
+        .landing-bar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 0;
+        }
+        
+        .landing-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .customer-logos {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .logo-item {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e40af;
+            font-size: 1.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .logo-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Main Content Layout */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: grid;
+            grid-template-columns: 75% 25%;
+            gap: 2rem;
+        }
+        
+        /* 75% Content Block */
+        .content-block {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .content-section {
+            margin-bottom: 3rem;
+        }
+        
+        .content-section h2 {
+            color: #1e40af;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+            text-shadow: none;
+        }
+        
+        .content-section p {
+            line-height: 1.8;
+            color: #374151;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            text-shadow: none;
+        }
+        
+        /* 25% Sidebar Block */
+        .sidebar-block {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-card h3 {
+            color: #1e40af;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: none;
+        }
+        
+        .section-links,
+        .contributors-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .section-links li,
+        .contributors-list li {
+            margin: 0.5rem 0;
+        }
+        
+        .section-links a,
+        .contributors-list a {
+            color: #6b7280;
+            text-decoration: none;
+            padding: 0.75rem 0;
+            display: block;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .section-links a:hover,
+        .contributors-list a:hover {
+            color: #1e40af;
+            transform: translateX(5px);
+            border-bottom-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .contributors-list li {
+            font-size: 0.95rem;
+        }
+        
+        /* Footer */
+        .footer {
+            background: rgba(30, 64, 175, 0.9);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h4 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .landing-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .customer-logos {
+                justify-content: center;
+            }
+            
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .search-box {
+                position: static;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <h1 class="library-name">Micronesian Teachers Digital Library</h1>
+            <a href="#" class="login-btn">
+                <i class="fas fa-user"></i>
+                <span>Login</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Sticky Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-content">
+            <div class="page-switch">
+                <div class="switch-container">
+                    <div class="switch-option active">Resource Guide</div>
+                    <div class="switch-option">Resource Library</div>
+                </div>
+            </div>
+            <div style="position: relative;">
+                <button class="search-toggle" onclick="toggleSearch()">
+                    <i class="fas fa-search"></i>
+                    <span>Search</span>
+                </button>
+                <div class="search-box" id="searchBox">
+                    <input type="text" class="search-input" placeholder="Search resources...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Landing Bar -->
+    <div class="landing-bar">
+        <div class="landing-content">
+            <h1 class="page-title">Marine Biology Educational Resources</h1>
+            <div class="customer-logos">
+                <div class="logo-item" title="University of Guam">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="logo-item" title="College of Micronesia">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="logo-item" title="Palau Community College">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="logo-item" title="Pacific Research Institute">
+                    <i class="fas fa-microscope"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="main-container">
+        <!-- 75% Content Block -->
+        <div class="content-block">
+            <section class="content-section" id="ocean-ecosystems">
+                <h2>Understanding Pacific Ocean Ecosystems</h2>
+                <p>
+                    The Pacific Ocean surrounding Micronesia contains some of the world's most diverse marine ecosystems. 
+                    These complex underwater communities support an incredible variety of life forms, from microscopic 
+                    plankton to massive whale species. The coral reefs that characterize much of the region serve as 
+                    nurseries for countless fish species and provide critical habitat for marine organisms.
+                </p>
+                <p>
+                    Temperature gradients, ocean currents, and seasonal variations create distinct ecological zones 
+                    throughout the Pacific. The warm tropical waters near the equator support different species 
+                    compositions compared to the cooler temperate regions. Understanding these variations is crucial 
+                    for comprehending the broader marine biological processes that sustain life in the ocean.
+                </p>
+                <p>
+                    Human activities increasingly impact these delicate ecosystems. Climate change, pollution, and 
+                    overfishing pose significant threats to marine biodiversity. Educational initiatives focusing 
+                    on ocean conservation help students understand their role as stewards of these vital marine environments.
+                </p>
+            </section>
+
+            <section class="content-section" id="coral-reef-systems">
+                <h2>Coral Reef Systems and Biodiversity</h2>
+                <p>
+                    Coral reefs represent one of the most productive and biodiverse ecosystems on Earth. In Micronesian 
+                    waters, these limestone structures built by tiny coral polyps create complex three-dimensional 
+                    habitats that support approximately 25% of all marine species. The symbiotic relationship between 
+                    corals and zooxanthellae algae forms the foundation of these remarkable ecosystems.
+                </p>
+                <p>
+                    Different coral species create varied reef structures, each providing unique ecological niches. 
+                    Branching corals offer shelter for small fish and invertebrates, while massive coral formations 
+                    create caves and crevices that serve as hiding places for larger marine animals. The calcium 
+                    carbonate skeletons of dead corals continue to provide structural complexity long after the 
+                    organisms have died.
+                </p>
+                <p>
+                    Reef fish communities exhibit remarkable specialization and interdependence. Cleaner fish remove 
+                    parasites from larger species, while herbivorous fish help control algae growth that could 
+                    otherwise smother coral colonies. These intricate relationships demonstrate the importance of 
+                    biodiversity in maintaining ecosystem stability and resilience.
+                </p>
+            </section>
+
+            <section class="content-section" id="marine-conservation">
+                <h2>Marine Conservation Strategies</h2>
+                <p>
+                    Effective marine conservation requires comprehensive understanding of ocean processes and human 
+                    impacts. Marine protected areas (MPAs) serve as essential tools for preserving critical habitats 
+                    and allowing fish populations to recover from fishing pressure. These designated zones often 
+                    show remarkable improvements in species diversity and abundance within relatively short timeframes.
+                </p>
+                <p>
+                    Community-based conservation approaches recognize the important role of local knowledge and 
+                    traditional practices in marine stewardship. Indigenous fishing techniques often incorporate 
+                    sustainable harvesting methods that have been refined over generations. Combining traditional 
+                    ecological knowledge with modern scientific research creates more effective conservation strategies.
+                </p>
+                <p>
+                    Education and outreach programs help build public awareness about marine conservation issues. 
+                    When students understand the connections between healthy oceans and human well-being, they become 
+                    more motivated to participate in conservation efforts. Schools can implement practical conservation 
+                    projects that allow students to contribute directly to marine protection initiatives.
+                </p>
+            </section>
+
+            <section class="content-section" id="research-methods">
+                <h2>Modern Marine Research Methods</h2>
+                <p>
+                    Contemporary marine biology research employs sophisticated technologies to study ocean life. 
+                    Underwater robots and remotely operated vehicles (ROVs) allow scientists to explore deep-sea 
+                    environments that were previously inaccessible. These tools provide unprecedented insights into 
+                    the behavior and ecology of deep-water species.
+                </p>
+                <p>
+                    Satellite tracking and acoustic monitoring systems enable researchers to follow marine animal 
+                    movements across vast ocean distances. This technology reveals migration patterns, feeding 
+                    behaviors, and habitat preferences that inform conservation planning efforts. Advanced genetic 
+                    analysis techniques help scientists understand population structures and evolutionary relationships 
+                    among marine species.
+                </p>
+                <p>
+                    Citizen science programs engage the public in marine research activities. Volunteer divers and 
+                    snorkelers can contribute valuable data about coral health, fish populations, and water quality. 
+                    These collaborative approaches expand research capacity while building community connections to 
+                    marine science and conservation.
+                </p>
+            </section>
+        </div>
+
+        <!-- 25% Sidebar Block -->
+        <div class="sidebar-block">
+            <!-- Sections Navigation -->
+            <div class="sidebar-card">
+                <h3>
+                    <i class="fas fa-list"></i>
+                    Sections
+                </h3>
+                <ul class="section-links">
+                    <li><a href="#ocean-ecosystems">Understanding Pacific Ocean Ecosystems</a></li>
+                    <li><a href="#coral-reef-systems">Coral Reef Systems and Biodiversity</a></li>
+                    <li><a href="#marine-conservation">Marine Conservation Strategies</a></li>
+                    <li><a href="#research-methods">Modern Marine Research Methods</a></li>
+                </ul>
+            </div>
+
+            <!-- Resource Contributors -->
+            <div class="sidebar-card">
+                <h3>
+                    <i class="fas fa-users"></i>
+                    Resource Contributors
+                </h3>
+                <ul class="contributors-list">
+                    <li><a href="#">Dr. Maria Santos - Marine Biologist</a></li>
+                    <li><a href="#">Prof. James Coral - Oceanographer</a></li>
+                    <li><a href="#">Dr. Lisa Reefton - Conservation Scientist</a></li>
+                    <li><a href="#">Dr. Pacific Islander - Traditional Knowledge Expert</a></li>
+                    <li><a href="#">Prof. Deep Blue - Marine Ecologist</a></li>
+                    <li><a href="#">Dr. Coral Guardian - Reef Specialist</a></li>
+                    <li><a href="#">Prof. Ocean Current - Physical Oceanographer</a></li>
+                    <li><a href="#">Dr. Fish Counter - Fisheries Biologist</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact Information</h4>
+                <p>Micronesian Teachers Digital Library</p>
+                <p>Email: info@mtdl-pacific.edu</p>
+                <p>Phone: +691-320-2480</p>
+                <p>Address: PO Box 1250, Kolonia, Pohnpei 96941</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Resource Library</a>
+                <a href="#">Resource Guide</a>
+                <a href="#">Partners</a>
+            </div>
+            <div class="footer-section">
+                <h4>Site Information</h4>
+                <a href="#">Sitemap</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Accessibility</a>
+                <a href="#">Login</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#">Teacher Guidelines</a>
+                <a href="#">Technical Support</a>
+                <a href="#">Training Materials</a>
+                <a href="#">Community Forum</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Micronesian Teachers Digital Library. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleSearch() {
+            const searchBox = document.getElementById('searchBox');
+            searchBox.classList.toggle('active');
+        }
+
+        // Switch functionality
+        document.querySelectorAll('.switch-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.switch-option').forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
