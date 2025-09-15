@@ -16,7 +16,7 @@
             --light-gray: #f8fafc;
             --cream: #fefdf8;
         }
-        
+
         /* Theme 2 - Forest Academic */
         [data-theme="forest"] {
             --primary-navy: #14532d;
@@ -26,7 +26,7 @@
             --light-gray: #f0fdf4;
             --cream: #f7fee7;
         }
-        
+
         /* Theme 3 - Royal Purple */
         [data-theme="royal"] {
             --primary-navy: #581c87;
@@ -47,7 +47,7 @@
             padding-top: 140px;
             transition: all 0.3s ease;
         }
-        
+
         .page-content {
             position: relative;
             z-index: 1;
@@ -71,7 +71,7 @@
             height: 54px;
             box-sizing: border-box;
         }
-        
+
         .top-bar-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -80,14 +80,14 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .library-name {
             font-size: 1.1rem;
             font-weight: 600;
             margin: 0;
             color: white;
         }
-        
+
         .login-btn {
             background: var(--secondary-gold);
             color: white;
@@ -881,46 +881,46 @@
             .main-container {
                 grid-template-columns: 1fr;
             }
-            
+
             .landing-content {
                 flex-direction: column;
                 text-align: center;
                 gap: 1rem;
             }
-            
+
             .customer-logos {
                 justify-content: center;
             }
-            
+
             .nav-content {
                 flex-direction: column;
                 gap: 1rem;
             }
-            
+
             .nav-menu {
                 flex-wrap: wrap;
                 justify-content: center;
             }
-            
+
             .nav-right {
                 flex-direction: column;
                 gap: 1rem;
             }
-            
+
             .search-box {
                 position: static;
                 width: 100%;
                 margin-top: 1rem;
             }
-            
+
             .page-title {
                 font-size: 2rem;
             }
-            
+
             .content-block {
                 padding: 1.5rem;
             }
-            
+
             .sidebar-card {
                 padding: 1.25rem;
             }
@@ -958,7 +958,7 @@
             </a>
         </div>
     </div>
-
+    </div>
     <!-- Sticky Navigation Bar -->
     <div class="nav-bar">
         <div class="nav-content">
@@ -1006,7 +1006,7 @@
                     </div>
                 </div>
             </nav>
-            
+
             <div class="nav-right">
                 <div class="page-switch">
                     <div class="switch-container">
@@ -1465,9 +1465,9 @@
             const filterOptions = document.getElementById(filterId + '-filter');
             const filterHeader = filterOptions.previousElementSibling;
             const chevron = filterHeader.querySelector('i');
-            
+
             filterOptions.classList.toggle('active');
-            
+
             if (filterOptions.classList.contains('active')) {
                 chevron.style.transform = 'rotate(180deg)';
             } else {
@@ -1480,10 +1480,10 @@
             // Update active sort button
             document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             const resourceList = document.getElementById('resourceList');
             const resources = Array.from(resourceList.children);
-            
+
             resources.sort((a, b) => {
                 if (sortType === 'alphabetical') {
                     const titleA = a.querySelector('.resource-title').textContent.toLowerCase();
@@ -1496,7 +1496,7 @@
                 }
                 return 0;
             });
-            
+
             // Clear and re-append sorted resources
             resourceList.innerHTML = '';
             resources.forEach(resource => resourceList.appendChild(resource));
@@ -1507,7 +1507,7 @@
             const resourceItem = button.closest('.resource-item');
             const description = resourceItem.querySelector('.resource-description');
             const icon = button.querySelector('i');
-            
+
             if (description.style.display === 'none' || description.style.display === '') {
                 description.style.display = 'block';
                 icon.classList.remove('fa-plus');
@@ -1526,11 +1526,11 @@
             const searchTerm = this.value.toLowerCase();
             const resources = document.querySelectorAll('.resource-item');
             let visibleCount = 0;
-            
+
             resources.forEach(resource => {
                 const title = resource.querySelector('.resource-title').textContent.toLowerCase();
                 const description = resource.querySelector('.resource-description p').textContent.toLowerCase();
-                
+
                 if (title.includes(searchTerm) || description.includes(searchTerm)) {
                     resource.style.display = 'grid';
                     visibleCount++;
@@ -1538,7 +1538,7 @@
                     resource.style.display = 'none';
                 }
             });
-            
+
             document.getElementById('resultsCount').textContent = `${visibleCount} resources found`;
         });
 
@@ -1557,13 +1557,13 @@
                 language: Array.from(document.querySelectorAll('input[name="language"]:checked')).map(cb => cb.value),
                 year: Array.from(document.querySelectorAll('input[name="year"]:checked')).map(cb => cb.value)
             };
-            
+
             const resources = document.querySelectorAll('.resource-item');
             let visibleCount = 0;
-            
+
             resources.forEach(resource => {
                 let shouldShow = true;
-                
+
                 // Check each filter category
                 Object.keys(checkedFilters).forEach(category => {
                     if (checkedFilters[category].length > 0) {
@@ -1573,7 +1573,7 @@
                         }
                     }
                 });
-                
+
                 if (shouldShow) {
                     resource.style.display = 'grid';
                     visibleCount++;
@@ -1581,7 +1581,7 @@
                     resource.style.display = 'none';
                 }
             });
-            
+
             document.getElementById('resultsCount').textContent = `${visibleCount} resources found`;
         }
     </script>
