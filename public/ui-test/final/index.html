@@ -1399,24 +1399,29 @@
         }
 
         /* Sticky header banners */
-        .coe-banner {
+        .banner {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: inherit;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .coe-banner {
+            position: relative;
+            z-index: 1002;
+            background: #fff;
         }
 
         .program-banner {
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            background: inherit;
-        }
-
-        /* Ensure proper stacking when both are sticky */
-        .banner {
             position: relative;
             z-index: 1001;
+            background: #fff;
+        }
+
+        /* Ensure sticky behavior works properly */
+        body {
+            padding-top: 0;
         }
     </style>
 
