@@ -1696,82 +1696,136 @@
             outline: 2px solid transparent;
         }
 
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: var(--wp--preset--spacing--40);
+        /* Table structure for books */
+        .books-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--wp--preset--color--white);
+            border: 1px solid #ddd;
             margin-bottom: var(--wp--preset--spacing--50);
         }
 
-        .book-card {
-            border: 2px solid var(--wp--preset--color--coe-light-green);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            background: var(--wp--preset--color--white);
-            box-shadow: 0 4px 12px rgba(0, 152, 119, 0.1);
+        .books-table th {
+            background: #f6f7f7;
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: #32373c;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
         }
 
-        .book-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 152, 119, 0.2);
-            border-color: var(--wp--preset--color--coe-green);
+        .books-table th.sortable:hover {
+            background: #f0f0f1;
+        }
+
+        .books-table th .sort-arrow {
+            display: inline-block;
+            margin-left: 5px;
+            opacity: 0.3;
+            transition: opacity 0.2s;
+        }
+
+        .books-table th.sort-asc .sort-arrow::after {
+            content: "▲";
+            opacity: 1;
+        }
+
+        .books-table th.sort-desc .sort-arrow::after {
+            content: "▼";
+            opacity: 1;
+        }
+
+        .books-table th:not(.sort-asc):not(.sort-desc) .sort-arrow::after {
+            content: "▲▼";
+            font-size: 8px;
+            line-height: 1;
+        }
+
+        .books-table td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            vertical-align: top;
+            background: var(--wp--preset--color--white);
+        }
+
+        .books-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .books-table tr:hover {
+            background: #f0f6fc;
+        }
+
+        .book-row {
+            transition: background-color 0.15s ease;
+        }
+
+        .book-cover-cell {
+            width: 80px;
+            text-align: center;
+            padding: 10px;
         }
 
         .book-cover {
-            width: 100%;
-            height: 220px;
+            width: 60px;
+            height: 80px;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
 
-        .book-card:hover .book-cover {
-            transform: scale(1.05);
-        }
-
-        .book-info {
-            padding: var(--wp--preset--spacing--30);
+        .book-details-cell {
+            width: auto;
+            min-width: 300px;
         }
 
         .book-title {
-            font-weight: 700;
-            color: var(--wp--preset--color--coe-green);
-            margin-bottom: var(--wp--preset--spacing--10);
-            font-size: var(--wp--preset--font-size--medium);
-            font-family: var(--wp--preset--font-family--proxima-nova);
-            line-height: 1.3;
-        }
-
-        .book-author {
-            color: var(--wp--preset--color--coe-blue);
-            margin-bottom: var(--wp--preset--spacing--15);
-            font-size: var(--wp--preset--font-size--small);
-            font-weight: 500;
-            font-family: var(--wp--preset--font-family--proxima-nova);
-        }
-
-        .book-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--wp--preset--spacing--10);
-            margin-bottom: var(--wp--preset--spacing--20);
-        }
-
-        .book-meta span {
-            background: var(--wp--preset--color--coe-light-green);
-            color: var(--wp--preset--color--coe-green);
-            padding: 4px var(--wp--preset--spacing--15);
-            border-radius: 16px;
-            font-size: var(--wp--preset--font-size--x-small);
             font-weight: 600;
-            font-family: var(--wp--preset--font-family--proxima-nova);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            color: #007cba;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            line-height: 1.4;
+        }
+
+        .book-title a {
+            color: #007cba;
+            text-decoration: none;
+        }
+
+        .book-title a:hover {
+            color: #005a87;
+            text-decoration: underline;
+        }
+
+        .book-metadata {
+            font-size: 13px;
+            color: #646970;
+            line-height: 1.4;
+            margin-bottom: 2px;
+        }
+
+        .book-description {
+            font-size: 12px;
+            color: #646970;
+            line-height: 1.3;
+            margin-top: 5px;
+        }
+
+        .book-actions-cell {
+            width: 120px;
+            text-align: center;
         }
 
         .book-actions {
             display: flex;
-            gap: var(--wp--preset--spacing--10);
+            flex-direction: column;
+            gap: 5px;
         }
 
         .btn-view, .btn-download {
@@ -2101,158 +2155,369 @@
                         </div>
                     </div>
 
-                    <div class="book-grid" id="bookGrid">
-                        <!-- Sample Book Cards -->
-                        <div class="book-card">
-                            <img src="https://picsum.photos/280/200?random=101" alt="Mathematics Grade 3" class="book-cover">
-                            <div class="book-info">
-                                <div class="book-title">Elementary Mathematics for Micronesian Students Grade 3</div>
-                                <div class="book-author">Pacific Education Council</div>
-                                <div class="book-meta">
-                                    <span>Grade 3</span>
-                                    <span>Mathematics</span>
-                                    <span>English</span>
-                                    <span>2023</span>
-                                </div>
-                                <div class="book-actions">
-                                    <button class="btn-view" onclick="viewBook(1)">View</button>
-                                    <button class="btn-download" onclick="downloadBook(1)">Download</button>
-                                </div>
-                            </div>
-                        </div>
+                    <table class="books-table" id="booksTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Cover</th>
+                                <th class="sortable" onclick="sortTable('title')">
+                                    Title/Edition
+                                    <span class="sort-arrow"></span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('author')">
+                                    Author/Publisher
+                                    <span class="sort-arrow"></span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('subject')">
+                                    Subject/Grade
+                                    <span class="sort-arrow"></span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('language')">
+                                    Language/Format
+                                    <span class="sort-arrow"></span>
+                                </th>
+                                <th class="sortable" onclick="sortTable('availability')">
+                                    Availability
+                                    <span class="sort-arrow"></span>
+                                </th>
+                                <th style="width: 120px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booksTableBody">
+                            <!-- Row 1 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=101" alt="Mathematics Grade 3" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(1)">Elementary Mathematics for Micronesian Students Grade 3</a>
+                                    </div>
+                                    <div class="book-metadata">2024-08-15, Paperback</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>Pacific Education Council</strong></div>
+                                    <div class="book-description">Educational materials publisher</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Mathematics</div>
+                                    <div class="book-description">Grade 3</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">English</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button button-primary btn-view" onclick="viewBook(1)">Locate</button>
+                                    </div>
+                                </td>
+                            </tr>
 
-                        <div class="book-card">
-                            <img src="https://picsum.photos/280/200?random=102" alt="Chuukese Language Arts" class="book-cover">
-                            <div class="book-info">
-                                <div class="book-title">Chuukese Traditional Stories and Language Learning</div>
-                                <div class="book-author">Chuukese Cultural Center</div>
-                                <div class="book-meta">
-                                    <span>Grades 1-3</span>
-                                    <span>Language Arts</span>
-                                    <span>Chuukese</span>
-                                    <span>2023</span>
-                                </div>
-                                <div class="book-actions">
-                                    <button class="btn-view" onclick="viewBook(2)">View</button>
-                                    <button class="btn-download" onclick="downloadBook(2)">Download</button>
-                                </div>
-                            </div>
-                        </div>
+                            <!-- Row 2 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=102" alt="Chuukese Stories" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(2)">Chuukese Traditional Stories and Language Learning</a>
+                                    </div>
+                                    <div class="book-metadata">2024-09-01, Digital Edition</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>Chuukese Cultural Center</strong></div>
+                                    <div class="book-description">Cultural preservation organization</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Language Arts</div>
+                                    <div class="book-description">Grades 1-3</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Chuukese</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button button-primary btn-view" onclick="viewBook(2)">Locate</button>
+                                    </div>
+                                </td>
+                            </tr>
 
-                        <div class="book-card">
-                            <img src="https://picsum.photos/280/200?random=103" alt="Pohnpeian Science" class="book-cover">
-                            <div class="book-info">
-                                <div class="book-title">Introduction to Marine Science for Pacific Islands</div>
-                                <div class="book-author">University of Hawaii Pacific Studies</div>
-                                <div class="book-meta">
-                                    <span>Grades 6-8</span>
-                                    <span>Science</span>
-                                    <span>Pohnpeian</span>
-                                    <span>2022</span>
-                                </div>
-                                <div class="book-actions">
-                                    <button class="btn-view" onclick="viewBook(3)">View</button>
-                                    <button class="btn-download" onclick="downloadBook(3)">Download</button>
-                                </div>
-                            </div>
-                        </div>
+                            <!-- Row 3 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=103" alt="Marine Science" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(3)">Introduction to Marine Science for Pacific Islands</a>
+                                    </div>
+                                    <div class="book-metadata">2023-02-07, Hardcover</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>University of Hawaii Pacific Studies</strong></div>
+                                    <div class="book-description">Academic publisher</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Science</div>
+                                    <div class="book-description">Grades 6-8</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Pohnpeian</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #d63638; font-weight: 600;">Limited Access</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button button-primary btn-view" onclick="viewBook(3)">Locate</button>
+                                    </div>
+                                </td>
+                            </tr>
 
-                        <div class="book-card">
-                            <img src="https://picsum.photos/280/200?random=104" alt="Cultural Studies" class="book-cover">
-                            <div class="book-info">
-                                <div class="book-title">Yapese Cultural Heritage and Social Studies</div>
-                                <div class="book-author">Yapese Traditional Authority</div>
-                                <div class="book-meta">
-                                    <span>High School</span>
-                                    <span>Social Studies</span>
-                                    <span>Yapese</span>
-                                    <span>2023</span>
-                                </div>
-                                <div class="book-actions">
-                                    <button class="btn-view" onclick="viewBook(4)">View</button>
-                                    <button class="btn-download" onclick="downloadBook(4)">Download</button>
-                                </div>
-                            </div>
-                        </div>
+                            <!-- Row 4 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=104" alt="Cultural Heritage" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(4)">Yapese Cultural Heritage and Social Studies</a>
+                                    </div>
+                                    <div class="book-metadata">2023-12-19, Paperback</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>Yapese Traditional Authority</strong></div>
+                                    <div class="book-description">Cultural authority</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Social Studies</div>
+                                    <div class="book-description">High School</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Yapese</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button button-primary btn-view" onclick="viewBook(4)">Locate</button>
+                                    </div>
+                                </td>
+                            </tr>
 
-                        <div class="book-card">
-                            <img src="https://picsum.photos/280/200?random=105" alt="Teacher Guide" class="book-cover">
-                            <div class="book-info">
-                                <div class="book-title">Teaching Methods for Multilingual Classrooms</div>
-                                <div class="book-author">Pacific Regional Education Laboratory</div>
-                                <div class="book-meta">
-                                    <span>Adult</span>
-                                    <span>Teacher Guide</span>
-                                    <span>English</span>
-                                    <span>2024</span>
-                                </div>
-                                <div class="book-actions">
-                                    <button class="btn-view" onclick="viewBook(5)">View</button>
-                                    <button class="btn-download" onclick="downloadBook(5)">Download</button>
-                                </div>
-                            </div>
-                        </div>
+                            <!-- Row 5 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=105" alt="Teaching Methods" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(5)">Teaching Methods for Multilingual Classrooms</a>
+                                    </div>
+                                    <div class="book-metadata">2024-01-15, Digital Edition</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>Pacific Regional Education Laboratory</strong></div>
+                                    <div class="book-description">Education research organization</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Education</div>
+                                    <div class="book-description">Teacher Guide</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">English</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button button-primary btn-view" onclick="viewBook(5)">Locate</button>
+                                    </div>
+                                </td>
+                            </tr>
 
-                        <div class="book-card">
-                            <img src="https://picsum.photos/280/200?random=106" alt="Health Education" class="book-cover">
-                            <div class="book-info">
-                                <div class="book-title">Community Health and Nutrition in the Pacific</div>
-                                <div class="book-author">FSM Department of Health</div>
-                                <div class="book-meta">
-                                    <span>Grades 9-12</span>
-                                    <span>Health & PE</span>
-                                    <span>English</span>
-                                    <span>2023</span>
-                                </div>
-                                <div class="book-actions">
-                                    <button class="btn-view" onclick="viewBook(6)">View</button>
-                                    <button class="btn-download" onclick="downloadBook(6)">Download</button>
-                                </div>
-                            </div>
-                        </div>
+                            <!-- Row 6 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=106" alt="Health Education" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(6)">Community Health and Nutrition in the Pacific</a>
+                                    </div>
+                                    <div class="book-metadata">2023-11-22, Paperback</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>FSM Department of Health</strong></div>
+                                    <div class="book-description">Government health department</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Health & PE</div>
+                                    <div class="book-description">Grades 9-12</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">English</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button button-primary btn-view" onclick="viewBook(6)">Locate</button>
+                                    </div>
+                                </td>
+                            </tr>
 
-                        <div class="book-card">
-                            <img src="https://picsum.photos/280/200?random=107" alt="Art Education" class="book-cover">
-                            <div class="book-info">
-                                <div class="book-title">Traditional Pacific Art Forms and Modern Expression</div>
-                                <div class="book-author">Micronesian Art Institute</div>
-                                <div class="book-meta">
-                                    <span>Grades 6-12</span>
-                                    <span>Art & Culture</span>
-                                    <span>Kosraean</span>
-                                    <span>2022</span>
-                                </div>
-                                <div class="book-actions">
-                                    <button class="btn-view" onclick="viewBook(7)">View</button>
-                                    <button class="btn-download" onclick="downloadBook(7)">Download</button>
-                                </div>
-                            </div>
-                        </div>
+                            <!-- Row 7 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=107" alt="Art Forms" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(7)">Traditional Pacific Art Forms and Modern Expression</a>
+                                    </div>
+                                    <div class="book-metadata">2022-05-10, Hardcover</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>Micronesian Art Institute</strong></div>
+                                    <div class="book-description">Arts education organization</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Art & Culture</div>
+                                    <div class="book-description">Grades 6-12</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Kosraean</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #d63638; font-weight: 600;">Limited Access</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button button-primary btn-view" onclick="viewBook(7)">Locate</button>
+                                    </div>
+                                </td>
+                            </tr>
 
-                        <div class="book-card">
-                            <img src="https://picsum.photos/280/200?random=108" alt="Activity Workbook" class="book-cover">
-                            <div class="book-info">
-                                <div class="book-title">Marshallese Language Practice Activities</div>
-                                <div class="book-author">Marshall Islands Ministry of Education</div>
-                                <div class="book-meta">
-                                    <span>Grades 3-5</span>
-                                    <span>Workbook</span>
-                                    <span>Marshallese</span>
-                                    <span>2024</span>
-                                </div>
-                                <div class="book-actions">
-                                    <button class="btn-view" onclick="viewBook(8)">View</button>
-                                    <button class="btn-download" onclick="downloadBook(8)">Download</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            <!-- Row 8 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=108" alt="Language Activities" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(8)">Marshallese Language Practice Activities</a>
+                                    </div>
+                                    <div class="book-metadata">2024-03-18, Digital Edition</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>Marshall Islands Ministry of Education</strong></div>
+                                    <div class="book-description">Ministry of education</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Language Arts</div>
+                                    <div class="book-description">Grades 3-5</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Marshallese</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button button-primary btn-view" onclick="viewBook(8)">Locate</button>
+                                    </div>
+                                </td>
+                            </tr>
 
-                    <!-- Pagination -->
+                            <!-- Row 9 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=109" alt="Pacific History" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(9)">Pacific Island History and Development</a>
+                                    </div>
+                                    <div class="book-metadata">2023-07-14, Paperback</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>Pacific Historical Association</strong></div>
+                                    <div class="book-description">Historical research organization</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">History</div>
+                                    <div class="book-description">High School</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">English</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button button-primary btn-view" onclick="viewBook(9)">Locate</button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Row 10 -->
+                            <tr class="book-row">
+                                <td class="book-cover-cell">
+                                    <img src="https://picsum.photos/60/80?random=110" alt="Environmental Science" class="book-cover">
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-title">
+                                        <a href="#" onclick="viewBook(10)">Environmental Conservation in Small Island States</a>
+                                    </div>
+                                    <div class="book-metadata">2024-02-29, Digital Edition</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata"><strong>Pacific Environmental Research Center</strong></div>
+                                    <div class="book-description">Environmental research center</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Environmental Science</div>
+                                    <div class="book-description">Grades 9-12</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata">Pohnpeian</div>
+                                    <div class="book-description">PDF Format</div>
+                                </td>
+                                <td class="book-details-cell">
+                                    <div class="book-metadata" style="color: #ffb900; font-weight: 600;">Restricted</div>
+                                </td>
+                                <td class="book-actions-cell">
+                                    <div class="book-actions">
+                                        <button class="button btn-secondary" onclick="requestAccess(10)" disabled>Request Access</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>                    <!-- Pagination -->
                     <div class="pagination" style="margin-top: var(--wp--preset--spacing--40); text-align: center;">
-                        <button class="button btn-secondary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="previousPage()">Previous</button>
-                        <span style="margin: 0 var(--wp--preset--spacing--20); color: var(--wp--preset--color--coe-green); font-weight: 600;">Page 1 of 185</span>
-                        <button class="button button-primary btn-primary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="nextPage()">Next</button>
+                        <button class="button btn-secondary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="previousPage()" id="prevBtn">Previous</button>
+                        <span style="margin: 0 var(--wp--preset--spacing--20); color: var(--wp--preset--color--coe-green); font-weight: 600;" id="pageInfo">Page 1 of 19</span>
+                        <button class="button button-primary btn-primary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="nextPage()" id="nextBtn">Next</button>
                     </div>
                 </div>        </div>
     </div>
@@ -2561,5 +2826,273 @@
 </script>
 
 <script src="assets/js/main.js"></script>
+
+<script>
+// Pagination and sorting functionality
+let currentPage = 1;
+const itemsPerPage = 10;
+let currentSort = { column: '', direction: 'asc' };
+let allBooks = [];
+
+// Initialize the library
+document.addEventListener('DOMContentLoaded', function() {
+    initializeBooks();
+    displayCurrentPage();
+    updateResultsCount();
+    updatePagination();
+});
+
+function initializeBooks() {
+    // Get all book rows from the table
+    const rows = document.querySelectorAll('#booksTableBody tr');
+    allBooks = Array.from(rows).map((row, index) => ({
+        element: row.cloneNode(true),
+        title: row.cells[1].textContent.trim(),
+        author: row.cells[2].textContent.trim(),
+        subject: row.cells[3].textContent.trim(),
+        language: row.cells[4].textContent.trim(),
+        availability: row.cells[5].textContent.trim(),
+        index: index
+    }));
+
+    // Add 10 more mock books to demonstrate pagination
+    const additionalBooks = [];
+    for (let i = 11; i <= 20; i++) {
+        const mockRow = document.createElement('tr');
+        mockRow.className = 'book-row';
+        mockRow.innerHTML = `
+            <td class="book-cover-cell">
+                <img src="https://picsum.photos/60/80?random=${110 + i}" alt="Mock Book ${i}" class="book-cover">
+            </td>
+            <td class="book-details-cell">
+                <div class="book-title">
+                    <a href="#" onclick="viewBook(${i})">Advanced Studies in Pacific Education Volume ${i}</a>
+                </div>
+                <div class="book-metadata">2024-0${i % 12 + 1}-${(i % 28) + 1}, Digital Edition</div>
+            </td>
+            <td class="book-details-cell">
+                <div class="book-metadata"><strong>Pacific Academic Press ${i}</strong></div>
+                <div class="book-description">Academic publisher</div>
+            </td>
+            <td class="book-details-cell">
+                <div class="book-metadata">${i % 2 === 0 ? 'Mathematics' : 'Language Arts'}</div>
+                <div class="book-description">Grade ${(i % 5) + 1}</div>
+            </td>
+            <td class="book-details-cell">
+                <div class="book-metadata">${i % 3 === 0 ? 'Pohnpeian' : i % 3 === 1 ? 'English' : 'Chuukese'}</div>
+                <div class="book-description">PDF Format</div>
+            </td>
+            <td class="book-details-cell">
+                <div class="book-metadata" style="color: ${i % 4 === 0 ? '#d63638' : '#00a32a'}; font-weight: 600;">${i % 4 === 0 ? 'Limited Access' : 'Available'}</div>
+            </td>
+            <td class="book-actions-cell">
+                <div class="book-actions">
+                    <button class="button button-primary btn-view" onclick="viewBook(${i})">Locate</button>
+                </div>
+            </td>
+        `;
+
+        additionalBooks.push({
+            element: mockRow,
+            title: `Advanced Studies in Pacific Education Volume ${i}`,
+            author: `Pacific Academic Press ${i}`,
+            subject: i % 2 === 0 ? 'Mathematics' : 'Language Arts',
+            language: i % 3 === 0 ? 'Pohnpeian' : i % 3 === 1 ? 'English' : 'Chuukese',
+            availability: i % 4 === 0 ? 'Limited Access' : 'Available',
+            index: i
+        });
+    }
+
+    allBooks = allBooks.concat(additionalBooks);
+}
+
+function sortTable(column) {
+    const headers = document.querySelectorAll('.books-table th.sortable');
+
+    // Remove sorting classes from all headers
+    headers.forEach(header => {
+        header.classList.remove('sort-asc', 'sort-desc');
+    });
+
+    // Determine sort direction
+    if (currentSort.column === column) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSort.direction = 'asc';
+    }
+    currentSort.column = column;
+
+    // Add appropriate class to clicked header
+    const clickedHeader = document.querySelector(`th[onclick="sortTable('${column}')"]`);
+    clickedHeader.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+
+    // Sort the books array
+    allBooks.sort((a, b) => {
+        let aValue = '';
+        let bValue = '';
+
+        switch(column) {
+            case 'title':
+                aValue = a.title.toLowerCase();
+                bValue = b.title.toLowerCase();
+                break;
+            case 'author':
+                aValue = a.author.toLowerCase();
+                bValue = b.author.toLowerCase();
+                break;
+            case 'subject':
+                aValue = a.subject.toLowerCase();
+                bValue = b.subject.toLowerCase();
+                break;
+            case 'language':
+                aValue = a.language.toLowerCase();
+                bValue = b.language.toLowerCase();
+                break;
+            case 'availability':
+                aValue = a.availability.toLowerCase();
+                bValue = b.availability.toLowerCase();
+                break;
+        }
+
+        if (currentSort.direction === 'asc') {
+            return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+        } else {
+            return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+        }
+    });
+
+    // Reset to first page after sorting
+    currentPage = 1;
+    displayCurrentPage();
+    updatePagination();
+}
+
+function displayCurrentPage() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const booksToShow = allBooks.slice(startIndex, endIndex);
+
+    const tbody = document.getElementById('booksTableBody');
+    tbody.innerHTML = '';
+
+    booksToShow.forEach(book => {
+        tbody.appendChild(book.element);
+    });
+}
+
+function updatePagination() {
+    const totalPages = Math.ceil(allBooks.length / itemsPerPage);
+    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+
+    // Update button styles for disabled state
+    if (currentPage === 1) {
+        prevBtn.style.opacity = '0.5';
+        prevBtn.style.cursor = 'not-allowed';
+    } else {
+        prevBtn.style.opacity = '1';
+        prevBtn.style.cursor = 'pointer';
+    }
+
+    if (currentPage === totalPages) {
+        nextBtn.style.opacity = '0.5';
+        nextBtn.style.cursor = 'not-allowed';
+    } else {
+        nextBtn.style.opacity = '1';
+        nextBtn.style.cursor = 'pointer';
+    }
+}
+
+function updateResultsCount() {
+    const resultsElement = document.getElementById('results-count');
+    if (resultsElement) {
+        resultsElement.textContent = `Showing ${allBooks.length} books and resources`;
+    }
+}
+
+function previousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        displayCurrentPage();
+        updatePagination();
+    }
+}
+
+function nextPage() {
+    const totalPages = Math.ceil(allBooks.length / itemsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        displayCurrentPage();
+        updatePagination();
+    }
+}
+
+// Mock functions for book actions
+function viewBook(id) {
+    alert(`Opening details for book ID: ${id}. This would typically open a book detail page.`);
+}
+
+function requestAccess(id) {
+    alert(`Access request submitted for book ID: ${id}. You will be notified when access is granted.`);
+}
+
+// Filter functionality
+function applyFilters() {
+    const checkedFilters = [];
+    const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked');
+
+    checkboxes.forEach(cb => {
+        checkedFilters.push(cb.value);
+    });
+
+    if (checkedFilters.length > 0) {
+        alert(`Applying filters: ${checkedFilters.join(', ')}\n\nThis would filter the books based on the selected criteria.`);
+    } else {
+        alert('No filters selected. Please select at least one filter to apply.');
+    }
+}
+
+function clearFilters() {
+    const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = false);
+    alert('All filters have been cleared. Showing all available books.');
+}
+
+// Search functionality
+function performSearch() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+
+    if (searchTerm === '') {
+        alert('Please enter a search term.');
+        return;
+    }
+
+    alert(`Searching for: "${searchTerm}"\n\nThis would filter books based on title, author, or description matching the search term.`);
+}
+
+// Add search functionality to search button
+document.addEventListener('DOMContentLoaded', function() {
+    const searchButton = document.querySelector('.search-button');
+    if (searchButton) {
+        searchButton.addEventListener('click', performSearch);
+    }
+
+    // Add Enter key support for search
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    }
+});
+</script>
+
 </body>
 </html>
