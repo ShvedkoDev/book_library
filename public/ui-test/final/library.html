@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micronesian Teachers Digital Library</title>
+    <link rel="stylesheet" href="https://use.typekit.net/aag8sdp.css">
+    <style>
+        /* CSS Custom Properties - Color Palette */
+        :root {
+            --wp--preset--color--coe-green: #009877;
+            --wp--preset--color--coe-blue: #005a70;
+            --wp--preset--color--coe-black: #0f1820;
+            --wp--preset--color--white: #ffffff;
+            --wp--preset--color--gray-light: #f8f9fa;
+            --wp--preset--color--gray-medium: #6c757d;
+            --wp--preset--color--gray-dark: #343a40;
+
+            /* Typography */
+            --wp--preset--font-size--small: 13px;
+            --wp--preset--font-size--medium: 20px;
+            --wp--preset--font-size--large: 36px;
+            --wp--preset--font-size--x-large: 42px;
+
+            /* Spacing */
+            --wp--preset--spacing--20: 0.5rem;
+            --wp--preset--spacing--30: 0.75rem;
+            --wp--preset--spacing--40: 1rem;
+            --wp--preset--spacing--50: 1.5rem;
+            --wp--preset--spacing--60: 2rem;
+            --wp--preset--spacing--70: 3rem;
+            --wp--preset--spacing--80: 5rem;
+
+            /* Layout */
+            --content-size: 620px;
+            --wide-size: 1600px;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "proxima-nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            line-height: 1.6;
+            color: var(--wp--preset--color--coe-black);
+            background-color: var(--wp--preset--color--white);
+        }
+
+        /* Layout Container */
+        .wp-site-blocks {
+            max-width: var(--wide-size);
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .site-header {
+            background-color: var(--wp--preset--color--white);
+            border-bottom: 1px solid #e9ecef;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: var(--wide-size);
+            margin: 0 auto;
+            padding: var(--wp--preset--spacing--40);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--wp--preset--spacing--30);
+        }
+
+        .site-logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        .site-title {
+            font-size: var(--wp--preset--font-size--medium);
+            font-weight: 700;
+            color: var(--wp--preset--color--coe-green);
+            text-decoration: none;
+        }
+
+        /* Navigation */
+        .main-navigation {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: var(--wp--preset--spacing--50);
+        }
+
+        .nav-menu a {
+            color: var(--wp--preset--color--coe-black);
+            text-decoration: none;
+            font-weight: 600;
+            padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a:focus {
+            background-color: var(--wp--preset--color--coe-green);
+            color: var(--wp--preset--color--white);
+        }
+
+        /* Library Layout */
+        .library-layout {
+            max-width: var(--wide-size);
+            margin: 0 auto;
+            padding: var(--wp--preset--spacing--60) var(--wp--preset--spacing--40);
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: var(--wp--preset--spacing--60);
+        }
+
+        .library-sidebar {
+            background-color: var(--wp--preset--color--gray-light);
+            padding: var(--wp--preset--spacing--40);
+            border-radius: 8px;
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .library-main {
+            min-width: 0;
+        }
+
+        .page-title {
+            font-size: var(--wp--preset--font-size--x-large);
+            font-weight: 800;
+            color: var(--wp--preset--color--coe-green);
+            margin-bottom: var(--wp--preset--spacing--50);
+            line-height: 1.2;
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: var(--wp--preset--spacing--50);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+            border: 2px solid var(--wp--preset--color--coe-green);
+            border-radius: 8px;
+            font-size: var(--wp--preset--font-size--medium);
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: var(--wp--preset--color--coe-blue);
+        }
+
+        /* Filters Section */
+        .filters-section {
+            margin-bottom: var(--wp--preset--spacing--50);
+        }
+
+        .filter-group {
+            margin-bottom: var(--wp--preset--spacing--40);
+        }
+
+        .filter-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--wp--preset--color--coe-blue);
+            margin-bottom: var(--wp--preset--spacing--30);
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--wp--preset--spacing--20);
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: var(--wp--preset--spacing--20);
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--wp--preset--color--coe-green);
+        }
+
+        .filter-option label {
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Results Section */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--wp--preset--spacing--40);
+            padding-bottom: var(--wp--preset--spacing--30);
+            border-bottom: 2px solid var(--wp--preset--color--gray-light);
+        }
+
+        .results-count {
+            font-size: var(--wp--preset--font-size--medium);
+            color: var(--wp--preset--color--gray-dark);
+            font-weight: 600;
+        }
+
+        .sort-select {
+            padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
+            border: 1px solid var(--wp--preset--color--gray-medium);
+            border-radius: 4px;
+            font-family: inherit;
+            background-color: var(--wp--preset--color--white);
+        }
+
+        /* Book Grid */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--wp--preset--spacing--40);
+            margin-bottom: var(--wp--preset--spacing--60);
+        }
+
+        .book-card {
+            background-color: var(--wp--preset--color--white);
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: var(--wp--preset--spacing--40);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .book-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .book-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--wp--preset--color--coe-green), var(--wp--preset--color--coe-blue));
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--wp--preset--color--white);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: var(--wp--preset--spacing--30);
+        }
+
+        .book-info h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--wp--preset--color--coe-black);
+            margin-bottom: var(--wp--preset--spacing--20);
+            line-height: 1.3;
+        }
+
+        .book-meta {
+            display: flex;
+            flex-direction: column;
+            gap: var(--wp--preset--spacing--20);
+            font-size: var(--wp--preset--font-size--small);
+            color: var(--wp--preset--color--gray-medium);
+        }
+
+        .book-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--wp--preset--spacing--20);
+            margin-top: var(--wp--preset--spacing--30);
+        }
+
+        .book-tag {
+            background-color: var(--wp--preset--color--coe-green);
+            color: var(--wp--preset--color--white);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--wp--preset--spacing--20);
+            margin-top: var(--wp--preset--spacing--60);
+        }
+
+        .pagination button {
+            padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
+            border: 1px solid var(--wp--preset--color--coe-green);
+            background-color: var(--wp--preset--color--white);
+            color: var(--wp--preset--color--coe-green);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background-color: var(--wp--preset--color--coe-green);
+            color: var(--wp--preset--color--white);
+        }
+
+        .pagination button.active {
+            background-color: var(--wp--preset--color--coe-green);
+            color: var(--wp--preset--color--white);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            font-weight: 600;
+            color: var(--wp--preset--color--gray-dark);
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: var(--wp--preset--color--coe-black);
+            color: var(--wp--preset--color--white);
+            padding: var(--wp--preset--spacing--60) var(--wp--preset--spacing--40);
+            margin-top: var(--wp--preset--spacing--80);
+        }
+
+        .footer-content {
+            max-width: var(--wide-size);
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .creative-commons {
+            margin-bottom: var(--wp--preset--spacing--40);
+            font-size: var(--wp--preset--font-size--small);
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .library-layout {
+                grid-template-columns: 1fr;
+                gap: var(--wp--preset--spacing--40);
+            }
+
+            .library-sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: var(--wp--preset--spacing--30);
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: var(--wp--preset--spacing--20);
+            }
+
+            .library-layout {
+                padding: var(--wp--preset--spacing--40) var(--wp--preset--spacing--30);
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: var(--wp--preset--spacing--20);
+                align-items: stretch;
+            }
+
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: var(--wp--preset--spacing--30);
+            }
+
+            .pagination {
+                flex-wrap: wrap;
+                gap: var(--wp--preset--spacing--20);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .book-card {
+                padding: var(--wp--preset--spacing--30);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wp-site-blocks">
+        <!-- Header -->
+        <header class="site-header">
+            <div class="header-container">
+                <div class="site-logo">
+                    <img src="https://via.placeholder.com/100x60/009877/ffffff?text=MT" alt="Micronesian Teachers">
+                    <a href="index.html" class="site-title">Micronesian Teachers Digital Library</a>
+                </div>
+                <nav class="main-navigation">
+                    <ul class="nav-menu">
+                        <li><a href="index.html">Guide</a></li>
+                        <li><a href="library.html">Library</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#partners">Partners</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Library Layout -->
+        <div class="library-layout">
+            <!-- Sidebar -->
+            <aside class="library-sidebar">
+                <!-- Search Section -->
+                <div class="search-section">
+                    <input type="text" id="searchBox" class="search-box" placeholder="Search books..." oninput="performSearch()">
+                </div>
+
+                <!-- Filters Section -->
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <h3 class="filter-title">Subject</h3>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" id="math" name="subject" value="Mathematics" onchange="applyFilters()">
+                                <label for="math">Mathematics</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="science" name="subject" value="Science" onchange="applyFilters()">
+                                <label for="science">Science</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="language" name="subject" value="Language Arts" onchange="applyFilters()">
+                                <label for="language">Language Arts</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="history" name="subject" value="History" onchange="applyFilters()">
+                                <label for="history">History</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="culture" name="subject" value="Cultural Studies" onchange="applyFilters()">
+                                <label for="culture">Cultural Studies</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3 class="filter-title">Grade Level</h3>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" id="elementary" name="grade" value="Elementary" onchange="applyFilters()">
+                                <label for="elementary">Elementary</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="middle" name="grade" value="Middle School" onchange="applyFilters()">
+                                <label for="middle">Middle School</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="high" name="grade" value="High School" onchange="applyFilters()">
+                                <label for="high">High School</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3 class="filter-title">Language</h3>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" id="chuukese" name="language" value="Chuukese" onchange="applyFilters()">
+                                <label for="chuukese">Chuukese</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="pohnpeian" name="language" value="Pohnpeian" onchange="applyFilters()">
+                                <label for="pohnpeian">Pohnpeian</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="yapese" name="language" value="Yapese" onchange="applyFilters()">
+                                <label for="yapese">Yapese</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="kosraean" name="language" value="Kosraean" onchange="applyFilters()">
+                                <label for="kosraean">Kosraean</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="marshallese" name="language" value="Marshallese" onchange="applyFilters()">
+                                <label for="marshallese">Marshallese</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="english" name="language" value="English" onchange="applyFilters()">
+                                <label for="english">English</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="library-main">
+                <h1 class="page-title">Digital Library</h1>
+
+                <!-- Results Header -->
+                <div class="results-header">
+                    <div class="results-count">
+                        Showing <span id="resultCount">25</span> of <span id="totalCount">2000</span> books
+                    </div>
+                    <select class="sort-select" id="sortSelect" onchange="applySorting()">
+                        <option value="title">Sort by Title</option>
+                        <option value="author">Sort by Author</option>
+                        <option value="year">Sort by Year</option>
+                        <option value="subject">Sort by Subject</option>
+                    </select>
+                </div>
+
+                <!-- Books Grid -->
+                <div class="books-grid" id="booksGrid">
+                    <!-- Books will be populated by JavaScript -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be populated by JavaScript -->
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="creative-commons">
+                    <p>This work is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.</p>
+                </div>
+                <p>&copy; 2024 Micronesian Teachers Digital Library. Preserving knowledge, empowering educators.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Sample book data
+        const sampleBooks = [
+            { id: 1, title: "Mathematics for Elementary Students", author: "Dr. Maria Santos", year: 2023, subject: "Mathematics", grade: "Elementary", language: "English", description: "Comprehensive math textbook for elementary students with cultural examples." },
+            { id: 2, title: "Chuukese Language Basics", author: "Prof. John Kimiuo", year: 2022, subject: "Language Arts", grade: "Elementary", language: "Chuukese", description: "Introduction to Chuukese language fundamentals." },
+            { id: 3, title: "Science Experiments for Middle School", author: "Dr. Sarah Kim", year: 2023, subject: "Science", grade: "Middle School", language: "English", description: "Hands-on science experiments using local materials." },
+            { id: 4, title: "History of Pohnpei", author: "Elder Robert Phillip", year: 2021, subject: "History", grade: "High School", language: "Pohnpeian", description: "Comprehensive history of Pohnpei island and culture." },
+            { id: 5, title: "Traditional Navigation Methods", author: "Master Navigator Paul Helgen", year: 2022, subject: "Cultural Studies", grade: "High School", language: "English", description: "Ancient Micronesian navigation techniques and their modern applications." },
+            { id: 6, title: "Yapese Cultural Practices", author: "Chief Margaret Falanruw", year: 2023, subject: "Cultural Studies", grade: "Middle School", language: "Yapese", description: "Traditional Yapese customs and their significance." },
+            { id: 7, title: "Environmental Science in Micronesia", author: "Dr. Peter Abraham", year: 2022, subject: "Science", grade: "High School", language: "English", description: "Local environmental challenges and conservation efforts." },
+            { id: 8, title: "Kosraean Literature Collection", author: "Various Authors", year: 2023, subject: "Language Arts", grade: "High School", language: "Kosraean", description: "Traditional stories and modern literature in Kosraean." },
+            { id: 9, title: "Basic Mathematics in Marshallese", author: "Teacher Janet Bobo", year: 2021, subject: "Mathematics", grade: "Elementary", language: "Marshallese", description: "Elementary mathematics concepts explained in Marshallese." },
+            { id: 10, title: "Pacific Island Geography", author: "Dr. Lisa Wong", year: 2023, subject: "History", grade: "Middle School", language: "English", description: "Geography and cultural diversity of Pacific islands." },
+            { id: 11, title: "Traditional Medicinal Plants", author: "Healer Rosa Nelson", year: 2022, subject: "Science", grade: "High School", language: "Chuukese", description: "Local plants and their traditional medicinal uses." },
+            { id: 12, title: "Creative Writing in Pohnpeian", author: "Author James David", year: 2023, subject: "Language Arts", grade: "High School", language: "Pohnpeian", description: "Guide to creative writing in Pohnpeian language." },
+            { id: 13, title: "Elementary Science Discoveries", author: "Teacher Anna George", year: 2022, subject: "Science", grade: "Elementary", language: "English", description: "Fun science activities for young learners." },
+            { id: 14, title: "Mathematical Problem Solving", author: "Prof. Robert Kim", year: 2023, subject: "Mathematics", grade: "High School", language: "English", description: "Advanced problem-solving techniques in mathematics." },
+            { id: 15, title: "Legends of Yap", author: "Storyteller Mary Figur", year: 2021, subject: "Cultural Studies", grade: "Elementary", language: "Yapese", description: "Traditional Yapese legends for children." },
+            { id: 16, title: "Modern Kosraean Grammar", author: "Dr. William Sigrah", year: 2022, subject: "Language Arts", grade: "Middle School", language: "Kosraean", description: "Comprehensive Kosraean grammar guide." },
+            { id: 17, title: "Marine Biology of Micronesia", author: "Dr. Jennifer Adams", year: 2023, subject: "Science", grade: "High School", language: "English", description: "Study of marine life in Micronesian waters." },
+            { id: 18, title: "Cultural Exchange Stories", author: "Various Teachers", year: 2022, subject: "Cultural Studies", grade: "Middle School", language: "English", description: "Stories of cultural exchange between islands." },
+            { id: 19, title: "Algebra in Daily Life", author: "Teacher Mark Santos", year: 2023, subject: "Mathematics", grade: "Middle School", language: "Marshallese", description: "Practical applications of algebra." },
+            { id: 20, title: "Oral Traditions of Chuuk", author: "Elder Joseph Sam", year: 2021, subject: "History", grade: "Elementary", language: "Chuukese", description: "Traditional oral histories of Chuuk." },
+            { id: 21, title: "Physics for Island Life", author: "Prof. David Lee", year: 2023, subject: "Science", grade: "High School", language: "English", description: "Physics concepts applied to island living." },
+            { id: 22, title: "Poetry in Pohnpeian", author: "Poet Susan Abraham", year: 2022, subject: "Language Arts", grade: "High School", language: "Pohnpeian", description: "Collection of modern Pohnpeian poetry." },
+            { id: 23, title: "Geometry and Art", author: "Artist Teacher Helen Kim", year: 2023, subject: "Mathematics", grade: "Middle School", language: "English", description: "Exploring geometry through traditional art." },
+            { id: 24, title: "Stories from Kosrae", author: "Community Elders", year: 2021, subject: "Cultural Studies", grade: "Elementary", language: "Kosraean", description: "Traditional stories from Kosraean elders." },
+            { id: 25, title: "Climate Change and Islands", author: "Dr. Michael Peter", year: 2023, subject: "Science", grade: "High School", language: "English", description: "Impact of climate change on Pacific islands." }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredBooks = [...sampleBooks];
+
+        function renderBooks() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const booksToShow = filteredBooks.slice(startIndex, endIndex);
+
+            const booksGrid = document.getElementById('booksGrid');
+            booksGrid.innerHTML = '';
+
+            booksToShow.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
+                bookCard.innerHTML = `
+                    <div class="book-thumbnail">${book.title.charAt(0)}</div>
+                    <div class="book-info">
+                        <h3>${book.title}</h3>
+                        <div class="book-meta">
+                            <div>By: ${book.author}</div>
+                            <div>Year: ${book.year}</div>
+                            <div>Grade: ${book.grade}</div>
+                        </div>
+                        <div class="book-tags">
+                            <span class="book-tag">${book.subject}</span>
+                            <span class="book-tag">${book.language}</span>
+                        </div>
+                    </div>
+                `;
+                booksGrid.appendChild(bookCard);
+            });
+
+            updateResultsCount();
+            renderPagination();
+        }
+
+        function updateResultsCount() {
+            document.getElementById('resultCount').textContent = Math.min(itemsPerPage, filteredBooks.length - ((currentPage - 1) * itemsPerPage));
+            document.getElementById('totalCount').textContent = filteredBooks.length;
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            // Previous button
+            const prevBtn = document.createElement('button');
+            prevBtn.textContent = 'Previous';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderBooks();
+                }
+            };
+            pagination.appendChild(prevBtn);
+
+            // Page numbers
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.className = i === currentPage ? 'active' : '';
+                pageBtn.onclick = () => {
+                    currentPage = i;
+                    renderBooks();
+                };
+                pagination.appendChild(pageBtn);
+            }
+
+            // Next button
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = 'Next';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderBooks();
+                }
+            };
+            pagination.appendChild(nextBtn);
+
+            // Page info
+            const pageInfo = document.createElement('div');
+            pageInfo.className = 'pagination-info';
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            pagination.appendChild(pageInfo);
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            applyFiltersAndSearch(searchTerm);
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            applyFiltersAndSearch(searchTerm);
+        }
+
+        function applyFiltersAndSearch(searchTerm = '') {
+            const subjectFilters = Array.from(document.querySelectorAll('input[name="subject"]:checked')).map(cb => cb.value);
+            const gradeFilters = Array.from(document.querySelectorAll('input[name="grade"]:checked')).map(cb => cb.value);
+            const languageFilters = Array.from(document.querySelectorAll('input[name="language"]:checked')).map(cb => cb.value);
+
+            filteredBooks = sampleBooks.filter(book => {
+                const matchesSearch = !searchTerm ||
+                    book.title.toLowerCase().includes(searchTerm) ||
+                    book.author.toLowerCase().includes(searchTerm) ||
+                    book.description.toLowerCase().includes(searchTerm);
+
+                const matchesSubject = subjectFilters.length === 0 || subjectFilters.includes(book.subject);
+                const matchesGrade = gradeFilters.length === 0 || gradeFilters.includes(book.grade);
+                const matchesLanguage = languageFilters.length === 0 || languageFilters.includes(book.language);
+
+                return matchesSearch && matchesSubject && matchesGrade && matchesLanguage;
+            });
+
+            currentPage = 1;
+            renderBooks();
+        }
+
+        function applySorting() {
+            const sortBy = document.getElementById('sortSelect').value;
+
+            filteredBooks.sort((a, b) => {
+                switch (sortBy) {
+                    case 'title':
+                        return a.title.localeCompare(b.title);
+                    case 'author':
+                        return a.author.localeCompare(b.author);
+                    case 'year':
+                        return b.year - a.year;
+                    case 'subject':
+                        return a.subject.localeCompare(b.subject);
+                    default:
+                        return 0;
+                }
+            });
+
+            renderBooks();
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderBooks();
+        });
+    </script>
+</body>
+</html>
