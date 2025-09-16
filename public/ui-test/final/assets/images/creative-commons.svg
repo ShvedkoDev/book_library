@@ -1,0 +1,10 @@
+<svg width="120" height="42" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="42" fill="#333" rx="4"/>
+  <text x="10" y="15" fill="white" font-size="8" font-family="Arial">CREATIVE</text>
+  <text x="10" y="25" fill="white" font-size="8" font-family="Arial">COMMONS</text>
+  <text x="10" y="35" fill="white" font-size="6" font-family="Arial">CC BY-NC-SA</text>
+  <circle cx="90" cy="12" r="8" fill="white"/>
+  <text x="86" y="16" fill="#333" font-size="10" font-weight="bold">CC</text>
+  <circle cx="90" cy="30" r="8" fill="white"/>
+  <text x="87" y="34" fill="#333" font-size="8">BY</text>
+</svg>
