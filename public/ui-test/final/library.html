@@ -2050,6 +2050,27 @@
                 gap: var(--wp--preset--spacing--20);
             }
         }
+
+        /* Sticky header banners */
+        .coe-banner {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: inherit;
+        }
+
+        .program-banner {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: inherit;
+        }
+
+        /* Ensure proper stacking when both are sticky */
+        .banner {
+            position: relative;
+            z-index: 1001;
+        }
     </style>
 
 </head>
