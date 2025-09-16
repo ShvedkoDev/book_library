@@ -1177,16 +1177,39 @@
         }
 
         .books-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            display: flex;
+            overflow-x: auto;
             gap: var(--wp--preset--spacing--30);
+            padding: var(--wp--preset--spacing--20) 0;
+            scroll-behavior: smooth;
+        }
+
+        .books-grid::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .books-grid::-webkit-scrollbar-track {
+            background: var(--wp--preset--color--coe-light-gray);
+            border-radius: 4px;
+        }
+
+        .books-grid::-webkit-scrollbar-thumb {
+            background: var(--wp--preset--color--coe-green);
+            border-radius: 4px;
+        }
+
+        .books-grid::-webkit-scrollbar-thumb:hover {
+            background: var(--wp--preset--color--coe-dark-green);
         }
 
         .book-card {
+            flex: 0 0 280px;
             border: 1px solid var(--wp--preset--color--coe-light-green);
             border-radius: 8px;
             padding: var(--wp--preset--spacing--30);
             text-align: center;
+            background: var(--wp--preset--color--white);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -1231,6 +1254,54 @@
             background-color: var(--wp--preset--color--coe-green-shade);
         }
 
+        .book-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-card-meta {
+            font-size: var(--wp--preset--font-size--small);
+            color: var(--wp--preset--color--coe-dark-gray);
+            margin-bottom: var(--wp--preset--spacing--10);
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--wp--preset--spacing--20);
+        }
+
+        .carousel-nav h2 {
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .carousel-controls {
+            display: flex;
+            gap: var(--wp--preset--spacing--10);
+        }
+
+        .carousel-btn {
+            background: var(--wp--preset--color--coe-green);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .carousel-btn:hover {
+            background: var(--wp--preset--color--coe-dark-green);
+        }
+
+        .carousel-btn:disabled {
+            background: var(--wp--preset--color--coe-light-gray);
+            cursor: not-allowed;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .book-page-container {
@@ -1248,8 +1319,8 @@
                 grid-template-columns: 1fr;
             }
             
-            .books-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            .book-card {
+                flex: 0 0 220px;
             }
         }
 
@@ -1667,30 +1738,6 @@
 <main class="main with_sidebar print" id="content">
 
     <div class="content print" role="main">
-        <div class="title_banner with_sidebar">
-            <div class="header-blurb container">
-                <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
-                    <!-- Breadcrumb NavXT 7.4.1 -->
-                    <span property="itemListElement" typeof="ListItem">
-                        <a property="item" typeof="WebPage" title="Go to Micronesian Teachers Digital Library." href="library.html" class="main-home">
-                            <span property="name">Resource Library</span></a>
-                        <meta property="position" content="1">
-                    </span>
-                    <span> &gt; </span>
-                    <span property="itemListElement" typeof="ListItem">
-                        <span property="name">The Sun Also Rises</span>
-                        <meta property="position" content="2">
-                    </span>
-                </div>
-                <div class="handbook-header-menu">
-                    <h1>Resource Library</h1>
-                </div>
-            </div>
-            <aside class="sidebar header-image handbook-image">
-                <img class="hupc-logo" src="https://picsum.photos/200/80?random=3DL" alt="Micronesian Teachers Digital Library logo">
-                <img class="farm-logo" src="https://picsum.photos/120/60?random=12" alt="Education Initiative logo">
-            </aside>
-        </div>
         <div class="page-content">
             <div class="container with_sidebar">
                 <div class="main_content">
@@ -1874,90 +1921,218 @@
 
                             <!-- Related Books Sections -->
                             <div class="related-books">
-                                <h2>More books from the same collection</h2>
-                                <div class="books-grid">
+                                <div class="carousel-nav">
+                                    <h2>More books from the same collection</h2>
+                                    <div class="carousel-controls">
+                                        <button class="carousel-btn" onclick="scrollCarousel('collection', -1)">‹</button>
+                                        <button class="carousel-btn" onclick="scrollCarousel('collection', 1)">›</button>
+                                    </div>
+                                </div>
+                                <div class="books-grid" id="collection-carousel">
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book4" alt="For Whom the Bell Tolls" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book4" alt="For Whom the Bell Tolls" class="book-card-cover">
                                         <div class="book-card-title">For Whom the Bell Tolls</div>
                                         <div class="book-card-author">Ernest Hemingway</div>
+                                        <div class="book-card-meta">1940 • Fiction • Grade 9-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book5" alt="A Farewell to Arms" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book5" alt="A Farewell to Arms" class="book-card-cover">
                                         <div class="book-card-title">A Farewell to Arms</div>
                                         <div class="book-card-author">Ernest Hemingway</div>
+                                        <div class="book-card-meta">1929 • Fiction • Grade 9-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book6" alt="The Great Gatsby" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book6" alt="The Great Gatsby" class="book-card-cover">
                                         <div class="book-card-title">The Great Gatsby</div>
                                         <div class="book-card-author">F. Scott Fitzgerald</div>
+                                        <div class="book-card-meta">1925 • Fiction • Grade 10-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book7" alt="Of Mice and Men" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book7" alt="Of Mice and Men" class="book-card-cover">
                                         <div class="book-card-title">Of Mice and Men</div>
                                         <div class="book-card-author">John Steinbeck</div>
+                                        <div class="book-card-meta">1937 • Fiction • Grade 8-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book21" alt="The Old Man and the Sea" class="book-card-cover">
+                                        <div class="book-card-title">The Old Man and the Sea</div>
+                                        <div class="book-card-author">Ernest Hemingway</div>
+                                        <div class="book-card-meta">1952 • Fiction • Grade 8-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book22" alt="The Grapes of Wrath" class="book-card-cover">
+                                        <div class="book-card-title">The Grapes of Wrath</div>
+                                        <div class="book-card-author">John Steinbeck</div>
+                                        <div class="book-card-meta">1939 • Fiction • Grade 10-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book23" alt="East of Eden" class="book-card-cover">
+                                        <div class="book-card-title">East of Eden</div>
+                                        <div class="book-card-author">John Steinbeck</div>
+                                        <div class="book-card-meta">1952 • Fiction • Grade 11-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book24" alt="Tender Is the Night" class="book-card-cover">
+                                        <div class="book-card-title">Tender Is the Night</div>
+                                        <div class="book-card-author">F. Scott Fitzgerald</div>
+                                        <div class="book-card-meta">1934 • Fiction • Grade 11-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="related-books">
-                                <h2>Related titles in the same language</h2>
-                                <div class="books-grid">
+                                <div class="carousel-nav">
+                                    <h2>Related titles in the same language</h2>
+                                    <div class="carousel-controls">
+                                        <button class="carousel-btn" onclick="scrollCarousel('same-language', -1)">‹</button>
+                                        <button class="carousel-btn" onclick="scrollCarousel('same-language', 1)">›</button>
+                                    </div>
+                                </div>
+                                <div class="books-grid" id="same-language-carousel">
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book8" alt="To Kill a Mockingbird" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book8" alt="To Kill a Mockingbird" class="book-card-cover">
                                         <div class="book-card-title">To Kill a Mockingbird</div>
                                         <div class="book-card-author">Harper Lee</div>
+                                        <div class="book-card-meta">1960 • Fiction • Grade 9-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book9" alt="1984" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book9" alt="1984" class="book-card-cover">
                                         <div class="book-card-title">1984</div>
                                         <div class="book-card-author">George Orwell</div>
+                                        <div class="book-card-meta">1949 • Dystopian • Grade 10-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book10" alt="Lord of the Flies" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book10" alt="Lord of the Flies" class="book-card-cover">
                                         <div class="book-card-title">Lord of the Flies</div>
                                         <div class="book-card-author">William Golding</div>
+                                        <div class="book-card-meta">1954 • Fiction • Grade 8-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book11" alt="The Catcher in the Rye" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book11" alt="The Catcher in the Rye" class="book-card-cover">
                                         <div class="book-card-title">The Catcher in the Rye</div>
                                         <div class="book-card-author">J.D. Salinger</div>
+                                        <div class="book-card-meta">1951 • Fiction • Grade 9-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book25" alt="Animal Farm" class="book-card-cover">
+                                        <div class="book-card-title">Animal Farm</div>
+                                        <div class="book-card-author">George Orwell</div>
+                                        <div class="book-card-meta">1945 • Allegory • Grade 8-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book26" alt="Pride and Prejudice" class="book-card-cover">
+                                        <div class="book-card-title">Pride and Prejudice</div>
+                                        <div class="book-card-author">Jane Austen</div>
+                                        <div class="book-card-meta">1813 • Romance • Grade 9-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book27" alt="Jane Eyre" class="book-card-cover">
+                                        <div class="book-card-title">Jane Eyre</div>
+                                        <div class="book-card-author">Charlotte Brontë</div>
+                                        <div class="book-card-meta">1847 • Gothic • Grade 10-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book28" alt="Brave New World" class="book-card-cover">
+                                        <div class="book-card-title">Brave New World</div>
+                                        <div class="book-card-author">Aldous Huxley</div>
+                                        <div class="book-card-meta">1932 • Dystopian • Grade 11-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book29" alt="Fahrenheit 451" class="book-card-cover">
+                                        <div class="book-card-title">Fahrenheit 451</div>
+                                        <div class="book-card-author">Ray Bradbury</div>
+                                        <div class="book-card-meta">1953 • Dystopian • Grade 9-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="related-books">
-                                <h2>Related titles in other languages</h2>
-                                <div class="books-grid">
+                                <div class="carousel-nav">
+                                    <h2>Related titles in other languages</h2>
+                                    <div class="carousel-controls">
+                                        <button class="carousel-btn" onclick="scrollCarousel('other-languages', -1)">‹</button>
+                                        <button class="carousel-btn" onclick="scrollCarousel('other-languages', 1)">›</button>
+                                    </div>
+                                </div>
+                                <div class="books-grid" id="other-languages-carousel">
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book12" alt="Chuukese Literature" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book12" alt="Chuukese Literature" class="book-card-cover">
                                         <div class="book-card-title">Fansoun Chuuk: Traditional Stories</div>
                                         <div class="book-card-author">Various Authors</div>
+                                        <div class="book-card-meta">2020 • Chuukese • Grade 6-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book13" alt="Yapese Stories" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book13" alt="Yapese Stories" class="book-card-cover">
                                         <div class="book-card-title">Gagil Tamil: Yapese Folktales</div>
                                         <div class="book-card-author">Traditional</div>
+                                        <div class="book-card-meta">2019 • Yapese • Grade 4-10</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book14" alt="Pohnpeian Literature" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book14" alt="Pohnpeian Literature" class="book-card-cover">
                                         <div class="book-card-title">Kapinga Pohnpei: Island Stories</div>
                                         <div class="book-card-author">Local Authors</div>
+                                        <div class="book-card-meta">2021 • Pohnpeian • Grade 5-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                     <div class="book-card">
-                                        <img src="https://picsum.photos/160/240?random=book15" alt="Kosraean Tales" class="book-card-cover">
+                                        <img src="https://picsum.photos/200/300?random=book15" alt="Kosraean Tales" class="book-card-cover">
                                         <div class="book-card-title">Kosrae Ac Fahfah: Ancient Tales</div>
                                         <div class="book-card-author">Cultural Preservation Society</div>
+                                        <div class="book-card-meta">2018 • Kosraean • Grade 3-9</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book30" alt="Marshallese Legends" class="book-card-cover">
+                                        <div class="book-card-title">Jab Waween: Marshallese Legends</div>
+                                        <div class="book-card-author">Island Storytellers</div>
+                                        <div class="book-card-meta">2020 • Marshallese • Grade 4-11</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book31" alt="Palauan Poetry" class="book-card-cover">
+                                        <div class="book-card-title">Olsudong: Palauan Poetry Collection</div>
+                                        <div class="book-card-author">Contemporary Poets</div>
+                                        <div class="book-card-meta">2022 • Palauan • Grade 7-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book32" alt="Carolinian Stories" class="book-card-cover">
+                                        <div class="book-card-title">Refaluwasch Stories</div>
+                                        <div class="book-card-author">Elder Council</div>
+                                        <div class="book-card-meta">2021 • Carolinian • Grade 5-10</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book33" alt="Chamorro Literature" class="book-card-cover">
+                                        <div class="book-card-title">I Estoria-ta: Our Stories</div>
+                                        <div class="book-card-author">Guam Writers Association</div>
+                                        <div class="book-card-meta">2020 • Chamorro • Grade 6-12</div>
+                                        <button class="book-card-btn">View</button>
+                                    </div>
+                                    <div class="book-card">
+                                        <img src="https://picsum.photos/200/300?random=book34" alt="Kiribati Tales" class="book-card-cover">
+                                        <div class="book-card-title">Te Karaki: Ocean Tales</div>
+                                        <div class="book-card-author">Pacific Preservation Project</div>
+                                        <div class="book-card-meta">2019 • Kiribati • Grade 4-9</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
                                 </div>
@@ -2067,6 +2242,41 @@
             const action = this.textContent;
             alert(`${action} functionality will be implemented in the Laravel version.`);
         });
+    });
+
+    // Carousel functionality
+    function scrollCarousel(carouselType, direction) {
+        const carousel = document.getElementById(`${carouselType}-carousel`);
+        if (!carousel) return;
+        
+        const cardWidth = 280; // card width + gap
+        const scrollAmount = cardWidth * 2; // scroll 2 cards at a time
+        
+        carousel.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    // Update carousel button states
+    function updateCarouselButtons() {
+        ['collection', 'same-language', 'other-languages'].forEach(carouselType => {
+            const carousel = document.getElementById(`${carouselType}-carousel`);
+            if (!carousel) return;
+            
+            const isAtStart = carousel.scrollLeft === 0;
+            const isAtEnd = carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth);
+            
+            // You can add button state updates here if needed
+        });
+    }
+
+    // Listen for scroll events to update button states
+    ['collection', 'same-language', 'other-languages'].forEach(carouselType => {
+        const carousel = document.getElementById(`${carouselType}-carousel`);
+        if (carousel) {
+            carousel.addEventListener('scroll', updateCarouselButtons);
+        }
     });
 </script>
 
