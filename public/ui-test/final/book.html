@@ -1265,41 +1265,66 @@
             margin-bottom: var(--wp--preset--spacing--10);
         }
 
-        .carousel-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .carousel-container {
+            position: relative;
+            margin-bottom: var(--wp--preset--spacing--40);
+        }
+
+        .carousel-header {
             margin-bottom: var(--wp--preset--spacing--20);
         }
 
-        .carousel-nav h2 {
+        .carousel-header h2 {
             margin: 0;
-            flex-grow: 1;
         }
 
-        .carousel-controls {
+        .carousel-wrapper {
+            position: relative;
             display: flex;
-            gap: var(--wp--preset--spacing--10);
+            align-items: center;
+            gap: var(--wp--preset--spacing--20);
         }
 
         .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
             background: var(--wp--preset--color--coe-green);
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 8px 12px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
             cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.2s ease;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .carousel-btn:hover {
             background: var(--wp--preset--color--coe-dark-green);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
 
         .carousel-btn:disabled {
             background: var(--wp--preset--color--coe-light-gray);
             cursor: not-allowed;
+            transform: translateY(-50%);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel-btn-prev {
+            left: -20px;
+        }
+
+        .carousel-btn-next {
+            right: -20px;
         }
 
         /* Responsive Design */
@@ -1321,6 +1346,20 @@
             
             .book-card {
                 flex: 0 0 220px;
+            }
+
+            .carousel-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+
+            .carousel-btn-prev {
+                left: -15px;
+            }
+
+            .carousel-btn-next {
+                right: -15px;
             }
         }
 
@@ -1921,14 +1960,13 @@
 
                             <!-- Related Books Sections -->
                             <div class="related-books">
-                                <div class="carousel-nav">
-                                    <h2>More books from the same collection</h2>
-                                    <div class="carousel-controls">
-                                        <button class="carousel-btn" onclick="scrollCarousel('collection', -1)">‹</button>
-                                        <button class="carousel-btn" onclick="scrollCarousel('collection', 1)">›</button>
+                                <div class="carousel-container">
+                                    <div class="carousel-header">
+                                        <h2>More books from the same collection</h2>
                                     </div>
-                                </div>
-                                <div class="books-grid" id="collection-carousel">
+                                    <div class="carousel-wrapper">
+                                        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('collection', -1)">‹</button>
+                                        <div class="books-grid" id="collection-carousel">
                                     <div class="book-card">
                                         <img src="https://picsum.photos/200/300?random=book4" alt="For Whom the Bell Tolls" class="book-card-cover">
                                         <div class="book-card-title">For Whom the Bell Tolls</div>
@@ -1985,18 +2023,20 @@
                                         <div class="book-card-meta">1934 • Fiction • Grade 11-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
+                                        </div>
+                                        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('collection', 1)">›</button>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="related-books">
-                                <div class="carousel-nav">
-                                    <h2>Related titles in the same language</h2>
-                                    <div class="carousel-controls">
-                                        <button class="carousel-btn" onclick="scrollCarousel('same-language', -1)">‹</button>
-                                        <button class="carousel-btn" onclick="scrollCarousel('same-language', 1)">›</button>
+                                <div class="carousel-container">
+                                    <div class="carousel-header">
+                                        <h2>Related titles in the same language</h2>
                                     </div>
-                                </div>
-                                <div class="books-grid" id="same-language-carousel">
+                                    <div class="carousel-wrapper">
+                                        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('same-language', -1)">‹</button>
+                                        <div class="books-grid" id="same-language-carousel">
                                     <div class="book-card">
                                         <img src="https://picsum.photos/200/300?random=book8" alt="To Kill a Mockingbird" class="book-card-cover">
                                         <div class="book-card-title">To Kill a Mockingbird</div>
@@ -2060,18 +2100,20 @@
                                         <div class="book-card-meta">1953 • Dystopian • Grade 9-12</div>
                                         <button class="book-card-btn">View</button>
                                     </div>
+                                        </div>
+                                        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('same-language', 1)">›</button>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="related-books">
-                                <div class="carousel-nav">
-                                    <h2>Related titles in other languages</h2>
-                                    <div class="carousel-controls">
-                                        <button class="carousel-btn" onclick="scrollCarousel('other-languages', -1)">‹</button>
-                                        <button class="carousel-btn" onclick="scrollCarousel('other-languages', 1)">›</button>
+                                <div class="carousel-container">
+                                    <div class="carousel-header">
+                                        <h2>Related titles in other languages</h2>
                                     </div>
-                                </div>
-                                <div class="books-grid" id="other-languages-carousel">
+                                    <div class="carousel-wrapper">
+                                        <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('other-languages', -1)">‹</button>
+                                        <div class="books-grid" id="other-languages-carousel">
                                     <div class="book-card">
                                         <img src="https://picsum.photos/200/300?random=book12" alt="Chuukese Literature" class="book-card-cover">
                                         <div class="book-card-title">Fansoun Chuuk: Traditional Stories</div>
@@ -2134,6 +2176,9 @@
                                         <div class="book-card-author">Pacific Preservation Project</div>
                                         <div class="book-card-meta">2019 • Kiribati • Grade 4-9</div>
                                         <button class="book-card-btn">View</button>
+                                    </div>
+                                        </div>
+                                        <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('other-languages', 1)">›</button>
                                     </div>
                                 </div>
                             </div>
