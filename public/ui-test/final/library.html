@@ -1427,26 +1427,25 @@
         .search-box {
             display: flex;
             margin-bottom: var(--wp--preset--spacing--30);
-            border-radius: 6px;
+            border: 1px solid #8c8f94;
+            border-radius: 3px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background: var(--wp--preset--color--white);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.07);
         }
 
         /* WordPress input styling */
         .search-input, .input {
             flex: 1;
-            padding: 3px 5px;
-            border: 1px solid #ddd;
-            border-right: none;
-            border-radius: 0;
-            font-size: 14px;
+            padding: 6px 8px;
+            border: none;
+            font-size: 13px;
+            line-height: 2.15384615;
+            min-height: 30px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-            line-height: 2;
-            outline: none;
-            background-color: #fff;
+            background: var(--wp--preset--color--white);
             color: #32373c;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+            outline: none;
         }
 
         .search-input:focus, .input:focus {
@@ -1456,20 +1455,51 @@
         }
 
         .search-button {
-            background: var(--wp--preset--color--coe-green);
-            color: var(--wp--preset--color--white);
-            border: 2px solid var(--wp--preset--color--coe-green);
-            padding: 12px var(--wp--preset--spacing--20);
+            background: #f6f7f7;
+            border: none;
+            border-left: 1px solid #8c8f94;
+            color: #50575e;
+            padding: 6px 10px;
             cursor: pointer;
-            font-family: var(--wp--preset--font-family--proxima-nova);
-            font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            min-width: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .search-button:hover {
-            background: var(--wp--preset--color--coe-blue);
-            border-color: var(--wp--preset--color--coe-blue);
-            transform: translateY(-1px);
+            background: #f0f0f1;
+            color: #1d2327;
+        }
+
+        .search-button i {
+            font-size: 14px;
+        }
+
+        /* Entries section styling */
+        .entries-section {
+            margin-bottom: var(--wp--preset--spacing--40);
+        }
+
+        .entries-dropdown {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #8c8f94;
+            border-radius: 3px;
+            font-size: 13px;
+            line-height: 2.15384615;
+            min-height: 30px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            background: var(--wp--preset--color--white);
+            color: #32373c;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.07);
+        }
+
+        .entries-dropdown:focus {
+            outline: none;
+            border-color: #007cba;
+            box-shadow: 0 0 0 1px #007cba;
         }
 
         .filter-section {
@@ -1902,27 +1932,65 @@
             box-shadow: 0 0 0 1px #00a32a;
         }
 
-        /* Pagination styling */
+        /* Pagination styling - modern WordPress style */
         .pagination {
-            margin-top: var(--wp--preset--spacing--50);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            margin-top: var(--wp--preset--spacing--40);
+            padding: var(--wp--preset--spacing--30) 0;
+        }
+
+        .pagination-btn {
+            min-width: 32px;
+            height: 32px;
+            padding: 0;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #1e73be;
+            text-decoration: none;
+            border-radius: 16px;
+            transition: all 0.2s ease;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 32px;
             text-align: center;
-            padding: var(--wp--preset--spacing--30);
-            background: var(--wp--preset--color--coe-light-green-background);
-            border-radius: 8px;
-            border: 2px solid var(--wp--preset--color--coe-light-green);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
 
-        .pagination button {
-            margin: 0 var(--wp--preset--spacing--10);
-            min-width: 100px;
+        .pagination-btn:hover {
+            background: rgba(30, 115, 190, 0.1);
+            color: #1e73be;
         }
 
-        .pagination span {
-            margin: 0 var(--wp--preset--spacing--20);
-            color: var(--wp--preset--color--coe-green);
-            font-weight: 700;
-            font-family: var(--wp--preset--font-family--proxima-nova);
-            font-size: var(--wp--preset--font-size--medium);
+        .pagination-btn.active {
+            background: #1e73be;
+            color: white;
+            font-weight: 600;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn:disabled:hover {
+            background: transparent;
+        }
+
+        /* Navigation arrows styling */
+        .pagination-btn.nav-arrow {
+            background: #1e73be;
+            color: white;
+        }
+
+        .pagination-btn.nav-arrow:hover {
+            background: #155a8a;
         }
 
         /* Fix container width issues */
@@ -2094,6 +2162,19 @@
                                 <button type="button" class="search-button">
                                     <i class="fal fa-search"></i>
                                 </button>
+                            </div>
+                        </div>
+
+                        <div class="entries-section">
+                            <h3>Number of Entries</h3>
+                            <div class="entries-selector">
+                                <select id="entriesPerPage" class="entries-dropdown">
+                                    <option value="5">5 per page</option>
+                                    <option value="10" selected>10 per page</option>
+                                    <option value="20">20 per page</option>
+                                    <option value="50">50 per page</option>
+                                    <option value="100">100 per page</option>
+                                </select>
                             </div>
                         </div>
 
@@ -2375,10 +2456,16 @@
                                 </td>
                             </tr>                        </tbody>
                     </table>                    <!-- Pagination -->
-                    <div class="pagination" style="margin-top: var(--wp--preset--spacing--40); text-align: center;">
-                        <button class="button btn-secondary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="previousPage()" id="prevBtn">Previous</button>
-                        <span style="margin: 0 var(--wp--preset--spacing--20); color: var(--wp--preset--color--coe-green); font-weight: 600;" id="pageInfo">Page 1 of 19</span>
-                        <button class="button button-primary btn-primary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="nextPage()" id="nextBtn">Next</button>
+                    <div class="pagination">
+                        <button class="pagination-btn nav-arrow" onclick="previousPage()" id="prevBtn">←</button>
+                        <button class="pagination-btn active" onclick="goToPage(1)">1</button>
+                        <button class="pagination-btn" onclick="goToPage(2)">2</button>
+                        <button class="pagination-btn" onclick="goToPage(3)">3</button>
+                        <button class="pagination-btn" onclick="goToPage(4)">4</button>
+                        <button class="pagination-btn" onclick="goToPage(5)">5</button>
+                        <button class="pagination-btn" onclick="goToPage(6)">6</button>
+                        <button class="pagination-btn" onclick="goToPage(7)">7</button>
+                        <button class="pagination-btn nav-arrow" onclick="nextPage()" id="nextBtn">→</button>
                     </div>
                 </div>        </div>
     </div>
@@ -2691,7 +2778,7 @@
 <script>
 // Pagination and sorting functionality
 let currentPage = 1;
-const itemsPerPage = 10;
+let itemsPerPage = 10;
 let currentSort = { column: '', direction: 'asc' };
 let allBooks = [];
 
@@ -2701,6 +2788,18 @@ document.addEventListener('DOMContentLoaded', function() {
     displayCurrentPage();
     updateResultsCount();
     updatePagination();
+
+    // Add entries per page functionality
+    const entriesDropdown = document.getElementById('entriesPerPage');
+    if (entriesDropdown) {
+        entriesDropdown.addEventListener('change', function() {
+            itemsPerPage = parseInt(this.value);
+            currentPage = 1; // Reset to first page
+            displayCurrentPage();
+            updateResultsCount();
+            updatePagination();
+        });
+    }
 });
 
 function initializeBooks() {
@@ -2807,30 +2906,22 @@ function displayCurrentPage() {
 
 function updatePagination() {
     const totalPages = Math.ceil(allBooks.length / itemsPerPage);
-    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
 
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
 
+    // Update navigation arrows
     prevBtn.disabled = currentPage === 1;
     nextBtn.disabled = currentPage === totalPages;
 
-    // Update button styles for disabled state
-    if (currentPage === 1) {
-        prevBtn.style.opacity = '0.5';
-        prevBtn.style.cursor = 'not-allowed';
-    } else {
-        prevBtn.style.opacity = '1';
-        prevBtn.style.cursor = 'pointer';
-    }
-
-    if (currentPage === totalPages) {
-        nextBtn.style.opacity = '0.5';
-        nextBtn.style.cursor = 'not-allowed';
-    } else {
-        nextBtn.style.opacity = '1';
-        nextBtn.style.cursor = 'pointer';
-    }
+    // Update page number buttons
+    const pageButtons = document.querySelectorAll('.pagination-btn:not(.nav-arrow)');
+    pageButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (parseInt(btn.textContent) === currentPage) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 function updateResultsCount() {
@@ -2852,6 +2943,15 @@ function nextPage() {
     const totalPages = Math.ceil(allBooks.length / itemsPerPage);
     if (currentPage < totalPages) {
         currentPage++;
+        displayCurrentPage();
+        updatePagination();
+    }
+}
+
+function goToPage(page) {
+    const totalPages = Math.ceil(allBooks.length / itemsPerPage);
+    if (page >= 1 && page <= totalPages) {
+        currentPage = page;
         displayCurrentPage();
         updatePagination();
     }
