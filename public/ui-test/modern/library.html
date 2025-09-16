@@ -912,7 +912,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(59, 130, 246, 0.3);
             border-radius: 12px;
-            color: white;
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s;
@@ -922,6 +922,7 @@
         .pagination-btn:hover:not(:disabled) {
             background: rgba(59, 130, 246, 0.2);
             border-color: rgba(59, 130, 246, 0.5);
+            color: white;
             transform: translateY(-1px);
         }
 
@@ -946,7 +947,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s;
@@ -956,12 +957,14 @@
         .pagination-number:hover {
             background: rgba(59, 130, 246, 0.2);
             border-color: rgba(59, 130, 246, 0.5);
+            color: white;
             transform: translateY(-1px);
         }
 
         .pagination-number.active {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             border-color: var(--primary-color);
+            color: white;
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
         }
 
