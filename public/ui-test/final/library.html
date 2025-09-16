@@ -1432,19 +1432,27 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .search-input {
+        /* WordPress input styling */
+        .search-input, .input {
             flex: 1;
-            padding: 12px var(--wp--preset--spacing--20);
-            border: 2px solid var(--wp--preset--color--coe-light-green);
+            padding: 3px 5px;
+            border: 1px solid #ddd;
             border-right: none;
-            font-size: var(--wp--preset--font-size--small);
-            font-family: var(--wp--preset--font-family--proxima-nova);
+            border-radius: 0;
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            line-height: 2;
             outline: none;
-            transition: border-color 0.3s ease;
+            background-color: #fff;
+            color: #32373c;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
         }
 
-        .search-input:focus {
-            border-color: var(--wp--preset--color--coe-green);
+        .search-input:focus, .input:focus {
+            border-color: #007cba;
+            box-shadow: 0 0 0 1px #007cba;
+            outline: 2px solid transparent;
         }
 
         .search-button {
@@ -1521,43 +1529,108 @@
             margin-top: var(--wp--preset--spacing--30);
         }
 
-        /* WordPress-style buttons */
-        .btn-primary, .btn-secondary {
-            font-family: var(--wp--preset--font-family--proxima-nova);
-            font-weight: 600;
-            padding: 12px var(--wp--preset--spacing--20);
-            border: none;
-            border-radius: 6px;
+        /* WordPress button styling */
+        .button, .btn-primary, .btn-secondary {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 13px;
+            line-height: 2.15384615;
+            min-height: 30px;
+            margin: 0;
+            padding: 0 10px;
             cursor: pointer;
-            font-size: var(--wp--preset--font-size--small);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 3px;
+            white-space: nowrap;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-weight: 400;
+            vertical-align: top;
+            transition: all 0.1s ease-in-out;
         }
 
-        .btn-primary {
-            background: var(--wp--preset--color--coe-green);
-            color: var(--wp--preset--color--white);
+        .button-primary, .btn-primary {
+            background: #007cba;
+            border-color: #007cba;
+            color: #fff;
+            text-shadow: none;
+        }
+
+        .button-primary:hover, .btn-primary:hover {
+            background: #005a87;
+            border-color: #005a87;
+            color: #fff;
+        }
+
+        .button-primary:focus, .btn-primary:focus {
+            background: #005a87;
+            border-color: #005a87;
+            color: #fff;
+            box-shadow: 0 0 0 1px #007cba;
+            outline: 2px solid transparent;
+        }
+
+        .button-large {
+            height: 30px;
+            line-height: 2;
+            padding: 0 12px;
+            font-size: 14px;
+        }
+
+        .btn-secondary, .button {
+            background: #f6f7f7;
+            border-color: #dcdcde;
+            color: #2c3338;
+            text-shadow: none;
+        }
+
+        .btn-secondary:hover, .button:hover {
+            background: #f0f0f1;
+            border-color: #8c8f94;
+            color: #1d2327;
+        }
+
+        .btn-secondary:focus, .button:focus {
+            background: #f6f7f7;
+            border-color: #4f94d4;
+            color: #1d2327;
+            box-shadow: 0 0 0 1px #4f94d4;
+            outline: 2px solid transparent;
+        }
+
+        /* Apply WordPress button styles to our library buttons */
+        .filter-actions .btn-primary,
+        .filter-actions .btn-secondary {
             flex: 1;
+            min-height: 32px;
+            padding: 0 12px;
         }
 
-        .btn-primary:hover {
-            background: var(--wp--preset--color--coe-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 152, 119, 0.3);
+        .search-button {
+            background: #007cba;
+            border: 1px solid #007cba;
+            color: #fff;
+            padding: 0 12px;
+            cursor: pointer;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-size: 13px;
+            line-height: 2.15384615;
+            min-height: 30px;
+            border-radius: 0;
+            transition: all 0.1s ease-in-out;
         }
 
-        .btn-secondary {
-            background: var(--wp--preset--color--coe-gray);
-            color: var(--wp--preset--color--white);
-            flex: 1;
+        .search-button:hover {
+            background: #005a87;
+            border-color: #005a87;
         }
 
-        .btn-secondary:hover {
-            background: var(--wp--preset--color--coe-black);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        .search-button:focus {
+            background: #005a87;
+            border-color: #005a87;
+            box-shadow: 0 0 0 1px #007cba;
+            outline: 2px solid transparent;
         }
 
         .library-header {
@@ -1604,17 +1677,23 @@
         }
 
         .sort-options select {
-            padding: 8px var(--wp--preset--spacing--15);
-            border: 1px solid var(--wp--preset--color--coe-light-green);
-            border-radius: 4px;
-            font-family: var(--wp--preset--font-family--proxima-nova);
-            background: var(--wp--preset--color--white);
-            color: var(--wp--preset--color--coe-black);
+            padding: 2px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-size: 14px;
+            line-height: 2;
+            background: #fff;
+            color: #32373c;
             outline: none;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
 
         .sort-options select:focus {
-            border-color: var(--wp--preset--color--coe-green);
+            border-color: #007cba;
+            box-shadow: 0 0 0 1px #007cba;
+            outline: 2px solid transparent;
         }
 
         .book-grid {
@@ -1698,40 +1777,57 @@
         .btn-view, .btn-download {
             flex: 1;
             text-align: center;
-            padding: 12px var(--wp--preset--spacing--10);
-            border-radius: 6px;
+            padding: 0 10px;
+            border-radius: 3px;
             text-decoration: none;
-            font-size: var(--wp--preset--font-size--small);
-            font-weight: 600;
-            font-family: var(--wp--preset--font-family--proxima-nova);
+            font-size: 13px;
+            font-weight: 400;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
             cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            border-width: 1px;
+            border-style: solid;
+            transition: all 0.1s ease-in-out;
+            line-height: 2.15384615;
+            min-height: 30px;
+            box-sizing: border-box;
+            white-space: nowrap;
+            vertical-align: top;
+            display: inline-block;
         }
 
         .btn-view {
-            background: var(--wp--preset--color--coe-blue);
-            color: var(--wp--preset--color--white);
+            background: #007cba;
+            border-color: #007cba;
+            color: #fff;
+            text-shadow: none;
         }
 
         .btn-download {
-            background: var(--wp--preset--color--coe-green);
-            color: var(--wp--preset--color--white);
-        }
-
-        .btn-view:hover, .btn-download:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            background: #00a32a;
+            border-color: #00a32a;
+            color: #fff;
+            text-shadow: none;
         }
 
         .btn-view:hover {
-            background: var(--wp--preset--color--coe-forward-blue);
+            background: #005a87;
+            border-color: #005a87;
+            color: #fff;
         }
 
         .btn-download:hover {
-            background: var(--wp--preset--color--coe-highlight-green);
+            background: #008a20;
+            border-color: #008a20;
+            color: #fff;
+        }
+
+        .btn-view:focus, .btn-download:focus {
+            box-shadow: 0 0 0 1px #007cba;
+            outline: 2px solid transparent;
+        }
+
+        .btn-download:focus {
+            box-shadow: 0 0 0 1px #00a32a;
         }
 
         /* Pagination styling */
@@ -1922,7 +2018,7 @@
                         <div class="search-section">
                             <h3>Search Library</h3>
                             <div class="search-box">
-                                <input type="text" id="searchInput" placeholder="Search books, authors, topics..." class="search-input">
+                                <input type="text" id="searchInput" placeholder="Search books, authors, topics..." class="search-input input">
                                 <button type="button" class="search-button">
                                     <i class="fal fa-search"></i>
                                 </button>
@@ -1980,8 +2076,8 @@
                             </div>
 
                             <div class="filter-actions">
-                                <button type="button" class="btn-primary" onclick="applyFilters()">Apply Filters</button>
-                                <button type="button" class="btn-secondary" onclick="clearFilters()">Clear All</button>
+                                <button type="button" class="button button-primary btn-primary" onclick="applyFilters()">Apply Filters</button>
+                                <button type="button" class="button btn-secondary" onclick="clearFilters()">Clear All</button>
                             </div>
                         </div>
                     </div>
@@ -2154,9 +2250,9 @@
 
                     <!-- Pagination -->
                     <div class="pagination" style="margin-top: var(--wp--preset--spacing--40); text-align: center;">
-                        <button class="btn-secondary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="previousPage()">Previous</button>
+                        <button class="button btn-secondary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="previousPage()">Previous</button>
                         <span style="margin: 0 var(--wp--preset--spacing--20); color: var(--wp--preset--color--coe-green); font-weight: 600;">Page 1 of 185</span>
-                        <button class="btn-primary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="nextPage()">Next</button>
+                        <button class="button button-primary btn-primary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="nextPage()">Next</button>
                     </div>
                 </div>        </div>
     </div>
