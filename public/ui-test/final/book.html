@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'/>
+    <style>img:is([sizes="auto" i], [sizes^="auto," i]) {
+        contain-intrinsic-size: 3000px 1500px
+    }</style>
+
+    <title>The Sun Also Rises - Micronesian Teachers Digital Library</title>
+    <link rel="canonical" href="https://localhost/micronesian-digital-library/book/the-sun-also-rises"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="The Sun Also Rises - Micronesian Teachers Digital Library"/>
+    <meta property="og:description" content="A classic novel by Ernest Hemingway exploring themes of love, loss, and the post-war generation. Educational edition adapted for Micronesian students."/>
+    <meta property="og:url" content="https://localhost/micronesian-digital-library/book/the-sun-also-rises"/>
+    <meta property="og:site_name" content="Micronesian Teachers Digital Library"/>
+    <meta property="article:modified_time" content="2024-12-16T01:03:09+00:00"/>
+
+    <style>
+        :root {
+            --primary-green: #007c89;
+            --secondary-green: #4a9b8e;
+            --accent-teal: #5db0a8;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --background-light: #f8f9fa;
+            --border-light: #e9ecef;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-light);
+        }
+
+        /* Header Styles */
+        .top-bar {
+            background-color: var(--primary-green);
+            color: var(--white);
+            padding: 10px 0;
+        }
+
+        .top-bar .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-left, .logo-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-left img, .logo-right img {
+            height: 40px;
+        }
+
+        .menu-bar {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 0;
+        }
+
+        .menu-bar .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .module-toggle {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+        }
+
+        .toggle-item {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: var(--text-light);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-item.active {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .main-nav {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            padding: 15px 0;
+            transition: color 0.3s ease;
+        }
+
+        .main-nav a:hover {
+            color: var(--primary-green);
+        }
+
+        .menu-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--background-light);
+            border-radius: 4px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            padding: 4px 8px;
+            width: 200px;
+        }
+
+        .landing-bar {
+            background-color: var(--secondary-green);
+            height: 8px;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .book-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* Book Cover Section */
+        .book-cover-section {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .book-cover {
+            width: 100%;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .access-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .access-status.full-access {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .access-status.limited-access {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .access-status.unavailable {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: #006b75;
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .rating-section {
+            border-top: 1px solid var(--border-light);
+            padding-top: 15px;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            font-size: 20px;
+            color: #ddd;
+        }
+
+        .star.filled {
+            color: #ffd700;
+        }
+
+        .rating-text {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .user-actions {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .user-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-action:hover {
+            background-color: var(--background-light);
+        }
+
+        /* Book Info Section */
+        .book-info-section {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .book-header {
+            margin-bottom: 30px;
+        }
+
+        .collection-link {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        .book-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .book-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .book-author {
+            font-size: 1.1rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+        }
+
+        .book-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .book-description {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Navigation Tabs */
+        .content-nav {
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: 30px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            gap: 0;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            border-bottom-color: var(--primary-green);
+            color: var(--primary-green);
+            font-weight: 500;
+        }
+
+        .nav-tab:hover {
+            background-color: var(--background-light);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .book-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .detail-group h3 {
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            min-width: 120px;
+            color: var(--text-dark);
+        }
+
+        .detail-value {
+            color: var(--text-light);
+        }
+
+        /* Related Books */
+        .related-section {
+            margin-top: 40px;
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .related-section h2 {
+            color: var(--primary-green);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .book-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .book-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .book-card-cover {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .book-card-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-size: 14px;
+            line-height: 1.3;
+        }
+
+        .book-card-author {
+            color: var(--text-light);
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .book-card-btn {
+            width: 100%;
+            padding: 8px;
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        .book-card-btn:hover {
+            background-color: #006b75;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--text-dark);
+            color: var(--white);
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .book-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .book-details-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .book-title {
+                font-size: 2rem;
+            }
+            
+            .menu-bar .container {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            
+            .main-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Bar -->
+    <header class="top-bar">
+        <div class="container">
+            <div class="logo-left">
+                <img src="https://picsum.photos/200/80?random=3DL" alt="University of Hawaii Logo">
+                <span>University of Hawaii</span>
+            </div>
+            <div class="logo-right">
+                <span>Micronesian Educational Initiative</span>
+                <img src="https://picsum.photos/120/60?random=12" alt="Educational Initiative Logo">
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Bar -->
+    <nav class="menu-bar">
+        <div class="container">
+            <div class="menu-left">
+                <div class="module-toggle">
+                    <a href="index.html" class="toggle-item">Guide</a>
+                    <span>|</span>
+                    <a href="library.html" class="toggle-item active">Library</a>
+                </div>
+                <ul class="main-nav">
+                    <li><a href="library.html">Browse</a></li>
+                    <li><a href="#">My Books</a></li>
+                    <li><a href="#">Collections</a></li>
+                </ul>
+            </div>
+            <div class="menu-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Search books...">
+                    <span>🔍</span>
+                </div>
+                <a href="#" style="text-decoration: none; color: var(--text-dark);">Login</a>
+                <select style="border: 1px solid var(--border-light); padding: 5px; border-radius: 4px;">
+                    <option>English</option>
+                    <option>Chuukese</option>
+                    <option>Yapese</option>
+                    <option>Pohnpeian</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Landing Bar -->
+    <div class="landing-bar"></div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="book-container">
+            <!-- Book Cover Section -->
+            <div class="book-cover-section">
+                <img src="https://picsum.photos/260/400?random=book1" alt="The Sun Also Rises cover" class="book-cover">
+                
+                <div class="access-status full-access">
+                    <span>📖</span>
+                    <span>Full Access</span>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary">Preview</button>
+                    <button class="btn btn-secondary">Download PDF</button>
+                </div>
+                
+                <div class="rating-section">
+                    <div class="star-rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <div class="rating-text">4.2 (28 reviews) • 187 want to read • 34 currently reading • 52 have read</div>
+                </div>
+                
+                <div class="user-actions">
+                    <div class="user-action">
+                        <span>❤️</span>
+                        <span>Add to favorites</span>
+                    </div>
+                    <div class="user-action">
+                        <span>📚</span>
+                        <span>Add to my collection</span>
+                    </div>
+                    <div class="user-action">
+                        <span>📤</span>
+                        <span>Share</span>
+                    </div>
+                    <div class="user-action">
+                        <span>⭐</span>
+                        <span>Rate this book</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book Info Section -->
+            <div class="book-info-section">
+                <div class="book-header">
+                    <a href="#" class="collection-link">Classic Literature Collection</a>
+                    <h1 class="book-title">The Sun Also Rises</h1>
+                    <h2 class="book-subtitle">A Classic Novel</h2>
+                    <div class="book-author">by Ernest Hemingway</div>
+                    <div class="book-meta">
+                        <span>First published 1926</span>
+                        <span>•</span>
+                        <span>251 pages</span>
+                        <span>•</span>
+                        <span>English</span>
+                        <span>•</span>
+                        <span>Fiction</span>
+                    </div>
+                </div>
+
+                <div class="book-description">
+                    <p>Hemingway's profile of the Lost Generation reflects his own experiences in the post-WWI world and during the liberation of Paris, portraying both nihilistic resignation and authentic determination.</p>
+                    <p>This educational edition has been adapted for Micronesian students with additional cultural context and discussion questions that connect universal themes to local experiences and values.</p>
+                </div>
+
+                <!-- Content Navigation -->
+                <nav class="content-nav">
+                    <ul class="nav-tabs">
+                        <li class="nav-tab active" data-tab="overview">Overview</li>
+                        <li class="nav-tab" data-tab="details">Details</li>
+                        <li class="nav-tab" data-tab="reviews">Reviews</li>
+                        <li class="nav-tab" data-tab="editions">Other Versions</li>
+                    </ul>
+                </nav>
+
+                <!-- Content Sections -->
+                <div class="content-section active" id="overview">
+                    <p>Set in 1920s Paris and Spain, this novel follows Jake Barnes, an American journalist, and his friends as they navigate post-war disillusionment. The story explores themes of love, loss, masculinity, and the search for meaning in a world changed by war.</p>
+                    <p>This edition includes supplementary materials designed for Pacific Islander students, with cultural parallels and discussion guides that help connect the universal themes of the Lost Generation to contemporary Micronesian experiences.</p>
+                </div>
+
+                <div class="content-section" id="details">
+                    <div class="book-details-grid">
+                        <div class="detail-group">
+                            <h3>Contributors</h3>
+                            <div class="detail-item">
+                                <span class="detail-label">Author:</span>
+                                <span class="detail-value">Ernest Hemingway</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Editor:</span>
+                                <span class="detail-value">Dr. Maria Santos</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Translator:</span>
+                                <span class="detail-value">N/A</span>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-group">
+                            <h3>Classifications</h3>
+                            <div class="detail-item">
+                                <span class="detail-label">Subject:</span>
+                                <span class="detail-value">Literature, Fiction</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Grade Level:</span>
+                                <span class="detail-value">11-12, College</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Language:</span>
+                                <span class="detail-value">English</span>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-group">
+                            <h3>Physical & Digital Source</h3>
+                            <div class="detail-item">
+                                <span class="detail-label">Publisher:</span>
+                                <span class="detail-value">Scribner</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Publication Year:</span>
+                                <span class="detail-value">1926</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Format:</span>
+                                <span class="detail-value">PDF, 251 pages</span>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-group">
+                            <h3>Identifiers</h3>
+                            <div class="detail-item">
+                                <span class="detail-label">ISBN-10:</span>
+                                <span class="detail-value">0684800071</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">ISBN-13:</span>
+                                <span class="detail-value">9780684800073</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">LCCN:</span>
+                                <span class="detail-value">26027400</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-section" id="reviews">
+                    <p><strong>Community Reviews (28)</strong></p>
+                    <p>Reviews feature has been submitted for development but is not yet available. <a href="#" style="color: var(--primary-green);">Log in to add your community review</a></p>
+                </div>
+
+                <div class="content-section" id="editions">
+                    <p><strong>This title is available in multiple versions:</strong></p>
+                    <div class="books-grid">
+                        <div class="book-card">
+                            <img src="https://picsum.photos/160/240?random=book2" alt="Annotated Edition" class="book-card-cover">
+                            <div class="book-card-title">The Sun Also Rises: Annotated Student Edition</div>
+                            <div class="book-card-author">Hemingway, Ernest (Author)</div>
+                            <button class="book-card-btn">View</button>
+                        </div>
+                        <div class="book-card">
+                            <img src="https://picsum.photos/160/240?random=book3" alt="Audio Edition" class="book-card-cover">
+                            <div class="book-card-title">The Sun Also Rises: Audio Companion</div>
+                            <div class="book-card-author">Narrated by William Hurt</div>
+                            <button class="book-card-btn">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Books Sections -->
+        <section class="related-section">
+            <h2>More books from the same collection</h2>
+            <div class="books-grid">
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book4" alt="For Whom the Bell Tolls" class="book-card-cover">
+                    <div class="book-card-title">For Whom the Bell Tolls</div>
+                    <div class="book-card-author">Ernest Hemingway</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book5" alt="A Farewell to Arms" class="book-card-cover">
+                    <div class="book-card-title">A Farewell to Arms</div>
+                    <div class="book-card-author">Ernest Hemingway</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book6" alt="The Great Gatsby" class="book-card-cover">
+                    <div class="book-card-title">The Great Gatsby</div>
+                    <div class="book-card-author">F. Scott Fitzgerald</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book7" alt="Of Mice and Men" class="book-card-cover">
+                    <div class="book-card-title">Of Mice and Men</div>
+                    <div class="book-card-author">John Steinbeck</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="related-section">
+            <h2>Related titles in the same language</h2>
+            <div class="books-grid">
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book8" alt="To Kill a Mockingbird" class="book-card-cover">
+                    <div class="book-card-title">To Kill a Mockingbird</div>
+                    <div class="book-card-author">Harper Lee</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book9" alt="1984" class="book-card-cover">
+                    <div class="book-card-title">1984</div>
+                    <div class="book-card-author">George Orwell</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book10" alt="Lord of the Flies" class="book-card-cover">
+                    <div class="book-card-title">Lord of the Flies</div>
+                    <div class="book-card-author">William Golding</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book11" alt="The Catcher in the Rye" class="book-card-cover">
+                    <div class="book-card-title">The Catcher in the Rye</div>
+                    <div class="book-card-author">J.D. Salinger</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="related-section">
+            <h2>Related titles in other languages</h2>
+            <div class="books-grid">
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book12" alt="Chuukese Literature" class="book-card-cover">
+                    <div class="book-card-title">Fansoun Chuuk: Traditional Stories</div>
+                    <div class="book-card-author">Various Authors</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book13" alt="Yapese Stories" class="book-card-cover">
+                    <div class="book-card-title">Gagil Tamil: Yapese Folktales</div>
+                    <div class="book-card-author">Traditional</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book14" alt="Pohnpeian Literature" class="book-card-cover">
+                    <div class="book-card-title">Kapinga Pohnpei: Island Stories</div>
+                    <div class="book-card-author">Local Authors</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://picsum.photos/160/240?random=book15" alt="Kosraean Tales" class="book-card-cover">
+                    <div class="book-card-title">Kosrae Ac Fahfah: Ancient Tales</div>
+                    <div class="book-card-author">Cultural Preservation Society</div>
+                    <button class="book-card-btn">View</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Micronesian Teachers Digital Library. All rights reserved.</p>
+            <p>A collaborative educational initiative supporting teachers across Micronesia</p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs and sections
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Show corresponding content section
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // User action clicks
+        document.querySelectorAll('.user-action').forEach(action => {
+            action.addEventListener('click', function() {
+                const actionText = this.querySelector('span:last-child').textContent;
+                alert(`Action: ${actionText}\n\nPlease log in to use this feature.`);
+            });
+        });
+
+        // Book card clicks
+        document.querySelectorAll('.book-card-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const bookTitle = this.parentElement.querySelector('.book-card-title').textContent;
+                alert(`Opening book: ${bookTitle}`);
+            });
+        });
+    </script>
+</body>
+</html>
