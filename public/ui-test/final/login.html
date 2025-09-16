@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'/>
+    <style>img:is([sizes="auto" i], [sizes^="auto," i]) {
+        contain-intrinsic-size: 3000px 1500px
+    }</style>
+
+    <title>Micronesian Teachers Digital Library - Login</title>
+    <link rel="canonical" href="https://localhost/micronesian-digital-library-login/"/>
+
+    <link rel='dns-prefetch' href='//www.googletagmanager.com'/>
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        var gtagDataLayerName = "dataLayer";
+        var gtag = function () { dataLayer.push(arguments); }
+        var gtagEnabled = false;
+
+        function initializeGTag() {
+            if (gtag && typeof gtag === 'function') {
+                gtag('config', 'G-XXXXXXXXXX');
+                gtagEnabled = true;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            window.dataLayer = window.dataLayer || [];
+            initializeGTag();
+        });
+        /* ]]> */
+    </script>
+
+    <style>
+        /* WordPress custom properties */
+        :root {
+            --wp--preset--color--black: #000000;
+            --wp--preset--color--cyan-bluish-gray: #abb8c3;
+            --wp--preset--color--white: #ffffff;
+            --wp--preset--color--pale-pink: #f9f;
+            --wp--preset--color--vivid-red: #cf2e2e;
+            --wp--preset--color--luminous-vivid-orange: #ff6900;
+            --wp--preset--color--luminous-vivid-amber: #fcb900;
+            --wp--preset--color--light-green-cyan: #7bdcb5;
+            --wp--preset--color--vivid-green-cyan: #00d084;
+            --wp--preset--color--pale-cyan-blue: #8ed1fc;
+            --wp--preset--color--vivid-cyan-blue: #0693e3;
+            --wp--preset--color--vivid-purple: #9b51e0;
+            --wp--preset--color--coe-green: #009877;
+            --wp--preset--color--coe-blue: #007cba;
+            --wp--preset--color--coe-dark-green: #00664e;
+            --wp--preset--color--coe-light-green: #b3d9d0;
+            --wp--preset--color--coe-light-green-background: rgba(179, 217, 208, 0.1);
+            --wp--preset--color--coe-gray: #666666;
+            --wp--preset--font-family--proxima-nova: "Proxima Nova", sans-serif;
+            --wp--preset--font-size--small: 13px;
+            --wp--preset--font-size--medium: 16px;
+            --wp--preset--font-size--large: 18px;
+            --wp--preset--font-size--x-large: 42px;
+            --wp--preset--spacing--20: 0.5rem;
+            --wp--preset--spacing--30: 0.75rem;
+            --wp--preset--spacing--40: 1rem;
+            --wp--preset--spacing--50: 1.25rem;
+            --wp--preset--spacing--60: 1.5rem;
+            --wp--preset--spacing--70: 1.75rem;
+            --wp--preset--spacing--80: 2rem;
+        }
+
+        /* WordPress login page styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            background: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: var(--wp--preset--color--white);
+            padding: 26px 24px 46px;
+            font-weight: 400;
+            overflow: hidden;
+            position: relative;
+            max-width: 320px;
+            width: 100%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+            border-radius: 3px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .login-header h1 {
+            font-size: 24px;
+            margin: 0 0 25px;
+            color: #1d2327;
+            font-weight: 600;
+            font-family: var(--wp--preset--font-family--proxima-nova);
+        }
+
+        .site-logo {
+            max-width: 200px;
+            margin: 0 auto 25px;
+            display: block;
+        }
+
+        .login-form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            color: #1d2327;
+            font-size: 14px;
+            line-height: 1.5;
+            display: block;
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            background: #fff;
+            border: 1px solid #8c8f94;
+            border-radius: 3px;
+            color: #2c3338;
+            font-size: 24px;
+            width: 100%;
+            border-width: 0.0625rem;
+            font-family: Consolas, Monaco, monospace;
+            line-height: 1.33333333;
+            margin: 0;
+            padding: 3px 5px;
+            box-sizing: border-box;
+            transition: 50ms border-color ease-in-out;
+        }
+
+        .form-input:focus {
+            border-color: #007cba;
+            box-shadow: 0 0 0 1px #007cba;
+            outline: 2px solid transparent;
+        }
+
+        .form-input#user_login,
+        .form-input#user_pass {
+            font-size: 24px;
+            line-height: 1.33333333;
+            padding: 3px 5px;
+        }
+
+        .checkbox-group {
+            margin: 16px 0 16px 0;
+        }
+
+        .checkbox-group label {
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 6px;
+            margin-top: 0;
+        }
+
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 13px;
+            line-height: 2.15384615;
+            min-height: 30px;
+            margin: 0;
+            padding: 0 10px;
+            cursor: pointer;
+            border-width: 1px;
+            border-style: solid;
+            -webkit-appearance: none;
+            border-radius: 3px;
+            white-space: nowrap;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        }
+
+        .button-primary {
+            background: #007cba;
+            border-color: #007cba;
+            color: #fff;
+        }
+
+        .button-primary:hover {
+            background: #005a87;
+            border-color: #005a87;
+            color: #fff;
+        }
+
+        .button-primary:focus {
+            background: #005a87;
+            border-color: #005a87;
+            color: #fff;
+            box-shadow: 0 0 0 1px #007cba;
+            outline: 2px solid transparent;
+        }
+
+        .button-large {
+            min-height: 32px;
+            line-height: 2;
+            padding: 0 12px;
+        }
+
+        .login-submit {
+            text-align: left;
+            padding: 16px 0 0;
+        }
+
+        .login-submit .button {
+            float: right;
+            margin-left: 8px;
+        }
+
+        .login-links {
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .login-links p {
+            margin: 16px 0 0;
+            font-size: 13px;
+        }
+
+        .login-links a {
+            color: #50575e;
+            text-decoration: none;
+        }
+
+        .login-links a:hover,
+        .login-links a:active {
+            color: #135e96;
+        }
+
+        .back-link {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            text-indent: -9999px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            cursor: pointer;
+        }
+
+        .back-to-site {
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        .back-to-site a {
+            color: #50575e;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .back-to-site a:hover {
+            color: #135e96;
+        }
+
+        .login-message {
+            border-left: 4px solid #00a32a;
+            padding: 12px;
+            margin-left: 0;
+            margin-bottom: 20px;
+            background: #fff;
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+            word-wrap: break-word;
+        }
+
+        .login-error {
+            border-left: 4px solid #d63638;
+        }
+
+        /* Responsive design */
+        @media screen and (max-width: 782px) {
+            .login-container {
+                margin: 50px auto;
+                width: auto;
+                max-width: none;
+                box-shadow: none;
+                background: none;
+                padding: 0 20px;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-header">
+            <img src="https://picsum.photos/200/80?random=3DL" alt="Micronesian Teachers Digital Library" class="site-logo">
+            <h1>Micronesian Teachers Digital Library</h1>
+        </div>
+
+        <form name="loginform" id="loginform" class="login-form" action="#" method="post">
+            <div class="form-group">
+                <label for="user_login">Username or Email Address</label>
+                <input type="text" name="log" id="user_login" class="form-input" value="" size="20" autocapitalize="off" autocomplete="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="user_pass">Password</label>
+                <input type="password" name="pwd" id="user_pass" class="form-input" value="" size="20" autocomplete="current-password" required>
+            </div>
+
+            <div class="checkbox-group">
+                <label for="rememberme">
+                    <input name="rememberme" type="checkbox" id="rememberme" value="forever">
+                    Remember Me
+                </label>
+            </div>
+
+            <div class="login-submit">
+                <input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="Log In">
+                <input type="hidden" name="redirect_to" value="">
+            </div>
+        </form>
+
+        <div class="login-links">
+            <p><a href="#" id="lost-password-link">Lost your password?</a></p>
+        </div>
+
+        <div class="back-to-site">
+            <a href="index.html">← Go to Micronesian Teachers Digital Library</a>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handler
+        document.getElementById('loginform').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('user_login').value;
+            const password = document.getElementById('user_pass').value;
+
+            if (!username || !password) {
+                alert('Please enter both username and password.');
+                return;
+            }
+
+            // Mock authentication - in real app this would send to server
+            if (username === 'admin' && password === 'admin') {
+                alert('Login successful! Redirecting to library...');
+                window.location.href = 'library.html';
+            } else {
+                alert('Invalid username or password. Try admin/admin for demo.');
+            }
+        });
+
+        // Lost password handler
+        document.getElementById('lost-password-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Password reset functionality would be implemented here.');
+        });
+    </script>
+</body>
+
+</html>
