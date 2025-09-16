@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Micronesian Teachers Digital Library - Educational Resources for Educators">
+    <title>MTDL Guide - Micronesian Teachers Digital Library</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/images/logo-mtdl.svg">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="institution-logo left-institution">
+                <img src="assets/images/logo-institution-1.svg" alt="Institution 1 Logo">
+                <span class="institution-name">Educational Institution 1</span>
+            </div>
+            <div class="institution-logo right-institution">
+                <img src="assets/images/logo-institution-2.svg" alt="Institution 2 Logo">
+                <span class="institution-name">Educational Institution 2</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="header-container">
+                <a href="/" class="site-logo">
+                    <img src="assets/images/logo-mtdl.svg" alt="MTDL Logo">
+                    <span>MTDL</span>
+                </a>
+
+                <nav class="nav-primary">
+                    <!-- Mobile Menu Toggle -->
+                    <button class="menu-toggle" aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                        <span class="sr-only">Menu</span>
+                    </button>
+
+                    <!-- Module Toggle -->
+                    <div class="module-toggle">
+                        <button class="toggle-option guide active" data-module="guide">Guide</button>
+                        <span class="toggle-divider">/</span>
+                        <button class="toggle-option library" data-module="library">Library</button>
+                    </div>
+
+                    <!-- Navigation Menu -->
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li class="has-submenu">
+                            <a href="#">About Us <i class="fas fa-chevron-down"></i></a>
+                            <ul class="sub-menu">
+                                <li><a href="/about">What is MTDL?</a></li>
+                                <li><a href="/why">Why Digital Library?</a></li>
+                                <li><a href="/gallery">Photo Gallery</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#">Resources <i class="fas fa-chevron-down"></i></a>
+                            <ul class="sub-menu">
+                                <li><a href="/guides">Teacher Guides</a></li>
+                                <li><a href="/training">Training Materials</a></li>
+                                <li><a href="/cultural">Cultural Resources</a></li>
+                                <li><a href="/languages">Language Materials</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#">Network <i class="fas fa-chevron-down"></i></a>
+                            <ul class="sub-menu">
+                                <li><a href="/partners">Partner Directory</a></li>
+                                <li><a href="/map">Network Map</a></li>
+                                <li><a href="/supporters">Supporters</a></li>
+                                <li><a href="/contribute">Contribute Resources</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="language-selector">EN <i class="fas fa-chevron-down"></i></a>
+                            <ul class="sub-menu language-options">
+                                <li><a href="#">English</a></li>
+                                <li><a href="#">Chuukese</a></li>
+                                <li><a href="#">Pohnpeian</a></li>
+                                <li><a href="#">Yapese</a></li>
+                                <li><a href="#">Kosraean</a></li>
+                                <li><a href="#">Marshallese</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/login">Login</a></li>
+                    </ul>
+
+                    <!-- Search -->
+                    <div class="search-container">
+                        <button class="search-toggle">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <form class="search-form hidden">
+                            <input type="search" class="search-input" placeholder="Search...">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Title Banner -->
+    <div class="title-banner">
+        <div class="container">
+            <div class="breadcrumbs">
+                <a href="/">MTDL</a>
+                <i class="fas fa-angle-right"></i>
+                <span class="current">Guide</span>
+            </div>
+            <h1 class="page-title">Digital Library Guide</h1>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="content-with-sidebar">
+                <!-- Main Content Area -->
+                <div class="content-area">
+                    <!-- Introduction -->
+                    <section class="card">
+                        <p><strong>Aloha and mahalo for your interest in the Micronesian Teachers Digital Library!</strong></p>
+                        <p>The Micronesian Teachers Digital Library is designed to support educators across Micronesia by providing access to over 2,000 educational books and resources in local languages. This comprehensive collection serves as an interactive online database where educators and families can search and organize materials by grade level, subject matter, resource type, and language.</p>
+                        <p>This project represents a collaborative effort among educational institutions, cultural organizations, and dedicated educators across Micronesia – including contributions from ministries of education, colleges, schools, and individual resource contributors.</p>
+                        <div class="alert alert-info">
+                            <strong>Before accessing content, please read this Digital Library Guide carefully and agree to the Terms of Use below.</strong>
+                        </div>
+                    </section>
+
+                    <!-- Section 1 -->
+                    <section class="section-divider">
+                        <img src="assets/images/divider.png" alt="Section Divider">
+                        <h2 class="section-title">E Mā Kākou: Let's Learn Together</h2>
+                    </section>
+
+                    <section class="card">
+                        <p>Education in Micronesia encompasses both traditional knowledge systems and contemporary learning approaches. Our digital library bridges these worlds by providing access to materials that honor our cultural heritage while supporting modern educational needs.</p>
+
+                        <div class="image-grid">
+                            <figure>
+                                <svg width="300" height="217" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="300" height="217" fill="#e8f5f0"/>
+                                    <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#009877" font-size="18">Learning Resources</text>
+                                </svg>
+                                <figcaption>Learning: to grow, develop, inspire, and spread knowledge</figcaption>
+                            </figure>
+                            <figure>
+                                <svg width="300" height="217" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="300" height="217" fill="#e6f2f5"/>
+                                    <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#005a70" font-size="18">Knowledge Base</text>
+                                </svg>
+                                <figcaption>Knowledge: educational resources and cultural wisdom</figcaption>
+                            </figure>
+                        </div>
+                    </section>
+
+                    <!-- Section 2 -->
+                    <section class="section-divider">
+                        <img src="assets/images/divider.png" alt="Section Divider">
+                        <h2 class="section-title">About Our Collection</h2>
+                    </section>
+
+                    <section class="card">
+                        <p>Our digital library contains carefully curated educational resources specifically designed for Micronesian educators. The collection includes materials that have been developed in collaboration with local educators and cultural experts.</p>
+
+                        <h3>Content Overview</h3>
+                        <p>The library houses over 2,000 educational books and resources covering various subjects, grade levels, and local languages. These materials have been selected to support both traditional cultural education and contemporary academic standards.</p>
+
+                        <h3>Educational Impact</h3>
+                        <p>These resources provide educators with culturally relevant materials that help students connect their learning to their heritage and community.</p>
+
+                        <h3>Why Digital Access?</h3>
+                        <p>Digital access to educational resources has become essential for modern education. Our platform provides teachers across all Micronesian islands with immediate access to high-quality educational materials, regardless of their geographic location.</p>
+                    </section>
+
+                    <!-- Section 3 -->
+                    <section class="section-divider">
+                        <img src="assets/images/divider.png" alt="Section Divider">
+                        <h2 class="section-title">Growing with Purpose</h2>
+                    </section>
+
+                    <section class="card">
+                        <p>To the traditional knowledge that has guided our educational systems and allowed our communities to flourish, we express our deep gratitude. To the many educators, administrators, and cultural leaders who have contributed to building this digital library, we extend our heartfelt appreciation.</p>
+
+                        <svg width="100%" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400">
+                            <rect width="1200" height="400" fill="#e6f2f5"/>
+                            <circle cx="300" cy="200" r="80" fill="#009877" opacity="0.7"/>
+                            <circle cx="600" cy="200" r="80" fill="#005a70" opacity="0.7"/>
+                            <circle cx="900" cy="200" r="80" fill="#009877" opacity="0.7"/>
+                            <text x="50%" y="90%" text-anchor="middle" dy=".3em" fill="#005a70" font-size="24" font-weight="bold">Education Bringing Communities Together</text>
+                        </svg>
+                    </section>
+
+                    <!-- Section 4: Terms of Use -->
+                    <section class="section-divider">
+                        <img src="assets/images/divider.png" alt="Section Divider">
+                        <h2 class="section-title">Partner With Us & Terms of Use</h2>
+                    </section>
+
+                    <section class="card">
+                        <p>We hope you will find the Micronesian Teachers Digital Library useful and invite you to not only use these resources but to contribute to its evolution and continuous improvement! Partner with us by:</p>
+
+                        <ul>
+                            <li>Downloading and using these materials (including all images and text)</li>
+                            <li>Contributing feedback and reviews for educational resources</li>
+                            <li>Sharing your own educational materials and teaching experiences</li>
+                            <li>If you have any questions, please reach out to us at <a href="mailto:info@mtdl.edu"><strong>info@mtdl.edu</strong></a></li>
+                        </ul>
+
+                        <h3>Terms of Use</h3>
+                        <p>Published under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)</p>
+
+                        <ul>
+                            <li><strong>Attribution</strong> – you must give appropriate credit</li>
+                            <li><strong>NonCommercial</strong> – material may not be used for commercial purposes</li>
+                            <li><strong>ShareAlike</strong> – if you remix or build upon the material you must distribute under the same license</li>
+                            <li><strong>No additional restrictions</strong> – you may not apply legal terms which prevent others from doing anything the license permits</li>
+                        </ul>
+                    </section>
+
+                    <!-- Bottom Library Entry -->
+                    <section class="card bottom-library-entry text-center">
+                        <button class="btn btn-primary btn-lg">
+                            <i class="fas fa-book"></i>
+                            I Accept and Agree to the Terms of Use. Continue to the Digital Library
+                        </button>
+                    </section>
+
+                    <!-- Contributors Section -->
+                    <section class="section-divider">
+                        <img src="assets/images/divider.png" alt="Section Divider">
+                        <h2 class="section-title">Resource Contributors</h2>
+                    </section>
+
+                    <section class="card">
+                        <div class="contributors-grid">
+                            <p>Ministry of Education - FSM<br>
+                            College of Micronesia<br>
+                            Palau Community College<br>
+                            Marshall Islands Ministry of Education<br>
+                            Chuuk State Department of Education<br>
+                            Yap State Department of Education<br>
+                            Pohnpei State Department of Education<br>
+                            Kosrae State Department of Education<br>
+                            Northern Marianas College<br>
+                            Guam Department of Education<br>
+                            Pacific Resources for Education and Learning (PREL)<br>
+                            University of Hawaii - Pacific Islander Education<br>
+                            Pacific Educational Development Center<br>
+                            Micronesian Cultural Preservation Society</p>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <!-- Sections Navigation -->
+                    <div class="sidebar-item">
+                        <h2>Sections</h2>
+                        <ul class="sidebar-menu">
+                            <li><a href="#section-1">E Mā Kākou: Let's Learn Together</a></li>
+                            <li><a href="#section-2">About Our Collection</a></li>
+                            <li><a href="#section-3">Growing with Purpose</a></li>
+                            <li><a href="#section-4">Partner With Us & Terms of Use</a></li>
+                            <li><a href="#contributors">Resource Contributors</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Contributors Sidebar -->
+                    <div class="sidebar-item sidebar-contributors">
+                        <h2>Resource Contributors</h2>
+                        <div class="contributors-list">
+                            <div class="contributor-category">
+                                <strong>Government Partners</strong>
+                                <ul>
+                                    <li>Ministry of Education - FSM</li>
+                                    <li>Marshall Islands MOE</li>
+                                    <li>Guam DOE</li>
+                                </ul>
+                            </div>
+                            <div class="contributor-category">
+                                <strong>Educational Institutions</strong>
+                                <ul>
+                                    <li>College of Micronesia</li>
+                                    <li>Palau Community College</li>
+                                    <li>Northern Marianas College</li>
+                                </ul>
+                            </div>
+                            <div class="contributor-category">
+                                <strong>State Departments</strong>
+                                <ul>
+                                    <li>Chuuk State DOE</li>
+                                    <li>Yap State DOE</li>
+                                    <li>Pohnpei State DOE</li>
+                                    <li>Kosrae State DOE</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ready to Explore -->
+                    <div class="sidebar-item">
+                        <h2>Ready to Explore?</h2>
+                        <p>Have you reviewed this material and agreed to terms of use?</p>
+                        <button class="btn btn-primary btn-block library-entry-sidebar-btn">
+                            <strong>Access the Digital Library</strong>
+                        </button>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Right Sidebar Library Entry -->
+    <div class="sidebar-library-entry">
+        <h3>Library ENTRY</h3>
+        <i class="fas fa-book"></i>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Micronesian Teachers</h3>
+                    <ul>
+                        <li><a href="/about">About MTDL</a></li>
+                        <li><a href="/mission">Our Mission</a></li>
+                        <li><a href="/team">Our Team</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Digital Library</h3>
+                    <ul>
+                        <li><a href="/resources">Browse Resources</a></li>
+                        <li><a href="/collections">Collections</a></li>
+                        <li><a href="/new">New Additions</a></li>
+                        <li><a href="/popular">Popular Items</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>For Educators</h3>
+                    <ul>
+                        <li><a href="/guides">Teaching Guides</a></li>
+                        <li><a href="/training">Professional Development</a></li>
+                        <li><a href="/curriculum">Curriculum Support</a></li>
+                        <li><a href="/assessment">Assessment Tools</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Get Involved</h3>
+                    <ul>
+                        <li><a href="/contribute">Contribute Resources</a></li>
+                        <li><a href="/volunteer">Volunteer</a></li>
+                        <li><a href="/donate">Support Us</a></li>
+                        <li><a href="/newsletter">Newsletter</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-logos">
+                <img src="assets/images/logo-mtdl.svg" alt="MTDL Logo">
+                <img src="assets/images/logo-institution-1.svg" alt="Institution 1">
+                <img src="assets/images/logo-institution-2.svg" alt="Institution 2">
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Micronesian Teachers Digital Library. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Terms Modal -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Terms of Use</h2>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <h3>Micronesian Teachers Digital Library - Terms of Use</h3>
+                <p>Welcome to the Micronesian Teachers Digital Library. By accessing and using this digital library, you agree to comply with and be bound by the following terms and conditions:</p>
+
+                <h4>1. Purpose and Scope</h4>
+                <p>This digital library is designed specifically for educational purposes to support teachers and educators in Micronesia with access to approximately 2,000 educational books in local languages.</p>
+
+                <h4>2. Acceptable Use</h4>
+                <ul>
+                    <li>Materials are for educational and non-commercial use only</li>
+                    <li>Content may be used for teaching, learning, and research purposes</li>
+                    <li>Users must respect copyright and intellectual property rights</li>
+                    <li>Redistribution of materials outside this platform is prohibited without proper authorization</li>
+                </ul>
+
+                <h4>3. User Responsibilities</h4>
+                <ul>
+                    <li>Provide accurate registration information</li>
+                    <li>Maintain the confidentiality of your account credentials</li>
+                    <li>Use the library resources responsibly and ethically</li>
+                    <li>Report any technical issues or inappropriate content</li>
+                </ul>
+
+                <h4>4. Content Disclaimer</h4>
+                <p>While we strive to provide accurate and up-to-date educational materials, we make no warranties regarding the completeness, accuracy, or suitability of the content for specific educational needs.</p>
+
+                <h4>5. Privacy</h4>
+                <p>Your privacy is important to us. We collect and use personal information only as necessary to provide library services and improve user experience.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-decline">Decline</button>
+                <button class="btn btn-primary btn-accept">Accept & Continue to Library</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
