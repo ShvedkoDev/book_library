@@ -990,24 +990,67 @@
             font-family: var(--wp--preset--font-family--proxima-nova);
         }
 
-        .btn-primary {
-            background-color: var(--wp--preset--color--coe-green);
-            color: var(--wp--preset--color--white);
+        /* WordPress button styling from library.html */
+        .button, .btn-primary, .btn-secondary {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 13px;
+            line-height: 2.15384615;
+            min-height: 30px;
+            margin: 0;
+            padding: 0 10px;
+            cursor: pointer;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 3px;
+            white-space: nowrap;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-weight: 400;
+            vertical-align: top;
+            transition: all 0.1s ease-in-out;
         }
 
-        .btn-primary:hover {
-            background-color: var(--wp--preset--color--coe-green-shade);
+        .button-primary, .btn-primary {
+            background: #007cba;
+            border-color: #007cba;
+            color: #fff;
+            text-shadow: none;
         }
 
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--wp--preset--color--coe-green);
-            border: 2px solid var(--wp--preset--color--coe-green);
+        .button-primary:hover, .btn-primary:hover {
+            background: #005a87;
+            border-color: #005a87;
+            color: #fff;
         }
 
-        .btn-secondary:hover {
-            background-color: var(--wp--preset--color--coe-green);
-            color: var(--wp--preset--color--white);
+        .button-primary:focus, .btn-primary:focus {
+            background: #005a87;
+            border-color: #005a87;
+            color: #fff;
+            box-shadow: 0 0 0 1px #007cba;
+            outline: 2px solid transparent;
+        }
+
+        .btn-secondary, .button {
+            background: #f6f7f7;
+            border-color: #dcdcde;
+            color: #2c3338;
+            text-shadow: none;
+        }
+
+        .btn-secondary:hover, .button:hover {
+            background: #f0f0f1;
+            border-color: #8c8f94;
+            color: #1d2327;
+        }
+
+        .btn-secondary:focus, .button:focus {
+            background: #f6f7f7;
+            border-color: #4f94d4;
+            color: #1d2327;
+            box-shadow: 0 0 0 1px #4f94d4;
+            outline: 2px solid transparent;
         }
 
         .book-rating {
@@ -1063,7 +1106,7 @@
         }
 
         .collection-link {
-            color: var(--wp--preset--color--coe-green);
+            color: #007cba;
             text-decoration: none;
             font-size: var(--wp--preset--font-size--small);
             font-weight: 600;
@@ -1084,7 +1127,7 @@
 
         .book-author {
             font-size: var(--wp--preset--font-size--medium);
-            color: var(--wp--preset--color--coe-green);
+            color: #2c3338;
             font-weight: 600;
             margin-bottom: var(--wp--preset--spacing--20);
         }
@@ -1145,7 +1188,7 @@
         }
 
         .detail-group h3 {
-            color: var(--wp--preset--color--coe-green);
+            color: #1d2327;
             font-size: var(--wp--preset--font-size--medium);
             margin-bottom: var(--wp--preset--spacing--30);
             font-weight: 700;
@@ -1171,7 +1214,7 @@
         }
 
         .related-books h2 {
-            color: var(--wp--preset--color--coe-green);
+            color: #1d2327;
             font-size: var(--wp--preset--font-size--large);
             margin-bottom: var(--wp--preset--spacing--40);
         }
@@ -1285,48 +1328,45 @@
             gap: var(--wp--preset--spacing--20);
         }
 
+        /* Carousel buttons using pagination styling from library.html */
         .carousel-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: var(--wp--preset--color--coe-green);
-            color: var(--wp--preset--color--coe-white);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
+            min-width: 32px;
+            height: 32px;
+            padding: 0;
+            border: 1px solid transparent;
+            background: #1e73be;
+            color: white;
+            text-decoration: none;
+            border-radius: 16px;
             transition: all 0.2s ease;
-            z-index: 10;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            display: flex;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 32px;
+            text-align: center;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            line-height: 1;
-            min-width: 40px;
-            min-height: 40px;
+            cursor: pointer;
+            z-index: 10;
         }
 
         .carousel-btn:hover {
-            background: var(--wp--preset--color--coe-green-shade);
-            color: var(--wp--preset--color--coe-white);
-            transform: translateY(-50%) scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-        }
-
-        .carousel-btn:active {
-            background: var(--wp--preset--color--coe-green-shade);
-            transform: translateY(-50%) scale(1.05);
+            background: #155a8a;
+            color: white;
         }
 
         .carousel-btn:disabled {
-            background: var(--wp--preset--color--coe-gray);
-            color: var(--wp--preset--color--coe-white);
+            opacity: 0.3;
             cursor: not-allowed;
-            transform: translateY(-50%);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #1e73be;
+        }
+
+        .carousel-btn:disabled:hover {
+            background: #1e73be;
         }
 
         .carousel-btn-prev {
@@ -1335,6 +1375,42 @@
 
         .carousel-btn-next {
             right: -20px;
+        }
+
+        /* Form styling from login.html */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            color: #1d2327;
+            font-size: 14px;
+            line-height: 1.5;
+            display: block;
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            background: #fff;
+            border: 1px solid #8c8f94;
+            border-radius: 3px;
+            color: #2c3338;
+            font-size: 24px;
+            width: 100%;
+            border-width: 0.0625rem;
+            font-family: Consolas, Monaco, monospace;
+            line-height: 1.33333333;
+            margin: 0;
+            padding: 3px 5px;
+            box-sizing: border-box;
+            transition: 50ms border-color ease-in-out;
+        }
+
+        .form-input:focus {
+            border-color: #007cba;
+            box-shadow: 0 0 0 1px #007cba;
+            outline: 2px solid transparent;
         }
 
         /* Responsive Design */
@@ -1947,7 +2023,7 @@
 
                                     <div class="book-content-section" id="reviews">
                                         <p><strong>Community Reviews (28)</strong></p>
-                                        <p>Reviews feature has been submitted for development but is not yet available. <a href="#" style="color: var(--wp--preset--color--coe-green);">Log in to add your community review</a></p>
+                                        <p>Reviews feature has been submitted for development but is not yet available. <a href="#" style="color: #007cba;">Log in to add your community review</a></p>
                                     </div>
 
                                     <div class="book-content-section" id="editions">
