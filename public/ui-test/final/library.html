@@ -1747,13 +1747,18 @@
         }
 
         .books-table td {
-            border: 1px solid #ddd;
+            border: none;
             padding: 15px;
             vertical-align: top;
             background: var(--wp--preset--color--white);
+            border-bottom: 1px solid #ddd;
         }
 
         .books-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .books-table tr:nth-child(even) td {
             background: #f9f9f9;
         }
 
@@ -1761,8 +1766,21 @@
             background: #f0f6fc;
         }
 
+        .books-table tr:hover td {
+            background: #f0f6fc;
+        }
+
         .book-row {
             transition: background-color 0.15s ease;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .book-row:last-child {
+            border-bottom: none;
+        }
+
+        .book-row:last-child td {
+            border-bottom: none;
         }
 
         .book-cover-cell {
@@ -2163,22 +2181,6 @@
                                     Title/Edition
                                     <span class="sort-arrow"></span>
                                 </th>
-                                <th class="sortable" onclick="sortTable('author')">
-                                    Author/Publisher
-                                    <span class="sort-arrow"></span>
-                                </th>
-                                <th class="sortable" onclick="sortTable('subject')">
-                                    Subject/Grade
-                                    <span class="sort-arrow"></span>
-                                </th>
-                                <th class="sortable" onclick="sortTable('language')">
-                                    Language/Format
-                                    <span class="sort-arrow"></span>
-                                </th>
-                                <th class="sortable" onclick="sortTable('availability')">
-                                    Availability
-                                    <span class="sort-arrow"></span>
-                                </th>
                                 <th style="width: 120px;">Actions</th>
                             </tr>
                         </thead>
@@ -2192,22 +2194,8 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(1)">Elementary Mathematics for Micronesian Students Grade 3</a>
                                     </div>
-                                    <div class="book-metadata">2024-08-15, Paperback</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>Pacific Education Council</strong></div>
-                                    <div class="book-description">Educational materials publisher</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Mathematics</div>
-                                    <div class="book-description">Grade 3</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">English</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                    <div class="book-metadata">2024-08-15, Pacific Education Council</div>
+                                    <div class="book-description">Mathematics, Grade 3, English, PDF Format - Available</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
@@ -2225,22 +2213,8 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(2)">Chuukese Traditional Stories and Language Learning</a>
                                     </div>
-                                    <div class="book-metadata">2024-09-01, Digital Edition</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>Chuukese Cultural Center</strong></div>
-                                    <div class="book-description">Cultural preservation organization</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Language Arts</div>
-                                    <div class="book-description">Grades 1-3</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Chuukese</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                    <div class="book-metadata">2024-09-01, Chuukese Cultural Center</div>
+                                    <div class="book-description">Language Arts, Grades 1-3, Chuukese, PDF Format - Available</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
@@ -2258,22 +2232,8 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(3)">Introduction to Marine Science for Pacific Islands</a>
                                     </div>
-                                    <div class="book-metadata">2023-02-07, Hardcover</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>University of Hawaii Pacific Studies</strong></div>
-                                    <div class="book-description">Academic publisher</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Science</div>
-                                    <div class="book-description">Grades 6-8</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Pohnpeian</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #d63638; font-weight: 600;">Limited Access</div>
+                                    <div class="book-metadata">2023-02-07, University of Hawaii Pacific Studies</div>
+                                    <div class="book-description">Science, Grades 6-8, Pohnpeian, PDF Format - Limited Access</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
@@ -2291,22 +2251,8 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(4)">Yapese Cultural Heritage and Social Studies</a>
                                     </div>
-                                    <div class="book-metadata">2023-12-19, Paperback</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>Yapese Traditional Authority</strong></div>
-                                    <div class="book-description">Cultural authority</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Social Studies</div>
-                                    <div class="book-description">High School</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Yapese</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                    <div class="book-metadata">2023-12-19, Yapese Traditional Authority</div>
+                                    <div class="book-description">Social Studies, High School, Yapese, PDF Format - Available</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
@@ -2324,22 +2270,8 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(5)">Teaching Methods for Multilingual Classrooms</a>
                                     </div>
-                                    <div class="book-metadata">2024-01-15, Digital Edition</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>Pacific Regional Education Laboratory</strong></div>
-                                    <div class="book-description">Education research organization</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Education</div>
-                                    <div class="book-description">Teacher Guide</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">English</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                    <div class="book-metadata">2024-01-15, Pacific Regional Education Laboratory</div>
+                                    <div class="book-description">Education, Teacher Guide, English, PDF Format - Available</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
@@ -2357,22 +2289,8 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(6)">Community Health and Nutrition in the Pacific</a>
                                     </div>
-                                    <div class="book-metadata">2023-11-22, Paperback</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>FSM Department of Health</strong></div>
-                                    <div class="book-description">Government health department</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Health & PE</div>
-                                    <div class="book-description">Grades 9-12</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">English</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                    <div class="book-metadata">2023-11-22, FSM Department of Health</div>
+                                    <div class="book-description">Health & PE, Grades 9-12, English, PDF Format - Available</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
@@ -2390,22 +2308,8 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(7)">Traditional Pacific Art Forms and Modern Expression</a>
                                     </div>
-                                    <div class="book-metadata">2022-05-10, Hardcover</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>Micronesian Art Institute</strong></div>
-                                    <div class="book-description">Arts education organization</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Art & Culture</div>
-                                    <div class="book-description">Grades 6-12</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Kosraean</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #d63638; font-weight: 600;">Limited Access</div>
+                                    <div class="book-metadata">2022-05-10, Micronesian Art Institute</div>
+                                    <div class="book-description">Art & Culture, Grades 6-12, Kosraean, PDF Format - Limited Access</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
@@ -2423,22 +2327,8 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(8)">Marshallese Language Practice Activities</a>
                                     </div>
-                                    <div class="book-metadata">2024-03-18, Digital Edition</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>Marshall Islands Ministry of Education</strong></div>
-                                    <div class="book-description">Ministry of education</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Language Arts</div>
-                                    <div class="book-description">Grades 3-5</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Marshallese</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                    <div class="book-metadata">2024-03-18, Marshall Islands Ministry of Education</div>
+                                    <div class="book-description">Language Arts, Grades 3-5, Marshallese, PDF Format - Available</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
@@ -2456,22 +2346,8 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(9)">Pacific Island History and Development</a>
                                     </div>
-                                    <div class="book-metadata">2023-07-14, Paperback</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>Pacific Historical Association</strong></div>
-                                    <div class="book-description">Historical research organization</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">History</div>
-                                    <div class="book-description">High School</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">English</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #00a32a; font-weight: 600;">Available</div>
+                                    <div class="book-metadata">2023-07-14, Pacific Historical Association</div>
+                                    <div class="book-description">History, High School, English, PDF Format - Available</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
@@ -2489,30 +2365,15 @@
                                     <div class="book-title">
                                         <a href="#" onclick="viewBook(10)">Environmental Conservation in Small Island States</a>
                                     </div>
-                                    <div class="book-metadata">2024-02-29, Digital Edition</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata"><strong>Pacific Environmental Research Center</strong></div>
-                                    <div class="book-description">Environmental research center</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Environmental Science</div>
-                                    <div class="book-description">Grades 9-12</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata">Pohnpeian</div>
-                                    <div class="book-description">PDF Format</div>
-                                </td>
-                                <td class="book-details-cell">
-                                    <div class="book-metadata" style="color: #ffb900; font-weight: 600;">Restricted</div>
+                                    <div class="book-metadata">2024-02-29, Pacific Environmental Research Center</div>
+                                    <div class="book-description">Environmental Science, Grades 9-12, Pohnpeian, PDF Format - Restricted</div>
                                 </td>
                                 <td class="book-actions-cell">
                                     <div class="book-actions">
                                         <button class="button btn-secondary" onclick="requestAccess(10)" disabled>Request Access</button>
                                     </div>
                                 </td>
-                            </tr>
-                        </tbody>
+                            </tr>                        </tbody>
                     </table>                    <!-- Pagination -->
                     <div class="pagination" style="margin-top: var(--wp--preset--spacing--40); text-align: center;">
                         <button class="button btn-secondary" style="margin: 0 var(--wp--preset--spacing--10);" onclick="previousPage()" id="prevBtn">Previous</button>
@@ -2848,16 +2709,16 @@ function initializeBooks() {
     allBooks = Array.from(rows).map((row, index) => ({
         element: row.cloneNode(true),
         title: row.cells[1].textContent.trim(),
-        author: row.cells[2].textContent.trim(),
-        subject: row.cells[3].textContent.trim(),
-        language: row.cells[4].textContent.trim(),
-        availability: row.cells[5].textContent.trim(),
         index: index
     }));
 
     // Add 10 more mock books to demonstrate pagination
     const additionalBooks = [];
     for (let i = 11; i <= 20; i++) {
+        const subjects = ['Mathematics', 'Language Arts', 'Science', 'History', 'Art & Culture'];
+        const languages = ['English', 'Pohnpeian', 'Chuukese', 'Yapese', 'Marshallese'];
+        const publishers = ['Pacific Academic Press', 'Educational Materials Center', 'Island Studies Institute', 'Cultural Heritage Foundation', 'Learning Resources Group'];
+
         const mockRow = document.createElement('tr');
         mockRow.className = 'book-row';
         mockRow.innerHTML = `
@@ -2868,22 +2729,8 @@ function initializeBooks() {
                 <div class="book-title">
                     <a href="#" onclick="viewBook(${i})">Advanced Studies in Pacific Education Volume ${i}</a>
                 </div>
-                <div class="book-metadata">2024-0${i % 12 + 1}-${(i % 28) + 1}, Digital Edition</div>
-            </td>
-            <td class="book-details-cell">
-                <div class="book-metadata"><strong>Pacific Academic Press ${i}</strong></div>
-                <div class="book-description">Academic publisher</div>
-            </td>
-            <td class="book-details-cell">
-                <div class="book-metadata">${i % 2 === 0 ? 'Mathematics' : 'Language Arts'}</div>
-                <div class="book-description">Grade ${(i % 5) + 1}</div>
-            </td>
-            <td class="book-details-cell">
-                <div class="book-metadata">${i % 3 === 0 ? 'Pohnpeian' : i % 3 === 1 ? 'English' : 'Chuukese'}</div>
-                <div class="book-description">PDF Format</div>
-            </td>
-            <td class="book-details-cell">
-                <div class="book-metadata" style="color: ${i % 4 === 0 ? '#d63638' : '#00a32a'}; font-weight: 600;">${i % 4 === 0 ? 'Limited Access' : 'Available'}</div>
+                <div class="book-metadata">2024-0${i % 12 + 1}-${(i % 28) + 1}, ${publishers[i % publishers.length]}</div>
+                <div class="book-description">${subjects[i % subjects.length]}, Grade ${(i % 5) + 1}, ${languages[i % languages.length]}, PDF Format - ${i % 4 === 0 ? 'Limited Access' : 'Available'}</div>
             </td>
             <td class="book-actions-cell">
                 <div class="book-actions">
@@ -2895,10 +2742,6 @@ function initializeBooks() {
         additionalBooks.push({
             element: mockRow,
             title: `Advanced Studies in Pacific Education Volume ${i}`,
-            author: `Pacific Academic Press ${i}`,
-            subject: i % 2 === 0 ? 'Mathematics' : 'Language Arts',
-            language: i % 3 === 0 ? 'Pohnpeian' : i % 3 === 1 ? 'English' : 'Chuukese',
-            availability: i % 4 === 0 ? 'Limited Access' : 'Available',
             index: i
         });
     }
@@ -2931,27 +2774,9 @@ function sortTable(column) {
         let aValue = '';
         let bValue = '';
 
-        switch(column) {
-            case 'title':
-                aValue = a.title.toLowerCase();
-                bValue = b.title.toLowerCase();
-                break;
-            case 'author':
-                aValue = a.author.toLowerCase();
-                bValue = b.author.toLowerCase();
-                break;
-            case 'subject':
-                aValue = a.subject.toLowerCase();
-                bValue = b.subject.toLowerCase();
-                break;
-            case 'language':
-                aValue = a.language.toLowerCase();
-                bValue = b.language.toLowerCase();
-                break;
-            case 'availability':
-                aValue = a.availability.toLowerCase();
-                bValue = b.availability.toLowerCase();
-                break;
+        if (column === 'title') {
+            aValue = a.title.toLowerCase();
+            bValue = b.title.toLowerCase();
         }
 
         if (currentSort.direction === 'asc') {
