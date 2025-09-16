@@ -1202,50 +1202,6 @@
             margin-top: var(--wp--preset--spacing--20);
         }
 
-        /* Bottom Library Entry Button */
-        .bottom-library-entry {
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .bottom-library-entry:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 152, 119, 0.2);
-        }
-
-        .bottom-library-entry::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .bottom-library-entry:hover::before {
-            left: 100%;
-        }
-
-        .bottom-entry-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--wp--preset--spacing--30);
-        }
-
-        .bottom-entry-content::after {
-            content: "📚";
-            font-size: var(--wp--preset--font-size--large);
-            transition: transform 0.3s ease;
-        }
-
-        .bottom-library-entry:hover .bottom-entry-content::after {
-            transform: scale(1.2);
-        }
 
         /* Landing Bar Guide Enhancement */
         .title_banner.with_sidebar {
@@ -1682,10 +1638,10 @@
 
 
                             <div class="section section-items link" id="items-9">
-                                <div class="item highlight bottom-library-entry">
-                                    <div class="bottom-entry-content">
+                                <div class="item highlight">
+                                    <a href="#" onclick="showLibraryTerms(); return false;" target="_self">
                                         <span class="item-title">I Accept and Agree to the Terms of Use. Continue to the Digital Library</span>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
 
@@ -1743,49 +1699,6 @@
                                 <a class="section-anchor" href="#section-contributors">Resource Contributors</a>
                             </li>
                         </ul>
-                    </div>
-
-                    <div class="sidebar_item sidebar-contributors">
-                        <h2>Resource Contributors</h2>
-                        <div class="contributors-list">
-                            <div class="contributor-item">
-                                <strong>Government Partners</strong>
-                                <ul>
-                                    <li>Ministry of Education - FSM</li>
-                                    <li>Marshall Islands Ministry of Education</li>
-                                    <li>Guam Department of Education</li>
-                                </ul>
-                            </div>
-                            <div class="contributor-item">
-                                <strong>Educational Institutions</strong>
-                                <ul>
-                                    <li>College of Micronesia</li>
-                                    <li>Palau Community College</li>
-                                    <li>Northern Marianas College</li>
-                                </ul>
-                            </div>
-                            <div class="contributor-item">
-                                <strong>State Departments</strong>
-                                <ul>
-                                    <li>Chuuk State Department of Education</li>
-                                    <li>Yap State Department of Education</li>
-                                    <li>Pohnpei State Department of Education</li>
-                                    <li>Kosrae State Department of Education</li>
-                                </ul>
-                            </div>
-                            <div class="contributor-item">
-                                <strong>Partner Organizations</strong>
-                                <ul>
-                                    <li>Pacific Resources for Education and Learning (PREL)</li>
-                                    <li>University of Hawaii - Pacific Islander Education</li>
-                                    <li>Pacific Educational Development Center</li>
-                                    <li>Micronesian Cultural Preservation Society</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <p class="contributors-note">
-                            <em>These organizations and institutions have collaborated to provide educational resources for our community.</em>
-                        </p>
                     </div>
 
                     <div class="sidebar_item text-sidebar">
@@ -2035,7 +1948,7 @@
     // Get all library entry triggers
     const libraryToggle = document.querySelector('.toggle-switch');
     const sidebarEntry = document.querySelector('.sidebar-library-entry');
-    const bottomLibraryBtn = document.querySelector('.bottom-library-entry');
+    const bottomLibraryBtn = document.querySelector('.item.highlight a');
     const sidebarLibraryBtn = document.querySelector('.library-entry-sidebar-btn');
 
     // Library entry function
