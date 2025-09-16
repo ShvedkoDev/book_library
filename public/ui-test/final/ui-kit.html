@@ -10,12 +10,90 @@
         contain-intrinsic-size: 3000px 1500px
     }</style>
 
+    <!-- This site is optimized with the Yoast SEO plugin v25.8 - https://yoast.com/wordpress/plugins/seo/ -->
     <title>UI Kit - Micronesian Teachers Digital Library</title>
     <link rel="canonical" href="https://localhost/micronesian-digital-library-ui-kit/"/>
     <meta property="og:locale" content="en_US"/>
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="UI Kit - Micronesian Teachers Digital Library"/>
     <meta property="og:description" content="Complete UI Kit showcasing all styling elements and components used in the Micronesian Teachers Digital Library project."/>
+    <meta property="og:url" content="https://localhost/micronesian-digital-library-ui-kit/"/>
+    <meta property="og:site_name" content="Micronesian Teachers Digital Library"/>
+    <meta property="article:modified_time" content="2024-12-16T01:03:09+00:00"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:label1" content="Est. reading time"/>
+    <meta name="twitter:data1" content="5 minutes"/>
+    <script type="application/ld+json" class="yoast-schema-graph">{
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebPage",
+                "@id": "https://localhost/micronesian-digital-library-ui-kit/",
+                "url": "https://localhost/micronesian-digital-library-ui-kit/",
+                "name": "UI Kit - Micronesian Teachers Digital Library",
+                "isPartOf": {
+                    "@id": "https://localhost/#website"
+                },
+                "datePublished": "2024-12-16T01:51:21+00:00",
+                "dateModified": "2024-12-16T01:03:09+00:00",
+                "inLanguage": "en-US",
+                "potentialAction": [
+                    {
+                        "@type": "ReadAction",
+                        "target": [
+                            "https://localhost/micronesian-digital-library-ui-kit/"
+                        ]
+                    }
+                ]
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://localhost/#website",
+                "url": "https://localhost/",
+                "name": "Micronesian Teachers Digital Library",
+                "description": "",
+                "publisher": {
+                    "@id": "https://localhost/#organization"
+                },
+                "potentialAction": [
+                    {
+                        "@type": "SearchAction",
+                        "target": {
+                            "@type": "EntryPoint",
+                            "urlTemplate": "https://localhost/?s={search_term_string}"
+                        },
+                        "query-input": {
+                            "@type": "PropertyValueSpecification",
+                            "valueRequired": true,
+                            "valueName": "search_term_string"
+                        }
+                    }
+                ],
+                "inLanguage": "en-US"
+            },
+            {
+                "@type": "Organization",
+                "@id": "https://localhost/#organization",
+                "name": "Micronesian Teachers Digital Library",
+                "url": "https://localhost/",
+                "logo": {
+                    "@type": "ImageObject",
+                    "inLanguage": "en-US",
+                    "@id": "https://localhost/#/schema/logo/image/",
+                    "url": "https://picsum.photos/200/80?random=3DL",
+                    "contentUrl": "https://picsum.photos/200/80?random=3DL",
+                    "width": 1200,
+                    "height": 1200,
+                    "caption": "Micronesian Teachers Digital Library"
+                },
+                "image": {
+                    "@id": "https://localhost/#/schema/logo/image/"
+                }
+            }
+        ]
+    }</script>
+    <!-- / Yoast SEO plugin. -->
+
 
     <link rel='dns-prefetch' href='//www.googletagmanager.com'/>
     <script type="text/javascript">
@@ -50,6 +128,8 @@
             --wp--preset--color--coe-red: #b34a64;
             --wp--preset--color--coe-purple: #484d7a;
             --wp--preset--color--coe-dark-gray: #666666;
+            --wp--preset--color--coe-highlight-green: #ccebe4;
+            --wp--preset--color--coe-forward-blue: #005a70;
             --wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);
             --wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);
             --wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);
@@ -80,6 +160,12 @@
             --wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);
         }
 
+        /* Base styles from WordPress and theme */
+        img {
+            height: auto;
+            max-width: 100%;
+        }
+
         /* Reset and base styles */
         *, *:before, *:after {
             box-sizing: border-box;
@@ -100,19 +186,311 @@
             padding: 0 var(--wp--preset--spacing--40);
         }
 
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--wp--preset--color--coe-black);
-            margin-bottom: var(--wp--preset--spacing--30);
-            line-height: 1.3;
+        /* Skip link */
+        .screen-reader-text {
+            border: 0;
+            clip: rect(1px, 1px, 1px, 1px);
+            clip-path: inset(50%);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute !important;
+            width: 1px;
+            word-wrap: normal !important;
         }
 
-        h1 { font-size: var(--wp--preset--font-size--x-large); }
-        h2 { font-size: var(--wp--preset--font-size--large); }
-        h3 { font-size: var(--wp--preset--font-size--medium); }
+        .skip-link:focus {
+            background-color: #f1f1f1;
+            border-radius: 3px;
+            box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+            clip: auto !important;
+            clip-path: none;
+            color: #21759b;
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            height: auto;
+            left: 6px;
+            line-height: normal;
+            padding: 15px 23px 14px;
+            text-decoration: none;
+            top: 7px;
+            width: auto;
+            z-index: 100000;
+        }
 
-        p {
+        /* Header styles */
+        .banner {
+            background: var(--wp--preset--color--white);
+            border-bottom: 1px solid var(--wp--preset--color--coe-light-green);
+        }
+
+        .coe-banner {
+            background: var(--wp--preset--color--coe-light-green-background);
+            padding: var(--wp--preset--spacing--20) 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--wp--preset--spacing--40);
+        }
+
+        .left-institution,
+        .right-institution {
+            display: flex;
+            align-items: center;
+            gap: var(--wp--preset--spacing--20);
+        }
+
+        .left-institution a,
+        .right-institution a {
+            display: flex;
+            align-items: center;
+            gap: var(--wp--preset--spacing--20);
+            text-decoration: none;
+            color: var(--wp--preset--color--coe-black);
+        }
+
+        .left-institution img,
+        .right-institution img {
+            height: 40px;
+            width: auto;
+        }
+
+        .institution-name {
+            font-size: var(--wp--preset--font-size--small);
+            font-weight: 500;
+        }
+
+        .program-banner {
+            background: var(--wp--preset--color--white);
+            padding: var(--wp--preset--spacing--30) 0;
+            border-bottom: 1px solid var(--wp--preset--color--coe-light-green);
+        }
+
+        .module-toggle {
+            text-align: center;
             margin-bottom: var(--wp--preset--spacing--30);
+        }
+
+        .toggle-container {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--wp--preset--spacing--30);
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: var(--wp--preset--font-size--medium);
+            font-weight: 600;
+            color: var(--wp--preset--color--coe-gray);
+            cursor: pointer;
+            transition: color 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .toggle-btn.active {
+            color: var(--wp--preset--color--coe-green);
+        }
+
+        .toggle-btn:hover {
+            color: var(--wp--preset--color--coe-green);
+        }
+
+        .toggle-divider {
+            color: var(--wp--preset--color--coe-gray);
+            font-size: var(--wp--preset--font-size--large);
+        }
+
+        .nav-primary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--wp--preset--spacing--40);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: var(--wp--preset--font-size--medium);
+            cursor: pointer;
+        }
+
+        .nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: var(--wp--preset--spacing--40);
+            align-items: center;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--wp--preset--color--coe-black);
+            font-weight: 500;
+            transition: color 0.2s ease;
+            font-size: var(--wp--preset--font-size--medium);
+        }
+
+        .nav a:hover {
+            color: var(--wp--preset--color--coe-green);
+        }
+
+        .menu-item-has-children {
+            position: relative;
+        }
+
+        .sub-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--wp--preset--color--white);
+            border: 1px solid var(--wp--preset--color--coe-light-green);
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            list-style: none;
+            margin: 0;
+            padding: var(--wp--preset--spacing--20) 0;
+            min-width: 200px;
+            display: none;
+            z-index: 100;
+        }
+
+        .menu-item-has-children:hover .sub-menu {
+            display: block;
+        }
+
+        .sub-menu li {
+            margin: 0;
+        }
+
+        .sub-menu a {
+            display: block;
+            padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
+            font-size: var(--wp--preset--font-size--small);
+        }
+
+        .menu-search {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: var(--wp--preset--font-size--medium);
+            color: var(--wp--preset--color--coe-black);
+            text-decoration: none;
+        }
+
+        .search-container {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--wp--preset--color--white);
+            border: 1px solid var(--wp--preset--color--coe-light-green);
+            border-radius: 4px;
+            padding: var(--wp--preset--spacing--30);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .searchform {
+            display: flex;
+            gap: var(--wp--preset--spacing--20);
+        }
+
+        .search-field {
+            padding: var(--wp--preset--spacing--20);
+            border: 1px solid var(--wp--preset--color--coe-light-green);
+            border-radius: 4px;
+            font-size: var(--wp--preset--font-size--small);
+        }
+
+        .search-submit {
+            background: var(--wp--preset--color--coe-green);
+            color: var(--wp--preset--color--white);
+            border: none;
+            border-radius: 4px;
+            padding: var(--wp--preset--spacing--20);
+            cursor: pointer;
+        }
+
+        /* Main content area */
+        .main {
+            background: var(--wp--preset--color--white);
+        }
+
+        .title_banner {
+            background: var(--wp--preset--color--coe-light-green-background);
+            padding: var(--wp--preset--spacing--60) 0;
+            border-bottom: 1px solid var(--wp--preset--color--coe-light-green);
+        }
+
+        .title_banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 152, 119, 0.1) 0%, rgba(0, 90, 112, 0.1) 100%);
+            pointer-events: none;
+        }
+
+        .title_banner.with_sidebar {
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .header-blurb {
+            flex: 1;
+            z-index: 2;
+        }
+
+        .breadcrumbs {
+            margin-bottom: var(--wp--preset--spacing--20);
+        }
+
+        .breadcrumbs a {
+            color: var(--wp--preset--color--coe-green);
+            text-decoration: none;
+            font-size: var(--wp--preset--font-size--small);
+        }
+
+        .handbook-header-menu h1 {
+            font-size: var(--wp--preset--font-size--x-large);
+            color: var(--wp--preset--color--coe-black);
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .sidebar.header-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--wp--preset--spacing--30);
+            padding: 0 var(--wp--preset--spacing--60);
+        }
+
+        .hupc-logo,
+        .farm-logo {
+            height: 60px;
+            width: auto;
         }
 
         /* UI Kit specific styles */
@@ -159,41 +537,19 @@
             letter-spacing: 1px;
         }
 
-        /* Header styles */
-        .site-header {
-            background: var(--wp--preset--color--white);
-            border-bottom: 1px solid var(--wp--preset--color--coe-light-green);
-            padding: var(--wp--preset--spacing--20) 0;
-        }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            height: 60px;
-            width: auto;
-        }
-
-        .site-nav {
-            display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            gap: var(--wp--preset--spacing--40);
-        }
-
-        .site-nav a {
-            text-decoration: none;
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
             color: var(--wp--preset--color--coe-black);
-            font-weight: 500;
-            transition: color 0.2s ease;
+            margin-bottom: var(--wp--preset--spacing--30);
+            line-height: 1.3;
         }
 
-        .site-nav a:hover {
-            color: var(--wp--preset--color--coe-green);
+        h1 { font-size: var(--wp--preset--font-size--x-large); }
+        h2 { font-size: var(--wp--preset--font-size--large); }
+        h3 { font-size: var(--wp--preset--font-size--medium); }
+
+        p {
+            margin-bottom: var(--wp--preset--spacing--30);
         }
 
         /* Button styles */
@@ -371,7 +727,7 @@
         }
 
         /* Search bar styles */
-        .search-container {
+        .search-container-demo {
             display: flex;
             gap: var(--wp--preset--spacing--20);
             margin-bottom: var(--wp--preset--spacing--40);
@@ -641,11 +997,113 @@
         }
 
         /* Footer styles */
+        .department-footer {
+            background: var(--wp--preset--color--coe-light-green-background);
+            padding: var(--wp--preset--spacing--60) 0;
+            text-align: center;
+            border-top: 1px solid var(--wp--preset--color--coe-light-green);
+        }
+
+        .dept-logo {
+            height: 80px;
+            width: auto;
+            margin-bottom: var(--wp--preset--spacing--30);
+        }
+
+        .tagline {
+            font-size: var(--wp--preset--font-size--medium);
+            color: var(--wp--preset--color--coe-black);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
         .site-footer {
             background: var(--wp--preset--color--coe-black);
             color: var(--wp--preset--color--white);
             padding: var(--wp--preset--spacing--60) 0;
-            text-align: center;
+        }
+
+        .address-contact-link {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--wp--preset--spacing--40);
+            margin-bottom: var(--wp--preset--spacing--60);
+        }
+
+        .address-contact-link address {
+            font-style: normal;
+        }
+
+        .address-contact-link strong {
+            color: var(--wp--preset--color--coe-green);
+            display: block;
+            margin-bottom: var(--wp--preset--spacing--20);
+        }
+
+        .contact a {
+            color: var(--wp--preset--color--white);
+            text-decoration: none;
+        }
+
+        .contact a:hover {
+            color: var(--wp--preset--color--coe-green);
+        }
+
+        .other-links-col {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .other-links-col li {
+            margin-bottom: var(--wp--preset--spacing--20);
+        }
+
+        .other-links-col a {
+            color: var(--wp--preset--color--white);
+            text-decoration: none;
+            font-size: var(--wp--preset--font-size--small);
+        }
+
+        .other-links-col a:hover {
+            color: var(--wp--preset--color--coe-green);
+        }
+
+        .logos-coe-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--wp--preset--color--coe-gray);
+            padding-top: var(--wp--preset--spacing--40);
+        }
+
+        .logos {
+            display: flex;
+            gap: var(--wp--preset--spacing--40);
+        }
+
+        .logos img {
+            height: 60px;
+            width: auto;
+        }
+
+        .links {
+            display: flex;
+            gap: var(--wp--preset--spacing--40);
+        }
+
+        .links a {
+            color: var(--wp--preset--color--white);
+            text-decoration: none;
+            font-size: var(--wp--preset--font-size--small);
+            display: flex;
+            align-items: center;
+            gap: var(--wp--preset--spacing--20);
+        }
+
+        .links a:hover {
+            color: var(--wp--preset--color--coe-green);
         }
 
         /* Utility classes */
@@ -680,16 +1138,21 @@
                 gap: var(--wp--preset--spacing--30);
             }
             
-            .site-nav {
+            .nav {
                 flex-wrap: wrap;
                 justify-content: center;
+            }
+            
+            .toggle-container {
+                flex-direction: column;
+                gap: var(--wp--preset--spacing--20);
             }
             
             .filter-container {
                 flex-direction: column;
             }
             
-            .search-container {
+            .search-container-demo {
                 flex-direction: column;
             }
             
@@ -708,433 +1171,620 @@
             .carousel-btn-next {
                 right: -15px;
             }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .title_banner.with_sidebar {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .sidebar.header-image {
+                padding: var(--wp--preset--spacing--40) 0 0 0;
+            }
+
+            .address-contact-link {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .logos-coe-links {
+                flex-direction: column;
+                gap: var(--wp--preset--spacing--40);
+                text-align: center;
+            }
         }
     </style>
 </head>
 
-<body>
-    <!-- Header -->
-    <header class="site-header">
-        <div class="container">
-            <div class="header-container">
-                <img src="https://picsum.photos/200/80?random=3DL" alt="Logo" class="logo">
-                <nav>
-                    <ul class="site-nav">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#library">Library</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </nav>
+<body class="wp-singular page-template page-template-template-stems2-ulu-guide template-stems2-ulu-guide page page-id-4059 wp-theme-coe-wp-programs-themeresources edcs program stems2 ulu-education-toolkit-guide sidebar-primary app-data index-data singular-data page-data page-4059-data page-ulu-education-toolkit-guide-data template-stems2-ulu-guide-data">
+
+
+<header class="banner" role="banner">
+    <a class="screen-reader-text skip-link" href="#content">Skip to main content</a>
+    <!-- TOP BAR with two institution logos -->
+    <!-- MENU BAR with Guide/Library toggle -->
+    <div class="coe-banner">
+        <div class="header-container">
+            <div class="left-institution">
+                <a href="#" title="Institution 1">
+                    <img src="https://picsum.photos/120/60?random=10" alt="Institution 1 Logo">
+                    <span class="institution-name">Educational Institution 1</span>
+                </a>
+            </div>
+            <div class="right-institution">
+                <a href="#" title="Institution 2">
+                    <img src="https://picsum.photos/120/60?random=11" alt="Institution 2 Logo">
+                    <span class="institution-name">Educational Institution 2</span>
+                </a>
             </div>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main>
-        <div class="container">
-            <div class="ui-kit-section">
-                <h1>Micronesian Teachers Digital Library - UI Kit</h1>
-                <p>This comprehensive UI kit showcases all styling elements and components used throughout the Micronesian Teachers Digital Library project. Use this reference guide to maintain consistency across all pages and features.</p>
-            </div>
-
-            <!-- Typography Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Typography</h2>
-                <div class="component-grid">
-                    <div class="component-example">
-                        <div class="example-label">Headings</div>
-                        <h1>Heading 1 - Main Page Title</h1>
-                        <h2>Heading 2 - Section Title</h2>
-                        <h3>Heading 3 - Subsection Title</h3>
-                        <h4>Heading 4 - Component Title</h4>
-                        <h5>Heading 5 - Minor Heading</h5>
-                        <h6>Heading 6 - Small Heading</h6>
-                    </div>
-                    <div class="component-example">
-                        <div class="example-label">Body Text</div>
-                        <p>This is a regular paragraph with normal text styling. It demonstrates the default font family, size, line height, and spacing used throughout the application.</p>
-                        <p class="text-gray">This is a gray text paragraph often used for secondary information and descriptions.</p>
-                        <p class="text-green">This is green text used for highlights and important information.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Buttons Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Buttons</h2>
-                <div class="component-grid">
-                    <div class="component-example">
-                        <div class="example-label">Primary Buttons</div>
-                        <button class="btn btn-primary">Primary Button</button>
-                        <button class="btn btn-primary btn-small">Small Primary</button>
-                        <button class="btn btn-primary btn-large">Large Primary</button>
-                    </div>
-                    <div class="component-example">
-                        <div class="example-label">Secondary Buttons</div>
-                        <button class="btn btn-secondary">Secondary Button</button>
-                        <button class="btn btn-outline">Outline Button</button>
-                        <button class="btn btn-primary" disabled>Disabled Button</button>
-                    </div>
-                    <div class="component-example">
-                        <div class="example-label">Specialized Buttons</div>
-                        <button class="book-card-btn">Book Card Button</button>
-                        <button class="search-btn">Search Button</button>
-                        <button class="carousel-btn">‹</button>
-                        <button class="carousel-btn">›</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cards Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Cards</h2>
-                <div class="component-grid">
-                    <div class="component-example">
-                        <div class="example-label">Basic Card</div>
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Card Header</h3>
-                            </div>
-                            <div class="card-body">
-                                <p>This is the card body content. Cards are used to group related information and provide a clean, organized layout.</p>
-                            </div>
-                            <div class="card-footer">
-                                <button class="btn btn-primary btn-small">Action</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="component-example">
-                        <div class="example-label">Book Card</div>
-                        <div class="book-card">
-                            <img src="https://picsum.photos/160/240?random=book1" alt="Book Cover" class="book-card-cover">
-                            <div class="book-card-title">The Sun Also Rises</div>
-                            <div class="book-card-author">Ernest Hemingway</div>
-                            <div class="book-card-meta">1926 • Fiction • Grade 9-12</div>
-                            <button class="book-card-btn">View Book</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Forms Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Form Elements</h2>
-                <div class="component-grid">
-                    <div class="component-example">
-                        <div class="example-label">Form Inputs</div>
-                        <div class="form-group">
-                            <label class="form-label">Text Input</label>
-                            <input type="text" class="form-input" placeholder="Enter text here">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Select Dropdown</label>
-                            <select class="form-select">
-                                <option>Option 1</option>
-                                <option>Option 2</option>
-                                <option>Option 3</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Textarea</label>
-                            <textarea class="form-textarea" rows="4" placeholder="Enter longer text here"></textarea>
-                        </div>
-                    </div>
-                    <div class="component-example">
-                        <div class="example-label">Search Bar</div>
-                        <div class="search-container">
-                            <input type="text" class="search-input" placeholder="Search books...">
-                            <button class="search-btn">Search</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filter Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Filters</h2>
-                <div class="component-showcase">
-                    <div class="example-label">Filter Container</div>
-                    <div class="filter-container">
-                        <div class="filter-group">
-                            <div class="filter-label">Subject</div>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="form-checkbox"> Literature
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="form-checkbox"> Science
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="form-checkbox"> History
-                            </label>
-                        </div>
-                        <div class="filter-group">
-                            <div class="filter-label">Grade Level</div>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="form-checkbox"> K-5
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="form-checkbox"> 6-8
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="form-checkbox"> 9-12
-                            </label>
-                        </div>
-                        <div class="filter-group">
-                            <div class="filter-label">Language</div>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="form-checkbox"> English
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="form-checkbox"> Chuukese
-                            </label>
-                            <label class="filter-checkbox">
-                                <input type="checkbox" class="form-checkbox"> Pohnpeian
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Carousel Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Carousel</h2>
-                <div class="component-showcase">
-                    <div class="example-label">Book Carousel</div>
-                    <div class="carousel-container">
-                        <div class="carousel-header">
-                            <h3>Related Books</h3>
-                        </div>
-                        <div class="carousel-wrapper">
-                            <button class="carousel-btn carousel-btn-prev">‹</button>
-                            <div class="books-grid">
-                                <div class="book-card">
-                                    <img src="https://picsum.photos/160/240?random=book2" alt="Book" class="book-card-cover">
-                                    <div class="book-card-title">Book Title 1</div>
-                                    <div class="book-card-author">Author Name</div>
-                                    <div class="book-card-meta">2024 • Genre • Grade</div>
-                                    <button class="book-card-btn">View</button>
-                                </div>
-                                <div class="book-card">
-                                    <img src="https://picsum.photos/160/240?random=book3" alt="Book" class="book-card-cover">
-                                    <div class="book-card-title">Book Title 2</div>
-                                    <div class="book-card-author">Author Name</div>
-                                    <div class="book-card-meta">2024 • Genre • Grade</div>
-                                    <button class="book-card-btn">View</button>
-                                </div>
-                                <div class="book-card">
-                                    <img src="https://picsum.photos/160/240?random=book4" alt="Book" class="book-card-cover">
-                                    <div class="book-card-title">Book Title 3</div>
-                                    <div class="book-card-author">Author Name</div>
-                                    <div class="book-card-meta">2024 • Genre • Grade</div>
-                                    <button class="book-card-btn">View</button>
-                                </div>
-                            </div>
-                            <button class="carousel-btn carousel-btn-next">›</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Status Indicators Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Status Indicators</h2>
-                <div class="component-grid">
-                    <div class="component-example">
-                        <div class="example-label">Access Status</div>
-                        <div class="access-status full-access">
-                            <span>📖</span>
-                            <span>Full Access</span>
-                        </div>
-                        <div class="access-status limited-access">
-                            <span>👁️</span>
-                            <span>Limited Access</span>
-                        </div>
-                        <div class="access-status unavailable">
-                            <span>🔒</span>
-                            <span>Unavailable</span>
-                        </div>
-                    </div>
-                    <div class="component-example">
-                        <div class="example-label">Rating</div>
-                        <div class="rating">
-                            <div class="stars">
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star">★</span>
-                                <span class="star empty">★</span>
-                            </div>
-                            <span>4.0 out of 5</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Navigation Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Navigation</h2>
-                <div class="component-showcase">
-                    <div class="example-label">Tab Navigation</div>
-                    <div class="tab-nav">
-                        <button class="tab-nav-item active">Overview</button>
-                        <button class="tab-nav-item">Details</button>
-                        <button class="tab-nav-item">Reviews</button>
-                        <button class="tab-nav-item">Other Versions</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Alerts Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Alerts</h2>
-                <div class="component-grid">
-                    <div class="component-example">
-                        <div class="example-label">Alert Types</div>
-                        <div class="alert alert-success">
-                            <strong>Success!</strong> Your action was completed successfully.
-                        </div>
-                        <div class="alert alert-warning">
-                            <strong>Warning!</strong> Please check your input before proceeding.
-                        </div>
-                        <div class="alert alert-error">
-                            <strong>Error!</strong> Something went wrong. Please try again.
-                        </div>
-                        <div class="alert alert-info">
-                            <strong>Info:</strong> Here's some helpful information for you.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Color Palette Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Color Palette</h2>
-                <div class="component-grid">
-                    <div class="component-example">
-                        <div class="example-label">Primary Colors</div>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
-                            <div style="background: var(--wp--preset--color--coe-green); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
-                                <div>COE Green</div>
-                                <div style="font-size: 12px;">#009877</div>
-                            </div>
-                            <div style="background: var(--wp--preset--color--coe-blue); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
-                                <div>COE Blue</div>
-                                <div style="font-size: 12px;">#005a70</div>
-                            </div>
-                            <div style="background: var(--wp--preset--color--coe-black); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
-                                <div>COE Black</div>
-                                <div style="font-size: 12px;">#0f1820</div>
-                            </div>
-                            <div style="background: var(--wp--preset--color--coe-green-shade); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
-                                <div>Green Shade</div>
-                                <div style="font-size: 12px;">#007c5f</div>
-                            </div>
-                            <div style="background: var(--wp--preset--color--coe-gray); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
-                                <div>COE Gray</div>
-                                <div style="font-size: 12px;">#b1b6b9</div>
-                            </div>
-                            <div style="background: var(--wp--preset--color--coe-light-green); color: black; padding: 1rem; border-radius: 4px; text-align: center;">
-                                <div>Light Green</div>
-                                <div style="font-size: 12px;">#ccebe4</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Spacing Section -->
-            <div class="ui-kit-section">
-                <h2 class="component-title">Spacing Scale</h2>
-                <div class="component-example">
-                    <div class="example-label">Spacing Values</div>
-                    <div style="display: grid; gap: 1rem;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--20);"></div>
-                            <span>--wp--preset--spacing--20 (0.44rem)</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--30);"></div>
-                            <span>--wp--preset--spacing--30 (0.67rem)</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--40);"></div>
-                            <span>--wp--preset--spacing--40 (1rem)</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--50);"></div>
-                            <span>--wp--preset--spacing--50 (1.5rem)</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--60);"></div>
-                            <span>--wp--preset--spacing--60 (2.25rem)</span>
-                        </div>
-                    </div>
-                </div>
+    </div>
+    <div class="program-banner">
+        <div class="module-toggle">
+            <div class="toggle-container">
+                <button class="toggle-btn" data-module="guide" onclick="window.location.href='index.html'">Resource guide</button>
+                <div class="toggle-divider">|</div>
+                <button class="toggle-btn" data-module="library" onclick="window.location.href='library.html'">Resource library</button>
+                <div class="toggle-divider">|</div>
+                <button class="toggle-btn active" data-module="ui-kit">UI Kit</button>
             </div>
         </div>
-    </main>
+        <nav aria-label="main menu" class="nav-primary">
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2024 Micronesian Teachers Digital Library. All rights reserved.</p>
+            <button class="menu-toggle" aria-expanded="false">Menu <span class="screen-reader-text">Open Mobile Menu</span></button>
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav">
+                    <li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-2335"><a href="index.html">Guide</a></li>
+                    <li id="menu-item-1362" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1362"><a href="#">About Us</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-314" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-314"><a href="/about/">What is MTDL?</a></li>
+                            <li id="menu-item-320" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-320"><a href="/why/">Why Digital Library?</a></li>
+                            <li id="menu-item-1692" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1692"><a href="/photo-gallery/">Photo Gallery</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-language menu-item-has-children"><a href="#" class="language-selector">EN <i class="fal fa-chevron-down"></i></a>
+                        <ul class="sub-menu language-options">
+                            <li><a href="#">English</a></li>
+                            <li><a href="#">Chuukese</a></li>
+                            <li><a href="#">Pohnpeian</a></li>
+                            <li><a href="#">Yapese</a></li>
+                            <li><a href="#">Kosraean</a></li>
+                            <li><a href="#">Marshallese</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-login"><a href="login.html">Login</a></li>
+                </ul>
+            </div>
+
+            <div class="menu-search">
+                <a class="search-toggle" href="#searchform"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Toggle Search</span></a>
+                <div class="search-container" aria-expanded="false">
+                    <form role="search" method="get" class="searchform" action="/">
+                        <label for="basic-site-search" id="searchform" class="screen-reader-text" action="/">
+                            Search for:
+                        </label>
+                        <input type="search" class="search-field" id="basic-site-search" placeholder="Search &hellip;" value="" name="s"/>
+                        <button type="submit" class="search-submit" value="Search"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Site Search</span></button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+
+<main class="main with_sidebar print" id="content">
+
+    <div class="content print" role="main">
+        <div class="title_banner with_sidebar">
+            <div class="header-blurb container">
+                <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+                    <!-- Breadcrumb NavXT 7.4.1 -->
+                    <span property="itemListElement" typeof="ListItem">
+                        <a property="item" typeof="WebPage" title="Go to Micronesian Teachers Digital Library." href="index.html" class="main-home">
+                            <span property="name">Micronesian Teachers Digital Library</span></a>
+                        <meta property="position" content="1">
+                    </span>
+                    <span> &gt; </span>
+                    <span property="itemListElement" typeof="ListItem">
+                        <span property="name">UI Kit</span>
+                        <meta property="position" content="2">
+                    </span>
+                </div>
+                <div class="handbook-header-menu">
+                    <h1>UI Kit & Design System</h1>
+                </div>
+            </div>
+            <aside class="sidebar header-image handbook-image">
+                <img class="hupc-logo" src="https://picsum.photos/200/80?random=3DL" alt="Micronesian Teachers Digital Library logo">
+                <img class="farm-logo" src="https://picsum.photos/120/60?random=12" alt="Education Initiative logo">
+            </aside>
         </div>
-    </footer>
+        <div class="page-content">
+            <div class="container with_sidebar">
+                <div class="main_content">
+                    <div class="section-content">
+                        <div class="main-content">
+                            <div class="ui-kit-section">
+                                <p>This comprehensive UI kit showcases all styling elements and components used throughout the Micronesian Teachers Digital Library project. Use this reference guide to maintain consistency across all pages and features.</p>
+                            </div>
 
-    <!-- Modal Example -->
-    <div class="modal" id="example-modal">
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <h3>Modal Title</h3>
-            <p>This is an example modal dialog. It can be used for confirmations, forms, or displaying additional information.</p>
-            <div style="text-align: right; margin-top: 2rem;">
-                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="closeModal()">Confirm</button>
+                            <!-- Typography Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Typography</h2>
+                                <div class="component-grid">
+                                    <div class="component-example">
+                                        <div class="example-label">Headings</div>
+                                        <h1>Heading 1 - Main Page Title</h1>
+                                        <h2>Heading 2 - Section Title</h2>
+                                        <h3>Heading 3 - Subsection Title</h3>
+                                        <h4>Heading 4 - Component Title</h4>
+                                        <h5>Heading 5 - Minor Heading</h5>
+                                        <h6>Heading 6 - Small Heading</h6>
+                                    </div>
+                                    <div class="component-example">
+                                        <div class="example-label">Body Text</div>
+                                        <p>This is a regular paragraph with normal text styling. It demonstrates the default font family, size, line height, and spacing used throughout the application.</p>
+                                        <p class="text-gray">This is a gray text paragraph often used for secondary information and descriptions.</p>
+                                        <p class="text-green">This is green text used for highlights and important information.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Buttons Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Buttons</h2>
+                                <div class="component-grid">
+                                    <div class="component-example">
+                                        <div class="example-label">Primary Buttons</div>
+                                        <button class="btn btn-primary">Primary Button</button>
+                                        <button class="btn btn-primary btn-small">Small Primary</button>
+                                        <button class="btn btn-primary btn-large">Large Primary</button>
+                                    </div>
+                                    <div class="component-example">
+                                        <div class="example-label">Secondary Buttons</div>
+                                        <button class="btn btn-secondary">Secondary Button</button>
+                                        <button class="btn btn-outline">Outline Button</button>
+                                        <button class="btn btn-primary" disabled>Disabled Button</button>
+                                    </div>
+                                    <div class="component-example">
+                                        <div class="example-label">Specialized Buttons</div>
+                                        <button class="book-card-btn">Book Card Button</button>
+                                        <button class="search-btn">Search Button</button>
+                                        <button class="carousel-btn">‹</button>
+                                        <button class="carousel-btn">›</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cards Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Cards</h2>
+                                <div class="component-grid">
+                                    <div class="component-example">
+                                        <div class="example-label">Basic Card</div>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Card Header</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>This is the card body content. Cards are used to group related information and provide a clean, organized layout.</p>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button class="btn btn-primary btn-small">Action</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component-example">
+                                        <div class="example-label">Book Card</div>
+                                        <div class="book-card">
+                                            <img src="https://picsum.photos/160/240?random=book1" alt="Book Cover" class="book-card-cover">
+                                            <div class="book-card-title">The Sun Also Rises</div>
+                                            <div class="book-card-author">Ernest Hemingway</div>
+                                            <div class="book-card-meta">1926 • Fiction • Grade 9-12</div>
+                                            <button class="book-card-btn">View Book</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Forms Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Form Elements</h2>
+                                <div class="component-grid">
+                                    <div class="component-example">
+                                        <div class="example-label">Form Inputs</div>
+                                        <div class="form-group">
+                                            <label class="form-label">Text Input</label>
+                                            <input type="text" class="form-input" placeholder="Enter text here">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Select Dropdown</label>
+                                            <select class="form-select">
+                                                <option>Option 1</option>
+                                                <option>Option 2</option>
+                                                <option>Option 3</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Textarea</label>
+                                            <textarea class="form-textarea" rows="4" placeholder="Enter longer text here"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="component-example">
+                                        <div class="example-label">Search Bar</div>
+                                        <div class="search-container-demo">
+                                            <input type="text" class="search-input" placeholder="Search books...">
+                                            <button class="search-btn">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Filter Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Filters</h2>
+                                <div class="component-showcase">
+                                    <div class="example-label">Filter Container</div>
+                                    <div class="filter-container">
+                                        <div class="filter-group">
+                                            <div class="filter-label">Subject</div>
+                                            <label class="filter-checkbox">
+                                                <input type="checkbox" class="form-checkbox"> Literature
+                                            </label>
+                                            <label class="filter-checkbox">
+                                                <input type="checkbox" class="form-checkbox"> Science
+                                            </label>
+                                            <label class="filter-checkbox">
+                                                <input type="checkbox" class="form-checkbox"> History
+                                            </label>
+                                        </div>
+                                        <div class="filter-group">
+                                            <div class="filter-label">Grade Level</div>
+                                            <label class="filter-checkbox">
+                                                <input type="checkbox" class="form-checkbox"> K-5
+                                            </label>
+                                            <label class="filter-checkbox">
+                                                <input type="checkbox" class="form-checkbox"> 6-8
+                                            </label>
+                                            <label class="filter-checkbox">
+                                                <input type="checkbox" class="form-checkbox"> 9-12
+                                            </label>
+                                        </div>
+                                        <div class="filter-group">
+                                            <div class="filter-label">Language</div>
+                                            <label class="filter-checkbox">
+                                                <input type="checkbox" class="form-checkbox"> English
+                                            </label>
+                                            <label class="filter-checkbox">
+                                                <input type="checkbox" class="form-checkbox"> Chuukese
+                                            </label>
+                                            <label class="filter-checkbox">
+                                                <input type="checkbox" class="form-checkbox"> Pohnpeian
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Carousel Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Carousel</h2>
+                                <div class="component-showcase">
+                                    <div class="example-label">Book Carousel</div>
+                                    <div class="carousel-container">
+                                        <div class="carousel-header">
+                                            <h3>Related Books</h3>
+                                        </div>
+                                        <div class="carousel-wrapper">
+                                            <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel(-1)">‹</button>
+                                            <div class="books-grid" id="demo-carousel">
+                                                <div class="book-card">
+                                                    <img src="https://picsum.photos/160/240?random=book2" alt="Book" class="book-card-cover">
+                                                    <div class="book-card-title">Book Title 1</div>
+                                                    <div class="book-card-author">Author Name</div>
+                                                    <div class="book-card-meta">2024 • Genre • Grade</div>
+                                                    <button class="book-card-btn">View</button>
+                                                </div>
+                                                <div class="book-card">
+                                                    <img src="https://picsum.photos/160/240?random=book3" alt="Book" class="book-card-cover">
+                                                    <div class="book-card-title">Book Title 2</div>
+                                                    <div class="book-card-author">Author Name</div>
+                                                    <div class="book-card-meta">2024 • Genre • Grade</div>
+                                                    <button class="book-card-btn">View</button>
+                                                </div>
+                                                <div class="book-card">
+                                                    <img src="https://picsum.photos/160/240?random=book4" alt="Book" class="book-card-cover">
+                                                    <div class="book-card-title">Book Title 3</div>
+                                                    <div class="book-card-author">Author Name</div>
+                                                    <div class="book-card-meta">2024 • Genre • Grade</div>
+                                                    <button class="book-card-btn">View</button>
+                                                </div>
+                                                <div class="book-card">
+                                                    <img src="https://picsum.photos/160/240?random=book5" alt="Book" class="book-card-cover">
+                                                    <div class="book-card-title">Book Title 4</div>
+                                                    <div class="book-card-author">Author Name</div>
+                                                    <div class="book-card-meta">2024 • Genre • Grade</div>
+                                                    <button class="book-card-btn">View</button>
+                                                </div>
+                                            </div>
+                                            <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel(1)">›</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status Indicators Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Status Indicators</h2>
+                                <div class="component-grid">
+                                    <div class="component-example">
+                                        <div class="example-label">Access Status</div>
+                                        <div class="access-status full-access">
+                                            <span>📖</span>
+                                            <span>Full Access</span>
+                                        </div>
+                                        <div class="access-status limited-access">
+                                            <span>👁️</span>
+                                            <span>Limited Access</span>
+                                        </div>
+                                        <div class="access-status unavailable">
+                                            <span>🔒</span>
+                                            <span>Unavailable</span>
+                                        </div>
+                                    </div>
+                                    <div class="component-example">
+                                        <div class="example-label">Rating</div>
+                                        <div class="rating">
+                                            <div class="stars">
+                                                <span class="star">★</span>
+                                                <span class="star">★</span>
+                                                <span class="star">★</span>
+                                                <span class="star">★</span>
+                                                <span class="star empty">★</span>
+                                            </div>
+                                            <span>4.0 out of 5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Navigation Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Navigation</h2>
+                                <div class="component-showcase">
+                                    <div class="example-label">Tab Navigation</div>
+                                    <div class="tab-nav">
+                                        <button class="tab-nav-item active">Overview</button>
+                                        <button class="tab-nav-item">Details</button>
+                                        <button class="tab-nav-item">Reviews</button>
+                                        <button class="tab-nav-item">Other Versions</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Alerts Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Alerts</h2>
+                                <div class="component-grid">
+                                    <div class="component-example">
+                                        <div class="example-label">Alert Types</div>
+                                        <div class="alert alert-success">
+                                            <strong>Success!</strong> Your action was completed successfully.
+                                        </div>
+                                        <div class="alert alert-warning">
+                                            <strong>Warning!</strong> Please check your input before proceeding.
+                                        </div>
+                                        <div class="alert alert-error">
+                                            <strong>Error!</strong> Something went wrong. Please try again.
+                                        </div>
+                                        <div class="alert alert-info">
+                                            <strong>Info:</strong> Here's some helpful information for you.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Color Palette Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Color Palette</h2>
+                                <div class="component-grid">
+                                    <div class="component-example">
+                                        <div class="example-label">Primary Colors</div>
+                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                                            <div style="background: var(--wp--preset--color--coe-green); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
+                                                <div>COE Green</div>
+                                                <div style="font-size: 12px;">#009877</div>
+                                            </div>
+                                            <div style="background: var(--wp--preset--color--coe-blue); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
+                                                <div>COE Blue</div>
+                                                <div style="font-size: 12px;">#005a70</div>
+                                            </div>
+                                            <div style="background: var(--wp--preset--color--coe-black); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
+                                                <div>COE Black</div>
+                                                <div style="font-size: 12px;">#0f1820</div>
+                                            </div>
+                                            <div style="background: var(--wp--preset--color--coe-green-shade); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
+                                                <div>Green Shade</div>
+                                                <div style="font-size: 12px;">#007c5f</div>
+                                            </div>
+                                            <div style="background: var(--wp--preset--color--coe-gray); color: white; padding: 1rem; border-radius: 4px; text-align: center;">
+                                                <div>COE Gray</div>
+                                                <div style="font-size: 12px;">#b1b6b9</div>
+                                            </div>
+                                            <div style="background: var(--wp--preset--color--coe-light-green); color: black; padding: 1rem; border-radius: 4px; text-align: center;">
+                                                <div>Light Green</div>
+                                                <div style="font-size: 12px;">#ccebe4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Spacing Section -->
+                            <div class="ui-kit-section">
+                                <h2 class="component-title">Spacing Scale</h2>
+                                <div class="component-example">
+                                    <div class="example-label">Spacing Values</div>
+                                    <div style="display: grid; gap: 1rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--20);"></div>
+                                            <span>--wp--preset--spacing--20 (0.44rem)</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--30);"></div>
+                                            <span>--wp--preset--spacing--30 (0.67rem)</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--40);"></div>
+                                            <span>--wp--preset--spacing--40 (1rem)</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--50);"></div>
+                                            <span>--wp--preset--spacing--50 (1.5rem)</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <div style="background: var(--wp--preset--color--coe-green); height: 20px; width: var(--wp--preset--spacing--60);"></div>
+                                            <span>--wp--preset--spacing--60 (2.25rem)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Basic carousel functionality
-        function scrollCarousel(direction) {
-            const carousel = document.querySelector('.books-grid');
-            const cardWidth = 280;
-            const scrollAmount = cardWidth * 2;
-            
-            carousel.scrollBy({
-                left: direction * scrollAmount,
-                behavior: 'smooth'
-            });
-        }
+</main>
 
-        // Modal functionality
-        function openModal() {
-            document.getElementById('example-modal').style.display = 'block';
-        }
+<footer class="department-footer" aria-label="department or special program info">
+    <div class="container">
+        <img class="dept-logo" src="https://picsum.photos/200/80?random=3DL" alt="Micronesian Teachers Digital Library logo">
+        <p class="tagline">
+            The Micronesian Teachers Digital Library promotes culturally responsive, place-based education by providing access to over 2,000 educational resources in local languages, fostering cultural preservation and academic excellence across Micronesia.
+        </p>
+    </div>
+</footer>
 
-        function closeModal() {
-            document.getElementById('example-modal').style.display = 'none';
-        }
+<footer class="site-footer">
+    <div class="container">
+        <div class="address-contact-link">
+            <address>
+                <strong>Micronesian Teachers Digital Library</strong>
+                <p>Educational Resource Center<br/>
+                    Pacific Islands Region<br/>
+                    Micronesia</p>
 
-        // Tab functionality
-        document.querySelectorAll('.tab-nav-item').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab-nav-item').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
+            </address>
+            <div class="contact">
+                <i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+1-000-000-0000">(000) 000-0000</a>
+                <br/><i class="fas fa-fax" aria-hidden="true"></i> <a href="tel:+1-000-000-0000">(000) 000-0000</a>
+                <br/><i class="fas fa-envelope" aria-hidden="true"></i> <a href="mailto:info@mtdl.edu">info@mtdl.edu</a>
+            </div>
+
+            <ul class="other-links-col other-links-col1">
+                <li><a href="#" target="_self">Accessibility Info</a></li>
+                <li><a href="#" target="_self">Suggest Educational Content</a></li>
+            </ul>
+            <ul class="other-links-col other-links-col2">
+                <li><a href="#" target="_self">Contributor Form</a></li>
+                <li><a href="#" target="_self">Submit Resources</a></li>
+            </ul>
+        </div>
+        <div class="logos-coe-links">
+            <div class="logos">
+                <a class="coe" href="/">
+                    <img src="https://picsum.photos/200/80?random=80" alt="MTDL logo">
+                </a>
+                <a class="manoa" href="/">
+                    <img src="https://picsum.photos/200/80?random=81" alt="Education Initiative logo">
+                </a>
+            </div>
+            <div class="links">
+
+                <a class="sitemap" href="/sitemap/" title="sitemap"><i aria-hidden="true" class="fal fa-sitemap"></i> <span>Sitemap</span></a>
+                <a href="/login/" title="user login"><i aria-hidden="true" class="fal fa-sign-in"></i> <span>Log In</span></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal Example -->
+<div class="modal" id="example-modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <h3>Modal Title</h3>
+        <p>This is an example modal dialog. It can be used for confirmations, forms, or displaying additional information.</p>
+        <div style="text-align: right; margin-top: 2rem;">
+            <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="closeModal()">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Basic carousel functionality
+    function scrollCarousel(direction) {
+        const carousel = document.getElementById('demo-carousel');
+        const cardWidth = 280;
+        const scrollAmount = cardWidth * 2;
+        
+        carousel.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
         });
+    }
 
-        // Carousel button functionality
-        document.querySelector('.carousel-btn-prev').addEventListener('click', () => scrollCarousel(-1));
-        document.querySelector('.carousel-btn-next').addEventListener('click', () => scrollCarousel(1));
+    // Modal functionality
+    function openModal() {
+        document.getElementById('example-modal').style.display = 'block';
+    }
 
-        // Close modal when clicking outside
-        document.getElementById('example-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
+    function closeModal() {
+        document.getElementById('example-modal').style.display = 'none';
+    }
+
+    // Tab functionality
+    document.querySelectorAll('.tab-nav-item').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.tab-nav-item').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
         });
-    </script>
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('example-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+
+    // Search toggle functionality
+    document.querySelector('.search-toggle').addEventListener('click', function(e) {
+        e.preventDefault();
+        const searchContainer = document.querySelector('.search-container');
+        const isExpanded = searchContainer.getAttribute('aria-expanded') === 'true';
+        searchContainer.style.display = isExpanded ? 'none' : 'block';
+        searchContainer.setAttribute('aria-expanded', !isExpanded);
+    });
+
+    // Menu toggle for mobile
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        const nav = document.querySelector('.nav');
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        nav.style.display = isExpanded ? 'none' : 'flex';
+        this.setAttribute('aria-expanded', !isExpanded);
+    });
+</script>
+
 </body>
 </html>
