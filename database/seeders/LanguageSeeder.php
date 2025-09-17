@@ -23,7 +23,7 @@ class LanguageSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'code' => 'chuukese',
+                'code' => 'chk',
                 'name' => 'Chuukese',
                 'native_name' => 'Chuuk',
                 'is_active' => true,
@@ -31,7 +31,7 @@ class LanguageSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'code' => 'pohnpeian',
+                'code' => 'pon',
                 'name' => 'Pohnpeian',
                 'native_name' => 'Pohnpei',
                 'is_active' => true,
@@ -39,7 +39,7 @@ class LanguageSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'code' => 'yapese',
+                'code' => 'yap',
                 'name' => 'Yapese',
                 'native_name' => 'Waqab',
                 'is_active' => true,
@@ -47,7 +47,7 @@ class LanguageSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'code' => 'kosraean',
+                'code' => 'kos',
                 'name' => 'Kosraean',
                 'native_name' => 'Kosrae',
                 'is_active' => true,
@@ -55,7 +55,7 @@ class LanguageSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'code' => 'marshallese',
+                'code' => 'mah',
                 'name' => 'Marshallese',
                 'native_name' => 'Kajin M̧ajeļ',
                 'is_active' => true,
@@ -63,7 +63,7 @@ class LanguageSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'code' => 'palauan',
+                'code' => 'pau',
                 'name' => 'Palauan',
                 'native_name' => 'Tekoi er a Belau',
                 'is_active' => true,
@@ -71,7 +71,7 @@ class LanguageSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'code' => 'carolinian',
+                'code' => 'cal',
                 'name' => 'Carolinian',
                 'native_name' => 'Refaluwasch',
                 'is_active' => true,
@@ -79,7 +79,7 @@ class LanguageSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'code' => 'chamorro',
+                'code' => 'cha',
                 'name' => 'Chamorro',
                 'native_name' => 'Fino\' Chamoru',
                 'is_active' => true,
@@ -87,7 +87,7 @@ class LanguageSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'code' => 'ulithian',
+                'code' => 'uli',
                 'name' => 'Ulithian',
                 'native_name' => 'Woleaian',
                 'is_active' => true,

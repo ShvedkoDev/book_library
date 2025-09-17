@@ -167,7 +167,6 @@ class BookInteractionsSeeder extends Seeder
             ['book_id' => 34, 'category_id' => 29, 'is_primary' => false], // Workbook
 
             // Grade levels
-            ['book_id' => 1, 'category_id' => 24, 'is_primary' => false], // Elementary 1-3
             ['book_id' => 7, 'category_id' => 24, 'is_primary' => false], // Elementary 1-3
             ['book_id' => 14, 'category_id' => 26, 'is_primary' => false], // Middle School
             ['book_id' => 28, 'category_id' => 27, 'is_primary' => false], // High School
