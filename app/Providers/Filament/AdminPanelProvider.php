@@ -2,6 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\BooksStatsWidget;
+use App\Filament\Widgets\RatingAnalyticsWidget;
+use App\Filament\Widgets\UserActivityWidget;
+use App\Filament\Widgets\DownloadsChartWidget;
+use App\Filament\Widgets\RecentActivityWidget;
+use App\Filament\Widgets\PopularBooksWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -28,17 +34,25 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Emerald,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
+            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
+                // Analytics Widgets
+                BooksStatsWidget::class,
+                RatingAnalyticsWidget::class,
+                UserActivityWidget::class,
+                DownloadsChartWidget::class,
+                RecentActivityWidget::class,
+                PopularBooksWidget::class,
+                
+                // Default Widgets
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
