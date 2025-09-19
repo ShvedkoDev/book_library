@@ -269,15 +269,15 @@ Afterwards mark as done tasts in the CMS_TODO.md, update CLAUDE.md and commit an
 ```
 
 ### Task 2.3: Content Block Builder System
-**Priority:** High  
+**Priority:** High
 **Estimated Time:** 2 hours
 
 **TODO:**
-- [ ] Create flexible content block system
-- [ ] Implement block type registry
-- [ ] Create block templates and preview
-- [ ] Add block validation and settings
-- [ ] Configure block drag-drop interface
+- [x] Create flexible content block system
+- [x] Implement block type registry
+- [x] Create block templates and preview
+- [x] Add block validation and settings
+- [x] Configure block drag-drop interface
 
 **AI Prompt:**
 ```
