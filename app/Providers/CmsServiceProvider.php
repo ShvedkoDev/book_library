@@ -48,8 +48,8 @@ class CmsServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Load CMS routes
-        $this->loadCmsRoutes();
+        // Load CMS routes (disabled until controllers are created)
+        // $this->loadCmsRoutes();
 
         // Register media collections
         $this->registerMediaCollections();
@@ -77,38 +77,111 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected function registerCmsServices(): void
     {
-        // Register CMS cache service
+        // Register CMS cache service (placeholder implementation)
         $this->app->singleton('cms.cache', function ($app) {
-            return new \App\Services\CmsCacheService(
-                $app['cache.store'],
-                config('cms.cache')
-            );
+            // Return a simple cache wrapper for now
+            return new class($app['cache.store'], config('cms.cache')) {
+                protected $cache;
+                protected $config;
+
+                public function __construct($cache, $config)
+                {
+                    $this->cache = $cache;
+                    $this->config = $config;
+                }
+
+                public function remember($key, $ttl, $callback)
+                {
+                    if (!$this->config['enabled']) {
+                        return $callback();
+                    }
+                    return $this->cache->remember($key, $ttl, $callback);
+                }
+
+                public function forget($key)
+                {
+                    return $this->cache->forget($key);
+                }
+
+                public function flush()
+                {
+                    return $this->cache->flush();
+                }
+            };
         });
 
-        // Register CMS SEO service
+        // Register CMS SEO service (placeholder implementation)
         $this->app->singleton('cms.seo', function ($app) {
-            return new \App\Services\CmsSeoService(
-                config('cms.seo')
-            );
+            return new class(config('cms.seo')) {
+                protected $config;
+
+                public function __construct($config)
+                {
+                    $this->config = $config;
+                }
+
+                public function generateMetaTags($data)
+                {
+                    return [];
+                }
+
+                public function generateStructuredData($data)
+                {
+                    return [];
+                }
+            };
         });
 
-        // Register CMS media service
+        // Register CMS media service (placeholder implementation)
         $this->app->singleton('cms.media', function ($app) {
-            return new \App\Services\CmsMediaService(
-                config('cms.media')
-            );
+            return new class(config('cms.media')) {
+                protected $config;
+
+                public function __construct($config)
+                {
+                    $this->config = $config;
+                }
+
+                public function processUpload($file)
+                {
+                    return $file;
+                }
+            };
         });
 
-        // Register content block renderer
+        // Register content block renderer (placeholder implementation)
         $this->app->singleton('cms.blocks', function ($app) {
-            return new \App\Services\ContentBlockRenderer(
-                config('cms.blocks')
-            );
+            return new class(config('cms.blocks')) {
+                protected $config;
+
+                public function __construct($config)
+                {
+                    $this->config = $config;
+                }
+
+                public function render($block)
+                {
+                    if (is_object($block) && method_exists($block, 'render')) {
+                        return $block->render();
+                    }
+                    return '';
+                }
+            };
         });
 
-        // Register CMS navigation service
+        // Register CMS navigation service (placeholder implementation)
         $this->app->singleton('cms.navigation', function ($app) {
-            return new \App\Services\CmsNavigationService();
+            return new class {
+                public function getMainNavigation()
+                {
+                    return collect();
+                }
+
+                public function getBreadcrumb($page)
+                {
+                    return collect();
+                }
+            };
         });
     }
 
@@ -123,19 +196,25 @@ class CmsServiceProvider extends ServiceProvider
             return;
         }
 
-        // Load frontend routes
-        Route::middleware(config('cms.routing.middleware', ['web']))
-            ->prefix(config('cms.routing.prefix', 'cms'))
-            ->group(function () {
-                $this->loadRoutesFrom(__DIR__ . '/../../routes/cms.php');
-            });
+        // Load frontend routes if file exists
+        $frontendRoutesPath = __DIR__ . '/../../routes/cms.php';
+        if (file_exists($frontendRoutesPath)) {
+            Route::middleware(config('cms.routing.middleware', ['web']))
+                ->prefix(config('cms.routing.prefix', 'cms'))
+                ->group(function () use ($frontendRoutesPath) {
+                    $this->loadRoutesFrom($frontendRoutesPath);
+                });
+        }
 
-        // Load admin routes (if not using Filament routing)
-        Route::middleware(['web', 'auth'])
-            ->prefix(config('cms.routing.admin_prefix', 'admin/cms'))
-            ->group(function () {
-                $this->loadRoutesFrom(__DIR__ . '/../../routes/cms-admin.php');
-            });
+        // Load admin routes if file exists (if not using Filament routing)
+        $adminRoutesPath = __DIR__ . '/../../routes/cms-admin.php';
+        if (file_exists($adminRoutesPath)) {
+            Route::middleware(['web', 'auth'])
+                ->prefix(config('cms.routing.admin_prefix', 'admin/cms'))
+                ->group(function () use ($adminRoutesPath) {
+                    $this->loadRoutesFrom($adminRoutesPath);
+                });
+        }
     }
 
     /**
@@ -355,17 +434,22 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected function setupModelObservers(): void
     {
-        // Register Page model observer for cache invalidation
-        Page::observe(new \App\Observers\PageObserver());
+        // Register observers only if observer classes exist
+        if (class_exists(\App\Observers\PageObserver::class)) {
+            Page::observe(new \App\Observers\PageObserver());
+        }
 
-        // Register Category model observer
-        CmsCategory::observe(new \App\Observers\CmsCategoryObserver());
+        if (class_exists(\App\Observers\CmsCategoryObserver::class)) {
+            CmsCategory::observe(new \App\Observers\CmsCategoryObserver());
+        }
 
-        // Register ContentBlock model observer
-        ContentBlock::observe(new \App\Observers\ContentBlockObserver());
+        if (class_exists(\App\Observers\ContentBlockObserver::class)) {
+            ContentBlock::observe(new \App\Observers\ContentBlockObserver());
+        }
 
-        // Register CmsSetting model observer for cache clearing
-        CmsSetting::observe(new \App\Observers\CmsSettingObserver());
+        if (class_exists(\App\Observers\CmsSettingObserver::class)) {
+            CmsSetting::observe(new \App\Observers\CmsSettingObserver());
+        }
     }
 
     /**
@@ -395,13 +479,20 @@ class CmsServiceProvider extends ServiceProvider
      */
     protected function registerCmsMiddleware(): void
     {
-        $kernel = $this->app->make(Kernel::class);
-
-        // Register route middleware
         $router = $this->app['router'];
-        $router->aliasMiddleware('cms.auth', \App\Http\Middleware\CmsAuthMiddleware::class);
-        $router->aliasMiddleware('cms.permission', \App\Http\Middleware\CmsPermissionMiddleware::class);
-        $router->aliasMiddleware('cms.cache', \App\Http\Middleware\CmsCacheMiddleware::class);
+
+        // Register route middleware only if classes exist
+        if (class_exists(\App\Http\Middleware\CmsAuthMiddleware::class)) {
+            $router->aliasMiddleware('cms.auth', \App\Http\Middleware\CmsAuthMiddleware::class);
+        }
+
+        if (class_exists(\App\Http\Middleware\CmsPermissionMiddleware::class)) {
+            $router->aliasMiddleware('cms.permission', \App\Http\Middleware\CmsPermissionMiddleware::class);
+        }
+
+        if (class_exists(\App\Http\Middleware\CmsCacheMiddleware::class)) {
+            $router->aliasMiddleware('cms.cache', \App\Http\Middleware\CmsCacheMiddleware::class);
+        }
     }
 
     /**
@@ -412,12 +503,28 @@ class CmsServiceProvider extends ServiceProvider
     protected function extendArtisanCommands(): void
     {
         if ($this->app->runningInConsole()) {
-            $this->commands([
-                \App\Console\Commands\CmsInstallCommand::class,
-                \App\Console\Commands\CmsClearCacheCommand::class,
-                \App\Console\Commands\CmsGenerateSitemapCommand::class,
-                \App\Console\Commands\CmsOptimizeImagesCommand::class,
-            ]);
+            $commands = [];
+
+            // Register commands only if they exist
+            if (class_exists(\App\Console\Commands\CmsInstallCommand::class)) {
+                $commands[] = \App\Console\Commands\CmsInstallCommand::class;
+            }
+
+            if (class_exists(\App\Console\Commands\CmsClearCacheCommand::class)) {
+                $commands[] = \App\Console\Commands\CmsClearCacheCommand::class;
+            }
+
+            if (class_exists(\App\Console\Commands\CmsGenerateSitemapCommand::class)) {
+                $commands[] = \App\Console\Commands\CmsGenerateSitemapCommand::class;
+            }
+
+            if (class_exists(\App\Console\Commands\CmsOptimizeImagesCommand::class)) {
+                $commands[] = \App\Console\Commands\CmsOptimizeImagesCommand::class;
+            }
+
+            if (!empty($commands)) {
+                $this->commands($commands);
+            }
         }
     }
 
