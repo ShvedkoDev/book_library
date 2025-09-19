@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Services\Cms\CmsSeoService;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,5 +17,38 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Sitemap routes
+Route::get('/sitemap.xml', function () {
+    $seoService = app(CmsSeoService::class);
+    $sitemap = $seoService->generateSitemap();
+
+    return response($sitemap, 200)
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
+Route::get('/sitemap-index.xml', function () {
+    $seoService = app(CmsSeoService::class);
+    $sitemap = $seoService->generateSitemapIndex();
+
+    return response($sitemap, 200)
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap.index');
+
+Route::get('/sitemap-pages.xml', function () {
+    $seoService = app(CmsSeoService::class);
+    $sitemap = $seoService->generatePagesSitemap();
+
+    return response($sitemap, 200)
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap.pages');
+
+Route::get('/sitemap-categories.xml', function () {
+    $seoService = app(CmsSeoService::class);
+    $sitemap = $seoService->generateCategoriesSitemap();
+
+    return response($sitemap, 200)
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap.categories');
 
 require __DIR__.'/auth.php';
