@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Image\Enums\Fit;
 
 /**
  * Class Page
@@ -44,9 +48,9 @@ use Carbon\Carbon;
  *
  * @package App\Models
  */
-class Page extends Model
+class Page extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, InteractsWithMedia;
 
     /**
      * The table associated with the model.
@@ -116,6 +120,120 @@ class Page extends Model
         ];
     }
 
+    /**
+     * Register media collections for the page model.
+     */
+    public function registerMediaCollections(): void
+    {
+        // Featured Image Collection
+        $this->addMediaCollection('page_featured')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
+            ->singleFile()
+            ->useDisk(config('cms.media.collections.page_featured.disk', 'public'))
+            ->usePath(config('cms.media.collections.page_featured.path', 'cms/pages/featured'));
+
+        // Page Gallery Collection
+        $this->addMediaCollection('page_gallery')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
+            ->useDisk(config('cms.media.collections.page_gallery.disk', 'public'))
+            ->usePath(config('cms.media.collections.page_gallery.path', 'cms/pages/gallery'));
+
+        // SEO Images Collection
+        $this->addMediaCollection('seo_images')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
+            ->useDisk(config('cms.media.collections.seo_images.disk', 'public'))
+            ->usePath(config('cms.media.collections.seo_images.path', 'cms/seo'));
+
+        // Documents Collection (for downloadable content)
+        $this->addMediaCollection('documents')
+            ->acceptsMimeTypes([
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ])
+            ->useDisk(config('cms.media.collections.documents.disk', 'public'))
+            ->usePath(config('cms.media.collections.documents.path', 'cms/documents'));
+    }
+
+    /**
+     * Register media conversions for the page model.
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $conversions = config('cms.media.conversions', []);
+
+        foreach ($conversions as $name => $config) {
+            $conversion = $this->addMediaConversion($name)
+                ->fit(
+                    match($config['fit'] ?? 'contain') {
+                        'crop' => Fit::Crop,
+                        'contain' => Fit::Contain,
+                        'fill' => Fit::Fill,
+                        'stretch' => Fit::Stretch,
+                        default => Fit::Contain,
+                    },
+                    $config['width'] ?? 300,
+                    $config['height'] ?? 300
+                )
+                ->quality($config['quality'] ?? 85)
+                ->sharpen(10);
+
+            // Create WebP versions if enabled
+            if (config('cms.media.generate_webp', true)) {
+                $this->addMediaConversion($name . '_webp')
+                    ->fit(
+                        match($config['fit'] ?? 'contain') {
+                            'crop' => Fit::Crop,
+                            'contain' => Fit::Contain,
+                            'fill' => Fit::Fill,
+                            'stretch' => Fit::Stretch,
+                            default => Fit::Contain,
+                        },
+                        $config['width'] ?? 300,
+                        $config['height'] ?? 300
+                    )
+                    ->format('webp')
+                    ->quality(config('cms.media.optimization.webp_quality', 80));
+            }
+
+            // Create retina versions if enabled
+            if (config('cms.media.generate_retina', true) && isset($config['width']) && isset($config['height'])) {
+                $this->addMediaConversion($name . '_2x')
+                    ->fit(
+                        match($config['fit'] ?? 'contain') {
+                            'crop' => Fit::Crop,
+                            'contain' => Fit::Contain,
+                            'fill' => Fit::Fill,
+                            'stretch' => Fit::Stretch,
+                            default => Fit::Contain,
+                        },
+                        $config['width'] * 2,
+                        $config['height'] * 2
+                    )
+                    ->quality($config['quality'] ?? 85);
+            }
+        }
+
+        // Collection-specific conversions
+        if ($media && $media->collection_name === 'page_featured') {
+            $this->addMediaConversion('hero')
+                ->fit(Fit::Crop, 1920, 600)
+                ->quality(90)
+                ->sharpen(10);
+        }
+
+        if ($media && $media->collection_name === 'seo_images') {
+            $this->addMediaConversion('og_image')
+                ->fit(Fit::Crop, 1200, 630)
+                ->quality(90);
+
+            $this->addMediaConversion('twitter_image')
+                ->fit(Fit::Crop, 1024, 512)
+                ->quality(90);
+        }
+    }
 
     /**
      * Get the user who created the page.
@@ -267,8 +385,7 @@ class Page extends Model
      */
     public function getUrl(): string
     {
-        // TODO: Implement when frontend routes are created
-        return '#'; // Placeholder until cms.page.show route is implemented
+        return route('cms.page.show', ['slug' => $this->slug]);
     }
 
     /**
@@ -368,5 +485,113 @@ class Page extends Model
             ->orderBy('published_at', 'desc')
             ->limit($limit)
             ->get();
+    }
+
+    /**
+     * Get the featured image media object.
+     *
+     * @return Media|null
+     */
+    public function getFeaturedImage(): ?Media
+    {
+        return $this->getFirstMedia('page_featured');
+    }
+
+    /**
+     * Get the featured image URL with optional conversion.
+     *
+     * @param string $conversion
+     * @return string|null
+     */
+    public function getFeaturedImageUrl(string $conversion = ''): ?string
+    {
+        $media = $this->getFeaturedImage();
+
+        if (!$media) {
+            return null;
+        }
+
+        return $conversion ? $media->getUrl($conversion) : $media->getUrl();
+    }
+
+    /**
+     * Get gallery images.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getGalleryImages()
+    {
+        return $this->getMedia('page_gallery');
+    }
+
+    /**
+     * Get SEO image URL for OpenGraph.
+     *
+     * @return string|null
+     */
+    public function getSeoImageUrl(): ?string
+    {
+        $seoImage = $this->getFirstMedia('seo_images');
+
+        if ($seoImage) {
+            return $seoImage->getUrl('og_image');
+        }
+
+        // Fallback to featured image
+        $featuredImage = $this->getFeaturedImage();
+        if ($featuredImage) {
+            return $featuredImage->getUrl('og_image');
+        }
+
+        return null;
+    }
+
+    /**
+     * Get Twitter Card image URL.
+     *
+     * @return string|null
+     */
+    public function getTwitterImageUrl(): ?string
+    {
+        $seoImage = $this->getFirstMedia('seo_images');
+
+        if ($seoImage) {
+            return $seoImage->getUrl('twitter_image');
+        }
+
+        // Fallback to featured image
+        $featuredImage = $this->getFeaturedImage();
+        if ($featuredImage) {
+            return $featuredImage->getUrl('twitter_image');
+        }
+
+        return null;
+    }
+
+    /**
+     * Get all downloadable documents.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getDocuments()
+    {
+        return $this->getMedia('documents');
+    }
+
+    /**
+     * Get media usage statistics for this page.
+     *
+     * @return array
+     */
+    public function getMediaStats(): array
+    {
+        $allMedia = $this->getMedia();
+
+        return [
+            'total_files' => $allMedia->count(),
+            'total_size' => $allMedia->sum('size'),
+            'by_collection' => $allMedia->groupBy('collection_name')->map->count(),
+            'by_type' => $allMedia->groupBy(fn($media) => explode('/', $media->mime_type)[0])->map->count(),
+        ];
     }
 }

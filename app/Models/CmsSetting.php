@@ -242,7 +242,7 @@ class CmsSetting extends Model
      *
      * @return array
      */
-    public static function all(): array
+    public static function getAllSettings(): array
     {
         $settings = static::active()->get();
 

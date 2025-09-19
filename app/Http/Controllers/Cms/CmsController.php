@@ -30,9 +30,6 @@ class CmsController extends Controller
         $this->seoService = $seoService;
         $this->cacheService = $cacheService;
 
-        // Apply middleware
-        $this->middleware('cms.page_access')->only(['showPage']);
-        $this->middleware('cms.analytics')->except(['sitemapXml', 'feedRss']);
     }
 
     /**
@@ -40,9 +37,6 @@ class CmsController extends Controller
      */
     public function showPage(string $slug)
     {
-        $cacheKey = "cms.page.{$slug}";
-        
-        return Cache::remember($cacheKey, $this->cacheService->getPageCacheTtl(), function () use ($slug) {
             try {
                 $page = Page::where('slug', $slug)
                     ->published()
@@ -68,9 +62,7 @@ class CmsController extends Controller
 
                 abort(404, 'Page not found');
             }
-        });
     }
-
     /**
      * Display paginated category listings
      */
@@ -275,7 +267,7 @@ class CmsController extends Controller
     /**
      * Prepare view data for search results
      */
-    protected function prepareSearchViewData(string $query, ?$categoryId, $pages): array
+    protected function prepareSearchViewData(string $query, ?int $categoryId, $pages): array
     {
         // Get all categories for filter dropdown
         $categories = CmsCategory::where('is_active', true)

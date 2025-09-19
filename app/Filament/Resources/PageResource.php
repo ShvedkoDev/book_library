@@ -165,13 +165,17 @@ class PageResource extends Resource
                                         Forms\Components\Group::make([
                                             Forms\Components\RichEditor::make("data.content")
                                                 ->label("Content")
-                                                ->required()
-                                                ->visible(fn (Forms\Get $get) => $get("type") === "text"),
+                                                ->required(fn (Forms\Get $get) => $get("type") === "text")
+                                                ->visible(fn (Forms\Get $get) => $get("type") === "text")
+                                                ->placeholder("Enter your content here...")
+                                                ->validationMessages([
+                                                    'required' => 'Please enter content for this text block.',
+                                                ]),
 
                                             Forms\Components\FileUpload::make("data.image")
                                                 ->label("Image")
                                                 ->image()
-                                                ->required()
+                                                ->required(fn (Forms\Get $get) => $get("type") === "image")
                                                 ->visible(fn (Forms\Get $get) => $get("type") === "image"),
 
                                             Forms\Components\FileUpload::make("data.images")
@@ -179,7 +183,7 @@ class PageResource extends Resource
                                                 ->image()
                                                 ->multiple()
                                                 ->reorderable()
-                                                ->required()
+                                                ->required(fn (Forms\Get $get) => $get("type") === "gallery")
                                                 ->visible(fn (Forms\Get $get) => $get("type") === "gallery"),
 
                                             Forms\Components\Grid::make(2)
@@ -187,7 +191,7 @@ class PageResource extends Resource
                                                     Forms\Components\TextInput::make("data.video_url")
                                                         ->label("Video URL")
                                                         ->url()
-                                                        ->required(),
+                                                        ->required(fn (Forms\Get $get) => $get("../../type") === "video"),
                                                     Forms\Components\Select::make("data.video_type")
                                                         ->label("Video Type")
                                                         ->options([
@@ -195,7 +199,7 @@ class PageResource extends Resource
                                                             "vimeo" => "Vimeo",
                                                             "direct" => "Direct Link",
                                                         ])
-                                                        ->required(),
+                                                        ->required(fn (Forms\Get $get) => $get("../../type") === "video"),
                                                 ])
                                                 ->visible(fn (Forms\Get $get) => $get("type") === "video"),
 
@@ -203,7 +207,7 @@ class PageResource extends Resource
                                                 ->schema([
                                                     Forms\Components\Textarea::make("data.quote_text")
                                                         ->label("Quote Text")
-                                                        ->required()
+                                                        ->required(fn (Forms\Get $get) => $get("../../type") === "quote")
                                                         ->rows(3),
                                                     Forms\Components\TextInput::make("data.quote_author")
                                                         ->label("Author")
@@ -230,7 +234,7 @@ class PageResource extends Resource
                                                         ->default("html"),
                                                     Forms\Components\Textarea::make("data.code")
                                                         ->label("Code")
-                                                        ->required()
+                                                        ->required(fn (Forms\Get $get) => $get("../../type") === "code")
                                                         ->rows(10)
                                                         ->extraAttributes(["style" => "font-family: monospace;"]),
                                                 ])
@@ -240,11 +244,11 @@ class PageResource extends Resource
                                                 ->schema([
                                                     Forms\Components\TextInput::make("data.cta_text")
                                                         ->label("Button Text")
-                                                        ->required()
+                                                        ->required(fn (Forms\Get $get) => $get("../../type") === "cta")
                                                         ->maxLength(100),
                                                     Forms\Components\TextInput::make("data.cta_url")
                                                         ->label("Button URL")
-                                                        ->required()
+                                                        ->required(fn (Forms\Get $get) => $get("../../type") === "cta")
                                                         ->url(),
                                                     Forms\Components\Select::make("data.cta_style")
                                                         ->label("Button Style")
@@ -274,7 +278,7 @@ class PageResource extends Resource
                                             Forms\Components\Textarea::make("data.table_data")
                                                 ->label("Table Data (CSV format)")
                                                 ->placeholder("Header1,Header2,Header3\\nRow1Col1,Row1Col2,Row1Col3\\nRow2Col1,Row2Col2,Row2Col3")
-                                                ->required()
+                                                ->required(fn (Forms\Get $get) => $get("type") === "table")
                                                 ->rows(6)
                                                 ->visible(fn (Forms\Get $get) => $get("type") === "table"),
 
@@ -294,7 +298,7 @@ class PageResource extends Resource
                                             Forms\Components\Textarea::make("data.embed_code")
                                                 ->label("Embed Code")
                                                 ->placeholder("<iframe src=\"...\" ...></iframe>")
-                                                ->required()
+                                                ->required(fn (Forms\Get $get) => $get("type") === "embed")
                                                 ->rows(4)
                                                 ->visible(fn (Forms\Get $get) => $get("type") === "embed"),
                                         ]),
@@ -455,11 +459,6 @@ class PageResource extends Resource
                                     ->bulkToggleable()
                                     ->helperText("Select one or more categories for this page"),
 
-                                Forms\Components\Select::make("primary_category_id")
-                                    ->label("Primary Category")
-                                    ->relationship("primaryCategory", "name")
-                                    ->searchable()
-                                    ->helperText("Main category for navigation and breadcrumbs"),
 
                                 Forms\Components\TagsInput::make("tags")
                                     ->label("Tags")
@@ -694,6 +693,14 @@ class PageResource extends Resource
                     ->requiresConfirmation()
                     ->modalHeading("Duplicate Page")
                     ->modalDescription("Are you sure you want to duplicate this page?"),
+
+                Tables\Actions\Action::make("preview")
+                    ->label("Preview")
+                    ->icon("heroicon-o-eye")
+                    ->color("info")
+                    ->url(fn ($record) => $record->getUrl())
+                    ->openUrlInNewTab()
+                    ->visible(fn ($record) => $record->status === 'published' || $record->status === 'draft'),
 
                 Tables\Actions\EditAction::make()
                     ->icon("heroicon-o-pencil"),

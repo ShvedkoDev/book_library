@@ -443,8 +443,29 @@ return [
     'media' => [
         'disk' => env('CMS_MEDIA_DISK', 'public'),
         'path' => 'cms/media',
+        'max_file_size' => 50 * 1024 * 1024, // 50MB in bytes
 
-        'max_file_size' => 10 * 1024 * 1024, // 10MB in bytes
+        'allowed_mime_types' => [
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/webp',
+            'image/svg+xml',
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.ms-powerpoint',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'video/mp4',
+            'video/mpeg',
+            'video/quicktime',
+            'video/webm',
+            'audio/mpeg',
+            'audio/wav',
+            'audio/ogg',
+        ],
 
         'allowed_types' => [
             'images' => ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'],
@@ -453,9 +474,79 @@ return [
             'audio' => ['mp3', 'wav', 'ogg', 'aac'],
         ],
 
-        'image_quality' => 85,
-        'generate_webp' => true,
+        // Media Collections Configuration
+        'collections' => [
+            'page_featured' => [
+                'name' => 'Page Featured Images',
+                'description' => 'Main featured images for pages',
+                'single_file' => true,
+                'accepts_mime_types' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                'disk' => 'public',
+                'path' => 'cms/pages/featured',
+            ],
+            'page_gallery' => [
+                'name' => 'Page Gallery',
+                'description' => 'Gallery images for pages',
+                'single_file' => false,
+                'accepts_mime_types' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                'disk' => 'public',
+                'path' => 'cms/pages/gallery',
+            ],
+            'content_blocks' => [
+                'name' => 'Content Block Media',
+                'description' => 'Media files used within content blocks',
+                'single_file' => false,
+                'accepts_mime_types' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm'],
+                'disk' => 'public',
+                'path' => 'cms/content-blocks',
+            ],
+            'documents' => [
+                'name' => 'Documents',
+                'description' => 'PDF files, documents, and spreadsheets',
+                'single_file' => false,
+                'accepts_mime_types' => [
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.ms-excel',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'application/vnd.ms-powerpoint',
+                    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                ],
+                'disk' => 'public',
+                'path' => 'cms/documents',
+            ],
+            'videos' => [
+                'name' => 'Video Files',
+                'description' => 'Video files with poster frame generation',
+                'single_file' => false,
+                'accepts_mime_types' => ['video/mp4', 'video/mpeg', 'video/quicktime', 'video/webm'],
+                'disk' => 'public',
+                'path' => 'cms/videos',
+            ],
+            'seo_images' => [
+                'name' => 'SEO Images',
+                'description' => 'OpenGraph and Twitter Card images',
+                'single_file' => false,
+                'accepts_mime_types' => ['image/jpeg', 'image/png', 'image/webp'],
+                'disk' => 'public',
+                'path' => 'cms/seo',
+            ],
+        ],
 
+        // Image Processing & Optimization
+        'optimization' => [
+            'jpeg_quality' => 85,
+            'png_compression' => 6,
+            'webp_quality' => 80,
+            'avif_quality' => 75,
+        ],
+
+        'generate_webp' => true,
+        'generate_retina' => true,
+        'auto_alt_text' => false, // Enable when AI service is configured
+
+        // Responsive Image Conversions
         'conversions' => [
             'thumbnail' => [
                 'width' => 150,
@@ -464,21 +555,27 @@ return [
                 'quality' => 80,
             ],
             'small' => [
-                'width' => 300,
+                'width' => 400,
                 'height' => 300,
-                'fit' => 'max',
+                'fit' => 'contain',
                 'quality' => 85,
             ],
             'medium' => [
-                'width' => 600,
+                'width' => 800,
                 'height' => 600,
-                'fit' => 'max',
+                'fit' => 'contain',
                 'quality' => 85,
             ],
             'large' => [
                 'width' => 1200,
-                'height' => 1200,
-                'fit' => 'max',
+                'height' => 900,
+                'fit' => 'contain',
+                'quality' => 90,
+            ],
+            'extra_large' => [
+                'width' => 1920,
+                'height' => 1080,
+                'fit' => 'contain',
                 'quality' => 90,
             ],
             'og_image' => [
@@ -493,6 +590,52 @@ return [
                 'fit' => 'crop',
                 'quality' => 90,
             ],
+            'hero' => [
+                'width' => 1920,
+                'height' => 600,
+                'fit' => 'crop',
+                'quality' => 90,
+            ],
+        ],
+
+        // Media Query Breakpoints for Responsive Images
+        'media_queries' => [
+            'thumbnail' => null,
+            'small' => '(max-width: 480px)',
+            'medium' => '(max-width: 768px)',
+            'large' => '(max-width: 1200px)',
+            'extra_large' => '(min-width: 1201px)',
+        ],
+
+        // Security Settings
+        'virus_scan' => env('CMS_MEDIA_VIRUS_SCAN', false),
+        'sanitize_svg' => true,
+        'watermark' => [
+            'enabled' => false,
+            'image' => 'watermark.png',
+            'opacity' => 0.3,
+            'position' => 'bottom-right',
+        ],
+
+        // CDN Configuration
+        'cdn' => [
+            'enabled' => env('CMS_MEDIA_CDN_ENABLED', false),
+            'url' => env('CMS_MEDIA_CDN_URL'),
+            'pull_zone' => env('CMS_MEDIA_CDN_PULL_ZONE'),
+        ],
+
+        // Storage Analytics
+        'analytics' => [
+            'track_downloads' => true,
+            'track_views' => true,
+            'generate_reports' => true,
+        ],
+
+        // Cleanup Settings
+        'cleanup' => [
+            'auto_delete_unused' => false,
+            'unused_retention_days' => 30,
+            'temp_file_retention_hours' => 24,
         ],
     ],
 

@@ -132,21 +132,9 @@ class CmsServiceProvider extends ServiceProvider
             };
         });
 
-        // Register CMS media service (placeholder implementation)
+        // Register CMS media service
         $this->app->singleton('cms.media', function ($app) {
-            return new class(config('cms.media')) {
-                protected $config;
-
-                public function __construct($config)
-                {
-                    $this->config = $config;
-                }
-
-                public function processUpload($file)
-                {
-                    return $file;
-                }
-            };
+            return new \App\Services\Cms\MediaService();
         });
 
         // Register content block renderer (placeholder implementation)

@@ -300,13 +300,13 @@
     <div class="coe-banner">
         <div class="header-container">
             <div class="left-institution">
-                <a href="{{ route('cms.page', 'home') }}" title="Educational Institution 1">
+                <a href="{{ route('cms.page.show', 'home') }}" title="Educational Institution 1">
                     <img src="https://picsum.photos/120/60?random=10" alt="Institution 1 Logo" class="h-8">
                     <span class="institution-name">Educational Institution 1</span>
                 </a>
             </div>
             <div class="right-institution">
-                <a href="{{ route('cms.page', 'home') }}" title="Educational Institution 2">
+                <a href="{{ route('cms.page.show', 'home') }}" title="Educational Institution 2">
                     <img src="https://picsum.photos/120/60?random=11" alt="Institution 2 Logo" class="h-8">
                     <span class="institution-name">Educational Institution 2</span>
                 </a>
@@ -322,7 +322,7 @@
                     Resource guide
                 </button>
                 <div class="toggle-divider">|</div>
-                <button class="toggle-btn {{ request()->routeIs('cms.category') ? 'active' : '' }}" data-module="library" onclick="window.location.href='{{ route('cms.category', 'all') }}'">
+                <button class="toggle-btn {{ request()->routeIs('cms.category') ? 'active' : '' }}" data-module="library" onclick="window.location.href='{{ route('cms.category.show', 'all') }}'">
                     Resource library
                 </button>
             </div>
@@ -336,14 +336,14 @@
             <div class="menu-main-container">
                 <ul id="menu-main" class="nav">
                     <li class="menu-item">
-                        <a href="{{ route('cms.page', 'home') }}">Home</a>
+                        <a href="{{ route('cms.page.show', 'home') }}">Home</a>
                     </li>
                     <li class="menu-item menu-item-has-children">
                         <a href="#">About Us</a>
                         <ul class="sub-menu">
-                            <li><a href="{{ route('cms.page', 'about') }}">What is MTDL?</a></li>
-                            <li><a href="{{ route('cms.page', 'why') }}">Why Digital Library?</a></li>
-                            <li><a href="{{ route('cms.page', 'gallery') }}">Photo Gallery</a></li>
+                            <li><a href="{{ route('cms.page.show', 'about') }}">What is MTDL?</a></li>
+                            <li><a href="{{ route('cms.page.show', 'why') }}">Why Digital Library?</a></li>
+                            <li><a href="{{ route('cms.page.show', 'gallery') }}">Photo Gallery</a></li>
                         </ul>
                     </li>
                     <li class="menu-item menu-language menu-item-has-children">
@@ -431,20 +431,20 @@
             </div>
 
             <ul class="other-links-col other-links-col1">
-                <li><a href="{{ route('cms.page', 'accessibility') }}" target="_self">Accessibility Info</a></li>
-                <li><a href="{{ route('cms.page', 'suggest-content') }}" target="_self">Suggest Educational Content</a></li>
+                <li><a href="{{ route('cms.page.show', 'accessibility') }}" target="_self">Accessibility Info</a></li>
+                <li><a href="{{ route('cms.page.show', 'suggest-content') }}" target="_self">Suggest Educational Content</a></li>
             </ul>
             <ul class="other-links-col other-links-col2">
-                <li><a href="{{ route('cms.page', 'contribute') }}" target="_self">Contributor Form</a></li>
-                <li><a href="{{ route('cms.page', 'submit-resources') }}" target="_self">Submit Resources</a></li>
+                <li><a href="{{ route('cms.page.show', 'contribute') }}" target="_self">Contributor Form</a></li>
+                <li><a href="{{ route('cms.page.show', 'submit-resources') }}" target="_self">Submit Resources</a></li>
             </ul>
         </div>
         <div class="logos-coe-links">
             <div class="logos">
-                <a class="coe" href="{{ route('cms.page', 'home') }}">
+                <a class="coe" href="{{ route('cms.page.show', 'home') }}">
                     <img src="https://picsum.photos/200/80?random=80" alt="MTDL logo" class="h-12">
                 </a>
-                <a class="manoa" href="{{ route('cms.page', 'home') }}">
+                <a class="manoa" href="{{ route('cms.page.show', 'home') }}">
                     <img src="https://picsum.photos/200/80?random=81" alt="Education Initiative logo" class="h-12">
                 </a>
             </div>
