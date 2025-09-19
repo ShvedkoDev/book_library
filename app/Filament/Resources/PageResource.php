@@ -646,10 +646,6 @@ class PageResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
-                    ->url(fn ($record) => route("cms.page.show", $record->slug))
-                    ->openUrlInNewTab()
-                    ->icon("heroicon-o-eye"),
 
                 Tables\Actions\Action::make("quick_edit")
                     ->label("Quick Edit")

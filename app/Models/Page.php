@@ -267,7 +267,8 @@ class Page extends Model
      */
     public function getUrl(): string
     {
-        return route('cms.page.show', ['slug' => $this->slug]);
+        // TODO: Implement when frontend routes are created
+        return '#'; // Placeholder until cms.page.show route is implemented
     }
 
     /**
