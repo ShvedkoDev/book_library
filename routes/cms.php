@@ -1,66 +1,68 @@
 <?php
 
+use App\Http\Controllers\Cms\CmsController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CmsController;
 
 /*
 |--------------------------------------------------------------------------
-| CMS Frontend Routes
+| CMS Routes
 |--------------------------------------------------------------------------
 |
-| These routes handle the frontend display of CMS content including
-| pages, categories, search functionality, and SEO-related routes.
+| Here are the frontend routes for the CMS system. These routes handle
+| public-facing content display including pages, categories, search,
+| sitemap, and RSS feeds with proper SEO-friendly URLs and caching.
 |
 */
 
-// Page routes
-Route::get('/page/{slug}', [CmsController::class, 'showPage'])
-    ->name('cms.page.show')
-    ->where('slug', '[a-zA-Z0-9\-_]+');
+// CMS Frontend Routes
+Route::prefix('')->group(function () {
 
-// Category routes
-Route::get('/category/{slug}', [CmsController::class, 'showCategory'])
-    ->name('cms.category.show')
-    ->where('slug', '[a-zA-Z0-9\-_]+');
+    // Search functionality
+    Route::get('/search', [CmsController::class, 'searchPages'])
+        ->name('cms.search');
 
-// Search routes
-Route::get('/search', [CmsController::class, 'search'])
-    ->name('cms.search');
+    // Sitemap and feeds
+    Route::get('/sitemap.xml', [CmsController::class, 'sitemapXml'])
+        ->name('cms.sitemap');
 
-Route::post('/search', [CmsController::class, 'search'])
-    ->name('cms.search.post');
+    Route::get('/feed', [CmsController::class, 'feedRss'])
+        ->name('cms.feed');
 
-// SEO and utility routes
-Route::get('/sitemap.xml', [CmsController::class, 'sitemap'])
-    ->name('cms.sitemap');
+    Route::get('/rss', [CmsController::class, 'feedRss'])
+        ->name('cms.rss');
 
-Route::get('/feed', [CmsController::class, 'feed'])
-    ->name('cms.feed');
+    // Category pages - must come before page routes to avoid conflicts
+    Route::get('/category/{categorySlug}', [CmsController::class, 'categoryPages'])
+        ->name('cms.category')
+        ->where('categorySlug', '[a-z0-9\-]+');
 
-Route::get('/feed.xml', [CmsController::class, 'feed'])
-    ->name('cms.feed.xml');
+    // Individual pages - this should be last to avoid conflicts
+    Route::get('/page/{slug}', [CmsController::class, 'showPage'])
+        ->name('cms.page')
+        ->where('slug', '[a-z0-9\-]+');
 
-// CMS home/index route (optional - can be used for CMS landing page)
-Route::get('/', [CmsController::class, 'index'])
-    ->name('cms.index');
+    // Alternative route pattern for pages at root level (optional)
+    // Uncomment if you want pages accessible directly at /{slug}
+    // Route::get('/{slug}', [CmsController::class, 'showPage'])
+    //     ->name('cms.page.root')
+    //     ->where('slug', '[a-z0-9\-]+')
+    //     ->middleware('cms.page_fallback'); // Custom middleware to check if it's not an existing route
+});
 
-// API routes for frontend interactions (AJAX)
-Route::prefix('api')->group(function () {
-    // Page view tracking
-    Route::post('/page/{id}/view', [CmsController::class, 'trackPageView'])
+// API Routes for CMS (optional - for AJAX requests)
+Route::prefix('api/cms')->group(function () {
+
+    // Live search API
+    Route::get('/search/suggest', [CmsController::class, 'searchSuggestions'])
+        ->name('cms.api.search.suggest');
+
+    // Page views tracking
+    Route::post('/page/{slug}/view', [CmsController::class, 'trackPageView'])
         ->name('cms.api.page.view')
-        ->where('id', '[0-9]+');
+        ->where('slug', '[a-z0-9\-]+');
 
-    // Search suggestions
-    Route::get('/search/suggestions', [CmsController::class, 'searchSuggestions'])
-        ->name('cms.api.search.suggestions');
-
-    // Load more pages (for infinite scroll)
-    Route::get('/pages/load-more', [CmsController::class, 'loadMorePages'])
-        ->name('cms.api.pages.load-more');
-
-    // Category pages with pagination
-    Route::get('/category/{id}/pages', [CmsController::class, 'getCategoryPages'])
-        ->name('cms.api.category.pages')
-        ->where('id', '[0-9]+');
+    // Related pages API
+    Route::get('/page/{slug}/related', [CmsController::class, 'getRelatedPages'])
+        ->name('cms.api.page.related')
+        ->where('slug', '[a-z0-9\-]+');
 });
