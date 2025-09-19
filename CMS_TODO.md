@@ -214,15 +214,15 @@ Afterwards mark as done tasts in the CMS_TODO.md, update CLAUDE.md and commit an
 ```
 
 ### Task 2.2: Category Resource with Tree Structure
-**Priority:** High  
+**Priority:** High
 **Estimated Time:** 1.5 hours
 
 **TODO:**
-- [ ] Create CategoryResource with tree view
-- [ ] Implement parent-child relationships
-- [ ] Add drag-drop sorting
-- [ ] Configure category colors and icons
-- [ ] Set up category-based filtering
+- [x] Create CategoryResource with tree view
+- [x] Implement parent-child relationships
+- [x] Add drag-drop sorting
+- [x] Configure category colors and icons
+- [x] Set up category-based filtering
 
 **AI Prompt:**
 ```
