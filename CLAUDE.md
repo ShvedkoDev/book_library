@@ -566,4 +566,124 @@ docker-compose exec app bash
 - **Lazy Loading**: Progressive image loading
 - **Storage Analytics**: Monitor usage and optimize storage
 - **Watermarking**: Configurable image watermarking
+
+## User Roles and Permissions System ✅
+
+### Database Structure (Completed)
+- **cms_roles**: System roles with hierarchical levels (1-100)
+- **cms_permissions**: Granular permissions with group organization
+- **cms_role_permissions**: Many-to-many relationship for role-permission assignment
+- **cms_user_roles**: User role assignments with expiration and assignment tracking
+- **cms_content_workflow**: Content review and approval workflow
+- **cms_audit_log**: Comprehensive security and activity logging
+
+### System Roles (Implemented)
+1. **Super Administrator** (Level: 100)
+   - Full system access with all permissions
+   - Cannot be deleted (system role)
+   - Access to all CMS features and settings
+
+2. **Editor** (Level: 80)
+   - Manage all content, categories, and media
+   - Approve and publish content
+   - View users but cannot manage roles
+
+3. **Reviewer** (Level: 60)
+   - Review and approve submitted content
+   - Edit any content for review purposes
+   - Cannot delete or manage settings
+
+4. **Author** (Level: 40)
+   - Create and edit own content
+   - Submit content for review
+   - Upload and manage media
+
+5. **Contributor** (Level: 20)
+   - Create content and submit for review
+   - Limited media upload capabilities
+   - Cannot delete content
+
+6. **Viewer** (Level: 1)
+   - Read-only access to CMS
+   - View pages, categories, and media
+   - No content modification rights
+
+### Granular Permissions (28 Total)
+- **System**: cms.system.access, cms.system.settings
+- **Pages**: view, create, edit.own, edit.any, delete.own, delete.any, publish
+- **Categories**: view, create, edit, delete
+- **Media**: view, upload, edit, delete
+- **Workflow**: submit, review, approve, manage
+- **Users**: view, edit, roles
+- **Roles**: view, create, edit, delete
+
+### Content Workflow System
+- **States**: Draft → Pending Review → Approved/Rejected → Published → Archived
+- **Features**:
+  - Automatic notifications on state transitions
+  - Revision history tracking with JSON storage
+  - Review notes and rejection reasons
+  - Workflow assignment to specific reviewers
+  - Time tracking for each workflow state
+
+### Security Features
+- **Audit Logging**: All security-relevant events tracked
+  - Role assignments and removals
+  - Permission changes and denials
+  - Content CRUD operations
+  - Login/logout and failed login attempts
+  - Media uploads and deletions
+  - Settings modifications
+- **Event Types**: 18 predefined event types with color coding
+- **Log Management**: Automatic cleanup of old logs (configurable retention)
+- **Statistics**: Security and content event analytics
+
+### Filament Admin Integration
+1. **CmsRoleResource**: Complete role management interface
+   - Role creation with permission assignment
+   - Level-based hierarchy display
+   - System role protection
+   - Permission count badges
+
+2. **UserResource**: Comprehensive user management
+   - Role assignment with expiration dates
+   - CMS access control toggles
+   - Department and profile management
+   - Last access tracking
+
+3. **CmsAuditLogResource**: Security monitoring dashboard
+   - Real-time event monitoring (30s polling)
+   - Advanced filtering by event type, user, date range
+   - Security and content event filters
+   - Color-coded event badges
+
+4. **CmsContentWorkflowResource**: Workflow management
+   - Review queue dashboard
+   - Approval/rejection interface
+   - Workflow statistics
+
+### Permission Policies
+- **PagePolicy**: Page access control with ownership checking
+- **CmsCategoryPolicy**: Category management permissions
+- **Automatic Logging**: Permission denials automatically logged
+- **Content Access Tracking**: All content views logged for audit
+
+### User Model Enhancements
+- **CMS Methods**:
+  - `hasCmsRole()`: Check role assignment
+  - `hasCmsPermission()`: Check specific permission
+  - `assignCmsRole()`: Assign role with tracking
+  - `removeCmsRole()`: Deactivate role assignment
+  - `syncCmsRoles()`: Bulk role management
+  - `canAccessCms()`: Check CMS access eligibility
+- **Profile Features**:
+  - Full name and initials generation
+  - Avatar URL with fallback to initials
+  - Department and bio fields
+  - CMS preferences JSON storage
+  - Last CMS access tracking
+
+### Testing Credentials
+- **Super Admin**: admin@example.com / password
+- Created via AdminUserSeeder for testing purposes
 - **Cleanup Automation**: Scheduled cleanup of temporary and unused files
