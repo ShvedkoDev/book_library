@@ -129,7 +129,6 @@ class CmsCategoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ColorColumn::make("color")
-                    ->size("sm")
                     ->tooltip("Category Color"),
 
                 Tables\Columns\TextColumn::make("name")
