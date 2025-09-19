@@ -109,15 +109,15 @@ Afterwards mark as done tasts in the CMS_TODO.md, update CLAUDE.md and commit an
 ```
 
 ### Task 1.3: CMS Configuration & Service Provider
-**Priority:** High  
+**Priority:** High
 **Estimated Time:** 45 minutes
 
 **TODO:**
-- [ ] Create CMS configuration file
-- [ ] Create CMS service provider
-- [ ] Register CMS routes and services
-- [ ] Configure media collections
-- [ ] Set up CMS permissions
+- [x] Create CMS configuration file
+- [x] Create CMS service provider
+- [x] Register CMS routes and services
+- [x] Configure media collections
+- [x] Set up CMS permissions
 
 **AI Prompt:**
 ```
