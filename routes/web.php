@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Cms\CmsController;
 use App\Services\Cms\CmsSeoService;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,26 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// CMS Frontend Routes
+Route::prefix('cms')->name('cms.')->group(function () {
+    // Search
+    Route::get('/search', [CmsController::class, 'search'])->name('search');
+
+    // Category pages
+    Route::get('/category/{slug}', [CmsController::class, 'category'])->name('category.show');
+
+    // RSS Feed
+    Route::get('/feed', [CmsController::class, 'feed'])->name('feed');
+
+    // CMS Pages (must be last to avoid conflicts)
+    Route::get('/{slug}', [CmsController::class, 'show'])->name('page.show');
+});
+
+// Alternative simpler URL structure (optional - comment out above and use this if preferred)
+// Route::get('/page/{slug}', [CmsController::class, 'show'])->name('cms.page.show');
+// Route::get('/category/{slug}', [CmsController::class, 'category'])->name('cms.category.show');
+// Route::get('/search', [CmsController::class, 'search'])->name('cms.search');
 
 // Sitemap routes
 Route::get('/sitemap.xml', function () {
