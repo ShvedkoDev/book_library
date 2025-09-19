@@ -1,61 +1,147 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Micronesian Teachers Digital Library
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A digital library website for teachers in Micronesia featuring approximately 2,000 educational books in local languages.
 
-## About Laravel
+## Project Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project builds a comprehensive digital library platform consisting of two main modules:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. The Guide (Static Content)
+- Welcome hub with project information
+- Landing page with sections navigation
+- Content pages explaining how to use resources
+- Partner information
+- Clear entry point to Library
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. The Library (Dynamic Content)
+- Searchable catalog of ~2,000 books
+- Advanced filtering by categories
+- Book detail pages with metadata
+- PDF viewing and download capabilities
+- User authentication and reviews
+- Admin panel for content management
 
-## Learning Laravel
+## Technology Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Backend**: Laravel 12.x
+- **Frontend**: Livewire 3.6.4 with Alpine.js
+- **Styling**: Tailwind CSS
+- **Database**: MySQL 8.0
+- **Admin Panel**: FilamentPHP 3.3.37
+- **Authentication**: Laravel Breeze 2.3.8
+- **Containerization**: Docker
+- **Languages**: PHP 8.2, JavaScript, HTML, CSS
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Getting Started
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prerequisites
+- Docker and Docker Compose installed on your system
+- Git (for version control)
 
-## Laravel Sponsors
+### Installation & Setup
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd book_library
+   ```
 
-### Premium Partners
+2. **Start the Docker environment**
+   ```bash
+   docker-compose up -d
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+3. **Check that all containers are running**
+   ```bash
+   docker-compose ps
+   ```
 
-## Contributing
+### Access Points
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Once the Docker environment is running, you can access:
 
-## Code of Conduct
+- **Main Application**: [http://localhost](http://localhost)
+- **Admin Panel**: [http://localhost/admin](http://localhost/admin)
+- **PHPMyAdmin**: [http://localhost:8080](http://localhost:8080)
+- **Database**: `localhost:3307` (from host machine)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Default Admin Credentials
 
-## Security Vulnerabilities
+For accessing the admin panel at `/admin`:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+Email: admin@micronesianlib.edu
+Password: password123
+```
+
+**⚠️ Security Note**: These are default development credentials. Change them immediately in production environments.
+
+### Docker Management
+
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Access the app container
+docker-compose exec app bash
+```
+
+## Features
+
+### Core Functionality
+- Persistent top bar with logos
+- Universal menu bar (changes between Guide/Library)
+- User authentication system
+- Language selector (placeholder for future)
+- Terms of use modal
+- Universal footer
+
+### Search & Library Features
+- Real-time keyword search
+- Advanced filtering by categories (Subject, Grade, Type, Language, Year)
+- Grid layout with thumbnails
+- Sorting options and pagination
+- Book detail pages with ratings and reviews
+- Access control (Full Access, Limited Access, Unavailable)
+- Related content suggestions
+- Multiple editions support
+
+## Development
+
+### Container Structure
+- **App Container**: PHP 8.2-FPM with all required extensions
+- **Database Container**: MySQL 8.0
+- **Web Server**: Nginx proxy
+- **Admin Interface**: PHPMyAdmin
+
+### Installed Packages
+- `laravel/breeze: ^2.3` - Authentication scaffolding
+- `filament/filament: ^3.3` - Admin dashboard
+- `livewire/livewire: ^3.6` - Dynamic frontend components
+
+## Database
+
+The application uses MySQL 8.0 with a comprehensive database structure including:
+- Books catalog with metadata
+- User authentication and roles
+- CMS pages and content blocks
+- Categories and filtering system
+- User ratings and reviews
+
+## Templates
+
+UI templates are available in `/public/ui-test/` for development reference:
+- Academic design template
+- Material design template
+- Modern glass-morphism template
+- Final production template with complete UI kit
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
