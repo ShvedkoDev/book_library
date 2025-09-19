@@ -14,7 +14,7 @@ class BookReviewResource extends Resource
 {
     protected static ?string $model = BookReview::class;
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
-    protected static ?string $navigationGroup = 'Book Management';
+    protected static ?string $navigationGroup = "Library";
 
     public static function form(Form $form): Form
     {

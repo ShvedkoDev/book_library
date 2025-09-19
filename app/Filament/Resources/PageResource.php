@@ -24,6 +24,11 @@ class PageResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasCmsPermission('cms.pages.view') ?? false;
+    }
+
     protected static ?string $recordTitleAttribute = "title";
 
     public static function form(Form $form): Form

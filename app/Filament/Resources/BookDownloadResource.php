@@ -14,7 +14,7 @@ class BookDownloadResource extends Resource
 {
     protected static ?string $model = BookDownload::class;
     protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
-    protected static ?string $navigationGroup = 'Analytics';
+    protected static ?string $navigationGroup = "Library";
 
     public static function form(Form $form): Form
     {
