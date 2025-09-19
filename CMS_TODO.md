@@ -159,16 +159,16 @@ Afterwards mark as done tasts in the CMS_TODO.md, update CLAUDE.md and commit an
 ## Phase 2: Filament Admin Resources
 
 ### Task 2.1: Page Resource with Advanced Features
-**Priority:** Critical  
+**Priority:** Critical
 **Estimated Time:** 3 hours
 
 **TODO:**
-- [ ] Create PageResource with form builder
-- [ ] Implement content blocks repeater
-- [ ] Add media upload fields
-- [ ] Configure SEO metadata fields
-- [ ] Set up status management and publishing
-- [ ] Add bulk actions and filters
+- [x] Create PageResource with form builder
+- [x] Implement content blocks repeater
+- [x] Add media upload fields
+- [x] Configure SEO metadata fields
+- [x] Set up status management and publishing
+- [x] Add bulk actions and filters
 
 **AI Prompt:**
 ```

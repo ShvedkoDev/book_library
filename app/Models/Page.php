@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Class Page
@@ -46,9 +44,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  *
  * @package App\Models
  */
-class Page extends Model implements HasMedia
+class Page extends Model
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -118,96 +116,6 @@ class Page extends Model implements HasMedia
         ];
     }
 
-    /**
-     * Register media collections
-     *
-     * @return void
-     */
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('featured_image')
-            ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp']);
-
-        $this->addMediaCollection('gallery')
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp']);
-
-        $this->addMediaCollection('documents')
-            ->acceptsMimeTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']);
-
-        $this->addMediaCollection('seo_images')
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp']);
-
-        $this->addMediaCollection('content_blocks')
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp', 'video/mp4', 'video/webm']);
-    }
-
-    /**
-     * Register media conversions
-     *
-     * @return void
-     */
-    public function registerMediaConversions(Media $media = null): void
-    {
-        $conversions = config('cms.media.conversions', []);
-
-        foreach ($conversions as $name => $config) {
-            $conversion = $this->addMediaConversion($name)
-                ->width($config['width'] ?? 300)
-                ->height($config['height'] ?? 300)
-                ->quality($config['quality'] ?? 85);
-
-            // Set fit method
-            if (isset($config['fit'])) {
-                switch ($config['fit']) {
-                    case 'crop':
-                        $conversion->fit(Fit::Crop, $config['width'], $config['height']);
-                        break;
-                    case 'max':
-                        $conversion->fit(Fit::Max, $config['width'], $config['height']);
-                        break;
-                    case 'fill':
-                        $conversion->fit(Fit::Fill, $config['width'], $config['height']);
-                        break;
-                    default:
-                        $conversion->fit(Fit::Contain, $config['width'], $config['height']);
-                        break;
-                }
-            }
-
-            // Generate WebP version if enabled
-            if (config('cms.media.generate_webp', true)) {
-                $this->addMediaConversion($name . '_webp')
-                    ->width($config['width'] ?? 300)
-                    ->height($config['height'] ?? 300)
-                    ->quality($config['quality'] ?? 85)
-                    ->format('webp');
-            }
-        }
-
-        // Specific conversions for different collections
-        if ($media && $media->collection_name === 'featured_image') {
-            $this->addMediaConversion('hero')
-                ->width(1920)
-                ->height(1080)
-                ->quality(90)
-                ->fit(Fit::Crop, 1920, 1080);
-        }
-
-        if ($media && $media->collection_name === 'seo_images') {
-            $this->addMediaConversion('og_image')
-                ->width(1200)
-                ->height(630)
-                ->quality(90)
-                ->fit(Fit::Crop, 1200, 630);
-
-            $this->addMediaConversion('twitter_image')
-                ->width(1024)
-                ->height(512)
-                ->quality(90)
-                ->fit(Fit::Crop, 1024, 512);
-        }
-    }
 
     /**
      * Get the user who created the page.
