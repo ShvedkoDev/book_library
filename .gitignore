@@ -367,3 +367,21 @@ public/js/app.js
 /public/storage
 /storage/app/public/*
 !/storage/app/public/.gitkeep
+
+# CMS Generated Files (should not be tracked)
+app/Filament/Components/
+app/Filament/Resources/Cms*
+app/Filament/Resources/ContentBlock*
+app/Filament/Resources/MediaResource*
+app/Filament/Resources/PageResource*
+app/Filament/Resources/SeoAnalytics*
+app/Http/Controllers/Cms/
+app/Http/Middleware/Cms/
+app/Models/Cms*
+app/Models/ContentBlock.php
+app/Models/Page.php
+app/Policies/Cms*
+app/Policies/PagePolicy.php
+app/Services/Cms/
+app/Services/ContentBlock*
+resources/views/cms/
