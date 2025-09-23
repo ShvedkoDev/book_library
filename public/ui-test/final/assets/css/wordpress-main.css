@@ -17428,7 +17428,7 @@ main a.button-line:hover {
 
 .button, a#sidebar_next, footer button, header button, input[type=submit], main button {
     font: 1rem/1.3 proxima-nova, Helvetica, Arial, sans-serif;
-    padding: .75rem 1.4rem .8rem;
+    padding: .5rem 0.75rem;
     text-decoration: none
 }
 
@@ -46716,7 +46716,7 @@ body.osas .island + .island {
 
 @media screen and (min-width: 992px) {
     .stems2.template-stems2-ulu-guide .page-content .with_sidebar aside.sidebar {
-        flex-basis: 32%
+        flex-basis: 20%
     }
 }
 
