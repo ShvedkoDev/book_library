@@ -15,7 +15,7 @@ class PublisherResource extends Resource
     protected static ?string $model = Publisher::class;
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
-    protected static ?string $navigationGroup = "Content Management";
+    protected static ?string $navigationGroup = "Library";
     public static function form(Form $form): Form
     {
         return $form
