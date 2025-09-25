@@ -1,28 +1,3 @@
-<!--
-BUILD NOTES:
-Source files scanned:
-- index.html (Modified: Sep 16 17:57) - Template structure, head, header, footer
-- book.html (Modified: Sep 16 20:04) - Book cards, buttons, ratings, carousels
-- library.html (Modified: Sep 16 17:57) - Tables, pagination, filters, search
-- login.html (Modified: Sep 16 17:57) - Forms, inputs, login components
-
-Sections included:
-- Overview
-- Colors (WordPress CSS variables)
-- Typography
-- Buttons (toggle-btn, book-action-btn, carousel-btn, pagination-btn)
-- Forms (login form, search, filters, checkboxes)
-- Cards (book-card variants)
-- Tables/Lists (books-table, pagination)
-- Navigation Elements (book-nav-tabs, breadcrumbs)
-- Feedback & Status (star ratings)
-- Layout & Utilities (grid systems, carousel)
-
-Assumptions:
-- Uses WordPress theme CSS variables and conventions
-- FilamentPHP/Laravel styling integration
-- Educational/academic design focus
--->
 <!doctype html>
 <html lang="en-US">
 
@@ -36,32 +11,97 @@ Assumptions:
     }</style>
 
     <!-- This site is optimized with the Yoast SEO plugin v25.8 - https://yoast.com/wordpress/plugins/seo/ -->
-    <title>UI Kit - Micronesian Teachers Digital Library</title>
+    <title>Micronesian Teachers Digital Library - UI kit</title>
     <link rel="canonical" href="https://localhost/micronesian-digital-library-guide/"/>
     <meta property="og:locale" content="en_US"/>
     <meta property="og:type" content="article"/>
-    <meta property="og:title" content="UI Kit - Micronesian Teachers Digital Library"/>
-    <meta property="og:description" content="Design system and UI components for the Micronesian Teachers Digital Library website"/>
+    <meta property="og:title" content="Micronesian Teachers Digital Library - Guide"/>
+    <meta property="og:description" content="Aloha and welcome to the Micronesian Teachers Digital Library! This comprehensive collection provides educators across Micronesia with access to over 2,000 educational books in local languages, fostering cultural preservation and educational excellence."/>
     <meta property="og:url" content="https://localhost/micronesian-digital-library-guide/"/>
     <meta property="og:site_name" content="Micronesian Teachers Digital Library"/>
     <meta property="article:modified_time" content="2024-12-16T01:03:09+00:00"/>
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:label1" content="Est. reading time"/>
-    <meta name="twitter:data1" content="5 minutes"/>
+    <meta name="twitter:data1" content="1 minute"/>
+    <script type="application/ld+json" class="yoast-schema-graph">{
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebPage",
+                "@id": "https://localhost/micronesian-digital-library-guide/",
+                "url": "https://localhost/micronesian-digital-library-guide/",
+                "name": "Micronesian Teachers Digital Library - Guide",
+                "isPartOf": {
+                    "@id": "https://localhost/#website"
+                },
+                "datePublished": "2024-12-16T01:51:21+00:00",
+                "dateModified": "2024-12-16T01:03:09+00:00",
+                "inLanguage": "en-US",
+                "potentialAction": [
+                    {
+                        "@type": "ReadAction",
+                        "target": [
+                            "https://localhost/micronesian-digital-library-guide/"
+                        ]
+                    }
+                ]
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://localhost/#website",
+                "url": "https://localhost/",
+                "name": "Micronesian Teachers Digital Library",
+                "description": "",
+                "publisher": {
+                    "@id": "https://localhost/#organization"
+                },
+                "potentialAction": [
+                    {
+                        "@type": "SearchAction",
+                        "target": {
+                            "@type": "EntryPoint",
+                            "urlTemplate": "https://localhost/?s={search_term_string}"
+                        },
+                        "query-input": {
+                            "@type": "PropertyValueSpecification",
+                            "valueRequired": true,
+                            "valueName": "search_term_string"
+                        }
+                    }
+                ],
+                "inLanguage": "en-US"
+            },
+            {
+                "@type": "Organization",
+                "@id": "https://localhost/#organization",
+                "name": "Micronesian Teachers Digital Library",
+                "url": "https://localhost/",
+                "logo": {
+                    "@type": "ImageObject",
+                    "inLanguage": "en-US",
+                    "@id": "https://localhost/#/schema/logo/image/",
+                    "url": "https://picsum.photos/200/80?random=3DL",
+                    "contentUrl": "https://picsum.photos/200/80?random=3DL",
+                    "width": 1200,
+                    "height": 1200,
+                    "caption": "Micronesian Teachers Digital Library"
+                },
+                "image": {
+                    "@id": "https://localhost/#/schema/logo/image/"
+                }
+            }
+        ]
+    }</script>
+    <!-- / Yoast SEO plugin. -->
+
 
     <link rel='dns-prefetch' href='//www.googletagmanager.com'/>
     <script type="text/javascript">
         /* <![CDATA[ */
-        window._wpemojiSettings = {
-            "baseUrl": "https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/72x72\/",
-            "ext": ".png",
-            "svgUrl": "https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/svg\/",
-            "svgExt": ".svg",
-            "source": {"concatemoji": "https:\/\/localhost\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.7.1"}
-        };
+        window._wpemojiSettings = {"baseUrl": "https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/72x72\/", "ext": ".png", "svgUrl": "https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/svg\/", "svgExt": ".svg", "source": {"concatemoji": "https:\/\/coe.hawaii.edu\/stems2\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.8.2"}};
         /*! This file is auto-generated */
-        !function (i, n) {
-            var o, s, e;
+        !function (s, n) {
+            var o, i, e;
 
             function c(e) {
                 try {
@@ -73,35 +113,38 @@ Assumptions:
 
             function p(e, t, n) {
                 e.clearRect(0, 0, e.canvas.width, e.canvas.height), e.fillText(t, 0, 0);
-                var t = new Uint32Array(e.getImageData(0, 0, e.canvas.width, e.canvas.height).data),
-                    r = (e.clearRect(0, 0, e.canvas.width, e.canvas.height), e.fillText(n, 0, 0), new Uint32Array(e.getImageData(0, 0, e.canvas.width, e.canvas.height).data));
+                var t = new Uint32Array(e.getImageData(0, 0, e.canvas.width, e.canvas.height).data), a = (e.clearRect(0, 0, e.canvas.width, e.canvas.height), e.fillText(n, 0, 0), new Uint32Array(e.getImageData(0, 0, e.canvas.width, e.canvas.height).data));
                 return t.every(function (e, t) {
-                    return e === r[t]
+                    return e === a[t]
                 })
             }
 
-            function u(e, t, n) {
+            function u(e, t) {
+                e.clearRect(0, 0, e.canvas.width, e.canvas.height), e.fillText(t, 0, 0);
+                for (var n = e.getImageData(16, 16, 1, 1), a = 0; a < n.data.length; a++) if (0 !== n.data[a]) return !1;
+                return !0
+            }
+
+            function f(e, t, n, a) {
                 switch (t) {
                     case"flag":
-                        return n(e, "\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f", "\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f") ? !1 : !n(e, "\ud83c\uddfa\ud83c\uddf3", "\ud83c\uddfa\u200b\ud83c\uddf3") && !n(e, "\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f", "\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");
+                        return n(e, "\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f", "\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f") ? !1 : !n(e, "\ud83c\udde8\ud83c\uddf6", "\ud83c\udde8\u200b\ud83c\uddf6") && !n(e, "\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f", "\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");
                     case"emoji":
-                        return !n(e, "\ud83d\udc26\u200d\u2b1b", "\ud83d\udc26\u200b\u2b1b")
+                        return !a(e, "\ud83e\udedf")
                 }
                 return !1
             }
 
-            function f(e, t, n) {
-                var r = "undefined" != typeof WorkerGlobalScope && self instanceof WorkerGlobalScope ? new OffscreenCanvas(300, 150) : i.createElement("canvas"),
-                    a = r.getContext("2d", {willReadFrequently: !0}),
-                    o = (a.textBaseline = "top", a.font = "600 32px Arial", {});
+            function g(e, t, n, a) {
+                var r = "undefined" != typeof WorkerGlobalScope && self instanceof WorkerGlobalScope ? new OffscreenCanvas(300, 150) : s.createElement("canvas"), o = r.getContext("2d", {willReadFrequently: !0}), i = (o.textBaseline = "top", o.font = "600 32px Arial", {});
                 return e.forEach(function (e) {
-                    o[e] = t(a, e, n)
-                }), o
+                    i[e] = t(o, e, n, a)
+                }), i
             }
 
             function t(e) {
-                var t = i.createElement("script");
-                t.src = e, t.defer = !0, i.head.appendChild(t)
+                var t = s.createElement("script");
+                t.src = e, t.defer = !0, s.head.appendChild(t)
             }
 
             "undefined" != typeof Promise && (o = "wpEmojiSettingsSupports", i = ["flag", "emoji"], n.supports = {everything: !0, everythingExceptFlag: !0}, e = new Promise(function (e) {
@@ -117,13 +160,13 @@ Assumptions:
                 }();
                 if (!n) {
                     if ("undefined" != typeof Worker && "undefined" != typeof OffscreenCanvas && "undefined" != typeof URL && URL.createObjectURL && "undefined" != typeof Blob) try {
-                        var e = "postMessage(" + f.toString() + "(" + [JSON.stringify(i), u.toString(), p.toString(), c.toString()].join(",") + "));", a = new Blob([e], {type: "text/javascript"}), r = new Worker(URL.createObjectURL(a), {name: "wpTestEmojiSupports"});
+                        var e = "postMessage(" + g.toString() + "(" + [JSON.stringify(i), f.toString(), p.toString(), u.toString()].join(",") + "));", a = new Blob([e], {type: "text/javascript"}), r = new Worker(URL.createObjectURL(a), {name: "wpTestEmojiSupports"});
                         return void (r.onmessage = function (e) {
                             c(n = e.data), r.terminate(), t(n)
                         })
                     } catch (e) {
                     }
-                    c(n = f(i, u, p))
+                    c(n = g(i, f, p, u))
                 }
                 t(n)
             }).then(function (e) {
@@ -140,214 +183,35 @@ Assumptions:
         }((window, document), window._wpemojiSettings);
         /* ]]> */
     </script>
-    <style id='wp-emoji-styles-inline-css' type='text/css'>
-
-        img.wp-smiley, img.emoji {
-            display: inline !important;
-            border: none !important;
-            box-shadow: none !important;
-            height: 1em !important;
-            width: 1em !important;
-            margin: 0 0.07em !important;
-            vertical-align: -0.1em !important;
-            background: none !important;
-            padding: 0 !important;
-        }
-    </style>
-    <style id='global-styles-inline-css' type='text/css'>
-        :root {
-            --wp--preset--aspect-ratio--square: 1;
-            --wp--preset--aspect-ratio--4-3: 4/3;
-            --wp--preset--aspect-ratio--3-4: 3/4;
-            --wp--preset--aspect-ratio--3-2: 3/2;
-            --wp--preset--aspect-ratio--2-3: 2/3;
-            --wp--preset--aspect-ratio--16-9: 16/9;
-            --wp--preset--aspect-ratio--9-16: 9/16;
-            --wp--preset--color--black: #000000;
-            --wp--preset--color--cyan-bluish-gray: #abb8c3;
-            --wp--preset--color--white: #ffffff;
-            --wp--preset--color--pale-pink: #f78da7;
-            --wp--preset--color--vivid-red: #cf2e2e;
-            --wp--preset--color--luminous-vivid-orange: #ff6900;
-            --wp--preset--color--luminous-vivid-amber: #fcb900;
-            --wp--preset--color--light-green-cyan: #7bdcb5;
-            --wp--preset--color--vivid-green-cyan: #00d084;
-            --wp--preset--color--pale-cyan-blue: #8ed1fc;
-            --wp--preset--color--vivid-cyan-blue: #0693e3;
-            --wp--preset--color--vivid-purple: #9b51e0;
-            --wp--preset--color--coe-green: #009877;
-            --wp--preset--color--coe-blue: #005a70;
-            --wp--preset--color--coe-black: #0f1820;
-            --wp--preset--color--coe-light-green-background: #e6f5f1;
-            --wp--preset--color--coe-light-green: #ccebe4;
-            --wp--preset--color--coe-gray: #b1b6b9;
-            --wp--preset--color--coe-white: #ffffff;
-            --wp--preset--color--coe-green-shade: #007c5f;
-            --wp--preset--color--coe-red: #b34a64;
-            --wp--preset--color--coe-purple: #484d7a;
-            --wp--preset--color--coe-highlight-green: #668848;
-            --wp--preset--color--coe-forward-blue: #00828c;
-            --wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg, rgba(6, 147, 227, 1) 0%, rgb(155, 81, 224) 100%);
-            --wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg, rgb(122, 220, 180) 0%, rgb(0, 208, 130) 100%);
-            --wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg, rgba(252, 185, 0, 1) 0%, rgba(255, 105, 0, 1) 100%);
-            --wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg, rgba(255, 105, 0, 1) 0%, rgb(207, 46, 46) 100%);
-            --wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg, rgb(238, 238, 238) 0%, rgb(169, 184, 195) 100%);
-            --wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg, rgb(74, 234, 220) 0%, rgb(151, 120, 209) 20%, rgb(207, 42, 186) 40%, rgb(238, 44, 130) 60%, rgb(251, 105, 98) 80%, rgb(254, 248, 76) 100%);
-            --wp--preset--gradient--blush-light-purple: linear-gradient(135deg, rgb(255, 206, 236) 0%, rgb(152, 150, 240) 100%);
-            --wp--preset--gradient--blush-bordeaux: linear-gradient(135deg, rgb(254, 205, 165) 0%, rgb(254, 45, 45) 50%, rgb(107, 0, 62) 100%);
-            --wp--preset--gradient--luminous-dusk: linear-gradient(135deg, rgb(255, 203, 112) 0%, rgb(199, 81, 192) 50%, rgb(65, 88, 208) 100%);
-            --wp--preset--gradient--pale-ocean: linear-gradient(135deg, rgb(255, 245, 203) 0%, rgb(182, 227, 212) 50%, rgb(51, 167, 181) 100%);
-            --wp--preset--gradient--electric-grass: linear-gradient(135deg, rgb(202, 248, 128) 0%, rgb(113, 206, 126) 100%);
-            --wp--preset--gradient--midnight: linear-gradient(135deg, rgb(2, 3, 129) 0%, rgb(40, 116, 252) 100%);
-            --wp--preset--gradient--light-green-radial: radial-gradient(ellipse at -10% 0%, #ccebe4 0%, #e6f5f1 22%, #F5F2ED 80%);
-            --wp--preset--gradient--blue-to-light-blue: linear-gradient(135deg, #005a70 20%, #337b8d 60%);
-            --wp--preset--gradient--green-to-blue: radial-gradient(ellipse at 0% 15%, #009877 25%, #005a70 65%);
-            --wp--preset--font-size--small: 13px;
-            --wp--preset--font-size--medium: 20px;
-            --wp--preset--font-size--large: 36px;
-            --wp--preset--font-size--x-large: 42px;
-            --wp--preset--font-family--inter: "Inter", sans-serif;
-            --wp--preset--font-family--cardo: "Cardo", serif;
-            --wp--preset--font-family--dm-mono: "DM Mono", monospace;
-            --wp--preset--spacing--20: 0.44rem;
-            --wp--preset--spacing--30: 0.67rem;
-            --wp--preset--spacing--40: 1rem;
-            --wp--preset--spacing--50: 1.5rem;
-            --wp--preset--spacing--60: 2.25rem;
-            --wp--preset--spacing--70: 3.38rem;
-            --wp--preset--spacing--80: 5.06rem;
-            --wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);
-            --wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);
-            --wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);
-            --wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);
-            --wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);
-        }
-
-        body {
-            margin: 0;
-            --wp--style--global--content-size: 620px;
-            --wp--style--global--wide-size: 1280px;
-        }
-
-        .wp-site-blocks {
-            padding-top: var(--wp--style--root--padding-top);
-            padding-bottom: var(--wp--style--root--padding-bottom);
-        }
-
-        .has-global-padding {
-            padding-right: var(--wp--style--global--content-size);
-            padding-left: var(--wp--style--global--content-size);
-        }
-
-        .has-global-padding :where(.has-global-padding:not(.wp-block-block)) {
-            padding-right: 0;
-            padding-left: 0;
-        }
-
-        .has-global-padding > .alignfull {
-            margin-right: calc(var(--wp--style--global--content-size) * -1);
-            margin-left: calc(var(--wp--style--global--content-size) * -1);
-        }
-
-        .has-global-padding > .alignfull:where(:not(.has-global-padding):not(.is-layout-flow):not(.is-layout-constrained)) > :where([class*="wp-block-"]:not(.alignfull):not([class*="__"]), p, h1, h2, h3, h4, h5, h6, ul, ol) {
-            padding-right: var(--wp--style--global--content-size);
-            padding-left: var(--wp--style--global--content-size);
-        }
-    </style>
-
-    <!-- Additional UI Kit styles for demo components -->
-    <style id='ui-kit-styles' type='text/css'>
-        .ui-kit-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .ui-kit-section {
-            margin-bottom: 40px;
-            border-bottom: 1px solid var(--wp--preset--color--coe-light-green);
-            padding-bottom: 30px;
-        }
-
-        .ui-kit-section:last-child {
-            border-bottom: none;
-        }
-
-        .ui-kit-section h2 {
-            color: var(--wp--preset--color--coe-green);
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--wp--preset--color--coe-light-green);
-            padding-bottom: 10px;
-        }
-
-        .ui-kit-example {
-            margin: 20px 0;
-            padding: 20px;
-            border: 1px solid var(--wp--preset--color--coe-light-green);
-            border-radius: 4px;
-            background: var(--wp--preset--color--coe-light-green-background);
-        }
-
-        .ui-kit-toc {
-            position: sticky;
-            top: 20px;
-            background: var(--wp--preset--color--white);
-            border: 1px solid var(--wp--preset--color--coe-light-green);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .ui-kit-toc h3 {
-            margin-top: 0;
-            color: var(--wp--preset--color--coe-green);
-        }
-
-        .ui-kit-toc ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .ui-kit-toc li {
-            margin: 8px 0;
-        }
-
-        .ui-kit-toc a {
-            color: var(--wp--preset--color--coe-blue);
-            text-decoration: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: background-color 0.2s;
-        }
-
-        .ui-kit-toc a:hover {
-            background: var(--wp--preset--color--coe-light-green-background);
-        }
-
-        .color-swatch {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-
-        .color-row {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-        }
-
-        .color-info {
-            flex: 1;
-        }
-    </style>
-
+    <link rel='stylesheet' href='assets/css/styles.css' type='text/css' media='all'/>
     <link rel='stylesheet' id='sage/main.css-css' href='assets/css/wordpress-main.css' type='text/css' media='all'/>
     <link rel='stylesheet' id='font-awesome-css' href='assets/css/font-awesome.min.css' type='text/css' media='all'/>
+    <link rel='stylesheet' href='assets/css/uikit.css' type='text/css' media='all'/>
+    <link rel="https://api.w.org/" href="https://localhost/wp-json/"/>
+    <link rel="alternate" title="JSON" type="application/json" href="https://localhost/wp-json/wp/v2/pages/4059"/>
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://localhost/xmlrpc.php?rsd"/>
+    <meta name="generator" content="WordPress 6.8.2"/>
+    <link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://localhost/wp-json/oembed/1.0/embed?url=https%3A%2F%2Flocalhost%2Fmicronesian-digital-library-guide%2F"/>
+    <link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://localhost/wp-json/oembed/1.0/embed?url=https%3A%2F%2Flocalhost%2Fmicronesian-digital-library-guide%2F&#038;format=xml"/>
+    <meta name="generator" content="Site Kit by Google 1.160.1"/>
+    <link rel="apple-touch-icon" href="https://picsum.photos/200/80?random=3" sizes="57x57">
+    <link rel="apple-touch-icon" href="https://picsum.photos/200/80?random=3" sizes="60x60">
+    <link rel="apple-touch-icon" href="https://picsum.photos/200/80?random=3" sizes="72x72">
+    <link rel="apple-touch-icon" href="https://picsum.photos/200/80?random=3" sizes="114x114">
+    <link rel="apple-touch-icon" href="https://picsum.photos/200/80?random=3" sizes="120x120">
+    <link rel="apple-touch-icon" href="https://picsum.photos/200/80?random=3" sizes="144x144">
+    <link rel="apple-touch-icon" href="https://picsum.photos/200/80?random=3" sizes="152x152">
+    <link rel="apple-touch-icon" href="https://picsum.photos/200/80?random=3" sizes="180x180">
+    <link rel="icon" type="image/png" href="https://picsum.photos/200/80?random=3" sizes="192x192">
+    <link rel="icon" type="image/png" href="https://picsum.photos/200/80?random=3" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://picsum.photos/200/80?random=3" sizes="96x96">
+    <link rel="icon" type="image/png" href="https://picsum.photos/200/80?random=3" sizes="16x16">
+    <meta name="msapplication-TileColor" content="#fff">
+    <meta name="msapplication-TileImager" content="ms-icon-144x144">
+    <meta name="theme-color" content="#fff">
+    <link rel="shortcut icon" type="image/svg+xml" href="https://picsum.photos/200/80?random=3">
+    <link rel="icon" type="image/svg+xml" href="https://picsum.photos/200/80?random=3">
+    <meta name="google-site-verification" content="t434u_H4w9lTKtLjxUzcPKmxbp0JLxqJG-SYkU9wdTE">
 </head>
 
 <body class="wp-singular page-template page-template-template-stems2-ulu-guide template-stems2-ulu-guide page page-id-4059 wp-theme-coe-wp-programs-themeresources edcs program stems2 ulu-education-toolkit-guide sidebar-primary app-data index-data singular-data page-data page-4059-data page-ulu-education-toolkit-guide-data template-stems2-ulu-guide-data">
@@ -355,42 +219,44 @@ Assumptions:
 <header class="banner" role="banner">
     <a class="screen-reader-text skip-link" href="#content">Skip to main content</a>
     <!-- TOP BAR with two institution logos -->
-    <div class="top-bar">
-        <div class="container">
-            <div class="institution-logos">
-                <img class="coe-logo" src="https://picsum.photos/120/60?random=1" alt="College of Education logo">
-                <img class="uhm-logo" src="https://picsum.photos/120/60?random=2" alt="University of Hawaii at Manoa logo">
+    <!-- MENU BAR with Guide/Library toggle -->
+    <div class="coe-banner">
+        <div class="header-container">
+            <div class="left-institution">
+                <img src="assets/images/government_of_the_federated_states_of_micronesia.png" alt="Government of the Federated States of Micronesia">
             </div>
-            <div class="utility-bar">
-                <div class="language-selector">
-                    <span class="current-language">English</span>
-                    <div class="language-dropdown">
-                        <a href="#" class="language-option">Chuukese</a>
-                        <a href="#" class="language-option">Yapese</a>
-                        <a href="#" class="language-option">Pohnpeian</a>
-                        <a href="#" class="language-option">Kosraean</a>
-                        <a href="#" class="language-option">Marshallese</a>
-                    </div>
+            <div class="right-institution">
+                <div class="language-selector-container">
+                    <button class="language-selector" id="languageSelector">
+                        <span class="language-code">ENG</span>
+                        <i class="fal fa-chevron-down"></i>
+                    </button>
+                    <ul class="language-dropdown" id="languageDropdown">
+                        <li><a href="#" data-code="eng" data-enabled="true">English</a></li>
+                        <li><a href="#" data-code="chk" data-enabled="false" class="disabled">Chuukese</a></li>
+                        <li><a href="#" data-code="kpg" data-enabled="false" class="disabled">Kapingamarangi</a></li>
+                        <li><a href="#" data-code="kos" data-enabled="false" class="disabled">Kosraean</a></li>
+                        <li><a href="#" data-code="mrl" data-enabled="false" class="disabled">Mortlockese</a></li>
+                        <li><a href="#" data-code="mwv" data-enabled="false" class="disabled">Mwoakilloaese</a></li>
+                        <li><a href="#" data-code="nkr" data-enabled="false" class="disabled">Nukuoro</a></li>
+                        <li><a href="#" data-code="pif" data-enabled="false" class="disabled">Pingelapese</a></li>
+                        <li><a href="#" data-code="pon" data-enabled="false" class="disabled">Pohnpeian</a></li>
+                        <li><a href="#" data-code="stw" data-enabled="false" class="disabled">Satawalese</a></li>
+                        <li><a href="#" data-code="uli" data-enabled="false" class="disabled">Ulithian</a></li>
+                        <li><a href="#" data-code="woe" data-enabled="false" class="disabled">Woleaian</a></li>
+                        <li><a href="#" data-code="yap" data-enabled="false" class="disabled">Yapese</a></li>
+                    </ul>
                 </div>
-                <a href="#" class="terms-link" onclick="openTermsModal()">Terms of Use</a>
             </div>
         </div>
     </div>
-
-    <!-- MENU BAR with Guide/Library toggle -->
-    <div class="menu-bar">
-        <div class="container">
-            <div class="main-logo">
-                <img src="https://picsum.photos/200/80?random=3DL" alt="Micronesian Teachers Digital Library logo">
-                <h1 class="site-title">Micronesian Teachers Digital Library</h1>
-            </div>
-        </div>
-
+    <div class="program-banner">
         <div class="module-toggle">
-            <div class="toggle-container">
-                <button class="toggle-btn" data-module="guide" onclick="window.location.href='index.html'">Resource guide</button>
-                <div class="toggle-divider">|</div>
-                <button class="toggle-btn active" data-module="library">Resource library</button>
+            <div class="toggle-switch-container">
+                <div class="toggle-switch">
+                    <button class="toggle-option active" data-module="guide">Resource guide</button>
+                    <button class="toggle-option" data-module="library" onclick="window.location.href='library.html'">Resource library</button>
+                </div>
             </div>
         </div>
         <nav aria-label="main menu" class="nav-primary">
@@ -398,18 +264,29 @@ Assumptions:
             <button class="menu-toggle" aria-expanded="false">Menu <span class="screen-reader-text">Open Mobile Menu</span></button>
             <div class="menu-main-container">
                 <ul id="menu-main" class="nav">
-                    <li id="menu-item-4069" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-4059 current_page_item menu-item-4069"><a href="/micronesian-digital-library-guide/" aria-current="page">Guide</a></li>
-                    <li id="menu-item-4070" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4070"><a href="/library/">Library</a></li>
+                    <li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-2335"><a href="/">Home</a></li>
+                    <li id="menu-item-1362" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1362"><a href="#">About Us</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-314" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-314"><a href="/about/">What is MTDL?</a></li>
+                            <li id="menu-item-320" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-320"><a href="/why/">Why Digital Library?</a></li>
+                            <li id="menu-item-1692" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1692"><a href="/photo-gallery/">Photo Gallery</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item menu-login"><a href="login.html">Login</a></li>
                 </ul>
             </div>
-            <div class="search-form-container">
-                <form role="search" method="get" class="search-form" action="/">
-                    <label>
-                        <span class="screen-reader-text">Search</span>
-                    </label>
-                    <input type="search" class="search-field" id="basic-site-search" placeholder="Search &hellip;" value="" name="s"/>
-                    <button type="submit" class="search-submit" value="Search"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Site Search</span></button>
-                </form>
+
+            <div class="menu-search">
+                <a class="search-toggle" href="#searchform"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Toggle Search</span></a>
+                <div class="search-container" aria-expanded="false">
+                    <form role="search" method="get" class="searchform" action="/">
+                        <label for="basic-site-search" id="searchform" class="screen-reader-text" action="/">
+                            Search for:
+                        </label>
+                        <input type="search" class="search-field" id="basic-site-search" placeholder="Search &hellip;" value="" name="s"/>
+                        <button type="submit" class="search-submit" value="Search"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Site Search</span></button>
+                    </form>
+                </div>
             </div>
         </nav>
     </div>
@@ -431,763 +308,789 @@ Assumptions:
                 </div>
             </div>
             <aside class="sidebar header-image handbook-image">
-                <img class="hupc-logo" src="https://picsum.photos/200/80?random=3DL" alt="Micronesian Teachers Digital Library logo">
-                <img class="farm-logo" src="https://picsum.photos/120/60?random=12" alt="Education Initiative logo">
+                <img class="ndoe-logo" src="assets/images/NDOE.png" alt="">
+                <img class="irei-logo" src="assets/images/iREi.png" alt="">
+                <img class="c4gts-logo" src="assets/images/C4GTS.png" alt="">
             </aside>
         </div>
 
         <div class="page-content">
-            <div class="container with_sidebar">
+            <!-- Build Notes:
+            Source files scanned: book.html, library.html, login.html
+            Last modified: 2024-12-20
+            Sections included: Overview, Colors, Typography, Buttons, Forms, Cards, Tables/Lists, Navigation, Feedback & Status, Layout & Utilities, Modals
+            CSS dependencies: styles.css, wordpress-main.css
+            -->
+
+            <div class="ui-kit-container">
+                <!-- Table of Contents -->
+                <div class="ui-kit-toc">
+                    <h3>Table of Contents</h3>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#colors">Colors</a></li>
+                        <li><a href="#typography">Typography</a></li>
+                        <li><a href="#buttons">Buttons</a></li>
+                        <li><a href="#forms">Forms</a></li>
+                        <li><a href="#cards">Cards</a></li>
+                        <li><a href="#tables">Tables / Lists</a></li>
+                        <li><a href="#navigation">Navigation Elements</a></li>
+                        <li><a href="#feedback">Feedback & Status</a></li>
+                        <li><a href="#layout">Layout & Utilities</a></li>
+                        <li><a href="#modals">Modals / Overlays</a></li>
+                    </ul>
+                </div>
+
+                <!-- Main Content -->
                 <div class="ui-kit-content">
-
-                    <!-- Table of Contents -->
-                    <div class="ui-kit-toc">
-                        <h3>Table of Contents</h3>
-                        <ul>
-                            <li><a href="#overview">Overview</a></li>
-                            <li><a href="#colors">Colors</a></li>
-                            <li><a href="#typography">Typography</a></li>
-                            <li><a href="#buttons">Buttons</a></li>
-                            <li><a href="#forms">Forms</a></li>
-                            <li><a href="#cards">Cards</a></li>
-                            <li><a href="#tables">Tables & Lists</a></li>
-                            <li><a href="#navigation">Navigation Elements</a></li>
-                            <li><a href="#feedback">Feedback & Status</a></li>
-                            <li><a href="#layout">Layout & Utilities</a></li>
-                            <li><a href="#modals">Modals & Overlays</a></li>
-                        </ul>
-                    </div>
-
                     <!-- Overview Section -->
-                    <section class="ui-kit-section" id="overview">
+                    <section id="overview" class="ui-section">
                         <h2>Overview</h2>
-                        <p>This UI Kit showcases the design components used throughout the Micronesian Teachers Digital Library. The design system is built on WordPress CSS variables and follows academic/educational design principles.</p>
-
-                        <h3>How to Use</h3>
-                        <ul>
-                            <li>Reuse existing CSS classes from <code>assets/css/wordpress-main.css</code></li>
-                            <li>Follow WordPress CSS variable conventions (<code>--wp--preset--*</code>)</li>
-                            <li>Maintain accessibility standards with proper labels and ARIA attributes</li>
-                            <li>Use semantic HTML elements where appropriate</li>
+                        <p>This UI Kit contains all reusable components from the Micronesian Teachers Digital Library project. The design system uses WordPress CSS variables and styling standards to maintain consistency across all templates.</p>
+                        <h3>CSS Variables</h3>
+                        <ul class="css-vars-list">
+                            <li><code>--wp--preset--color--coe-green: #009877</code> - Primary brand color</li>
+                            <li><code>--wp--preset--color--coe-blue: #005a70</code> - Secondary brand color</li>
+                            <li><code>--wp--preset--color--coe-black: #0f1820</code> - Dark text</li>
+                            <li><code>--wp--preset--color--coe-gray: #b1b6b9</code> - Muted text/borders</li>
+                            <li><code>--wp--preset--font-family--proxima-nova</code> - Primary font family</li>
+                            <li><code>--wp--preset--spacing--*</code> - Spacing scale (20-80)</li>
                         </ul>
                     </section>
 
                     <!-- Colors Section -->
-                    <section class="ui-kit-section" id="colors">
+                    <section id="colors" class="ui-section">
                         <h2>Colors</h2>
-                        <p>The color palette uses WordPress CSS variables with a focus on educational/academic themes:</p>
-
-                        <h3>Brand Colors</h3>
-                        <div class="color-row">
-                            <div class="color-swatch" style="background-color: var(--wp--preset--color--coe-green);"></div>
-                            <div class="color-info">
-                                <strong>COE Green</strong><br>
-                                <code>--wp--preset--color--coe-green: #009877</code><br>
-                                Primary brand color
+                        <div class="color-grid">
+                            <div class="color-swatch">
+                                <div class="swatch" style="background: var(--wp--preset--color--coe-green);"></div>
+                                <div class="swatch-info">
+                                    <strong>COE Green</strong><br>
+                                    <code>#009877</code><br>
+                                    <code>--wp--preset--color--coe-green</code>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="color-row">
-                            <div class="color-swatch" style="background-color: var(--wp--preset--color--coe-blue);"></div>
-                            <div class="color-info">
-                                <strong>COE Blue</strong><br>
-                                <code>--wp--preset--color--coe-blue: #005a70</code><br>
-                                Secondary brand color
+                            <div class="color-swatch">
+                                <div class="swatch" style="background: var(--wp--preset--color--coe-blue);"></div>
+                                <div class="swatch-info">
+                                    <strong>COE Blue</strong><br>
+                                    <code>#005a70</code><br>
+                                    <code>--wp--preset--color--coe-blue</code>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="color-row">
-                            <div class="color-swatch" style="background-color: var(--wp--preset--color--coe-light-green);"></div>
-                            <div class="color-info">
-                                <strong>COE Light Green</strong><br>
-                                <code>--wp--preset--color--coe-light-green: #ccebe4</code><br>
-                                Accent and background tints
+                            <div class="color-swatch">
+                                <div class="swatch" style="background: var(--wp--preset--color--coe-black);"></div>
+                                <div class="swatch-info">
+                                    <strong>COE Black</strong><br>
+                                    <code>#0f1820</code><br>
+                                    <code>--wp--preset--color--coe-black</code>
+                                </div>
                             </div>
-                        </div>
-
-                        <h3>Neutrals</h3>
-                        <div class="color-row">
-                            <div class="color-swatch" style="background-color: var(--wp--preset--color--coe-black);"></div>
-                            <div class="color-info">
-                                <strong>COE Black</strong><br>
-                                <code>--wp--preset--color--coe-black: #0f1820</code><br>
-                                Primary text color
+                            <div class="color-swatch">
+                                <div class="swatch" style="background: var(--wp--preset--color--coe-light-green);"></div>
+                                <div class="swatch-info">
+                                    <strong>Light Green</strong><br>
+                                    <code>#ccebe4</code><br>
+                                    <code>--wp--preset--color--coe-light-green</code>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="color-row">
-                            <div class="color-swatch" style="background-color: var(--wp--preset--color--coe-gray);"></div>
-                            <div class="color-info">
-                                <strong>COE Gray</strong><br>
-                                <code>--wp--preset--color--coe-gray: #b1b6b9</code><br>
-                                Secondary text and borders
+                            <div class="color-swatch">
+                                <div class="swatch" style="background: var(--wp--preset--color--coe-gray);"></div>
+                                <div class="swatch-info">
+                                    <strong>COE Gray</strong><br>
+                                    <code>#b1b6b9</code><br>
+                                    <code>--wp--preset--color--coe-gray</code>
+                                </div>
+                            </div>
+                            <div class="color-swatch">
+                                <div class="swatch" style="background: var(--wp--preset--color--white);"></div>
+                                <div class="swatch-info">
+                                    <strong>White</strong><br>
+                                    <code>#ffffff</code><br>
+                                    <code>--wp--preset--color--white</code>
+                                </div>
+                            </div>
+                            <div class="color-swatch">
+                                <div class="swatch" style="background: var(--wp--preset--color--coe-red);"></div>
+                                <div class="swatch-info">
+                                    <strong>COE Red</strong><br>
+                                    <code>#b34a64</code><br>
+                                    <code>--wp--preset--color--coe-red</code>
+                                </div>
+                            </div>
+                            <div class="color-swatch">
+                                <div class="swatch" style="background: var(--wp--preset--color--coe-purple);"></div>
+                                <div class="swatch-info">
+                                    <strong>COE Purple</strong><br>
+                                    <code>#484d7a</code><br>
+                                    <code>--wp--preset--color--coe-purple</code>
+                                </div>
                             </div>
                         </div>
                     </section>
 
                     <!-- Typography Section -->
-                    <section class="ui-kit-section" id="typography">
+                    <section id="typography" class="ui-section">
                         <h2>Typography</h2>
 
-                        <div class="ui-kit-example">
+                        <div class="typography-examples">
                             <h1>Heading 1 - Main Page Title</h1>
-                            <h2>Heading 2 - Section Titles</h2>
-                            <h3>Heading 3 - Subsections</h3>
-                            <h4>Heading 4 - Minor Headings</h4>
-                            <h5>Heading 5 - Small Headings</h5>
-                            <h6>Heading 6 - Smallest Headings</h6>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;h1&gt;Heading 1 - Main Page Title&lt;/h1&gt;</code></pre>
+                            </details>
 
-                            <p>This is a paragraph of regular text. It demonstrates the default body text styling used throughout the site. Text should be readable and accessible with proper contrast ratios.</p>
+                            <h2>Heading 2 - Section Title</h2>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;h2&gt;Heading 2 - Section Title&lt;/h2&gt;</code></pre>
+                            </details>
 
-                            <p><small>Small text for captions and metadata.</small></p>
+                            <h3>Heading 3 - Subsection</h3>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;h3&gt;Heading 3 - Subsection&lt;/h3&gt;</code></pre>
+                            </details>
 
-                            <p><a href="#">This is a link</a> that shows the default link styling.</p>
+                            <h4>Heading 4 - Card Title</h4>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;h4&gt;Heading 4 - Card Title&lt;/h4&gt;</code></pre>
+                            </details>
+
+                            <h5>Heading 5 - Small Title</h5>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;h5&gt;Heading 5 - Small Title&lt;/h5&gt;</code></pre>
+                            </details>
+
+                            <h6>Heading 6 - Caption</h6>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;h6&gt;Heading 6 - Caption&lt;/h6&gt;</code></pre>
+                            </details>
+
+                            <p>This is a standard paragraph with body text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;p&gt;This is a standard paragraph...&lt;/p&gt;</code></pre>
+                            </details>
+
+                            <p><small>Small text for captions and metadata</small></p>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;p&gt;&lt;small&gt;Small text for captions and metadata&lt;/small&gt;&lt;/p&gt;</code></pre>
+                            </details>
+
+                            <p><a href="#">This is a text link</a></p>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;a href="#"&gt;This is a text link&lt;/a&gt;</code></pre>
+                            </details>
 
                             <blockquote>
-                                <p>This is a blockquote used for important callouts or quoted content.</p>
+                                "This is a blockquote used for testimonials or highlighted text."
                             </blockquote>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;blockquote&gt;"This is a blockquote..."&lt;/blockquote&gt;</code></pre>
+                            </details>
 
                             <ul>
-                                <li>Unordered list item one</li>
-                                <li>Unordered list item two</li>
-                                <li>Unordered list item three</li>
+                                <li>Unordered list item 1</li>
+                                <li>Unordered list item 2</li>
+                                <li>Unordered list item 3</li>
                             </ul>
-
-                            <ol>
-                                <li>Ordered list item one</li>
-                                <li>Ordered list item two</li>
-                                <li>Ordered list item three</li>
-                            </ol>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;ul&gt;
+    &lt;li&gt;Unordered list item 1&lt;/li&gt;
+    &lt;li&gt;Unordered list item 2&lt;/li&gt;
+    &lt;li&gt;Unordered list item 3&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+                            </details>
                         </div>
-
-                        <details>
-                            <summary>Show HTML</summary>
-                            <pre><code>&lt;h1&gt;Heading 1 - Main Page Title&lt;/h1&gt;
-&lt;h2&gt;Heading 2 - Section Titles&lt;/h2&gt;
-&lt;h3&gt;Heading 3 - Subsections&lt;/h3&gt;
-&lt;p&gt;This is a paragraph of regular text...&lt;/p&gt;
-&lt;p&gt;&lt;small&gt;Small text for captions and metadata.&lt;/small&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="#"&gt;This is a link&lt;/a&gt; that shows the default link styling.&lt;/p&gt;
-&lt;blockquote&gt;&lt;p&gt;This is a blockquote...&lt;/p&gt;&lt;/blockquote&gt;</code></pre>
-                        </details>
                     </section>
 
                     <!-- Buttons Section -->
-                    <section class="ui-kit-section" id="buttons">
+                    <section id="buttons" class="ui-section">
                         <h2>Buttons</h2>
 
-                        <h3>Module Toggle Buttons</h3>
-                        <div class="ui-kit-example">
-                            <div class="toggle-container">
-                                <button class="toggle-btn" data-module="guide">Resource guide</button>
-                                <div class="toggle-divider">|</div>
-                                <button class="toggle-btn active" data-module="library">Resource library</button>
-                            </div>
-                        </div>
-
-                        <details>
-                            <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="toggle-container"&gt;
-    &lt;button class="toggle-btn" data-module="guide"&gt;Resource guide&lt;/button&gt;
-    &lt;div class="toggle-divider"&gt;|&lt;/div&gt;
-    &lt;button class="toggle-btn active" data-module="library"&gt;Resource library&lt;/button&gt;
-&lt;/div&gt;</code></pre>
-                        </details>
-
-                        <h3>Book Action Buttons</h3>
-                        <div class="ui-kit-example">
-                            <div class="book-actions">
-                                <button class="book-action-btn btn-primary">Preview</button>
-                                <button class="book-action-btn btn-secondary">Download</button>
-                            </div>
-                        </div>
-
-                        <details>
-                            <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="book-actions"&gt;
-    &lt;button class="book-action-btn btn-primary"&gt;Preview&lt;/button&gt;
-    &lt;button class="book-action-btn btn-secondary"&gt;Download&lt;/button&gt;
-&lt;/div&gt;</code></pre>
-                        </details>
-
-                        <h3>Standard Form Buttons</h3>
-                        <div class="ui-kit-example">
+                        <div class="button-examples">
+                            <h3>Primary Buttons</h3>
                             <button class="button button-primary">Primary Button</button>
-                            <button class="button button-secondary">Secondary Button</button>
-                            <button class="button button-large">Large Button</button>
-                            <button class="button" disabled>Disabled Button</button>
+                            <button class="button button-primary" disabled>Disabled Primary</button>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;button class="button button-primary"&gt;Primary Button&lt;/button&gt;
+&lt;button class="button button-primary" disabled&gt;Disabled Primary&lt;/button&gt;</code></pre>
+                            </details>
+
+                            <h3>Secondary Buttons</h3>
+                            <button class="button">Secondary Button</button>
+                            <button class="button" disabled>Disabled Secondary</button>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;button class="button"&gt;Secondary Button&lt;/button&gt;
+&lt;button class="button" disabled&gt;Disabled Secondary&lt;/button&gt;</code></pre>
+                            </details>
+
+                            <h3>Action Buttons (from book.html)</h3>
+                            <button class="button button-primary btn-view">Locate</button>
+                            <button class="btn-secondary" disabled>Request Access</button>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;button class="button button-primary btn-view"&gt;Locate&lt;/button&gt;
+&lt;button class="btn-secondary" disabled&gt;Request Access&lt;/button&gt;</code></pre>
+                            </details>
+
+                            <h3>Icon Buttons</h3>
+                            <button class="button button-primary">
+                                <i class="fal fa-search"></i> Search
+                            </button>
+                            <button class="button">
+                                <i class="fal fa-download"></i> Download
+                            </button>
+                            <details>
+                                <summary>Show HTML</summary>
+                                <pre><code>&lt;button class="button button-primary"&gt;
+    &lt;i class="fal fa-search"&gt;&lt;/i&gt; Search
+&lt;/button&gt;</code></pre>
+                            </details>
                         </div>
-
-                        <details>
-                            <summary>Show HTML</summary>
-                            <pre><code>&lt;button class="button button-primary"&gt;Primary Button&lt;/button&gt;
-&lt;button class="button button-secondary"&gt;Secondary Button&lt;/button&gt;
-&lt;button class="button button-large"&gt;Large Button&lt;/button&gt;
-&lt;button class="button" disabled&gt;Disabled Button&lt;/button&gt;</code></pre>
-                        </details>
-
-                        <h3>Carousel Navigation Buttons</h3>
-                        <div class="ui-kit-example">
-                            <button class="carousel-btn carousel-btn-prev">‹</button>
-                            <button class="carousel-btn carousel-btn-next">›</button>
-                        </div>
-
-                        <details>
-                            <summary>Show HTML</summary>
-                            <pre><code>&lt;button class="carousel-btn carousel-btn-prev"&gt;‹&lt;/button&gt;
-&lt;button class="carousel-btn carousel-btn-next"&gt;›&lt;/button&gt;</code></pre>
-                        </details>
-
-                        <h3>Pagination Buttons</h3>
-                        <div class="ui-kit-example">
-                            <div class="pagination">
-                                <button class="pagination-btn nav-arrow">←</button>
-                                <button class="pagination-btn active">1</button>
-                                <button class="pagination-btn">2</button>
-                                <button class="pagination-btn">3</button>
-                                <button class="pagination-btn nav-arrow">→</button>
-                            </div>
-                        </div>
-
-                        <details>
-                            <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="pagination"&gt;
-    &lt;button class="pagination-btn nav-arrow"&gt;←&lt;/button&gt;
-    &lt;button class="pagination-btn active"&gt;1&lt;/button&gt;
-    &lt;button class="pagination-btn"&gt;2&lt;/button&gt;
-    &lt;button class="pagination-btn"&gt;3&lt;/button&gt;
-    &lt;button class="pagination-btn nav-arrow"&gt;→&lt;/button&gt;
-&lt;/div&gt;</code></pre>
-                        </details>
                     </section>
 
                     <!-- Forms Section -->
-                    <section class="ui-kit-section" id="forms">
+                    <section id="forms" class="ui-section">
                         <h2>Forms</h2>
 
-                        <h3>Login Form (Complete Example)</h3>
-                        <div class="ui-kit-example">
-                            <form name="loginform" id="loginform" class="login-form" action="#" method="post">
+                        <h3>Complete Login Form (from login.html)</h3>
+                        <div class="form-example">
+                            <form class="login-form" onsubmit="event.preventDefault(); return false;">
                                 <div class="form-group">
-                                    <label for="user_login">Username or Email Address</label>
-                                    <input type="text" name="log" id="user_login" class="form-input" value="" size="20" autocapitalize="off" autocomplete="username" required>
+                                    <label for="demo_user_login">Username or Email Address</label>
+                                    <input type="text" name="log" id="demo_user_login" class="form-input" value="" size="20" autocapitalize="off" autocomplete="username">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="user_pass">Password</label>
-                                    <input type="password" name="pwd" id="user_pass" class="form-input" value="" size="20" autocomplete="current-password" required>
+                                    <label for="demo_user_pass">Password</label>
+                                    <input type="password" name="pwd" id="demo_user_pass" class="form-input" value="" size="20" autocomplete="current-password">
                                 </div>
 
                                 <div class="checkbox-group">
-                                    <label for="rememberme">
-                                        <input name="rememberme" type="checkbox" id="rememberme" value="forever">
+                                    <label for="demo_rememberme">
+                                        <input name="rememberme" type="checkbox" id="demo_rememberme" value="forever">
                                         Remember Me
                                     </label>
                                 </div>
 
                                 <div class="login-submit">
-                                    <input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="Log In">
+                                    <input type="submit" name="wp-submit" class="button button-primary button-large" value="Log In">
                                 </div>
                             </form>
                         </div>
-
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;form name="loginform" id="loginform" class="login-form" action="#" method="post"&gt;
+                            <pre><code>&lt;form class="login-form"&gt;
     &lt;div class="form-group"&gt;
         &lt;label for="user_login"&gt;Username or Email Address&lt;/label&gt;
-        &lt;input type="text" name="log" id="user_login" class="form-input" required&gt;
+        &lt;input type="text" name="log" id="user_login" class="form-input" value="" size="20" autocapitalize="off" autocomplete="username"&gt;
     &lt;/div&gt;
+
     &lt;div class="form-group"&gt;
         &lt;label for="user_pass"&gt;Password&lt;/label&gt;
-        &lt;input type="password" name="pwd" id="user_pass" class="form-input" required&gt;
+        &lt;input type="password" name="pwd" id="user_pass" class="form-input" value="" size="20" autocomplete="current-password"&gt;
     &lt;/div&gt;
+
     &lt;div class="checkbox-group"&gt;
         &lt;label for="rememberme"&gt;
-            &lt;input name="rememberme" type="checkbox" id="rememberme"&gt;
+            &lt;input name="rememberme" type="checkbox" id="rememberme" value="forever"&gt;
             Remember Me
         &lt;/label&gt;
     &lt;/div&gt;
+
     &lt;div class="login-submit"&gt;
-        &lt;input type="submit" class="button button-primary button-large" value="Log In"&gt;
+        &lt;input type="submit" name="wp-submit" class="button button-primary button-large" value="Log In"&gt;
     &lt;/div&gt;
 &lt;/form&gt;</code></pre>
                         </details>
 
-                        <h3>Search Box</h3>
-                        <div class="ui-kit-example">
-                            <div class="search-box">
-                                <input type="text" id="search-books" placeholder="Search books, authors, subjects..." class="search-input">
-                                <button type="button" class="search-btn">
-                                    <i class="fal fa-search"></i>
-                                </button>
-                            </div>
+                        <h3>Search Input (from library.html)</h3>
+                        <div class="search-box">
+                            <input type="text" placeholder="Search books, authors, topics..." class="search-input input">
+                            <button type="button" class="search-button">
+                                <i class="fal fa-search"></i>
+                            </button>
                         </div>
-
                         <details>
                             <summary>Show HTML</summary>
                             <pre><code>&lt;div class="search-box"&gt;
-    &lt;input type="text" id="search-books" placeholder="Search books, authors, subjects..." class="search-input"&gt;
-    &lt;button type="button" class="search-btn"&gt;
+    &lt;input type="text" placeholder="Search books, authors, topics..." class="search-input input"&gt;
+    &lt;button type="button" class="search-button"&gt;
         &lt;i class="fal fa-search"&gt;&lt;/i&gt;
     &lt;/button&gt;
 &lt;/div&gt;</code></pre>
                         </details>
 
-                        <h3>Filter Checkboxes</h3>
-                        <div class="ui-kit-example">
-                            <div class="filter-group">
-                                <h4>Subject</h4>
-                                <div class="checkbox-group">
-                                    <label><input type="checkbox" value="mathematics"> Mathematics</label>
-                                    <label><input type="checkbox" value="science"> Science</label>
-                                    <label><input type="checkbox" value="english"> English Language Arts</label>
-                                    <label><input type="checkbox" value="social-studies"> Social Studies</label>
-                                </div>
-                            </div>
-                        </div>
-
+                        <h3>Select Dropdown</h3>
+                        <select class="entries-dropdown">
+                            <option value="5">5 per page</option>
+                            <option value="10" selected>10 per page</option>
+                            <option value="20">20 per page</option>
+                            <option value="50">50 per page</option>
+                        </select>
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="filter-group"&gt;
-    &lt;h4&gt;Subject&lt;/h4&gt;
-    &lt;div class="checkbox-group"&gt;
-        &lt;label&gt;&lt;input type="checkbox" value="mathematics"&gt; Mathematics&lt;/label&gt;
-        &lt;label&gt;&lt;input type="checkbox" value="science"&gt; Science&lt;/label&gt;
-        &lt;label&gt;&lt;input type="checkbox" value="english"&gt; English Language Arts&lt;/label&gt;
-        &lt;label&gt;&lt;input type="checkbox" value="social-studies"&gt; Social Studies&lt;/label&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
+                            <pre><code>&lt;select class="entries-dropdown"&gt;
+    &lt;option value="5"&gt;5 per page&lt;/option&gt;
+    &lt;option value="10" selected&gt;10 per page&lt;/option&gt;
+    &lt;option value="20"&gt;20 per page&lt;/option&gt;
+    &lt;option value="50"&gt;50 per page&lt;/option&gt;
+&lt;/select&gt;</code></pre>
                         </details>
 
-                        <h3>Form Input States</h3>
-                        <div class="ui-kit-example">
-                            <div class="form-group">
-                                <label for="normal-input">Normal Input</label>
-                                <input type="text" id="normal-input" class="form-input" placeholder="Normal state">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="disabled-input">Disabled Input</label>
-                                <input type="text" id="disabled-input" class="form-input" placeholder="Disabled state" disabled>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="textarea-input">Text Area</label>
-                                <textarea id="textarea-input" class="form-input" rows="3" placeholder="Multi-line text area"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="select-input">Select Dropdown</label>
-                                <select id="select-input" class="form-input">
-                                    <option>Choose an option</option>
-                                    <option>Option 1</option>
-                                    <option>Option 2</option>
-                                    <option>Option 3</option>
-                                </select>
-                            </div>
+                        <h3>Checkbox Groups (from library.html filters)</h3>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" value="mathematics" checked> &nbsp;Mathematics</label>
+                            <label><input type="checkbox" value="language" checked> &nbsp;Language Arts</label>
+                            <label><input type="checkbox" value="science"> &nbsp;Science</label>
                         </div>
-
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="form-group"&gt;
-    &lt;label for="normal-input"&gt;Normal Input&lt;/label&gt;
-    &lt;input type="text" id="normal-input" class="form-input" placeholder="Normal state"&gt;
-&lt;/div&gt;
-&lt;div class="form-group"&gt;
-    &lt;label for="disabled-input"&gt;Disabled Input&lt;/label&gt;
-    &lt;input type="text" id="disabled-input" class="form-input" disabled&gt;
-&lt;/div&gt;
-&lt;div class="form-group"&gt;
-    &lt;label for="textarea-input"&gt;Text Area&lt;/label&gt;
-    &lt;textarea id="textarea-input" class="form-input" rows="3"&gt;&lt;/textarea&gt;
+                            <pre><code>&lt;div class="checkbox-group"&gt;
+    &lt;label&gt;&lt;input type="checkbox" value="mathematics" checked&gt; &nbsp;Mathematics&lt;/label&gt;
+    &lt;label&gt;&lt;input type="checkbox" value="language" checked&gt; &nbsp;Language Arts&lt;/label&gt;
+    &lt;label&gt;&lt;input type="checkbox" value="science"&gt; &nbsp;Science&lt;/label&gt;
 &lt;/div&gt;</code></pre>
                         </details>
                     </section>
 
                     <!-- Cards Section -->
-                    <section class="ui-kit-section" id="cards">
+                    <section id="cards" class="ui-section">
                         <h2>Cards</h2>
 
-                        <h3>Book Cards</h3>
-                        <div class="ui-kit-example">
-                            <div class="books-grid">
-                                <div class="book-card">
-                                    <img src="https://picsum.photos/160/240?random=book1" alt="Sample Book" class="book-card-cover">
-                                    <div class="book-card-title">The Sun Also Rises</div>
-                                    <div class="book-card-author">Ernest Hemingway</div>
-                                    <div class="book-card-meta">1926 • Fiction • Grade 9-12</div>
-                                    <button class="book-card-btn">View</button>
-                                </div>
+                        <h3>Book Cards (from book.html)</h3>
+                        <div class="books-grid">
+                            <div class="book-card">
+                                <img src="https://picsum.photos/150/200?random=301" alt="Book Cover" class="book-card-cover">
+                                <h4 class="book-card-title">Elementary Mathematics</h4>
+                                <p class="book-card-author">Pacific Education Council</p>
+                                <p class="book-card-meta">English • 2024</p>
+                                <button class="book-card-btn">View Details</button>
+                            </div>
 
-                                <div class="book-card">
-                                    <img src="https://picsum.photos/160/240?random=book2" alt="Sample Book" class="book-card-cover">
-                                    <div class="book-card-title">Traditional Chuukese Stories</div>
-                                    <div class="book-card-author">Various Authors</div>
-                                    <div class="book-card-meta">2020 • Chuukese • Grade 6-12</div>
-                                    <button class="book-card-btn">View</button>
-                                </div>
-
-                                <div class="book-card">
-                                    <img src="https://picsum.photos/160/240?random=book3" alt="Sample Book" class="book-card-cover">
-                                    <div class="book-card-title">Mathematics for Pacific Islands</div>
-                                    <div class="book-card-author">Pacific Education Consortium</div>
-                                    <div class="book-card-meta">2021 • Mathematics • Grade 7-10</div>
-                                    <button class="book-card-btn">View</button>
-                                </div>
+                            <div class="book-card">
+                                <img src="https://picsum.photos/150/200?random=302" alt="Book Cover" class="book-card-cover">
+                                <h4 class="book-card-title">Chuukese Stories</h4>
+                                <p class="book-card-author">Cultural Center</p>
+                                <p class="book-card-meta">Chuukese • 2023</p>
+                                <button class="book-card-btn">View Details</button>
                             </div>
                         </div>
-
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="books-grid"&gt;
-    &lt;div class="book-card"&gt;
-        &lt;img src="cover-image.jpg" alt="Book Title" class="book-card-cover"&gt;
-        &lt;div class="book-card-title"&gt;The Sun Also Rises&lt;/div&gt;
-        &lt;div class="book-card-author"&gt;Ernest Hemingway&lt;/div&gt;
-        &lt;div class="book-card-meta"&gt;1926 • Fiction • Grade 9-12&lt;/div&gt;
-        &lt;button class="book-card-btn"&gt;View&lt;/button&gt;
-    &lt;/div&gt;
+                            <pre><code>&lt;div class="book-card"&gt;
+    &lt;img src="cover.jpg" alt="Book Cover" class="book-card-cover"&gt;
+    &lt;h4 class="book-card-title"&gt;Elementary Mathematics&lt;/h4&gt;
+    &lt;p class="book-card-author"&gt;Pacific Education Council&lt;/p&gt;
+    &lt;p class="book-card-meta"&gt;English • 2024&lt;/p&gt;
+    &lt;button class="book-card-btn"&gt;View Details&lt;/button&gt;
 &lt;/div&gt;</code></pre>
                         </details>
 
-                        <h3>Carousel with Navigation</h3>
-                        <div class="ui-kit-example">
-                            <div class="carousel-wrapper">
-                                <button class="carousel-btn carousel-btn-prev" onclick="alert('Previous clicked')">‹</button>
-                                <div class="books-grid" id="sample-carousel">
-                                    <div class="book-card">
-                                        <img src="https://picsum.photos/200/300?random=book4" alt="Book 4" class="book-card-cover">
-                                        <div class="book-card-title">Book Title 1</div>
-                                        <div class="book-card-author">Author Name</div>
-                                        <div class="book-card-meta">2023 • Fiction</div>
-                                        <button class="book-card-btn">View</button>
-                                    </div>
-                                    <div class="book-card">
-                                        <img src="https://picsum.photos/200/300?random=book5" alt="Book 5" class="book-card-cover">
-                                        <div class="book-card-title">Book Title 2</div>
-                                        <div class="book-card-author">Author Name</div>
-                                        <div class="book-card-meta">2023 • Non-fiction</div>
-                                        <button class="book-card-btn">View</button>
-                                    </div>
-                                </div>
-                                <button class="carousel-btn carousel-btn-next" onclick="alert('Next clicked')">›</button>
+                        <h3>Access Status Cards</h3>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                            <div class="access-status full-access">
+                                <i class="fal fa-check-circle"></i> Full Access
+                            </div>
+                            <div class="access-status limited-access">
+                                <i class="fal fa-exclamation-triangle"></i> Limited Access
+                            </div>
+                            <div class="access-status unavailable">
+                                <i class="fal fa-times-circle"></i> Unavailable
                             </div>
                         </div>
-
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="carousel-wrapper"&gt;
-    &lt;button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('sample', -1)"&gt;‹&lt;/button&gt;
-    &lt;div class="books-grid" id="sample-carousel"&gt;
-        &lt;div class="book-card"&gt;...&lt;/div&gt;
-        &lt;div class="book-card"&gt;...&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('sample', 1)"&gt;›&lt;/button&gt;
+                            <pre><code>&lt;div class="access-status full-access"&gt;
+    &lt;i class="fal fa-check-circle"&gt;&lt;/i&gt; Full Access
+&lt;/div&gt;
+
+&lt;div class="access-status limited-access"&gt;
+    &lt;i class="fal fa-exclamation-triangle"&gt;&lt;/i&gt; Limited Access
+&lt;/div&gt;
+
+&lt;div class="access-status unavailable"&gt;
+    &lt;i class="fal fa-times-circle"&gt;&lt;/i&gt; Unavailable
 &lt;/div&gt;</code></pre>
                         </details>
                     </section>
 
                     <!-- Tables Section -->
-                    <section class="ui-kit-section" id="tables">
-                        <h2>Tables & Lists</h2>
+                    <section id="tables" class="ui-section">
+                        <h2>Tables / Lists</h2>
 
-                        <h3>Books Table</h3>
-                        <div class="ui-kit-example">
-                            <table class="books-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 80px;">Cover</th>
-                                        <th class="sortable">
-                                            Title/Edition
-                                            <span class="sort-arrow"></span>
-                                        </th>
-                                        <th class="sortable">
-                                            Author(s)
-                                            <span class="sort-arrow"></span>
-                                        </th>
-                                        <th>Subject</th>
-                                        <th>Grade</th>
-                                        <th>Language</th>
-                                        <th>Access</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <img src="https://picsum.photos/60/90?random=table1" alt="Book cover" class="table-cover">
-                                        </td>
-                                        <td>
-                                            <div class="book-title">The Sun Also Rises</div>
-                                            <div class="book-subtitle">Classic Literature Edition</div>
-                                        </td>
-                                        <td>Ernest Hemingway</td>
-                                        <td>English Literature</td>
-                                        <td>9-12</td>
-                                        <td>English</td>
-                                        <td>
-                                            <span class="access-level full">Full Access</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <img src="https://picsum.photos/60/90?random=table2" alt="Book cover" class="table-cover">
-                                        </td>
-                                        <td>
-                                            <div class="book-title">Chuukese Folk Tales</div>
-                                            <div class="book-subtitle">Traditional Stories Collection</div>
-                                        </td>
-                                        <td>Traditional Authors</td>
-                                        <td>Cultural Studies</td>
-                                        <td>6-12</td>
-                                        <td>Chuukese</td>
-                                        <td>
-                                            <span class="access-level limited">Limited Access</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <img src="https://picsum.photos/60/90?random=table3" alt="Book cover" class="table-cover">
-                                        </td>
-                                        <td>
-                                            <div class="book-title">Pacific Mathematics</div>
-                                            <div class="book-subtitle">Problem Solving Approaches</div>
-                                        </td>
-                                        <td>Dr. Maria Santos</td>
-                                        <td>Mathematics</td>
-                                        <td>7-10</td>
-                                        <td>English</td>
-                                        <td>
-                                            <span class="access-level unavailable">Unavailable</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
+                        <h3>Books Table (from library.html)</h3>
+                        <table class="books-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;"></th>
+                                    <th class="sortable">Title/Edition <span class="sort-arrow"></span></th>
+                                    <th style="width: 120px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="book-row">
+                                    <td class="book-cover-cell">
+                                        <img src="https://picsum.photos/60/80?random=201" alt="Book" class="book-cover">
+                                    </td>
+                                    <td class="book-details-cell">
+                                        <div class="book-title">
+                                            <a href="#">Elementary Mathematics for Micronesian Students</a>
+                                        </div>
+                                        <div class="book-metadata">2024-08-15, Pacific Education Council</div>
+                                        <div class="book-description">Mathematics, Grade 3, English, PDF Format - Available</div>
+                                    </td>
+                                    <td class="book-actions-cell">
+                                        <div class="book-actions">
+                                            <button class="button button-primary btn-view">Locate</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="book-row">
+                                    <td class="book-cover-cell">
+                                        <img src="https://picsum.photos/60/80?random=202" alt="Book" class="book-cover">
+                                    </td>
+                                    <td class="book-details-cell">
+                                        <div class="book-title">
+                                            <a href="#">Marine Science for Pacific Islands</a>
+                                        </div>
+                                        <div class="book-metadata">2023-02-07, University of Hawaii</div>
+                                        <div class="book-description">Science, Grades 6-8, PDF Format - Limited Access</div>
+                                    </td>
+                                    <td class="book-actions-cell">
+                                        <div class="book-actions">
+                                            <button class="button btn-secondary" disabled>Request Access</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <details>
                             <summary>Show HTML</summary>
                             <pre><code>&lt;table class="books-table"&gt;
     &lt;thead&gt;
         &lt;tr&gt;
-            &lt;th style="width: 80px;"&gt;Cover&lt;/th&gt;
+            &lt;th style="width: 80px;"&gt;&lt;/th&gt;
             &lt;th class="sortable"&gt;Title/Edition &lt;span class="sort-arrow"&gt;&lt;/span&gt;&lt;/th&gt;
-            &lt;th class="sortable"&gt;Author(s) &lt;span class="sort-arrow"&gt;&lt;/span&gt;&lt;/th&gt;
-            &lt;th&gt;Subject&lt;/th&gt;
-            &lt;th&gt;Grade&lt;/th&gt;
-            &lt;th&gt;Language&lt;/th&gt;
-            &lt;th&gt;Access&lt;/th&gt;
+            &lt;th style="width: 120px;"&gt;Actions&lt;/th&gt;
         &lt;/tr&gt;
     &lt;/thead&gt;
     &lt;tbody&gt;
-        &lt;tr&gt;
-            &lt;td&gt;&lt;img src="cover.jpg" alt="Book cover" class="table-cover"&gt;&lt;/td&gt;
-            &lt;td&gt;
-                &lt;div class="book-title"&gt;The Sun Also Rises&lt;/div&gt;
-                &lt;div class="book-subtitle"&gt;Classic Literature Edition&lt;/div&gt;
+        &lt;tr class="book-row"&gt;
+            &lt;td class="book-cover-cell"&gt;
+                &lt;img src="book.jpg" alt="Book" class="book-cover"&gt;
             &lt;/td&gt;
-            &lt;td&gt;Ernest Hemingway&lt;/td&gt;
-            &lt;td&gt;English Literature&lt;/td&gt;
-            &lt;td&gt;9-12&lt;/td&gt;
-            &lt;td&gt;English&lt;/td&gt;
-            &lt;td&gt;&lt;span class="access-level full"&gt;Full Access&lt;/span&gt;&lt;/td&gt;
+            &lt;td class="book-details-cell"&gt;
+                &lt;div class="book-title"&gt;
+                    &lt;a href="#"&gt;Book Title&lt;/a&gt;
+                &lt;/div&gt;
+                &lt;div class="book-metadata"&gt;Date, Publisher&lt;/div&gt;
+                &lt;div class="book-description"&gt;Description&lt;/div&gt;
+            &lt;/td&gt;
+            &lt;td class="book-actions-cell"&gt;
+                &lt;div class="book-actions"&gt;
+                    &lt;button class="button button-primary btn-view"&gt;Locate&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
         &lt;/tr&gt;
     &lt;/tbody&gt;
 &lt;/table&gt;</code></pre>
                         </details>
 
                         <h3>Pagination</h3>
-                        <div class="ui-kit-example">
-                            <div class="pagination">
-                                <button class="pagination-btn nav-arrow" id="prevBtn">←</button>
-                                <button class="pagination-btn active">1</button>
-                                <button class="pagination-btn">2</button>
-                                <button class="pagination-btn">3</button>
-                                <button class="pagination-btn">4</button>
-                                <button class="pagination-btn">5</button>
-                                <button class="pagination-btn nav-arrow" id="nextBtn">→</button>
-                            </div>
+                        <div class="pagination">
+                            <button class="pagination-btn nav-arrow" disabled>←</button>
+                            <button class="pagination-btn active">1</button>
+                            <button class="pagination-btn">2</button>
+                            <button class="pagination-btn">3</button>
+                            <button class="pagination-btn">4</button>
+                            <button class="pagination-btn">5</button>
+                            <button class="pagination-btn nav-arrow">→</button>
                         </div>
-
                         <details>
                             <summary>Show HTML</summary>
                             <pre><code>&lt;div class="pagination"&gt;
-    &lt;button class="pagination-btn nav-arrow" id="prevBtn"&gt;←&lt;/button&gt;
+    &lt;button class="pagination-btn nav-arrow" disabled&gt;←&lt;/button&gt;
     &lt;button class="pagination-btn active"&gt;1&lt;/button&gt;
     &lt;button class="pagination-btn"&gt;2&lt;/button&gt;
     &lt;button class="pagination-btn"&gt;3&lt;/button&gt;
     &lt;button class="pagination-btn"&gt;4&lt;/button&gt;
     &lt;button class="pagination-btn"&gt;5&lt;/button&gt;
-    &lt;button class="pagination-btn nav-arrow" id="nextBtn"&gt;→&lt;/button&gt;
+    &lt;button class="pagination-btn nav-arrow"&gt;→&lt;/button&gt;
 &lt;/div&gt;</code></pre>
                         </details>
                     </section>
 
                     <!-- Navigation Section -->
-                    <section class="ui-kit-section" id="navigation">
+                    <section id="navigation" class="ui-section">
                         <h2>Navigation Elements</h2>
 
-                        <h3>Book Navigation Tabs</h3>
-                        <div class="ui-kit-example">
-                            <nav class="book-nav-tabs">
-                                <button class="book-nav-tab active" data-tab="overview">Overview</button>
-                                <button class="book-nav-tab" data-tab="details">Details</button>
-                                <button class="book-nav-tab" data-tab="reviews">Reviews</button>
-                                <button class="book-nav-tab" data-tab="editions">Other Versions</button>
-                            </nav>
+                        <h3>Module Toggle (Guide/Library)</h3>
+                        <div class="toggle-switch-container">
+                            <div class="toggle-switch">
+                                <button class="toggle-option active" data-module="guide">Resource guide</button>
+                                <button class="toggle-option" data-module="library">Resource library</button>
+                            </div>
                         </div>
-
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;nav class="book-nav-tabs"&gt;
-    &lt;button class="book-nav-tab active" data-tab="overview"&gt;Overview&lt;/button&gt;
-    &lt;button class="book-nav-tab" data-tab="details"&gt;Details&lt;/button&gt;
-    &lt;button class="book-nav-tab" data-tab="reviews"&gt;Reviews&lt;/button&gt;
-    &lt;button class="book-nav-tab" data-tab="editions"&gt;Other Versions&lt;/button&gt;
-&lt;/nav&gt;</code></pre>
+                            <pre><code>&lt;div class="toggle-switch-container"&gt;
+    &lt;div class="toggle-switch"&gt;
+        &lt;button class="toggle-option active" data-module="guide"&gt;Resource guide&lt;/button&gt;
+        &lt;button class="toggle-option" data-module="library"&gt;Resource library&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </details>
+
+                        <h3>Book Navigation Tabs</h3>
+                        <div class="book-nav-tabs">
+                            <button class="book-nav-tab active">Details</button>
+                            <button class="book-nav-tab">Reviews</button>
+                            <button class="book-nav-tab">Related</button>
+                            <button class="book-nav-tab">Editions</button>
+                        </div>
+                        <details>
+                            <summary>Show HTML</summary>
+                            <pre><code>&lt;div class="book-nav-tabs"&gt;
+    &lt;button class="book-nav-tab active"&gt;Details&lt;/button&gt;
+    &lt;button class="book-nav-tab"&gt;Reviews&lt;/button&gt;
+    &lt;button class="book-nav-tab"&gt;Related&lt;/button&gt;
+    &lt;button class="book-nav-tab"&gt;Editions&lt;/button&gt;
+&lt;/div&gt;</code></pre>
                         </details>
 
                         <h3>Breadcrumbs</h3>
-                        <div class="ui-kit-example">
-                            <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
-                                <span property="itemListElement" typeof="ListItem">
-                                    <a property="item" typeof="WebPage" title="Go to Home" href="/" class="main-home">
-                                        <span property="name">Library</span></a>
-                                    <meta property="position" content="1">
-                                </span>
-                                <span class="breadcrumb-separator"> › </span>
-                                <span property="itemListElement" typeof="ListItem">
-                                    <a property="item" typeof="WebPage" title="Go to Books" href="/books/">
-                                        <span property="name">Books</span></a>
-                                    <meta property="position" content="2">
-                                </span>
-                                <span class="breadcrumb-separator"> › </span>
-                                <span property="itemListElement" typeof="ListItem">
-                                    <span property="name">Current Page</span>
-                                    <meta property="position" content="3">
-                                </span>
-                            </div>
+                        <div class="breadcrumbs">
+                            <span property="itemListElement" typeof="ListItem">
+                                <a property="item" typeof="WebPage" href="/" class="main-home">
+                                    <span property="name">Home</span>
+                                </a> ›
+                            </span>
+                            <span property="itemListElement" typeof="ListItem">
+                                <a property="item" typeof="WebPage" href="/library">
+                                    <span property="name">Library</span>
+                                </a> ›
+                            </span>
+                            <span property="itemListElement" typeof="ListItem">
+                                <span property="name">Current Page</span>
+                            </span>
                         </div>
-
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/"&gt;
-    &lt;span property="itemListElement" typeof="ListItem"&gt;
-        &lt;a property="item" typeof="WebPage" href="/" class="main-home"&gt;
-            &lt;span property="name"&gt;Library&lt;/span&gt;&lt;/a&gt;
-        &lt;meta property="position" content="1"&gt;
-    &lt;/span&gt;
-    &lt;span class="breadcrumb-separator"&gt; › &lt;/span&gt;
-    &lt;span property="itemListElement" typeof="ListItem"&gt;
-        &lt;a property="item" typeof="WebPage" href="/books/"&gt;
-            &lt;span property="name"&gt;Books&lt;/span&gt;&lt;/a&gt;
-        &lt;meta property="position" content="2"&gt;
-    &lt;/span&gt;
+                            <pre><code>&lt;div class="breadcrumbs"&gt;
+    &lt;span&gt;&lt;a href="/"&gt;Home&lt;/a&gt; › &lt;/span&gt;
+    &lt;span&gt;&lt;a href="/library"&gt;Library&lt;/a&gt; › &lt;/span&gt;
+    &lt;span&gt;Current Page&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+                        </details>
+
+                        <h3>Language Selector</h3>
+                        <div class="language-selector-container">
+                            <button class="language-selector">
+                                <span class="language-code">ENG</span>
+                                <i class="fal fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <details>
+                            <summary>Show HTML</summary>
+                            <pre><code>&lt;div class="language-selector-container"&gt;
+    &lt;button class="language-selector"&gt;
+        &lt;span class="language-code"&gt;ENG&lt;/span&gt;
+        &lt;i class="fal fa-chevron-down"&gt;&lt;/i&gt;
+    &lt;/button&gt;
 &lt;/div&gt;</code></pre>
                         </details>
                     </section>
 
                     <!-- Feedback Section -->
-                    <section class="ui-kit-section" id="feedback">
+                    <section id="feedback" class="ui-section">
                         <h2>Feedback & Status</h2>
 
                         <h3>Star Ratings</h3>
-                        <div class="ui-kit-example">
-                            <div class="book-rating">
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star empty">★</span>
-                                </div>
-                                <div class="rating-text">4.2 (28 reviews) • 187 want to read • 34 currently reading • 52 have read</div>
-                            </div>
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">☆</span>
                         </div>
-
+                        <span class="rating-text">4.0 out of 5 (127 reviews)</span>
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="book-rating"&gt;
-    &lt;div class="stars"&gt;
-        &lt;span class="star"&gt;★&lt;/span&gt;
-        &lt;span class="star"&gt;★&lt;/span&gt;
-        &lt;span class="star"&gt;★&lt;/span&gt;
-        &lt;span class="star"&gt;★&lt;/span&gt;
-        &lt;span class="star empty"&gt;★&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class="rating-text"&gt;4.2 (28 reviews) • 187 want to read&lt;/div&gt;
+                            <pre><code>&lt;div class="stars"&gt;
+    &lt;span class="star"&gt;★&lt;/span&gt;
+    &lt;span class="star"&gt;★&lt;/span&gt;
+    &lt;span class="star"&gt;★&lt;/span&gt;
+    &lt;span class="star"&gt;★&lt;/span&gt;
+    &lt;span class="star empty"&gt;☆&lt;/span&gt;
+&lt;/div&gt;
+&lt;span class="rating-text"&gt;4.0 out of 5 (127 reviews)&lt;/span&gt;</code></pre>
+                        </details>
+
+                        <h3>Alert Messages</h3>
+                        <div class="login-message" style="margin: 20px 0;">
+                            Success! Your changes have been saved.
+                        </div>
+                        <div class="login-message login-error" style="margin: 20px 0;">
+                            Error: Invalid username or password.
+                        </div>
+                        <details>
+                            <summary>Show HTML</summary>
+                            <pre><code>&lt;div class="login-message"&gt;
+    Success! Your changes have been saved.
+&lt;/div&gt;
+
+&lt;div class="login-message login-error"&gt;
+    Error: Invalid username or password.
 &lt;/div&gt;</code></pre>
                         </details>
 
-                        <h3>Access Level Badges</h3>
-                        <div class="ui-kit-example">
-                            <span class="access-level full">Full Access</span>
-                            <span class="access-level limited">Limited Access</span>
-                            <span class="access-level unavailable">Unavailable</span>
+                        <h3>Empty State</h3>
+                        <div style="text-align: center; padding: 40px; background: #f5f5f5; border-radius: 8px;">
+                            <i class="fal fa-search" style="font-size: 48px; color: #ccc; margin-bottom: 20px; display: block;"></i>
+                            <h3>No results found</h3>
+                            <p>Try adjusting your search or filter criteria</p>
                         </div>
-
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;span class="access-level full"&gt;Full Access&lt;/span&gt;
-&lt;span class="access-level limited"&gt;Limited Access&lt;/span&gt;
-&lt;span class="access-level unavailable"&gt;Unavailable&lt;/span&gt;</code></pre>
+                            <pre><code>&lt;div style="text-align: center; padding: 40px;"&gt;
+    &lt;i class="fal fa-search" style="font-size: 48px;"&gt;&lt;/i&gt;
+    &lt;h3&gt;No results found&lt;/h3&gt;
+    &lt;p&gt;Try adjusting your search or filter criteria&lt;/p&gt;
+&lt;/div&gt;</code></pre>
                         </details>
                     </section>
 
                     <!-- Layout Section -->
-                    <section class="ui-kit-section" id="layout">
+                    <section id="layout" class="ui-section">
                         <h2>Layout & Utilities</h2>
 
-                        <h3>Grid System</h3>
-                        <div class="ui-kit-example">
-                            <p>The <code>.books-grid</code> class provides a responsive grid layout for book cards:</p>
-                            <div class="books-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                                <div style="background: var(--wp--preset--color--coe-light-green); padding: 20px; text-align: center; border-radius: 4px;">Grid Item 1</div>
-                                <div style="background: var(--wp--preset--color--coe-light-green); padding: 20px; text-align: center; border-radius: 4px;">Grid Item 2</div>
-                                <div style="background: var(--wp--preset--color--coe-light-green); padding: 20px; text-align: center; border-radius: 4px;">Grid Item 3</div>
-                                <div style="background: var(--wp--preset--color--coe-light-green); padding: 20px; text-align: center; border-radius: 4px;">Grid Item 4</div>
+                        <h3>Container Widths</h3>
+                        <div style="background: #f5f5f5; padding: 20px; margin: 10px 0;">
+                            <code>.container</code> - Max width: 1600px (var(--wp--style--global--content-size))
+                        </div>
+
+                        <h3>Spacing Scale</h3>
+                        <div class="spacing-examples">
+                            <div style="padding: var(--wp--preset--spacing--20); background: #f5f5f5; margin: 5px 0;">
+                                <code>--wp--preset--spacing--20</code> (0.44rem)
+                            </div>
+                            <div style="padding: var(--wp--preset--spacing--30); background: #f5f5f5; margin: 5px 0;">
+                                <code>--wp--preset--spacing--30</code> (0.67rem)
+                            </div>
+                            <div style="padding: var(--wp--preset--spacing--40); background: #f5f5f5; margin: 5px 0;">
+                                <code>--wp--preset--spacing--40</code> (1rem)
+                            </div>
+                            <div style="padding: var(--wp--preset--spacing--50); background: #f5f5f5; margin: 5px 0;">
+                                <code>--wp--preset--spacing--50</code> (1.5rem)
+                            </div>
+                            <div style="padding: var(--wp--preset--spacing--60); background: #f5f5f5; margin: 5px 0;">
+                                <code>--wp--preset--spacing--60</code> (2.25rem)
+                            </div>
+                        </div>
+
+                        <h3>Grid Layout (Book Cards)</h3>
+                        <div class="books-grid" style="max-width: 100%; overflow: auto;">
+                            <div style="flex: 0 0 280px; height: 100px; background: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                                Grid Item 1
+                            </div>
+                            <div style="flex: 0 0 280px; height: 100px; background: #e5e5e5; display: flex; align-items: center; justify-content: center;">
+                                Grid Item 2
+                            </div>
+                            <div style="flex: 0 0 280px; height: 100px; background: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                                Grid Item 3
+                            </div>
+                        </div>
+                        <details>
+                            <summary>Show HTML</summary>
+                            <pre><code>&lt;div class="books-grid"&gt;
+    &lt;div style="flex: 0 0 280px;"&gt;Grid Item&lt;/div&gt;
+    &lt;div style="flex: 0 0 280px;"&gt;Grid Item&lt;/div&gt;
+    &lt;div style="flex: 0 0 280px;"&gt;Grid Item&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </details>
+
+                        <h3>Shadows</h3>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                            <div style="width: 150px; height: 100px; background: white; box-shadow: var(--wp--preset--shadow--natural); padding: 20px;">
+                                Natural Shadow
+                            </div>
+                            <div style="width: 150px; height: 100px; background: white; box-shadow: var(--wp--preset--shadow--sharp); padding: 20px;">
+                                Sharp Shadow
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Modals Section -->
+                    <section id="modals" class="ui-section">
+                        <h2>Modals / Overlays</h2>
+
+                        <h3>Modal Example</h3>
+                        <button class="button button-primary" onclick="document.getElementById('demo-modal').style.display='flex';">
+                            Open Demo Modal
+                        </button>
+
+                        <!-- Demo Modal -->
+                        <div id="demo-modal" class="terms-modal" style="display: none;" onclick="if(event.target === this) this.style.display='none';">
+                            <div class="terms-modal-content">
+                                <div class="terms-modal-header">
+                                    <h2>Terms of Use</h2>
+                                    <span class="terms-close" onclick="document.getElementById('demo-modal').style.display='none';">&times;</span>
+                                </div>
+                                <div class="terms-modal-body">
+                                    <div class="terms-content">
+                                        <h3>Welcome to the Digital Library</h3>
+                                        <p>These terms govern your use of our educational resources.</p>
+                                        <h4>1. Acceptance of Terms</h4>
+                                        <p>By accessing this library, you agree to these terms.</p>
+                                        <h4>2. Educational Use</h4>
+                                        <p>All materials are for educational purposes only.</p>
+                                    </div>
+                                </div>
+                                <div class="terms-modal-footer">
+                                    <button class="terms-decline-btn" onclick="document.getElementById('demo-modal').style.display='none';">
+                                        Decline
+                                    </button>
+                                    <button class="terms-accept-btn" onclick="document.getElementById('demo-modal').style.display='none';">
+                                        Accept Terms
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         <details>
                             <summary>Show HTML</summary>
-                            <pre><code>&lt;div class="books-grid"&gt;
-    &lt;div&gt;Grid Item 1&lt;/div&gt;
-    &lt;div&gt;Grid Item 2&lt;/div&gt;
-    &lt;div&gt;Grid Item 3&lt;/div&gt;
-    &lt;div&gt;Grid Item 4&lt;/div&gt;
+                            <pre><code>&lt;div class="terms-modal"&gt;
+    &lt;div class="terms-modal-content"&gt;
+        &lt;div class="terms-modal-header"&gt;
+            &lt;h2&gt;Terms of Use&lt;/h2&gt;
+            &lt;span class="terms-close"&gt;&times;&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="terms-modal-body"&gt;
+            &lt;div class="terms-content"&gt;
+                &lt;h3&gt;Welcome&lt;/h3&gt;
+                &lt;p&gt;Content here...&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="terms-modal-footer"&gt;
+            &lt;button class="terms-decline-btn"&gt;Decline&lt;/button&gt;
+            &lt;button class="terms-accept-btn"&gt;Accept Terms&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
 &lt;/div&gt;</code></pre>
                         </details>
-
-                        <h3>Container Classes</h3>
-                        <div class="ui-kit-example">
-                            <p>Common layout container classes:</p>
-                            <ul>
-                                <li><code>.container</code> - Main content container with max-width</li>
-                                <li><code>.with_sidebar</code> - Layout with sidebar support</li>
-                                <li><code>.content</code> - Primary content area</li>
-                                <li><code>.main_content</code> - Central content wrapper</li>
-                            </ul>
-                        </div>
                     </section>
-
-                    <!-- Modals Section -->
-                    <section class="ui-kit-section" id="modals">
-                        <h2>Modals & Overlays</h2>
-
-                        <div class="ui-kit-example">
-                            <p>Modal functionality exists for Terms of Use. Example trigger:</p>
-                            <button class="button button-primary" onclick="alert('Modal would open here. Check existing JS for openTermsModal() function.')">Open Terms Modal</button>
-                        </div>
-
-                        <details>
-                            <summary>Show HTML</summary>
-                            <pre><code>&lt;button class="button button-primary" onclick="openTermsModal()"&gt;Open Terms Modal&lt;/button&gt;</code></pre>
-                        </details>
-
-                        <p><em>Note: Modal implementation exists in the existing JavaScript. Refer to the main.js file for complete modal functionality.</em></p>
-                    </section>
-
                 </div>
             </div>
         </div>
