@@ -85,9 +85,36 @@ h1, h2, h3, h4, h5, h6,
     overflow-x: hidden !important;
 }
 
+/* Sidebar Navigation - Remove List Styling */
+.fi-sidebar ul,
+.fi-sidebar ol,
+.fi-sidebar li {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.fi-sidebar-nav ul {
+    list-style-type: none !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+}
+
+.fi-sidebar-nav li {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 /* Sidebar Navigation Group */
 .fi-sidebar-group {
     margin-bottom: var(--mtdl-spacing-lg) !important;
+}
+
+.fi-sidebar-group ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .fi-sidebar-group-label {
@@ -103,6 +130,7 @@ h1, h2, h3, h4, h5, h6,
 /* Sidebar Items */
 .fi-sidebar-item {
     margin-bottom: 2px !important;
+    list-style: none !important;
 }
 
 .fi-sidebar-item a,
@@ -133,22 +161,45 @@ h1, h2, h3, h4, h5, h6,
     font-weight: 600 !important;
 }
 
-/* Sidebar Item Icons */
-.fi-sidebar-item .fi-icon,
-.fi-sidebar-item svg {
-    width: 20px !important;
-    height: 20px !important;
+/* Sidebar Item Icons - More Specific Selectors */
+.fi-sidebar .fi-sidebar-item .fi-icon,
+.fi-sidebar .fi-sidebar-item svg,
+.fi-sidebar .fi-sidebar-item-icon,
+.fi-sidebar .fi-sidebar-nav svg,
+.fi-sidebar .fi-sidebar-nav .fi-icon,
+.fi-sidebar nav svg,
+.fi-sidebar nav .fi-icon {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
     flex-shrink: 0 !important;
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
+/* Force icon sizing for all possible Filament icon classes */
+.fi-sidebar .heroicon,
+.fi-sidebar .heroicon-o,
+.fi-sidebar .heroicon-s,
+.fi-sidebar .heroicon-m,
+.fi-sidebar .tabler-icon {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+}
+
 .fi-sidebar-item:hover .fi-icon,
-.fi-sidebar-item:hover svg {
+.fi-sidebar-item:hover svg,
+.fi-sidebar:hover .heroicon {
     color: white !important;
 }
 
 .fi-sidebar-item-active .fi-icon,
-.fi-sidebar-item-active svg {
+.fi-sidebar-item-active svg,
+.fi-sidebar-item-active .heroicon {
     color: white !important;
 }
 
@@ -163,6 +214,21 @@ h1, h2, h3, h4, h5, h6,
 .fi-main {
     margin-left: 256px !important; /* Account for sidebar width */
     min-height: 100vh !important;
+    padding: var(--mtdl-spacing-2xl) !important;
+    background-color: #f9fafb !important;
+}
+
+/* Center content container */
+.fi-page {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 var(--mtdl-spacing-xl) !important;
+}
+
+/* Ensure proper content spacing */
+.fi-main > div {
+    max-width: 100% !important;
+    margin: 0 auto !important;
 }
 
 /* Top Bar */
@@ -182,9 +248,102 @@ h1, h2, h3, h4, h5, h6,
     height: 64px;
 }
 
+/* Topbar specific icon sizing */
+.fi-topbar .fi-icon,
+.fi-topbar svg,
+.fi-topbar .heroicon,
+.fi-topbar .heroicon-o,
+.fi-topbar .heroicon-s,
+.fi-topbar .heroicon-m {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+}
+
+/* User menu trigger icon */
+.fi-topbar .fi-user-menu .fi-icon,
+.fi-topbar .fi-user-menu svg {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* Notifications and other topbar icons */
+.fi-topbar .fi-notifications .fi-icon,
+.fi-topbar .fi-notifications svg,
+.fi-topbar .fi-global-search .fi-icon,
+.fi-topbar .fi-global-search svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
 /* Content wrapper adjustment */
 .fi-main-content {
     padding-top: 64px !important; /* Account for fixed topbar */
+}
+
+/* Sidebar Collapse Button */
+.fi-sidebar-close-btn,
+.fi-sidebar-collapse-btn,
+button[aria-label="Collapse sidebar"],
+button[title="Collapse sidebar"] {
+    position: absolute !important;
+    top: var(--mtdl-spacing-md) !important;
+    right: var(--mtdl-spacing-md) !important;
+    width: 32px !important;
+    height: 32px !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: var(--mtdl-radius-md) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+}
+
+.fi-sidebar-close-btn:hover,
+.fi-sidebar-collapse-btn:hover,
+button[aria-label="Collapse sidebar"]:hover,
+button[title="Collapse sidebar"]:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+}
+
+.fi-sidebar-close-btn svg,
+.fi-sidebar-collapse-btn svg,
+button[aria-label="Collapse sidebar"] svg,
+button[title="Collapse sidebar"] svg {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* Mobile toggle button in topbar */
+.fi-topbar .fi-sidebar-toggle,
+.fi-topbar button[aria-label="Open sidebar"],
+.fi-topbar button[title="Open sidebar"] {
+    background-color: var(--mtdl-color-gray-light) !important;
+    border: 1px solid var(--mtdl-color-gray) !important;
+    border-radius: var(--mtdl-radius-md) !important;
+    padding: var(--mtdl-spacing-sm) !important;
+    color: var(--mtdl-color-gray-dark) !important;
+    transition: all 0.2s ease !important;
+}
+
+.fi-topbar .fi-sidebar-toggle:hover,
+.fi-topbar button[aria-label="Open sidebar"]:hover {
+    background-color: var(--mtdl-color-primary-light) !important;
+    border-color: var(--mtdl-color-primary) !important;
+    color: var(--mtdl-color-primary) !important;
+}
+
+.fi-topbar .fi-sidebar-toggle svg {
+    width: 20px !important;
+    height: 20px !important;
 }
 
 /* Breadcrumbs */
@@ -483,8 +642,179 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* ==========================================
-   Icons
+   Global Icon Sizing - Universal Override
    ========================================== */
+
+/* Universal Icon Size Control - Override Filament's large icons */
+svg:not(.fi-avatar):not(.fi-logo),
+.fi-icon:not(.fi-avatar):not(.fi-logo),
+.heroicon:not(.fi-avatar):not(.fi-logo),
+.heroicon-o:not(.fi-avatar):not(.fi-logo),
+.heroicon-s:not(.fi-avatar):not(.fi-logo),
+.heroicon-m:not(.fi-avatar):not(.fi-logo) {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+}
+
+/* Main Content Area Icons */
+.fi-main .fi-icon,
+.fi-main svg,
+.fi-main .heroicon,
+.fi-main .heroicon-o,
+.fi-main .heroicon-s,
+.fi-main .heroicon-m,
+.fi-topbar .fi-icon,
+.fi-topbar svg,
+.fi-topbar .heroicon {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+}
+
+/* User Avatar - Should be larger but controlled */
+.fi-avatar,
+.fi-user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    border-radius: var(--mtdl-radius-full) !important;
+    background-color: var(--mtdl-color-primary) !important;
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: var(--mtdl-font-size-sm) !important;
+    font-weight: 600 !important;
+}
+
+/* User Menu in Sidebar */
+.fi-sidebar .fi-user-menu,
+.fi-sidebar .fi-avatar-wrapper {
+    position: absolute !important;
+    bottom: var(--mtdl-spacing-lg) !important;
+    left: var(--mtdl-spacing-lg) !important;
+    right: var(--mtdl-spacing-lg) !important;
+}
+
+/* Move user avatar to sidebar bottom */
+.fi-topbar .fi-user-menu,
+.fi-topbar .fi-avatar-wrapper,
+.fi-topbar .fi-user-avatar {
+    display: none !important; /* Hide from topbar */
+}
+
+/* User menu in sidebar footer */
+.fi-sidebar-footer {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding: var(--mtdl-spacing-lg) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background-color: var(--mtdl-color-secondary-dark) !important;
+}
+
+.fi-sidebar-footer .fi-user-menu {
+    width: 100% !important;
+}
+
+/* Fix user dropdown panel positioning */
+.fi-dropdown-panel[x-cloak] {
+    display: none !important;
+}
+
+.fi-dropdown-panel {
+    position: fixed !important;
+    left: 270px !important; /* Just to the right of sidebar */
+    bottom: 100px !important; /* Above the user menu */
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    z-index: var(--mtdl-z-popover) !important;
+    background-color: white !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: var(--mtdl-radius-lg) !important;
+    box-shadow: var(--mtdl-shadow-xl) !important;
+    padding: var(--mtdl-spacing-md) !important;
+    min-width: 200px !important;
+}
+
+/* User dropdown menu items */
+.fi-dropdown-list-item {
+    padding: var(--mtdl-spacing-sm) var(--mtdl-spacing-md) !important;
+    border-radius: var(--mtdl-radius-sm) !important;
+    color: var(--mtdl-color-gray-dark) !important;
+    transition: all var(--mtdl-transition-fast) ease !important;
+}
+
+.fi-dropdown-list-item:hover {
+    background-color: var(--mtdl-color-gray-light) !important;
+    color: var(--mtdl-color-primary) !important;
+}
+
+.fi-sidebar-footer .fi-avatar {
+    margin-right: var(--mtdl-spacing-sm) !important;
+}
+
+/* Dropdown Icons */
+.fi-dropdown .fi-icon,
+.fi-dropdown svg,
+.fi-dropdown .heroicon {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+}
+
+/* Button Icons */
+.fi-btn .fi-icon,
+.fi-btn svg,
+.fi-btn .heroicon {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+}
+
+/* Table Icons */
+.fi-ta .fi-icon,
+.fi-ta svg,
+.fi-ta .heroicon {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+}
+
+/* Form Icons */
+.fi-fo .fi-icon,
+.fi-fo svg,
+.fi-fo .heroicon {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+}
+
+/* Generic Icon Colors */
 .fi-icon {
     color: var(--mtdl-color-gray);
 }
