@@ -39,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->font('system-ui')           // Start with system font
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->login()
+            // ->login()  // Commented out for testing
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -62,15 +62,15 @@ class AdminPanelProvider extends PanelProvider
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
-                AuthenticateSession::class,
+                // AuthenticateSession::class,  // Commented out for testing
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-            ])
-            ->authMiddleware([
-                Authenticate::class,
             ]);
+            // ->authMiddleware([         // Commented out for testing
+            //     Authenticate::class,
+            // ]);
     }
 }
