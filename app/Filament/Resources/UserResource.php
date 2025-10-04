@@ -69,13 +69,6 @@ class UserResource extends Resource
                             ->label('Active')
                             ->default(true)
                             ->helperText('Active users can log in'),
-
-                        Select::make('cms_roles')
-                            ->label('CMS Roles')
-                            ->multiple()
-                            ->relationship('cmsRoles', 'display_name')
-                            ->options(CmsRole::where('is_active', true)->pluck('display_name', 'id'))
-                            ->helperText('Assign CMS roles to this user'),
                     ])->columns(2),
 
                 Section::make('Password')
@@ -157,18 +150,10 @@ class UserResource extends Resource
                     ->label('Assign Role')
                     ->icon('heroicon-o-user-plus')
                     ->form([
-                        Select::make('role_id')
-                            ->label('Role')
-                            ->options(CmsRole::where('is_active', true)->pluck('display_name', 'id'))
-                            ->required(),
                         Forms\Components\DatePicker::make('expires_at')
                             ->label('Expires At')
                             ->helperText('Leave empty for permanent assignment'),
-                    ])
-                    ->action(function (User $record, array $data) {
-                        $role = CmsRole::find($data['role_id']);
-                        $record->assignCmsRole($role, auth()->user(), $data['expires_at'] ? now()->parse($data['expires_at']) : null);
-                    }),
+                    ]),
 
                 Tables\Actions\EditAction::make(),
 
@@ -199,10 +184,5 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
-    }
-
-    public static function canAccess(): bool
-    {
-        return auth()->user()?->hasCmsPermission('cms.users.view') ?? false;
     }
 }
