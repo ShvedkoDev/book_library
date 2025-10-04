@@ -5,11 +5,85 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Basic styling to prevent console errors */
-:root {
-    --primary-50: #f0fdf4;
-    --primary-500: #22c55e;
-    --primary-600: #16a34a;
-    --primary-700: #15803d;
-    --primary-900: #14532d;
+/* ==========================================
+   Filament Primary Button Overrides - Exact UI Kit Submit Button Style
+   ========================================== */
+
+/* Base button styling - exact from UI Kit styles.css */
+.fi-btn,
+.fi-btn-primary,
+.fi-ac-btn-action,
+button[type="submit"],
+input[type="submit"] {
+    /* Exact WordPress button styling from UI Kit */
+    display: inline-block !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    line-height: 2.15384615 !important;
+    min-height: 30px !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    cursor: pointer !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-radius: 3px !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
+    font-weight: 400 !important;
+}
+
+/* Primary button specific styling - exact from UI Kit submit button */
+.fi-btn-primary,
+.fi-ac-btn-action,
+button[type="submit"],
+input[type="submit"],
+.button-primary {
+    background: #005a70 !important;
+    border-color: #005a70 !important;
+    color: #fff !important;
+    text-shadow: none !important;
+}
+
+/* Primary button hover state - exact from UI Kit submit button */
+.fi-btn-primary:hover,
+.fi-ac-btn-action:hover,
+button[type="submit"]:hover,
+input[type="submit"]:hover,
+.button-primary:hover {
+    background: #003b49 !important;
+    border-color: #003b49 !important;
+    color: #fff !important;
+}
+
+/* Primary button focus state - exact from UI Kit submit button */
+.fi-btn-primary:focus,
+.fi-ac-btn-action:focus,
+button[type="submit"]:focus,
+input[type="submit"]:focus,
+.button-primary:focus {
+    background: #003b49 !important;
+    border-color: #003b49 !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 1px #005a70 !important;
+    outline: 2px solid transparent !important;
+}
+
+/* Large button variant - exact from UI Kit button-large class */
+.fi-btn-lg,
+.button-large,
+input[type="submit"].button-large,
+.fi-btn-primary.fi-btn-lg,
+.fi-ac-btn-action.fi-btn-lg {
+    height: 30px !important;
+    line-height: 2 !important;
+    padding: 0 12px !important;
+    font-size: 14px !important;
+}
+
+/* Ensure proper styling for Filament form submit buttons */
+.fi-form .fi-btn-primary,
+.fi-form button[type="submit"],
+.fi-fo-actions .fi-btn {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
 }
