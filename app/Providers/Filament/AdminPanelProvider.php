@@ -32,10 +32,14 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->brandName('Micronesian Teachers Digital Library')
             ->colors([
-                'primary' => Color::Emerald,
+                'primary' => '#009877',    // COE green
+                'secondary' => '#005a70',  // COE blue
             ])
+            ->font('system-ui')           // Start with system font
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->login()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -50,7 +54,7 @@ class AdminPanelProvider extends PanelProvider
                 DownloadsChartWidget::class,
                 RecentActivityWidget::class,
                 PopularBooksWidget::class,
-                
+
                 // Default Widgets
                 Widgets\AccountWidget::class,
             ])
