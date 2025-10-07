@@ -34,10 +34,15 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('Micronesian Teachers Digital Library')
             ->colors([
-                'primary' => '#009877',    // COE green
-                'secondary' => '#005a70',  // COE blue
+                'primary' => Color::hex('#009877'),    // COE green
+                'secondary' => Color::hex('#005a70'),  // COE blue
+                'danger' => Color::Red,
+                'gray' => Color::Gray,
+                'success' => Color::Green,
+                'warning' => Color::Orange,
+                'info' => Color::Blue,
             ])
-            ->font('system-ui')           // Start with system font
+            ->font('"proxima-nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif')           // Start with system font
             ->viteTheme('resources/css/filament/admin/theme.css')
             // ->login()  // Commented out for testing
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
@@ -56,7 +61,7 @@ class AdminPanelProvider extends PanelProvider
                 PopularBooksWidget::class,
 
                 // Default Widgets
-                Widgets\AccountWidget::class,
+                // Widgets\AccountWidget::class,  // Disabled - requires authenticated user
             ])
             ->middleware([
                 EncryptCookies::class,

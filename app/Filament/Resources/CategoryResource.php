@@ -16,7 +16,7 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = "CMS";
+    protected static ?string $navigationGroup = "Library";
     public static function form(Form $form): Form
     {
         return $form
@@ -24,24 +24,24 @@ class CategoryResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(100),
-                    
+
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(100),
-                    
+
                 Forms\Components\Textarea::make('description')
                     ->rows(3),
-                    
+
                 Forms\Components\Select::make('parent_id')
                     ->label('Parent Category')
                     ->options(Category::all()->pluck('name', 'id'))
                     ->searchable(),
-                    
+
                 Forms\Components\TextInput::make('sort_order')
                     ->numeric()
                     ->default(0),
-                    
+
                 Forms\Components\Toggle::make('is_active')
                     ->default(true),
             ]);
@@ -54,19 +54,19 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
-                    
+
                 Tables\Columns\TextColumn::make('parent.name')
                     ->label('Parent Category')
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('sort_order')
                     ->sortable(),
-                    
+
                 Tables\Columns\ToggleColumn::make('is_active'),
-                    
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
