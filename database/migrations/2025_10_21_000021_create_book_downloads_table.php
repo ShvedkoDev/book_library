@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_keywords', function (Blueprint $table) {
+        Schema::create('book_downloads', function (Blueprint $table) {
             $table->id();
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
-            $table->string('keyword', 100);
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('ip_address', 45)->nullable();
+            $table->string('user_agent', 255)->nullable();
             $table->timestamps();
 
-            $table->index(['keyword']);
-            $table->index(['book_id', 'keyword']);
+            $table->index(['book_id', 'created_at']);
+            $table->index(['user_id']);
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_keywords');
+        Schema::dropIfExists('book_downloads');
     }
 };

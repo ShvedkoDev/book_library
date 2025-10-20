@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_ratings', function (Blueprint $table) {
+        Schema::create('book_reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->tinyInteger('rating')->unsigned()->between(1, 5);
+            $table->text('review');
+            $table->boolean('is_approved')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
 
-            $table->unique(['book_id', 'user_id']);
-            $table->index(['rating']);
+            $table->index(['book_id', 'is_approved', 'is_active']);
+            $table->index(['user_id']);
         });
     }
 
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_ratings');
+        Schema::dropIfExists('book_reviews');
     }
 };

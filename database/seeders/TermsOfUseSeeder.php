@@ -31,7 +31,6 @@ class TermsOfUseSeeder extends Seeder
             [
                 'user_id' => 1, // Admin
                 'terms_version_id' => 1,
-                'accepted_at' => now()->subDays(30),
                 'ip_address' => '192.168.1.1',
                 'created_at' => now()->subDays(30),
                 'updated_at' => now()->subDays(30),
@@ -39,7 +38,6 @@ class TermsOfUseSeeder extends Seeder
             [
                 'user_id' => 2, // Teacher Maria
                 'terms_version_id' => 1,
-                'accepted_at' => now()->subDays(25),
                 'ip_address' => '192.168.1.2',
                 'created_at' => now()->subDays(25),
                 'updated_at' => now()->subDays(25),
@@ -47,7 +45,6 @@ class TermsOfUseSeeder extends Seeder
             [
                 'user_id' => 3, // Educator John
                 'terms_version_id' => 1,
-                'accepted_at' => now()->subDays(20),
                 'ip_address' => '192.168.1.3',
                 'created_at' => now()->subDays(20),
                 'updated_at' => now()->subDays(20),

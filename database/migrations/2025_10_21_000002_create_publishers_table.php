@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('authors', function (Blueprint $table) {
+        Schema::create('publishers', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
-            $table->text('biography')->nullable();
-            $table->integer('birth_year')->nullable();
-            $table->integer('death_year')->nullable();
-            $table->string('nationality', 100)->nullable();
+            $table->string('program_name', 255)->nullable()->comment('Contributor / Project / Partner');
+            $table->text('address')->nullable();
             $table->string('website', 255)->nullable();
+            $table->string('contact_email', 255)->nullable();
+            $table->integer('established_year')->nullable();
             $table->timestamps();
 
-            $table->fullText(['name', 'biography']);
+            $table->index(['name']);
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('authors');
+        Schema::dropIfExists('publishers');
     }
 };

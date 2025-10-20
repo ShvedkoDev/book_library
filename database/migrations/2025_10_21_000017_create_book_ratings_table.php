@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_identifiers', function (Blueprint $table) {
+        Schema::create('book_ratings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
-            $table->enum('identifier_type', ['doi', 'oclc', 'lccn', 'other']);
-            $table->string('identifier_value', 255);
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->tinyInteger('rating')->comment('1-5 stars');
             $table->timestamps();
 
-            $table->unique(['book_id', 'identifier_type', 'identifier_value']);
+            $table->unique(['book_id', 'user_id']);
+            $table->index(['book_id']);
+            $table->index(['user_id']);
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_identifiers');
+        Schema::dropIfExists('book_ratings');
     }
 };

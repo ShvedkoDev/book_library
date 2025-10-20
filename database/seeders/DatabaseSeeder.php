@@ -12,15 +12,22 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            // Core reference tables
             LanguageSeeder::class,
-            CategorySeeder::class,
-            AuthorSeeder::class,
             PublisherSeeder::class,
             CollectionSeeder::class,
+            CreatorSeeder::class,
+            ClassificationTypeSeeder::class,
+            ClassificationValueSeeder::class,
+            GeographicLocationSeeder::class,
+
+            // User management
             UserSeeder::class,
             TermsOfUseSeeder::class,
-            BookSeeder::class,
-            BookInteractionsSeeder::class,
+
+            // Books and interactions will be added later
+            // BookSeeder::class,
+            // BookInteractionsSeeder::class,
         ]);
     }
 }

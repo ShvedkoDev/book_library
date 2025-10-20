@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('publishers', function (Blueprint $table) {
+        Schema::create('terms_of_use_versions', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
-            $table->text('address')->nullable();
-            $table->string('website', 255)->nullable();
-            $table->string('contact_email', 255)->nullable();
-            $table->integer('established_year')->nullable();
+            $table->string('version', 20);
+            $table->text('content');
+            $table->date('effective_date');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            $table->index(['is_active', 'effective_date']);
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('publishers');
+        Schema::dropIfExists('terms_of_use_versions');
     }
 };

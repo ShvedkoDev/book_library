@@ -11,17 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('classification_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
+            $table->string('name', 100)->comment('e.g., Purpose, Genre, Type, Learner Level');
             $table->string('slug', 100)->unique();
             $table->text('description')->nullable();
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
+            $table->boolean('allow_multiple')->default(true)->comment('Can book have multiple values?');
+            $table->boolean('use_for_filtering')->default(true)->comment('Show in filter UI?');
             $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
-            $table->index(['parent_id', 'is_active']);
+            $table->index(['is_active', 'sort_order']);
         });
     }
 
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('classification_types');
     }
 };

@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_authors', function (Blueprint $table) {
+        Schema::create('book_keywords', function (Blueprint $table) {
             $table->id();
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
-            $table->foreignId('author_id')->constrained('authors')->onDelete('cascade');
-            $table->enum('role', ['author', 'co-author', 'editor', 'translator'])->default('author');
-            $table->integer('sort_order')->default(0);
+            $table->string('keyword', 100)->comment('CSV: Keywords');
             $table->timestamps();
 
-            $table->unique(['book_id', 'author_id', 'role']);
+            $table->index(['keyword']);
+            $table->index(['book_id', 'keyword']);
+            $table->index(['book_id']);
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_authors');
+        Schema::dropIfExists('book_keywords');
     }
 };

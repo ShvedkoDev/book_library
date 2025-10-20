@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_terms_acceptance', function (Blueprint $table) {
+        Schema::create('book_views', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('terms_version_id')->constrained('terms_of_use_versions')->onDelete('cascade');
-            $table->timestamp('accepted_at');
+            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('ip_address', 45)->nullable();
+            $table->string('user_agent', 255)->nullable();
             $table->timestamps();
 
-            $table->unique(['user_id', 'terms_version_id']);
+            $table->index(['book_id', 'created_at']);
+            $table->index(['user_id']);
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_terms_acceptance');
+        Schema::dropIfExists('book_views');
     }
 };

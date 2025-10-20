@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_bookmarks', function (Blueprint $table) {
+        Schema::create('user_terms_acceptance', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('terms_version_id')->constrained('terms_of_use_versions')->onDelete('cascade');
+            $table->string('ip_address', 45)->nullable();
             $table->timestamps();
 
-            $table->unique(['book_id', 'user_id']);
+            $table->unique(['user_id', 'terms_version_id']);
+            $table->index(['user_id']);
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_bookmarks');
+        Schema::dropIfExists('user_terms_acceptance');
     }
 };

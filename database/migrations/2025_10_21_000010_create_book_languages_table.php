@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_reviews', function (Blueprint $table) {
+        Schema::create('book_languages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->text('review_text');
-            $table->boolean('is_approved')->default(false);
-            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->timestamp('approved_at')->nullable();
+            $table->foreignId('language_id')->constrained('languages')->onDelete('cascade');
+            $table->boolean('is_primary')->default(false)->comment('Distinguishes Language 1 vs Language 2');
             $table->timestamps();
 
-            $table->index(['is_approved']);
+            $table->unique(['book_id', 'language_id']);
+            $table->index(['book_id']);
+            $table->index(['language_id', 'is_primary'], 'idx_language_primary');
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_reviews');
+        Schema::dropIfExists('book_languages');
     }
 };
