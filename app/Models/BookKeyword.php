@@ -5,22 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BookRating extends Model
+class BookKeyword extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'book_id',
-        'user_id',
-        'rating',
+        'keyword',
     ];
 
     protected function casts(): array
     {
         return [
             'book_id' => 'integer',
-            'user_id' => 'integer',
-            'rating' => 'integer',
         ];
     }
 
@@ -31,20 +28,10 @@ class BookRating extends Model
         return $this->belongsTo(Book::class);
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     // Scopes
 
-    public function scopeByRating($query, $rating)
+    public function scopeSearch($query, $term)
     {
-        return $query->where('rating', $rating);
-    }
-
-    public function scopeMinRating($query, $minRating)
-    {
-        return $query->where('rating', '>=', $minRating);
+        return $query->where('keyword', 'like', "%{$term}%");
     }
 }

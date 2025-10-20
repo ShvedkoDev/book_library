@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Collection extends Model
+class ClassificationType extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
+        'slug',
         'description',
-        'is_series',
+        'allow_multiple',
+        'use_for_filtering',
         'sort_order',
         'is_active',
     ];
@@ -20,7 +22,8 @@ class Collection extends Model
     protected function casts(): array
     {
         return [
-            'is_series' => 'boolean',
+            'allow_multiple' => 'boolean',
+            'use_for_filtering' => 'boolean',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];
@@ -28,9 +31,14 @@ class Collection extends Model
 
     // Relationships
 
-    public function books()
+    public function classificationValues()
     {
-        return $this->hasMany(Book::class);
+        return $this->hasMany(ClassificationValue::class);
+    }
+
+    public function activeValues()
+    {
+        return $this->hasMany(ClassificationValue::class)->where('is_active', true);
     }
 
     // Scopes
@@ -40,13 +48,18 @@ class Collection extends Model
         return $query->where('is_active', true);
     }
 
-    public function scopeSeries($query)
+    public function scopeForFiltering($query)
     {
-        return $query->where('is_series', true);
+        return $query->where('use_for_filtering', true);
     }
 
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order');
+    }
+
+    public function scopeBySlug($query, $slug)
+    {
+        return $query->where('slug', $slug);
     }
 }

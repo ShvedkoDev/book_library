@@ -6,7 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -16,27 +15,21 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
-        'first_name',
-        'last_name',
         'email',
         'password',
-        'bio',
         'avatar',
-        'phone',
-        'department',
-        'is_cms_user',
-        'cms_preferences',
+        'role',
         'is_active',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -53,51 +46,74 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_cms_user' => 'boolean',
             'is_active' => 'boolean',
-            'last_cms_access' => 'datetime',
-            'cms_preferences' => 'array',
         ];
     }
 
-    /**
-     * Get user's full name
-     */
-    public function getFullNameAttribute(): string
-    {
-        if ($this->first_name && $this->last_name) {
-            return "{$this->first_name} {$this->last_name}";
-        }
+    // Relationships
 
-        return $this->name;
+    public function bookmarks()
+    {
+        return $this->hasMany(BookBookmark::class);
     }
 
-    /**
-     * Get user's initials
-     */
-    public function getInitialsAttribute(): string
+    public function ratings()
     {
-        $name = $this->full_name;
-        $nameParts = explode(' ', $name);
-
-        if (count($nameParts) >= 2) {
-            return strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1));
-        }
-
-        return strtoupper(substr($name, 0, 2));
+        return $this->hasMany(BookRating::class);
     }
 
-    /**
-     * Get user's avatar URL
-     */
-    public function getAvatarUrlAttribute(): string
+    public function reviews()
     {
-        if ($this->avatar) {
-            return Storage::url($this->avatar);
-        }
-
-        // Generate avatar using initials
-        return "https://ui-avatars.com/api/?name={$this->initials}&size=100&background=0D47A1&color=fff";
+        return $this->hasMany(BookReview::class);
     }
 
+    public function views()
+    {
+        return $this->hasMany(BookView::class);
+    }
+
+    public function downloads()
+    {
+        return $this->hasMany(BookDownload::class);
+    }
+
+    public function termsAcceptances()
+    {
+        return $this->hasMany(UserTermsAcceptance::class);
+    }
+
+    // Scopes
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeAdmins($query)
+    {
+        return $query->where('role', 'admin');
+    }
+
+    public function scopeRegularUsers($query)
+    {
+        return $query->where('role', 'user');
+    }
+
+    // Helper Methods
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function hasAcceptedTerms($versionId = null)
+    {
+        $query = $this->termsAcceptances();
+
+        if ($versionId) {
+            $query->where('terms_version_id', $versionId);
+        }
+
+        return $query->exists();
+    }
 }

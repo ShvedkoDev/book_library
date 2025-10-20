@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BookDownload extends Model
+class BookBookmark extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'book_id',
         'user_id',
-        'ip_address',
-        'user_agent',
     ];
 
     protected function casts(): array
@@ -43,18 +41,8 @@ class BookDownload extends Model
         return $query->where('user_id', $userId);
     }
 
-    public function scopeByIp($query, $ip)
+    public function scopeRecent($query, $limit = 10)
     {
-        return $query->where('ip_address', $ip);
-    }
-
-    public function scopeToday($query)
-    {
-        return $query->whereDate('created_at', today());
-    }
-
-    public function scopeLastDays($query, $days = 7)
-    {
-        return $query->where('created_at', '>=', now()->subDays($days));
+        return $query->orderBy('created_at', 'desc')->limit($limit);
     }
 }

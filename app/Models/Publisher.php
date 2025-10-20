@@ -2,25 +2,46 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Publisher extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'name',
+        'program_name',
         'address',
         'website',
         'contact_email',
-        'established_year'
+        'established_year',
     ];
 
-    protected $casts = [
-        'established_year' => 'integer'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'established_year' => 'integer',
+        ];
+    }
 
-    public function books(): HasMany
+    // Relationships
+
+    public function books()
     {
         return $this->hasMany(Book::class);
+    }
+
+    // Scopes
+
+    public function scopeWithProgram($query)
+    {
+        return $query->whereNotNull('program_name');
+    }
+
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('name', 'like', "%{$term}%")
+            ->orWhere('program_name', 'like', "%{$term}%");
     }
 }

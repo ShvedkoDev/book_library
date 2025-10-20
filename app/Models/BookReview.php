@@ -2,37 +2,67 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BookReview extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'book_id',
         'user_id',
-        'review_text',
+        'review',
         'is_approved',
-        'approved_by',
-        'approved_at'
+        'is_active',
     ];
 
-    protected $casts = [
-        'is_approved' => 'boolean',
-        'approved_at' => 'timestamp'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'book_id' => 'integer',
+            'user_id' => 'integer',
+            'is_approved' => 'boolean',
+            'is_active' => 'boolean',
+        ];
+    }
 
-    public function book(): BelongsTo
+    // Relationships
+
+    public function book()
     {
         return $this->belongsTo(Book::class);
     }
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function approver(): BelongsTo
+    // Scopes
+
+    public function scopeApproved($query)
     {
-        return $this->belongsTo(User::class, 'approved_by');
+        return $query->where('is_approved', true);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_approved', true)->where('is_active', true);
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('is_approved', false);
+    }
+
+    public function scopeRecent($query, $limit = 10)
+    {
+        return $query->orderBy('created_at', 'desc')->limit($limit);
     }
 }

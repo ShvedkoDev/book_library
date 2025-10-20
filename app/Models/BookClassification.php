@@ -5,22 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BookRating extends Model
+class BookClassification extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'book_id',
-        'user_id',
-        'rating',
+        'classification_value_id',
     ];
 
     protected function casts(): array
     {
         return [
             'book_id' => 'integer',
-            'user_id' => 'integer',
-            'rating' => 'integer',
+            'classification_value_id' => 'integer',
         ];
     }
 
@@ -31,20 +29,17 @@ class BookRating extends Model
         return $this->belongsTo(Book::class);
     }
 
-    public function user()
+    public function classificationValue()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(ClassificationValue::class);
     }
 
     // Scopes
 
-    public function scopeByRating($query, $rating)
+    public function scopeOfType($query, $typeSlug)
     {
-        return $query->where('rating', $rating);
-    }
-
-    public function scopeMinRating($query, $minRating)
-    {
-        return $query->where('rating', '>=', $minRating);
+        return $query->whereHas('classificationValue.classificationType', function ($q) use ($typeSlug) {
+            $q->where('slug', $typeSlug);
+        });
     }
 }
