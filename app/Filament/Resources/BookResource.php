@@ -51,33 +51,23 @@ class BookResource extends Resource
                     
                 Forms\Components\Section::make('Publishing Details')
                     ->schema([
-                        Forms\Components\Select::make('language_id')
-                            ->label('Language')
-                            ->relationship('language', 'name')
-                            ->required()
-                            ->searchable()
-                            ->preload(),
-                            
                         Forms\Components\Select::make('publisher_id')
                             ->label('Publisher')
                             ->relationship('publisher', 'name')
                             ->searchable()
                             ->preload(),
-                            
+
                         Forms\Components\Select::make('collection_id')
                             ->label('Collection')
                             ->relationship('collection', 'name')
                             ->searchable()
                             ->preload(),
-                            
+
                         Forms\Components\TextInput::make('publication_year')
                             ->numeric()
                             ->minValue(1000)
                             ->maxValue(date('Y')),
-                            
-                        Forms\Components\TextInput::make('edition')
-                            ->maxLength(50),
-                            
+
                         Forms\Components\TextInput::make('pages')
                             ->numeric()
                             ->minValue(1),
@@ -130,14 +120,22 @@ class BookResource extends Resource
                     
                 Forms\Components\Section::make('Relationships')
                     ->schema([
-                        Forms\Components\Select::make('authors')
-                            ->relationship('authors', 'name')
+                        Forms\Components\Select::make('languages')
+                            ->relationship('languages', 'name')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+
+                        Forms\Components\Select::make('creators')
+                            ->relationship('creators', 'name')
                             ->multiple()
                             ->searchable()
                             ->preload(),
-                            
-                        Forms\Components\Select::make('categories')
-                            ->relationship('categories', 'name')
+
+                        Forms\Components\Select::make('geographicLocations')
+                            ->label('Geographic Locations')
+                            ->relationship('geographicLocations', 'name')
                             ->multiple()
                             ->searchable()
                             ->preload(),
@@ -159,13 +157,16 @@ class BookResource extends Resource
                     ->sortable()
                     ->limit(50),
                     
-                Tables\Columns\TextColumn::make('authors.name')
+                Tables\Columns\TextColumn::make('creators.name')
                     ->badge()
                     ->separator(',')
-                    ->limit(30),
-                    
-                Tables\Columns\TextColumn::make('language.name')
-                    ->sortable(),
+                    ->limit(30)
+                    ->label('Creators'),
+
+                Tables\Columns\TextColumn::make('languages.name')
+                    ->badge()
+                    ->separator(',')
+                    ->label('Languages'),
                     
                 Tables\Columns\SelectColumn::make('access_level')
                     ->options([
@@ -187,18 +188,29 @@ class BookResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('language')
-                    ->relationship('language', 'name'),
-                    
+                Tables\Filters\SelectFilter::make('languages')
+                    ->relationship('languages', 'name')
+                    ->multiple()
+                    ->preload(),
+
+                Tables\Filters\SelectFilter::make('publisher')
+                    ->relationship('publisher', 'name')
+                    ->searchable()
+                    ->preload(),
+
                 Tables\Filters\SelectFilter::make('access_level')
                     ->options([
                         'full' => 'Full Access',
                         'limited' => 'Limited Access',
                         'unavailable' => 'Unavailable'
-                    ]),
-                    
-                Tables\Filters\TernaryFilter::make('is_featured'),
-                Tables\Filters\TernaryFilter::make('is_active'),
+                    ])
+                    ->multiple(),
+
+                Tables\Filters\TernaryFilter::make('is_featured')
+                    ->label('Featured'),
+
+                Tables\Filters\TernaryFilter::make('is_active')
+                    ->label('Active'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
