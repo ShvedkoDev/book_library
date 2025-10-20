@@ -32,10 +32,19 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->brandName('Micronesian Teachers Digital Library')
             ->colors([
-                'primary' => Color::Emerald,
+                'primary' => Color::hex('#009877'),    // COE green
+                'secondary' => Color::hex('#005a70'),  // COE blue
+                'danger' => Color::Red,
+                'gray' => Color::Gray,
+                'success' => Color::Green,
+                'warning' => Color::Orange,
+                'info' => Color::Blue,
             ])
+            ->font('"proxima-nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif')           // Start with system font
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            // ->login()  // Commented out for testing
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -50,23 +59,23 @@ class AdminPanelProvider extends PanelProvider
                 DownloadsChartWidget::class,
                 RecentActivityWidget::class,
                 PopularBooksWidget::class,
-                
+
                 // Default Widgets
-                Widgets\AccountWidget::class,
+                // Widgets\AccountWidget::class,  // Disabled - requires authenticated user
             ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
-                AuthenticateSession::class,
+                // AuthenticateSession::class,  // Commented out for testing
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-            ])
-            ->authMiddleware([
-                Authenticate::class,
             ]);
+            // ->authMiddleware([         // Commented out for testing
+            //     Authenticate::class,
+            // ]);
     }
 }

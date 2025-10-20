@@ -1,0 +1,128 @@
+/* ==========================================
+   CSS Variables / Design Tokens - MTDL UI Kit
+   ========================================== */
+:root {
+    /* Typography */
+    --mtdl-font-primary: "proxima-nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mtdl-font-secondary: "proxima-nova", sans-serif;
+
+    /* Colors - COE Palette */
+    --mtdl-color-primary: #009877;
+    --mtdl-color-primary-dark: #007a5e;
+    --mtdl-color-primary-light: #e8f5f0;
+    --mtdl-color-secondary: #005a70;
+    --mtdl-color-secondary-dark: #004556;
+    --mtdl-color-secondary-light: #e6f2f5;
+
+    --mtdl-color-white: #ffffff;
+    --mtdl-color-black: #1a1a1a;
+    --mtdl-color-gray: #757575;
+    --mtdl-color-gray-light: #f5f5f5;
+    --mtdl-color-gray-dark: #333333;
+
+    --mtdl-color-success: #4caf50;
+    --mtdl-color-warning: #ff9800;
+    --mtdl-color-danger: #f44336;
+    --mtdl-color-info: #2196f3;
+
+    /* WordPress Preset Colors Integration */
+    --wp--preset--color--coe-green: #009877;
+    --wp--preset--color--coe-blue: #005a70;
+    --wp--preset--color--coe-black: #0f1820;
+    --wp--preset--color--coe-light-green-background: #e6f5f1;
+    --wp--preset--color--coe-light-green: #ccebe4;
+    --wp--preset--color--coe-gray: #b1b6b9;
+    --wp--preset--color--coe-white: #ffffff;
+    --wp--preset--color--coe-green-shade: #007c5f;
+    --wp--preset--color--coe-red: #b34a64;
+    --wp--preset--color--coe-purple: #484d7a;
+    --wp--preset--color--coe-highlight-green: #668848;
+    --wp--preset--color--coe-forward-blue: #00828c;
+
+    /* Typography Sizes */
+    --mtdl-font-size-xs: 0.75rem;
+    --mtdl-font-size-sm: 0.875rem;
+    --mtdl-font-size-base: 1rem;
+    --mtdl-font-size-lg: 1.125rem;
+    --mtdl-font-size-xl: 1.25rem;
+    --mtdl-font-size-2xl: 1.5rem;
+    --mtdl-font-size-3xl: 1.875rem;
+    --mtdl-font-size-4xl: 2.25rem;
+
+    /* Font Weights */
+    --mtdl-font-weight-light: 300;
+    --mtdl-font-weight-normal: 400;
+    --mtdl-font-weight-medium: 500;
+    --mtdl-font-weight-semibold: 600;
+    --mtdl-font-weight-bold: 700;
+
+    /* Line Heights */
+    --mtdl-line-height-tight: 1.25;
+    --mtdl-line-height-normal: 1.5;
+    --mtdl-line-height-relaxed: 1.75;
+    --mtdl-line-height-loose: 2;
+
+    /* Spacing */
+    --mtdl-spacing-xs: 0.25rem;
+    --mtdl-spacing-sm: 0.5rem;
+    --mtdl-spacing-md: 1rem;
+    --mtdl-spacing-lg: 1.5rem;
+    --mtdl-spacing-xl: 2rem;
+    --mtdl-spacing-2xl: 3rem;
+    --mtdl-spacing-3xl: 4rem;
+
+    /* WordPress Preset Spacing */
+    --wp--preset--spacing--20: 0.44rem;
+    --wp--preset--spacing--30: 0.67rem;
+    --wp--preset--spacing--40: 1rem;
+    --wp--preset--spacing--50: 1.5rem;
+    --wp--preset--spacing--60: 2.25rem;
+    --wp--preset--spacing--70: 3.38rem;
+    --wp--preset--spacing--80: 5.06rem;
+
+    /* Border Radius */
+    --mtdl-radius-sm: 4px;
+    --mtdl-radius-md: 6px;
+    --mtdl-radius-lg: 8px;
+    --mtdl-radius-xl: 12px;
+    --mtdl-radius-full: 9999px;
+
+    /* Shadows */
+    --mtdl-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --mtdl-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --mtdl-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --mtdl-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    /* WordPress Preset Shadows */
+    --wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);
+    --wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);
+    --wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);
+    --wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);
+    --wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);
+
+    /* Z-index */
+    --mtdl-z-dropdown: 100;
+    --mtdl-z-sticky: 200;
+    --mtdl-z-fixed: 300;
+    --mtdl-z-modal-backdrop: 400;
+    --mtdl-z-modal: 500;
+    --mtdl-z-popover: 600;
+    --mtdl-z-tooltip: 700;
+
+    /* Transitions */
+    --mtdl-transition-fast: 150ms;
+    --mtdl-transition-normal: 300ms;
+    --mtdl-transition-slow: 500ms;
+
+    /* Breakpoints */
+    --mtdl-breakpoint-sm: 640px;
+    --mtdl-breakpoint-md: 768px;
+    --mtdl-breakpoint-lg: 1024px;
+    --mtdl-breakpoint-xl: 1280px;
+    --mtdl-breakpoint-2xl: 1536px;
+
+    /* WordPress Gradients */
+    --wp--preset--gradient--light-green-radial: radial-gradient(ellipse at -10% 0%, #ccebe4 0%, #e6f5f1 22%, #F5F2ED 80%);
+    --wp--preset--gradient--blue-to-light-blue: linear-gradient(135deg, #005a70 20%, #337b8d 60%);
+    --wp--preset--gradient--green-to-blue: radial-gradient(ellipse at 0% 15%, #009877 25%, #005a70 65%);
+}
