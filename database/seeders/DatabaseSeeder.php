@@ -25,9 +25,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TermsOfUseSeeder::class,
 
-            // Books and interactions will be added later
-            // BookSeeder::class,
-            // BookInteractionsSeeder::class,
+            // Books with all relationships
+            BookSeeder::class,
         ]);
     }
 }
