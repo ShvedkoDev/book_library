@@ -360,11 +360,14 @@ class BookResource extends Resource
 
                                 Forms\Components\FileUpload::make('file_path')
                                     ->label('File')
+                                    ->disk('public')
                                     ->directory('books')
+                                    ->visibility('public')
                                     ->preserveFilenames()
                                     ->maxSize(50000)
+                                    ->acceptedFileTypes(['application/pdf', 'image/*', 'audio/*'])
                                     ->hidden(fn ($get) => $get('file_type') === 'video')
-                                    ->helperText('Upload PDF, image, or audio file')
+                                    ->helperText('Upload PDF, image, or audio file. Leave empty when editing to keep existing file.')
                                     ->columnSpan(2),
 
                                 Forms\Components\TextInput::make('external_url')
@@ -372,6 +375,7 @@ class BookResource extends Resource
                                     ->url()
                                     ->placeholder('https://youtube.com/...')
                                     ->visible(fn ($get) => $get('file_type') === 'video')
+                                    ->required(fn ($get) => $get('file_type') === 'video')
                                     ->helperText('CSV: Coupled video - YouTube/Vimeo link')
                                     ->columnSpan(2),
 

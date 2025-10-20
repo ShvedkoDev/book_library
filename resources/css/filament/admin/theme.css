@@ -72,4 +72,27 @@
     .fi-fo-toggle .fi-fo-field-wrp {
         align-items: center !important;
     }
+
+    /* Enhanced validation error styling */
+    .fi-fo-field-wrp-error-message,
+    .fi-fo-field-wrp-error-message p {
+        color: #dc2626 !important;
+        font-size: 0.9375rem !important;
+        font-weight: 600 !important;
+        margin-top: 0.5rem !important;
+        line-height: 1.5 !important;
+    }
+
+    /* Highlight fields with errors */
+    .fi-fo-field-wrp.has-error input,
+    .fi-fo-field-wrp.has-error select,
+    .fi-fo-field-wrp.has-error textarea {
+        border-color: #dc2626 !important;
+        border-width: 2px !important;
+    }
+
+    /* Error icon next to label */
+    .fi-fo-field-wrp-label.fi-required::after {
+        color: #dc2626;
+    }
 }
