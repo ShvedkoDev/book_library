@@ -1,0 +1,13 @@
+# Ensure shell scripts always use LF line endings
+*.sh text eol=lf
+
+# Ensure Docker-related files use LF
+Dockerfile text eol=lf
+docker-compose.yml text eol=lf
+
+# Auto detect text files and normalize to LF
+* text=auto eol=lf
+
+# Ensure Windows batch files use CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
