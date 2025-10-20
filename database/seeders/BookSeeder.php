@@ -80,7 +80,7 @@ class BookSeeder extends Seeder
             [
                 'id' => 3,
                 'internal_id' => 'P008-a',
-                'palm_code' => 'unavailable',
+                'palm_code' => null,
                 'title' => 'Ahkfuhlwactyen sun lwen ohnkohsr',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Celebrating June 6th]',
@@ -105,7 +105,7 @@ class BookSeeder extends Seeder
             [
                 'id' => 4,
                 'internal_id' => 'P015-a',
-                'palm_code' => 'unavailable',
+                'palm_code' => null,
                 'title' => 'Bitiiru sukuul ngea seenseey rooraed',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Students and their teacher]',
@@ -130,7 +130,7 @@ class BookSeeder extends Seeder
             [
                 'id' => 5,
                 'internal_id' => 'P019-a',
-                'palm_code' => 'unavailable',
+                'palm_code' => null,
                 'title' => 'Boechii tiir ni ba balyaang',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[A naughty kid]',
@@ -230,7 +230,7 @@ class BookSeeder extends Seeder
             [
                 'id' => 9,
                 'internal_id' => 'P029-a',
-                'palm_code' => 'unavailable',
+                'palm_code' => null,
                 'title' => 'Duen laid ki uhk',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Net fishing]',
