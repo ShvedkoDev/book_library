@@ -234,6 +234,281 @@ class BookResource extends Resource
                             ->helperText('Islands and states'),
                     ])
                     ->columns(2),
+
+                Forms\Components\Section::make('Classifications')
+                    ->schema([
+                        Forms\Components\Select::make('purposeClassifications')
+                            ->label('Purpose')
+                            ->relationship(
+                                'purposeClassifications',
+                                'value',
+                                fn ($query) => $query->whereHas('classificationType', function ($q) {
+                                    $q->where('slug', 'purpose');
+                                })
+                            )
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->helperText('CSV: Purpose'),
+
+                        Forms\Components\Select::make('genreClassifications')
+                            ->label('Genre')
+                            ->relationship(
+                                'genreClassifications',
+                                'value',
+                                fn ($query) => $query->whereHas('classificationType', function ($q) {
+                                    $q->where('slug', 'genre');
+                                })
+                            )
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->helperText('CSV: Genre'),
+
+                        Forms\Components\Select::make('subgenreClassifications')
+                            ->label('Sub-genre')
+                            ->relationship(
+                                'subgenreClassifications',
+                                'value',
+                                fn ($query) => $query->whereHas('classificationType', function ($q) {
+                                    $q->where('slug', 'sub-genre');
+                                })
+                            )
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->helperText('CSV: Sub-genre'),
+
+                        Forms\Components\Select::make('typeClassifications')
+                            ->label('Type')
+                            ->relationship(
+                                'typeClassifications',
+                                'value',
+                                fn ($query) => $query->whereHas('classificationType', function ($q) {
+                                    $q->where('slug', 'type');
+                                })
+                            )
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->helperText('CSV: Type'),
+
+                        Forms\Components\Select::make('themesClassifications')
+                            ->label('Themes/Uses')
+                            ->relationship(
+                                'themesClassifications',
+                                'value',
+                                fn ($query) => $query->whereHas('classificationType', function ($q) {
+                                    $q->where('slug', 'themes-uses');
+                                })
+                            )
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->helperText('CSV: Themes/Uses'),
+
+                        Forms\Components\Select::make('learnerLevelClassifications')
+                            ->label('Learner Level')
+                            ->relationship(
+                                'learnerLevelClassifications',
+                                'value',
+                                fn ($query) => $query->whereHas('classificationType', function ($q) {
+                                    $q->where('slug', 'learner-level');
+                                })
+                            )
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->helperText('CSV: Learner level'),
+                    ])
+                    ->columns(2)
+                    ->collapsible(),
+
+                Forms\Components\Section::make('Keywords')
+                    ->schema([
+                        Forms\Components\TagsInput::make('keyword_list')
+                            ->label('Keywords')
+                            ->placeholder('Add keywords')
+                            ->helperText('CSV: Keywords - Press Enter after each keyword')
+                            ->columnSpanFull(),
+                    ])
+                    ->collapsible(),
+
+                Forms\Components\Section::make('Book Files')
+                    ->schema([
+                        Forms\Components\Repeater::make('files')
+                            ->relationship('files')
+                            ->schema([
+                                Forms\Components\Select::make('file_type')
+                                    ->label('File Type')
+                                    ->options([
+                                        'pdf' => 'PDF Document',
+                                        'thumbnail' => 'Thumbnail Image',
+                                        'audio' => 'Audio File',
+                                        'video' => 'Video (External URL)',
+                                    ])
+                                    ->required()
+                                    ->reactive()
+                                    ->columnSpan(1),
+
+                                Forms\Components\Toggle::make('is_primary')
+                                    ->label('Primary')
+                                    ->default(false)
+                                    ->inline(false)
+                                    ->helperText('Mark as primary file')
+                                    ->columnSpan(1),
+
+                                Forms\Components\FileUpload::make('file_path')
+                                    ->label('File')
+                                    ->directory('books')
+                                    ->preserveFilenames()
+                                    ->maxSize(50000)
+                                    ->hidden(fn ($get) => $get('file_type') === 'video')
+                                    ->helperText('Upload PDF, image, or audio file')
+                                    ->columnSpan(2),
+
+                                Forms\Components\TextInput::make('external_url')
+                                    ->label('External URL')
+                                    ->url()
+                                    ->placeholder('https://youtube.com/...')
+                                    ->visible(fn ($get) => $get('file_type') === 'video')
+                                    ->helperText('CSV: Coupled video - YouTube/Vimeo link')
+                                    ->columnSpan(2),
+
+                                Forms\Components\TextInput::make('digital_source')
+                                    ->label('Digital Source')
+                                    ->maxLength(255)
+                                    ->placeholder('Where the file came from')
+                                    ->helperText('CSV: DIGITAL SOURCE / ALTERNATIVE DIGITAL SOURCE')
+                                    ->columnSpan(2),
+
+                                Forms\Components\TextInput::make('filename')
+                                    ->label('Original Filename')
+                                    ->maxLength(255)
+                                    ->disabled()
+                                    ->dehydrated(false)
+                                    ->columnSpan(1),
+
+                                Forms\Components\Toggle::make('is_active')
+                                    ->label('Active')
+                                    ->default(true)
+                                    ->inline(false)
+                                    ->columnSpan(1),
+                            ])
+                            ->columns(2)
+                            ->defaultItems(0)
+                            ->addActionLabel('Add File')
+                            ->reorderable()
+                            ->collapsible()
+                            ->columnSpanFull(),
+                    ])
+                    ->collapsible(),
+
+                Forms\Components\Section::make('Book Relationships')
+                    ->schema([
+                        Forms\Components\Repeater::make('bookRelationships')
+                            ->relationship('bookRelationships')
+                            ->schema([
+                                Forms\Components\Select::make('relationship_type')
+                                    ->label('Relationship Type')
+                                    ->options([
+                                        'same_version' => 'Same Version (Related same)',
+                                        'same_language' => 'Same Language (Omnibus)',
+                                        'supporting' => 'Supporting Material',
+                                        'other_language' => 'Other Language Version',
+                                    ])
+                                    ->required()
+                                    ->helperText('CSV: Related (same), Related (omnibus), Related (support), Related (same title, different language)')
+                                    ->columnSpan(1),
+
+                                Forms\Components\Select::make('related_book_id')
+                                    ->label('Related Book')
+                                    ->relationship('relatedBook', 'title')
+                                    ->searchable()
+                                    ->preload()
+                                    ->required()
+                                    ->helperText('Select the related book')
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('relationship_code')
+                                    ->label('Relationship Code')
+                                    ->maxLength(100)
+                                    ->placeholder('Group code for related books')
+                                    ->helperText('Used to group related books together')
+                                    ->columnSpan(1),
+
+                                Forms\Components\Textarea::make('description')
+                                    ->label('Description')
+                                    ->rows(2)
+                                    ->placeholder('Optional notes about this relationship')
+                                    ->columnSpan(1),
+                            ])
+                            ->columns(2)
+                            ->defaultItems(0)
+                            ->addActionLabel('Add Related Book')
+                            ->reorderable()
+                            ->collapsible()
+                            ->columnSpanFull(),
+                    ])
+                    ->collapsible(),
+
+                Forms\Components\Section::make('Library References')
+                    ->schema([
+                        Forms\Components\Repeater::make('libraryReferences')
+                            ->relationship('libraryReferences')
+                            ->schema([
+                                Forms\Components\Select::make('library_code')
+                                    ->label('Library')
+                                    ->options([
+                                        'UH' => 'University of Hawaii',
+                                        'COM' => 'COM Library',
+                                    ])
+                                    ->required()
+                                    ->helperText('Select library system')
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('library_name')
+                                    ->label('Library Name')
+                                    ->maxLength(255)
+                                    ->placeholder('Full library name')
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('reference_number')
+                                    ->label('Reference Number')
+                                    ->maxLength(100)
+                                    ->placeholder('Library reference number')
+                                    ->helperText('CSV: UH hard copy ref / COM hard copy ref')
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('call_number')
+                                    ->label('Call Number')
+                                    ->maxLength(100)
+                                    ->placeholder('Library call number')
+                                    ->helperText('CSV: UH hard copy call number / COM hard copy call number')
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('catalog_link')
+                                    ->label('Catalog Link')
+                                    ->url()
+                                    ->maxLength(500)
+                                    ->placeholder('https://...')
+                                    ->helperText('CSV: UH hard copy link')
+                                    ->columnSpan(2),
+
+                                Forms\Components\Textarea::make('notes')
+                                    ->label('Notes')
+                                    ->rows(2)
+                                    ->placeholder('Additional notes')
+                                    ->helperText('CSV: UH note / COM hard copy ref NOTE')
+                                    ->columnSpan(2),
+                            ])
+                            ->columns(2)
+                            ->defaultItems(0)
+                            ->addActionLabel('Add Library Reference')
+                            ->collapsible()
+                            ->columnSpanFull(),
+                    ])
+                    ->collapsible(),
             ]);
     }
 

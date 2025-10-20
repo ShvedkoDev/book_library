@@ -50,6 +50,20 @@ class Book extends Model
         ];
     }
 
+    // Accessors & Mutators for Filament forms
+
+    public function getKeywordListAttribute()
+    {
+        return $this->keywords->pluck('keyword')->toArray();
+    }
+
+    public function setKeywordListAttribute($value)
+    {
+        // This will be handled in the Filament Resource using afterSave hook
+        // Store temporarily for processing
+        $this->attributes['_keyword_list'] = json_encode($value ?? []);
+    }
+
     // Relationships - Core
 
     public function collection()
@@ -143,6 +157,61 @@ class Book extends Model
                 $q->where('slug', $typeSlug);
             })
             ->get();
+    }
+
+    // Classification type-specific relationships for Filament
+    public function purposeClassifications()
+    {
+        return $this->belongsToMany(ClassificationValue::class, 'book_classifications')
+            ->whereHas('classificationType', function ($q) {
+                $q->where('slug', 'purpose');
+            })
+            ->withTimestamps();
+    }
+
+    public function genreClassifications()
+    {
+        return $this->belongsToMany(ClassificationValue::class, 'book_classifications')
+            ->whereHas('classificationType', function ($q) {
+                $q->where('slug', 'genre');
+            })
+            ->withTimestamps();
+    }
+
+    public function subgenreClassifications()
+    {
+        return $this->belongsToMany(ClassificationValue::class, 'book_classifications')
+            ->whereHas('classificationType', function ($q) {
+                $q->where('slug', 'sub-genre');
+            })
+            ->withTimestamps();
+    }
+
+    public function typeClassifications()
+    {
+        return $this->belongsToMany(ClassificationValue::class, 'book_classifications')
+            ->whereHas('classificationType', function ($q) {
+                $q->where('slug', 'type');
+            })
+            ->withTimestamps();
+    }
+
+    public function themesClassifications()
+    {
+        return $this->belongsToMany(ClassificationValue::class, 'book_classifications')
+            ->whereHas('classificationType', function ($q) {
+                $q->where('slug', 'themes-uses');
+            })
+            ->withTimestamps();
+    }
+
+    public function learnerLevelClassifications()
+    {
+        return $this->belongsToMany(ClassificationValue::class, 'book_classifications')
+            ->whereHas('classificationType', function ($q) {
+                $q->where('slug', 'learner-level');
+            })
+            ->withTimestamps();
     }
 
     // Relationships - Geographic
