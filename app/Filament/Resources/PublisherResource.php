@@ -14,8 +14,9 @@ class PublisherResource extends Resource
 {
     protected static ?string $model = Publisher::class;
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static ?string $navigationGroup = 'Library';
+    protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = "Library";
     public static function form(Form $form): Form
     {
         return $form
@@ -23,18 +24,25 @@ class PublisherResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                    
+
+                Forms\Components\TextInput::make('program_name')
+                    ->label('Program/Project Name')
+                    ->maxLength(255)
+                    ->placeholder('e.g., Teacher Development Program')
+                    ->helperText('Department, series, or specific program'),
+
                 Forms\Components\Textarea::make('address')
                     ->rows(3),
-                    
+
                 Forms\Components\TextInput::make('website')
                     ->url()
-                    ->maxLength(255),
-                    
+                    ->maxLength(255)
+                    ->prefix('https://'),
+
                 Forms\Components\TextInput::make('contact_email')
                     ->email()
                     ->maxLength(255),
-                    
+
                 Forms\Components\TextInput::make('established_year')
                     ->numeric()
                     ->minValue(1000)
@@ -51,7 +59,9 @@ class PublisherResource extends Resource
                 Tables\Columns\TextColumn::make('established_year')->sortable(),
                 Tables\Columns\TextColumn::make('books_count')
                     ->counts('books')
-                    ->label('Books Count'),
+                    ->label('Books')
+                    ->badge()
+                    ->color('success'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

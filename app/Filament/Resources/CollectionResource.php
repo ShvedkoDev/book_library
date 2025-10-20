@@ -14,8 +14,8 @@ class CollectionResource extends Resource
 {
     protected static ?string $model = Collection::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
-
-    protected static ?string $navigationGroup = "Library";
+    protected static ?string $navigationGroup = 'Library';
+    protected static ?int $navigationSort = 7;
     public static function form(Form $form): Form
     {
         return $form
@@ -40,7 +40,9 @@ class CollectionResource extends Resource
                 Tables\Columns\ToggleColumn::make('is_series'),
                 Tables\Columns\TextColumn::make('books_count')
                     ->counts('books')
-                    ->label('Books Count'),
+                    ->label('Books')
+                    ->badge()
+                    ->color('success'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

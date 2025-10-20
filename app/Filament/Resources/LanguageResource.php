@@ -14,8 +14,8 @@ class LanguageResource extends Resource
 {
     protected static ?string $model = Language::class;
     protected static ?string $navigationIcon = 'heroicon-o-language';
-
-    protected static ?string $navigationGroup = "Library";
+    protected static ?string $navigationGroup = 'Library';
+    protected static ?int $navigationSort = 1;
     public static function form(Form $form): Form
     {
         return $form
@@ -46,8 +46,10 @@ class LanguageResource extends Resource
                 Tables\Columns\TextColumn::make('native_name')->searchable(),
                 Tables\Columns\ToggleColumn::make('is_active'),
                 Tables\Columns\TextColumn::make('books_count')
-                    ->counts('books')
-                    ->label('Books Count'),
+                    ->counts('bookLanguages')
+                    ->label('Books')
+                    ->badge()
+                    ->color('success'),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active'),
