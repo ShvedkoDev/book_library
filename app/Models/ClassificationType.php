@@ -41,6 +41,19 @@ class ClassificationType extends Model
         return $this->hasMany(ClassificationValue::class)->where('is_active', true);
     }
 
+    public function books()
+    {
+        return $this->hasManyThrough(
+            Book::class,
+            ClassificationValue::class,
+            'classification_type_id', // Foreign key on classification_values table
+            'id', // Foreign key on books table (we'll join via book_classifications)
+            'id', // Local key on classification_types table
+            'id' // Local key on classification_values table
+        )->join('book_classifications', 'book_classifications.classification_value_id', '=', 'classification_values.id')
+         ->where('book_classifications.book_id', '=', \DB::raw('books.id'));
+    }
+
     // Scopes
 
     public function scopeActive($query)
