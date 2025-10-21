@@ -4,7 +4,6 @@ namespace App\Filament\Widgets;
 
 use App\Models\Book;
 use App\Models\Language;
-use App\Models\Author;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 

@@ -40,10 +40,6 @@ class BookDownloadResource extends Resource
                 Forms\Components\Textarea::make('user_agent')
                     ->label('User Agent')
                     ->rows(2),
-                    
-                Forms\Components\DateTimePicker::make('downloaded_at')
-                    ->label('Downloaded At')
-                    ->default(now()),
             ]);
     }
 
@@ -63,23 +59,19 @@ class BookDownloadResource extends Resource
                     
                 Tables\Columns\TextColumn::make('ip_address')
                     ->searchable(),
-                    
-                Tables\Columns\TextColumn::make('downloaded_at')
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Downloaded At')
                     ->dateTime()
                     ->sortable(),
-                    
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\Filter::make('downloaded_today')
-                    ->query(fn ($query) => $query->whereDate('downloaded_at', today()))
+                    ->query(fn ($query) => $query->whereDate('created_at', today()))
                     ->label('Downloaded Today'),
-                    
+
                 Tables\Filters\Filter::make('downloaded_this_week')
-                    ->query(fn ($query) => $query->where('downloaded_at', '>=', now()->startOfWeek()))
+                    ->query(fn ($query) => $query->where('created_at', '>=', now()->startOfWeek()))
                     ->label('Downloaded This Week'),
             ])
             ->actions([
@@ -91,7 +83,7 @@ class BookDownloadResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('downloaded_at', 'desc');
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getPages(): array

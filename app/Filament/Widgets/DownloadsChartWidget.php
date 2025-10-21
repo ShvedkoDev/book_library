@@ -13,8 +13,8 @@ class DownloadsChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-        $downloads = BookDownload::selectRaw('DATE(downloaded_at) as date, COUNT(*) as count')
-            ->where('downloaded_at', '>=', now()->subDays(30))
+        $downloads = BookDownload::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->where('created_at', '>=', now()->subDays(30))
             ->groupBy('date')
             ->orderBy('date')
             ->pluck('count', 'date')

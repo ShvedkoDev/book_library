@@ -14,7 +14,7 @@ class UserActivityWidget extends BaseWidget
     {
         $totalUsers = User::count();
         $activeUsers = User::where('email_verified_at', '!=', null)->count();
-        $downloadsToday = BookDownload::whereDate('downloaded_at', today())->count();
+        $downloadsToday = BookDownload::whereDate('created_at', today())->count();
         $pendingReviews = BookReview::where('is_approved', false)->count();
 
         return [

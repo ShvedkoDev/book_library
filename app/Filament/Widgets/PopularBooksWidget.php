@@ -19,25 +19,22 @@ class PopularBooksWidget extends BaseWidget
             ->query(
                 Book::query()
                     ->withCount(['ratings', 'downloads' => function ($query) {
-                        $query->where('downloaded_at', '>=', now()->subDays(30));
+                        $query->where('created_at', '>=', now()->subDays(30));
                     }])
                     ->withAvg('ratings', 'rating')
                     ->orderByDesc('downloads_count')
                     ->limit(10)
             )
             ->columns([
-                Tables\Columns\ImageColumn::make('cover_image')
-                    ->square()
-                    ->size(40),
-                    
                 Tables\Columns\TextColumn::make('title')
                     ->label('Book Title')
                     ->limit(40)
                     ->searchable()
                     ->sortable(),
-                    
-                Tables\Columns\TextColumn::make('language.name')
+
+                Tables\Columns\TextColumn::make('languages.name')
                     ->label('Language')
+                    ->badge()
                     ->sortable(),
                     
                 Tables\Columns\TextColumn::make('downloads_count')
