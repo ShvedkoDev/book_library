@@ -97,8 +97,8 @@ class ClassificationTypeResource extends Resource
                     ->weight('medium')
                     ->description(fn (ClassificationType $record): ?string => $record->slug),
 
-                Tables\Columns\TextColumn::make('values_count')
-                    ->counts('values')
+                Tables\Columns\TextColumn::make('classification_values_count')
+                    ->counts('classificationValues')
                     ->label('Values')
                     ->sortable()
                     ->badge()
