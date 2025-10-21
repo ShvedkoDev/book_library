@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AuthorResource\Pages;
-use App\Models\Author;
+use App\Models\Creator;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,9 +12,11 @@ use Filament\Tables\Table;
 
 class AuthorResource extends Resource
 {
-    protected static ?string $model = Author::class;
+    protected static ?string $model = Creator::class;
     protected static ?string $navigationIcon = 'heroicon-o-user';
     protected static ?string $navigationGroup = "Library";
+    protected static ?string $label = 'Author';
+    protected static ?string $pluralLabel = 'Authors';
 
     public static function form(Form $form): Form
     {
@@ -60,7 +62,7 @@ class AuthorResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('nationality')
-                    ->options(Author::distinct('nationality')->pluck('nationality', 'nationality')),
+                    ->options(Creator::distinct('nationality')->whereNotNull('nationality')->pluck('nationality', 'nationality')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
