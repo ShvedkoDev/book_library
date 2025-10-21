@@ -3,7 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
-use App\Models\Category;
+use App\Models\ClassificationValue;
+use App\Models\ClassificationType;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,22 +13,29 @@ use Filament\Tables\Table;
 
 class CategoryResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static ?string $model = ClassificationValue::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = "Library";
+
+    protected static ?string $label = 'Category';
+    protected static ?string $pluralLabel = 'Categories';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\Select::make('classification_type_id')
+                    ->label('Classification Type')
+                    ->relationship('classificationType', 'name')
                     ->required()
-                    ->maxLength(100),
+                    ->searchable()
+                    ->preload(),
 
-                Forms\Components\TextInput::make('slug')
+                Forms\Components\TextInput::make('value')
+                    ->label('Value')
                     ->required()
-                    ->unique(ignoreRecord: true)
                     ->maxLength(100),
 
                 Forms\Components\Textarea::make('description')
@@ -35,8 +43,9 @@ class CategoryResource extends Resource
 
                 Forms\Components\Select::make('parent_id')
                     ->label('Parent Category')
-                    ->options(Category::all()->pluck('name', 'id'))
-                    ->searchable(),
+                    ->relationship('parent', 'value')
+                    ->searchable()
+                    ->preload(),
 
                 Forms\Components\TextInput::make('sort_order')
                     ->numeric()
@@ -51,16 +60,21 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('classificationType.name')
+                    ->label('Type')
+                    ->searchable()
+                    ->sortable()
+                    ->badge(),
+
+                Tables\Columns\TextColumn::make('value')
+                    ->label('Value')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('parent.name')
+                Tables\Columns\TextColumn::make('parent.value')
                     ->label('Parent Category')
-                    ->sortable(),
+                    ->sortable()
+                    ->placeholder('-'),
 
                 Tables\Columns\TextColumn::make('sort_order')
                     ->sortable(),
@@ -73,6 +87,10 @@ class CategoryResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('classification_type_id')
+                    ->label('Type')
+                    ->relationship('classificationType', 'name'),
+
                 Tables\Filters\TernaryFilter::make('is_active'),
             ])
             ->actions([
@@ -83,7 +101,8 @@ class CategoryResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('classification_type_id');
     }
 
     public static function getPages(): array
