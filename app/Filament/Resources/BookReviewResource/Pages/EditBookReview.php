@@ -16,7 +16,6 @@ class EditBookReview extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
-}
 
     protected function getFormActions(): array
     {
