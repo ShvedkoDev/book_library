@@ -105,6 +105,13 @@ class CategoryResource extends Resource
             ->defaultSort('classification_type_id');
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\BooksRelationManager::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [

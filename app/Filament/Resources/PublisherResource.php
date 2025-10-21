@@ -74,6 +74,13 @@ class PublisherResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\BooksRelationManager::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
