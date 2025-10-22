@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Book extends Model
 {
@@ -15,6 +16,7 @@ class Book extends Model
         'title',
         'subtitle',
         'translated_title',
+        'slug',
         'physical_type',
         'collection_id',
         'publisher_id',
@@ -34,6 +36,48 @@ class Book extends Model
         'download_count',
         'sort_order',
     ];
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Automatically generate slug when creating a new book
+        static::creating(function ($book) {
+            if (empty($book->slug)) {
+                $slug = Str::slug($book->title);
+
+                // Ensure uniqueness
+                $originalSlug = $slug;
+                $counter = 1;
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = $originalSlug . '-' . $counter;
+                    $counter++;
+                }
+
+                $book->slug = $slug;
+            }
+        });
+
+        // Update slug when title changes
+        static::updating(function ($book) {
+            if ($book->isDirty('title') && empty($book->slug)) {
+                $slug = Str::slug($book->title);
+
+                // Ensure uniqueness
+                $originalSlug = $slug;
+                $counter = 1;
+                while (static::where('slug', $slug)->where('id', '!=', $book->id)->exists()) {
+                    $slug = $originalSlug . '-' . $counter;
+                    $counter++;
+                }
+
+                $book->slug = $slug;
+            }
+        });
+    }
 
     protected function casts(): array
     {
