@@ -1,0 +1,71 @@
+/* Library Custom Styles - Fix for logo positioning and display */
+
+/* Fix government logo - ensure no background */
+.left-institution img {
+    background: transparent !important;
+    padding: 0.5rem 1rem;
+}
+
+/* Partner logos in sidebar - horizontal layout */
+.sidebar.header-image.handbook-image {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    padding: 0 2rem 1.5rem 2rem;
+}
+
+.sidebar.header-image.handbook-image img {
+    max-height: 80px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Specific sizing for each logo */
+.sidebar.header-image.handbook-image .ndoe-logo {
+    max-height: 70px;
+}
+
+.sidebar.header-image.handbook-image .irei-logo {
+    max-height: 75px;
+}
+
+.sidebar.header-image.handbook-image .c4gts-logo {
+    max-height: 65px;
+}
+
+/* Ensure flex layout works for title_banner */
+@media screen and (min-width: 768px) {
+    .title_banner.with_sidebar {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .title_banner.with_sidebar .header-blurb {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-bottom: 1.5rem;
+    }
+
+    .title_banner.with_sidebar .sidebar {
+        flex-basis: 37.4%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: flex-end;
+    }
+}
+
+/* Mobile responsiveness for logos */
+@media screen and (max-width: 767px) {
+    .sidebar.header-image.handbook-image {
+        justify-content: center;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .sidebar.header-image.handbook-image img {
+        max-height: 50px;
+    }
+}

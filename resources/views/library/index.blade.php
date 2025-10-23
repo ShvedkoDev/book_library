@@ -41,9 +41,9 @@
                                 placeholder="Search books, authors, topics..."
                                 class="search-input input"
                                 value="{{ $search ?? '' }}"
-                                onchange="document.getElementById('library-search-form').submit()"
+                                onkeypress="if(event.key === 'Enter') submitSearch()"
                             >
-                            <button type="button" class="search-button" onclick="document.getElementById('library-search-form').submit()">
+                            <button type="button" class="search-button" onclick="submitSearch()">
                                 <i class="fal fa-search"></i>
                             </button>
                         </div>
@@ -329,6 +329,18 @@
 
 @push('scripts')
 <script>
+    function submitSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('library-search-form');
+        const hiddenSearchInput = searchForm.querySelector('input[name="search"]');
+
+        // Update the hidden form's search value with the visible input's value
+        hiddenSearchInput.value = searchInput.value;
+
+        // Submit the form
+        searchForm.submit();
+    }
+
     function toggleFilterGroup(element) {
         const icon = element.querySelector('.toggle-icon');
         const group = element.nextElementSibling;

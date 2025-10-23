@@ -24,6 +24,7 @@
     <link rel='stylesheet' href='{{ asset('library-assets/css/styles.css') }}' type='text/css' media='all'/>
     <link rel='stylesheet' href='{{ asset('library-assets/css/font-awesome.min.css') }}' type='text/css' media='all'/>
     <link rel='stylesheet' href='{{ asset('library-assets/css/wordpress-main.css') }}' type='text/css' media='all'/>
+    <link rel='stylesheet' href='{{ asset('library-assets/css/library-custom.css') }}' type='text/css' media='all'/>
 
     @stack('styles')
 </head>
