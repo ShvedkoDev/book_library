@@ -4,38 +4,79 @@
 @section('description', 'Browse our collection of over 2,000 educational resources in local Micronesian languages')
 
 @section('content')
-<div class="container-fluid library-container">
-    <div class="library-layout">
-        <!-- Sidebar with Filters -->
-        <aside class="library-sidebar">
-            <div class="sidebar-content">
-                <!-- Search Box -->
-                <div class="search-box">
-                    <form action="{{ route('library.index') }}" method="GET" id="library-search-form">
-                        <div class="search-input-wrapper">
+
+<div class="content print" role="main">
+    <div class="title_banner with_sidebar">
+        <div class="header-blurb container">
+            <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+                <!-- Breadcrumb NavXT 7.4.1 -->
+                <span property="itemListElement" typeof="ListItem">
+                    <a property="item" typeof="WebPage" title="Go to Micronesian Teachers Digital Library." href="{{ url('/') }}" class="main-home">
+                        <span property="name">National Vernacular Language Arts (VLA) Curriculum</span></a>
+                    <meta property="position" content="1">
+                </span>
+            </div>
+            <div class="handbook-header-menu">
+                <h1>Resource Library</h1>
+            </div>
+        </div>
+        <aside class="sidebar header-image handbook-image">
+            <img class="ndoe-logo" src="{{ asset('library-assets/images/NDOE.png') }}" alt="">
+            <img class="irei-logo" src="{{ asset('library-assets/images/iREi.png') }}" alt="">
+            <img class="c4gts-logo" src="{{ asset('library-assets/images/C4GTS.png') }}" alt="">
+        </aside>
+    </div>
+    <div class="page-content">
+        <div class="container with_sidebar">
+            <!-- Sidebar with Filters -->
+            <aside class="sidebar sidebar-links library-sidebar">
+                <div class="search-filters">
+                    <div class="search-section">
+                        <h3>Keyword Search</h3>
+                        <div class="search-box">
                             <input
                                 type="text"
+                                id="searchInput"
                                 name="search"
-                                id="search-input"
-                                placeholder="Search books..."
+                                placeholder="Search books, authors, topics..."
+                                class="search-input input"
                                 value="{{ $search ?? '' }}"
-                                aria-label="Search books"
+                                onchange="document.getElementById('library-search-form').submit()"
                             >
-                            <button type="submit" class="search-btn" aria-label="Search">
+                            <button type="button" class="search-button" onclick="document.getElementById('library-search-form').submit()">
                                 <i class="fal fa-search"></i>
                             </button>
                         </div>
+                    </div>
 
-                        <!-- Hidden fields to preserve filters and sorting -->
+                    <div class="entries-section">
+                        <h3>Number of Entries</h3>
+                        <div class="entries-selector">
+                            <select id="entriesPerPage" class="entries-dropdown" onchange="changeEntriesPerPage(this.value)">
+                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 per page</option>
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 per page</option>
+                                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 per page</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 per page</option>
+                                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 per page</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>
+                            Filter Results
+                            @if(!empty(array_filter($filters)))
+                                <i class="fal fa-times-circle clear-filters-icon" onclick="window.location.href='{{ route('library.index') }}'" title="Clear All Filters"></i>
+                            @endif
+                        </h3>
+
+                    <!-- Hidden form for search -->
+                    <form action="{{ route('library.index') }}" method="GET" id="library-search-form" style="display: none;">
+                        <input type="hidden" name="search" value="{{ $search ?? '' }}">
                         <input type="hidden" name="per_page" value="{{ $perPage }}">
                         <input type="hidden" name="sort_by" value="{{ $sortBy }}">
                         <input type="hidden" name="sort_direction" value="{{ $sortDirection }}">
                     </form>
-                </div>
-
-                <!-- Filters -->
-                <div class="filters-section">
-                    <h3 class="filters-title">Filters</h3>
 
                     <form action="{{ route('library.index') }}" method="GET" id="filters-form">
                         <!-- Preserve search query -->
@@ -153,17 +194,9 @@
                                 </div>
                             </div>
                         @endif
-
-                        <!-- Clear Filters Button -->
-                        @if(!empty(array_filter($filters)))
-                            <div class="filter-actions">
-                                <a href="{{ route('library.index') }}" class="button button-secondary">Clear All Filters</a>
-                            </div>
-                        @endif
                     </form>
                 </div>
-            </div>
-        </aside>
+            </aside>
 
         <!-- Main Content -->
         <div class="main_content library-content">
@@ -288,6 +321,8 @@
                 </div>
             @endif
         </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -311,11 +346,15 @@
         window.location.href = url.toString();
     }
 
-    function changePerPage(value) {
+    function changeEntriesPerPage(value) {
         const url = new URL(window.location.href);
         url.searchParams.set('per_page', value);
         url.searchParams.delete('page'); // Reset to page 1
         window.location.href = url.toString();
+    }
+
+    function clearFilters() {
+        window.location.href = '{{ route('library.index') }}';
     }
 </script>
 @endpush
