@@ -146,6 +146,7 @@
                 <p>Educational Resource Center<br/>
                     Pacific Islands Region<br/>
                     Micronesia</p>
+
             </address>
             <div class="contact">
                 <i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+1-000-000-0000">(000) 000-0000</a>
@@ -163,20 +164,20 @@
             </ul>
         </div>
         <div class="logos-coe-links">
-            <div class="coe-lockup">
-                <a href="https://www.hawaii.edu" target="_blank">
-                    <img src="https://picsum.photos/150/60?random=uh" alt="University of Hawaii System" class="coe-logo">
+            <div class="logos">
+                <a class="coe" href="{{ url('/') }}">
+                    <img src="{{ asset('library-assets/images/mtdl-logo.png') }}" alt="MTDL logo">
+                </a>
+                <a class="manoa" href="{{ url('/') }}">
+                    <img src="{{ asset('library-assets/images/education-initiative-logo.png') }}" alt="Education Initiative logo">
                 </a>
             </div>
-            <ul class="other-links-col coe-other-links">
-                <li><a href="#" target="_blank">Privacy Policy</a></li>
-                <li><a href="#" target="_blank">Terms of Use</a></li>
-                <li><a href="#" target="_blank">Contact Us</a></li>
-            </ul>
+            <div class="links">
+
+                <a class="sitemap" href="{{ url('/sitemap') }}" title="sitemap"><i aria-hidden="true" class="fal fa-sitemap"></i> <span>Sitemap</span></a>
+                <a href="{{ route('login') }}" title="user login"><i aria-hidden="true" class="fal fa-sign-in"></i> <span>Log In</span></a>
+            </div>
         </div>
-    </div>
-    <div class="uh-footer" style="background-color: #024731; color: #fff; text-align: center; padding: 10px 0;">
-        <p>&copy; {{ date('Y') }} Micronesian Teachers Digital Library. All rights reserved.</p>
     </div>
 </footer>
 
