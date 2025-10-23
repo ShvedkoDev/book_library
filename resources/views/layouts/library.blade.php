@@ -28,65 +28,100 @@
     @stack('styles')
 </head>
 
-<body class="page-template page-template-page-landing page-template-page-landing-php page page-id-8">
+<body class="wp-singular page-template page-template-template-stems2-ulu-guide template-stems2-ulu-guide page wp-theme-coe-wp-programs-themeresources edcs program stems2 ulu-education-toolkit-guide sidebar-primary app-data index-data singular-data page-data library-layout">
 
 <div id="wrapper">
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="container-fluid">
-            <div class="logos-container">
-                <a href="{{ url('/') }}" class="logo-link">
-                    <img src="https://picsum.photos/200/80?random=3DL" alt="Micronesian Teachers Digital Library" class="site-logo">
-                </a>
-                <div class="partner-logos">
-                    <img src="https://picsum.photos/120/60?random=org1" alt="Partner Organization 1" class="partner-logo">
-                    <img src="https://picsum.photos/120/60?random=org2" alt="Partner Organization 2" class="partner-logo">
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Header Banner -->
+    <header class="banner" role="banner">
+        <a class="screen-reader-text skip-link" href="#content">Skip to main content</a>
 
-    <!-- Main Menu -->
-    <nav class="main-menu library-active" role="navigation" aria-label="main navigation">
-        <div class="container-fluid">
-            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-                <i class="fal fa-bars"></i>
-            </div>
-            <ul class="menu-items" id="mainMenu">
-                <li><a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Guide</a></li>
-                <li><a href="{{ route('library.index') }}" class="{{ request()->is('library*') ? 'active' : '' }}">Library</a></li>
-                @auth
-                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li>
-                        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                            @csrf
-                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
-                                Logout
-                            </a>
-                        </form>
-                    </li>
-                @else
-                    <li><a href="{{ route('login') }}">Login</a></li>
-                @endauth
-            </ul>
-            <div class="menu-right">
-                <div class="language-selector">
-                    <i class="fal fa-globe"></i>
-                    <select id="language-select" onchange="changeLanguage(this.value)">
-                        <option value="en">English</option>
-                        <option value="ch">Chuukese</option>
-                        <option value="po">Pohnpeian</option>
-                        <option value="ya">Yapese</option>
-                        <option value="ko">Kosraean</option>
-                        <option value="mh">Marshallese</option>
-                    </select>
+        <!-- COE Banner with logos and language selector -->
+        <div class="coe-banner">
+            <div class="header-container">
+                <div class="left-institution">
+                    <img src="{{ asset('library-assets/images/government_of_the_federated_states_of_micronesia.png') }}" alt="Government of the Federated States of Micronesia">
+                </div>
+                <div class="right-institution">
+                    <div class="language-selector-container">
+                        <button class="language-selector" id="languageSelector">
+                            <span class="language-code">ENG</span>
+                            <i class="fal fa-chevron-down"></i>
+                        </button>
+                        <ul class="language-dropdown" id="languageDropdown">
+                            <li><a href="#" data-code="eng" data-enabled="true">English</a></li>
+                            <li><a href="#" data-code="chk" data-enabled="false" class="disabled">Chuukese</a></li>
+                            <li><a href="#" data-code="kpg" data-enabled="false" class="disabled">Kapingamarangi</a></li>
+                            <li><a href="#" data-code="kos" data-enabled="false" class="disabled">Kosraean</a></li>
+                            <li><a href="#" data-code="mrl" data-enabled="false" class="disabled">Mortlockese</a></li>
+                            <li><a href="#" data-code="mwv" data-enabled="false" class="disabled">Mwoakilloaese</a></li>
+                            <li><a href="#" data-code="nkr" data-enabled="false" class="disabled">Nukuoro</a></li>
+                            <li><a href="#" data-code="pif" data-enabled="false" class="disabled">Pingelapese</a></li>
+                            <li><a href="#" data-code="pon" data-enabled="false" class="disabled">Pohnpeian</a></li>
+                            <li><a href="#" data-code="stw" data-enabled="false" class="disabled">Satawalese</a></li>
+                            <li><a href="#" data-code="uli" data-enabled="false" class="disabled">Ulithian</a></li>
+                            <li><a href="#" data-code="woe" data-enabled="false" class="disabled">Woleaian</a></li>
+                            <li><a href="#" data-code="yap" data-enabled="false" class="disabled">Yapese</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
+
+        <!-- Program Banner with toggle and navigation -->
+        <div class="program-banner">
+            <div class="module-toggle">
+                <div class="toggle-switch-container">
+                    <div class="toggle-switch">
+                        <button class="toggle-option {{ request()->is('/') ? 'active' : '' }}" onclick="window.location.href='{{ url('/') }}'" data-module="guide">Resource guide</button>
+                        <button class="toggle-option {{ request()->is('library*') ? 'active' : '' }}" data-module="library">Resource library</button>
+                    </div>
+                </div>
+            </div>
+            <nav aria-label="main menu" class="nav-primary">
+
+                <button class="menu-toggle" aria-expanded="false">Menu <span class="screen-reader-text">Open Mobile Menu</span></button>
+                <div class="menu-main-container">
+                    <ul id="menu-main" class="nav">
+                        <li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-2335"><a href="{{ url('/') }}">Home</a></li>
+                        <li id="menu-item-1362" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1362"><a href="#">About Us</a>
+                            <ul class="sub-menu">
+                                <li id="menu-item-314" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-314"><a href="{{ url('/about') }}">What is MTDL?</a></li>
+                                <li id="menu-item-320" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-320"><a href="{{ url('/why') }}">Why Digital Library?</a></li>
+                                <li id="menu-item-1692" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1692"><a href="{{ url('/photo-gallery') }}">Photo Gallery</a></li>
+                            </ul>
+                        </li>
+                        @auth
+                            <li class="menu-item menu-login"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li class="menu-item menu-logout">
+                                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                    @csrf
+                                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                </form>
+                            </li>
+                        @else
+                            <li class="menu-item menu-login"><a href="{{ route('login') }}">Login</a></li>
+                        @endauth
+                    </ul>
+                </div>
+
+                <div class="menu-search">
+                    <a class="search-toggle" href="#searchform"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Toggle Search</span></a>
+                    <div class="search-container" aria-expanded="false">
+                        <form role="search" method="get" class="searchform" action="/">
+                            <label for="basic-site-search" id="searchform" class="screen-reader-text">
+                                Search for:
+                            </label>
+                            <input type="search" class="search-field" id="basic-site-search" placeholder="Search &hellip;" value="" name="s"/>
+                            <button type="submit" class="search-submit" value="Search"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Site Search</span></button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
 
     <!-- Main Content -->
-    <main class="main-content library-layout">
+    <main class="main with_sidebar print" id="content">
         @yield('content')
     </main>
 
@@ -111,6 +146,7 @@
                 <p>Educational Resource Center<br/>
                     Pacific Islands Region<br/>
                     Micronesia</p>
+
             </address>
             <div class="contact">
                 <i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+1-000-000-0000">(000) 000-0000</a>
@@ -128,33 +164,100 @@
             </ul>
         </div>
         <div class="logos-coe-links">
-            <div class="coe-lockup">
-                <a href="https://www.hawaii.edu" target="_blank">
-                    <img src="https://picsum.photos/150/60?random=uh" alt="University of Hawaii System" class="coe-logo">
+            <div class="logos">
+                <a class="coe" href="{{ url('/') }}">
+                    <img src="{{ asset('library-assets/images/mtdl-logo.png') }}" alt="MTDL logo">
+                </a>
+                <a class="manoa" href="{{ url('/') }}">
+                    <img src="{{ asset('library-assets/images/education-initiative-logo.png') }}" alt="Education Initiative logo">
                 </a>
             </div>
-            <ul class="other-links-col coe-other-links">
-                <li><a href="#" target="_blank">Privacy Policy</a></li>
-                <li><a href="#" target="_blank">Terms of Use</a></li>
-                <li><a href="#" target="_blank">Contact Us</a></li>
-            </ul>
+            <div class="links">
+
+                <a class="sitemap" href="{{ url('/sitemap') }}" title="sitemap"><i aria-hidden="true" class="fal fa-sitemap"></i> <span>Sitemap</span></a>
+                <a href="{{ route('login') }}" title="user login"><i aria-hidden="true" class="fal fa-sign-in"></i> <span>Log In</span></a>
+            </div>
         </div>
-    </div>
-    <div class="uh-footer" style="background-color: #024731; color: #fff; text-align: center; padding: 10px 0;">
-        <p>&copy; {{ date('Y') }} Micronesian Teachers Digital Library. All rights reserved.</p>
     </div>
 </footer>
 
 <script>
-    function toggleMobileMenu() {
-        const menu = document.getElementById('mainMenu');
-        menu.classList.toggle('active');
-    }
+    // Language Selector Dropdown
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageSelector = document.getElementById('languageSelector');
+        const languageDropdown = document.getElementById('languageDropdown');
 
-    function changeLanguage(lang) {
-        console.log('Language changed to:', lang);
-        // Language switching logic to be implemented
-    }
+        if (languageSelector && languageDropdown) {
+            languageSelector.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                languageDropdown.classList.toggle('show');
+                this.setAttribute('aria-expanded', languageDropdown.classList.contains('show'));
+            });
+
+            // Handle language selection
+            languageDropdown.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    if (this.classList.contains('disabled')) {
+                        e.preventDefault();
+                        return false;
+                    }
+
+                    const code = this.getAttribute('data-code');
+                    const languageCode = document.querySelector('.language-code');
+                    if (languageCode && code) {
+                        languageCode.textContent = code.toUpperCase().substring(0, 3);
+                    }
+
+                    languageDropdown.classList.remove('show');
+                    languageSelector.setAttribute('aria-expanded', 'false');
+
+                    // TODO: Implement actual language switching logic
+                    console.log('Language changed to:', code);
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!languageSelector.contains(e.target) && !languageDropdown.contains(e.target)) {
+                    languageDropdown.classList.remove('show');
+                    languageSelector.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        // Mobile Menu Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const menuContainer = document.querySelector('.menu-main-container');
+
+        if (menuToggle && menuContainer) {
+            menuToggle.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                this.setAttribute('aria-expanded', !isExpanded);
+                menuContainer.classList.toggle('active');
+            });
+        }
+
+        // Search Toggle
+        const searchToggle = document.querySelector('.search-toggle');
+        const searchContainer = document.querySelector('.search-container');
+
+        if (searchToggle && searchContainer) {
+            searchToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const isExpanded = searchContainer.getAttribute('aria-expanded') === 'true';
+                searchContainer.setAttribute('aria-expanded', !isExpanded);
+                searchContainer.classList.toggle('active');
+
+                if (!isExpanded) {
+                    const searchField = searchContainer.querySelector('.search-field');
+                    if (searchField) {
+                        searchField.focus();
+                    }
+                }
+            });
+        }
+    });
 </script>
 
 @stack('scripts')
