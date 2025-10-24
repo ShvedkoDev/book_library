@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BookDownloadResource\Pages;
 use App\Filament\Resources\BookDownloadResource\RelationManagers;
 use App\Models\BookDownload;
+use App\Models\Book;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 
 class BookDownloadResource extends Resource
 {
@@ -59,6 +61,17 @@ class BookDownloadResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                // Group downloads by book and count them
+                $query->select([
+                    'book_downloads.book_id',
+                    DB::raw('COUNT(*) as download_count'),
+                    DB::raw('MAX(book_downloads.created_at) as latest_download'),
+                    DB::raw('MIN(book_downloads.created_at) as first_download'),
+                ])
+                ->groupBy('book_downloads.book_id')
+                ->orderByDesc('download_count');
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('book.title')
                     ->searchable()
@@ -67,45 +80,40 @@ class BookDownloadResource extends Resource
                     ->weight('bold')
                     ->url(fn ($record) => $record->book ? route('library.show', $record->book->slug) : null)
                     ->openUrlInNewTab(),
-                Tables\Columns\TextColumn::make('book.download_count')
+                Tables\Columns\TextColumn::make('download_count')
                     ->label('Total Downloads')
                     ->sortable()
                     ->badge()
                     ->color('info'),
-                Tables\Columns\TextColumn::make('user.name')
-                    ->sortable()
-                    ->label('User')
-                    ->toggleable()
-                    ->placeholder('Guest'),
-                Tables\Columns\TextColumn::make('ip_address')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make('latest_download')
                     ->dateTime()
                     ->sortable()
-                    ->label('Downloaded At')
+                    ->label('Latest Download')
                     ->since(),
+                Tables\Columns\TextColumn::make('first_download')
+                    ->dateTime()
+                    ->sortable()
+                    ->label('First Download')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\Filter::make('last_24_hours')
-                    ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subHours(24)))
+                    ->query(fn (Builder $query): Builder => $query->having(DB::raw('MAX(book_downloads.created_at)'), '>=', now()->subHours(24)))
                     ->label('Last 24 Hours'),
                 Tables\Filters\Filter::make('last_7_days')
-                    ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subDays(7)))
+                    ->query(fn (Builder $query): Builder => $query->having(DB::raw('MAX(book_downloads.created_at)'), '>=', now()->subDays(7)))
                     ->label('Last 7 Days'),
                 Tables\Filters\Filter::make('last_30_days')
-                    ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subDays(30)))
+                    ->query(fn (Builder $query): Builder => $query->having(DB::raw('MAX(book_downloads.created_at)'), '>=', now()->subDays(30)))
                     ->label('Last 30 Days'),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // No view action needed for grouped data
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // No bulk actions needed for grouped data
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('download_count', 'desc');
     }
 
     public static function getRelations(): array
@@ -119,7 +127,6 @@ class BookDownloadResource extends Resource
     {
         return [
             'index' => Pages\ListBookDownloads::route('/'),
-            'view' => Pages\ViewBookDownload::route('/{record}'),
         ];
     }
 }
