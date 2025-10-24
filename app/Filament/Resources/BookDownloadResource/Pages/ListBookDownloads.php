@@ -13,7 +13,13 @@ class ListBookDownloads extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            // No create action for analytics data
         ];
+    }
+
+    public function getTableRecordKey($record): string
+    {
+        // Use book_id as the record key since we're grouping by book
+        return (string) $record->book_id;
     }
 }
