@@ -2,7 +2,7 @@
 
 ## 📊 Implementation Status (Updated: 2025-10-24)
 
-**Overall Progress: ~95% Complete** 🎉
+**Overall Progress: ~97% Complete** 🎉
 
 ### ✅ Completed
 - **Phase 1**: Setup & Architecture (Routes, Controllers, Layouts) - 100% ✅
@@ -10,14 +10,14 @@
 - **Phase 3**: Book Detail Page (Full metadata display, Related books) - 90% ✅
 - **Phase 4.1**: Navigation & Layout (Header, Footer, Breadcrumbs) - 100% ✅
 - **Phase 4.2**: Thumbnail Generation (Placeholder service with 3 options) - 100% ✅
-- **Phase 4.4**: Analytics & Tracking (Book views, downloads, searches, filters) - 100% ✅
+- **Phase 4.4**: Analytics & Tracking (Comprehensive system with admin panels) - 100% ✅
 - SEO & Meta tags (basic implementation)
 - Responsive design
 - Eager loading to prevent N+1 queries
 - HTML template structure matching (library.blade.php exactly matches library.html)
 
 ### ⚠️ Partially Implemented
-- File viewing/downloading routes (UI buttons exist, backend routes not implemented)
+- File viewing routes (UI View PDF button exists, streaming route not implemented)
 - Reviews & ratings (UI placeholders exist, no backend functionality)
 - User favorites/sharing (UI buttons exist, no backend functionality)
 
@@ -309,10 +309,11 @@ Copy structure from `public/ui-test/final/book.html` and implement:
   - Check access level
   - Stream PDF or embed viewer
   - Track views
-- [ ] Implement download route: `GET /library/book/{id}/download/{fileId}`
+- [x] Implement download route: `GET /library/book/{book}/download/{file}` ✅
   - Check access level
   - Force download
-  - Track downloads
+  - Track downloads with AnalyticsService
+  - Implemented in LibraryController@download
 - [ ] Implement audio player (if audio files exist)
   - Use HTML5 audio player
 - [ ] Implement video embedding (for external URLs)
@@ -393,13 +394,23 @@ Copy structure from `public/ui-test/final/book.html` and implement:
 
 ### 4.4 Analytics & Tracking ✅ **COMPLETED**
 
-- [x] Track book views (already has view_count column)
-- [x] Track file downloads (download_count column)
+- [x] Track book views (increments view_count + creates individual records)
+- [x] Track file downloads (increments download_count + creates individual records)
 - [x] Track search queries (for improving search)
 - [x] Track popular filters
+- [x] Admin dashboard overview widget with 30-day stats
+- [x] Book Views admin page with grouped overview
+- [x] Book Views detailed breakdown page per book
+- [x] Book Downloads admin page with grouped overview
+- [x] Book Downloads detailed breakdown page per book
+- [x] Search Queries admin page with zero-result tracking
+- [x] Filter Analytics admin page with usage breakdown
+- [x] Download route with automatic tracking: `GET /library/book/{book}/download/{file}`
 - [ ] Add Google Analytics or similar (if required)
 
 **Implementation Details:**
+
+**Database & Models:**
 - Created `search_queries` and `filter_analytics` database tables with migrations
 - Created `SearchQuery` and `FilterAnalytic` models with analytics methods
 - Created `AnalyticsService` for centralized tracking logic
@@ -407,6 +418,55 @@ Copy structure from `public/ui-test/final/book.html` and implement:
 - Reset all mock data (view_count and download_count set to 0)
 - Tracks IP address, user agent, and user ID (if authenticated)
 - Provides analytics methods for popular queries, zero-result searches, and filter stats
+
+**Admin Panel Resources:**
+
+1. **AnalyticsOverviewWidget** (`/admin` dashboard)
+   - Shows 30-day totals: Total views, downloads, searches, unique books viewed
+   - Color-coded stats with icons
+
+2. **BookViewResource** (`/admin/book-views`)
+   - Grouped query showing each book once
+   - Columns: Book title (clickable), Total views, Latest view, First view
+   - Time filters: Last 24 hours, 7 days, 30 days
+   - Sorted by view count (most viewed first)
+   - Click title or "View Details" → Goes to detailed breakdown
+
+3. **BookViewDetails Page** (`/admin/book-views/{bookId}/details`)
+   - Book summary card: Total views, total downloads, publication year
+   - Table of individual view records with timestamps, users, IPs, user agents
+   - Time filters for viewing specific periods
+   - "View Book Page" action to open book in library
+
+4. **BookDownloadResource** (`/admin/book-downloads`)
+   - Grouped query showing each book once
+   - Columns: Book title (clickable), Total downloads, Latest download, First download
+   - Time filters: Last 24 hours, 7 days, 30 days
+   - Sorted by download count (most downloaded first)
+   - Click title or "View Details" → Goes to detailed breakdown
+
+5. **BookDownloadDetails Page** (`/admin/book-downloads/{bookId}/details`)
+   - Book summary card: Total downloads, total views, publication year
+   - Table of individual download records with timestamps, users, IPs, user agents
+   - Time filters for viewing specific periods
+   - "View Book Page" action to open book in library
+
+6. **SearchQueryResource** (`/admin/search-queries`)
+   - Shows all search queries with result counts
+   - Red badge for zero-result searches, green for successful searches
+   - Time filters: Last 7 days, 30 days
+   - Searchable by query text
+   - User tracking when authenticated
+
+7. **FilterAnalyticResource** (`/admin/filter-analytics`)
+   - Shows filter usage by type and value
+   - Filter by filter type: Subjects, Grades, Languages, Types, Years
+   - Usage count per filter value
+   - Time filters: Last 7 days, 30 days
+
+**Routes:**
+- `GET /library/book/{book}/download/{file}` - Download with tracking
+- Updated book detail view to use download route instead of direct asset links
 
 ---
 
@@ -599,7 +659,7 @@ public/
 - ✅ Search returns relevant results in < 1 second
 - ✅ Filters work correctly with AND logic
 - ✅ Book detail pages display all available metadata
-- ⚠️ PDFs can be viewed/downloaded based on access level (UI complete, backend routes not implemented)
+- ✅ PDFs can be downloaded with tracking (Download route implemented, View route pending)
 - ✅ Design matches HTML templates from `public/ui-test/final/` **EXACTLY**
   - ✅ Header banner structure (COE banner + program banner)
   - ✅ Main content structure (title banner + breadcrumbs + page content)

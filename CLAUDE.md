@@ -160,6 +160,7 @@ docker-compose exec app bash
 - **Access Control**: View/Download buttons based on access level
 - **Related Content**: Same language, other languages, same author, same collection
 - **Multiple Editions**: Linked edition navigation
+- **Analytics & Tracking**: Comprehensive tracking of views, downloads, searches, and filter usage
 
 ## Development Milestones
 1. **Milestone 1 (10%)**: Database setup, 10 sample books, basic Library search
@@ -204,3 +205,86 @@ docker-compose exec app bash
 2. Enter Library → Search/filter books → View details → Download/view PDFs
 3. Registered users can rate and review books
 4. Admins can manage book database through admin panel
+
+## Analytics & Tracking System ✅
+
+### Overview
+Comprehensive analytics system tracking user behavior and content performance across the library.
+
+### Tracking Capabilities
+- **Book Views**: Every book page visit tracked with user, IP, timestamp
+- **Downloads**: PDF downloads tracked with user, IP, user agent
+- **Search Queries**: All searches recorded with result counts and zero-result tracking
+- **Filter Usage**: Popular filters tracked by type (subjects, grades, languages, types, years)
+
+### Admin Panel Analytics
+
+#### Dashboard Widget (`/admin`)
+- **30-Day Summary Card** showing:
+  - Total book views
+  - Total downloads
+  - Total searches performed
+  - Unique books viewed
+
+#### Book Views (`/admin/book-views`)
+- **Grouped Overview**: Each book shown once with total view count
+- **Latest View & First View** timestamps
+- **Clickable Titles**: Link to detailed breakdown
+- **Time Filters**: Last 24 hours, 7 days, 30 days
+- **Sorted by Popularity**: Most viewed books first
+
+#### Book Views Details (`/admin/book-views/{bookId}/details`)
+- **Book Summary Card**: Total views, downloads, publication year
+- **Individual View Records**: Complete list of all view events
+  - Timestamp with "X ago" format and full date
+  - User (or "Guest" for anonymous)
+  - IP address (searchable, toggleable)
+  - User agent (hidden by default, toggleable)
+- **View Book Page Action**: Opens book in library (new tab)
+
+#### Book Downloads (`/admin/book-downloads`)
+- **Grouped Overview**: Each book shown once with total download count
+- **Latest Download & First Download** timestamps
+- **Clickable Titles**: Link to detailed breakdown
+- **Time Filters**: Last 24 hours, 7 days, 30 days
+- **Sorted by Popularity**: Most downloaded books first
+
+#### Book Downloads Details (`/admin/book-downloads/{bookId}/details`)
+- **Book Summary Card**: Total downloads, views, publication year
+- **Individual Download Records**: Complete list of all download events
+  - Timestamp with "X ago" format and full date
+  - User (or "Guest" for anonymous)
+  - IP address (searchable, toggleable)
+  - User agent (hidden by default, toggleable)
+- **View Book Page Action**: Opens book in library (new tab)
+
+#### Search Queries (`/admin/search-queries`)
+- **All Search Terms**: Complete search history with result counts
+- **Zero Results Tracking**: Red badge for searches with no results
+- **Popular Queries**: Identify most common search terms
+- **Time-based Filters**: Last 7 days, 30 days
+- **User Tracking**: Links searches to users when authenticated
+
+#### Filter Analytics (`/admin/filter-analytics`)
+- **Filter Type Breakdown**: Usage stats by category
+  - Subjects (Purpose classifications)
+  - Grades (Learner levels)
+  - Languages
+  - Resource Types
+  - Publication Years
+- **Usage Counts**: How many times each filter was applied
+- **Time-based Filters**: Last 7 days, 30 days
+
+### Technical Implementation
+- **AnalyticsService**: Centralized service for all tracking operations
+- **Automatic Tracking**: Controllers use dependency injection for seamless tracking
+- **Database Tables**:
+  - `book_views` - Individual view records
+  - `book_downloads` - Individual download records
+  - `search_queries` - Search history with results
+  - `filter_analytics` - Filter usage patterns
+- **Performance**: Indexed queries for fast analytics retrieval
+- **Privacy**: IP addresses and user agents stored for analytics purposes
+
+### Admin Access
+All analytics features accessible through FilamentPHP admin panel under "Analytics" navigation group.
