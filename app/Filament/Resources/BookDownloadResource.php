@@ -78,8 +78,7 @@ class BookDownloadResource extends Resource
                     ->sortable()
                     ->label('Book Title')
                     ->weight('bold')
-                    ->url(fn ($record) => BookDownloadResource::getUrl('details', ['bookId' => $record->book_id]))
-                    ->description('Click to view detailed download statistics'),
+                    ->url(fn ($record) => BookDownloadResource::getUrl('details', ['bookId' => $record->book_id])),
                 Tables\Columns\TextColumn::make('download_count')
                     ->label('Total Downloads')
                     ->sortable()
