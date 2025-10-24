@@ -78,8 +78,8 @@ class BookDownloadResource extends Resource
                     ->sortable()
                     ->label('Book Title')
                     ->weight('bold')
-                    ->url(fn ($record) => $record->book ? route('library.show', $record->book->slug) : null)
-                    ->openUrlInNewTab(),
+                    ->url(fn ($record) => BookDownloadResource::getUrl('details', ['bookId' => $record->book_id]))
+                    ->description('Click to view detailed download statistics'),
                 Tables\Columns\TextColumn::make('download_count')
                     ->label('Total Downloads')
                     ->sortable()
@@ -108,7 +108,10 @@ class BookDownloadResource extends Resource
                     ->label('Last 30 Days'),
             ])
             ->actions([
-                // No view action needed for grouped data
+                Tables\Actions\Action::make('view_details')
+                    ->label('View Details')
+                    ->icon('heroicon-o-eye')
+                    ->url(fn ($record) => BookDownloadResource::getUrl('details', ['bookId' => $record->book_id])),
             ])
             ->bulkActions([
                 // No bulk actions needed for grouped data
@@ -127,6 +130,7 @@ class BookDownloadResource extends Resource
     {
         return [
             'index' => Pages\ListBookDownloads::route('/'),
+            'details' => Pages\BookDownloadDetails::route('/{bookId}/details'),
         ];
     }
 }
