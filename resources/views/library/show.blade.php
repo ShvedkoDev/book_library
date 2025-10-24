@@ -296,15 +296,10 @@
         <!-- Book Cover Section -->
         <div class="book-cover-section">
             @php
-                $coverImage = $book->files->where('file_type', 'thumbnail')->where('is_primary', true)->first();
                 $pdfFile = $book->files->where('file_type', 'pdf')->where('is_primary', true)->first();
             @endphp
 
-            @if($coverImage && $coverImage->file_path)
-                <img src="{{ asset('storage/' . $coverImage->file_path) }}" alt="{{ $book->title }}" class="book-cover">
-            @else
-                <img src="https://via.placeholder.com/300x450?text=No+Cover" alt="{{ $book->title }}" class="book-cover">
-            @endif
+            <img src="{{ $book->getThumbnailUrl() }}" alt="{{ $book->title }}" class="book-cover">
 
             <div class="access-status {{ $book->access_level === 'full' ? 'full-access' : ($book->access_level === 'limited' ? 'limited-access' : 'unavailable') }}">
                 <span>
@@ -546,14 +541,7 @@
             <div class="books-grid">
                 @foreach($relatedByCollection->take(6) as $relatedBook)
                     <div class="book-card">
-                        @php
-                            $relatedCover = $relatedBook->files->where('file_type', 'thumbnail')->where('is_primary', true)->first();
-                        @endphp
-                        @if($relatedCover && $relatedCover->file_path)
-                            <img src="{{ asset('storage/' . $relatedCover->file_path) }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        @else
-                            <img src="https://via.placeholder.com/160x240?text=No+Cover" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        @endif
+                        <img src="{{ $relatedBook->getThumbnailUrl() }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
                         <div class="book-card-title">{{ Str::limit($relatedBook->title, 50) }}</div>
                         <div class="book-card-author">{{ $relatedBook->creators->pluck('name')->join(', ') }}</div>
                         <div class="book-card-meta">{{ $relatedBook->publication_year }}</div>
@@ -570,14 +558,7 @@
             <div class="books-grid">
                 @foreach($relatedByLanguage->take(6) as $relatedBook)
                     <div class="book-card">
-                        @php
-                            $relatedCover = $relatedBook->files->where('file_type', 'thumbnail')->where('is_primary', true)->first();
-                        @endphp
-                        @if($relatedCover && $relatedCover->file_path)
-                            <img src="{{ asset('storage/' . $relatedCover->file_path) }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        @else
-                            <img src="https://via.placeholder.com/160x240?text=No+Cover" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        @endif
+                        <img src="{{ $relatedBook->getThumbnailUrl() }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
                         <div class="book-card-title">{{ Str::limit($relatedBook->title, 50) }}</div>
                         <div class="book-card-author">{{ $relatedBook->creators->pluck('name')->join(', ') }}</div>
                         <div class="book-card-meta">{{ $relatedBook->publication_year }}</div>
@@ -594,14 +575,7 @@
             <div class="books-grid">
                 @foreach($relatedByCreator->take(6) as $relatedBook)
                     <div class="book-card">
-                        @php
-                            $relatedCover = $relatedBook->files->where('file_type', 'thumbnail')->where('is_primary', true)->first();
-                        @endphp
-                        @if($relatedCover && $relatedCover->file_path)
-                            <img src="{{ asset('storage/' . $relatedCover->file_path) }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        @else
-                            <img src="https://via.placeholder.com/160x240?text=No+Cover" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        @endif
+                        <img src="{{ $relatedBook->getThumbnailUrl() }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
                         <div class="book-card-title">{{ Str::limit($relatedBook->title, 50) }}</div>
                         <div class="book-card-author">{{ $relatedBook->creators->pluck('name')->join(', ') }}</div>
                         <div class="book-card-meta">{{ $relatedBook->publication_year }}</div>

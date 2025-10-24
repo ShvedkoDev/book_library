@@ -530,4 +530,24 @@ class Book extends Model
     {
         return $this->ratings()->where('user_id', $userId)->first();
     }
+
+    /**
+     * Get thumbnail URL for this book
+     * Uses ThumbnailService to generate placeholder if needed
+     */
+    public function getThumbnailUrl(): string
+    {
+        $thumbnailService = app(\App\Services\ThumbnailService::class);
+        return $thumbnailService->getThumbnailUrl($this);
+    }
+
+    /**
+     * Check if book has an existing thumbnail file
+     */
+    public function hasThumbnail(): bool
+    {
+        return $this->primaryThumbnail()
+            ->whereNotNull('file_path')
+            ->exists();
+    }
 }

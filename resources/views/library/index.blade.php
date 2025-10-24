@@ -231,18 +231,9 @@
                     @forelse($books as $book)
                         <tr class="book-row">
                             <td class="book-cover-cell">
-                                @php
-                                    $thumbnail = $book->files->where('file_type', 'thumbnail')->where('is_primary', true)->first();
-                                @endphp
-                                @if($thumbnail && $thumbnail->file_path)
-                                    <img src="{{ asset('storage/' . $thumbnail->file_path) }}"
-                                         alt="{{ $book->title }}"
-                                         class="book-cover">
-                                @else
-                                    <img src="https://via.placeholder.com/60x80?text=No+Cover"
-                                         alt="{{ $book->title }}"
-                                         class="book-cover">
-                                @endif
+                                <img src="{{ $book->getThumbnailUrl() }}"
+                                     alt="{{ $book->title }}"
+                                     class="book-cover">
                             </td>
                             <td class="book-details-cell">
                                 <div class="book-title">
