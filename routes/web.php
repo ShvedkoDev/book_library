@@ -15,6 +15,7 @@ Route::get('/dashboard', function () {
 // Library routes
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
 Route::get('/library/book/{slug}', [LibraryController::class, 'show'])->name('library.show');
+Route::get('/library/book/{book}/download/{file}', [LibraryController::class, 'download'])->name('library.download');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

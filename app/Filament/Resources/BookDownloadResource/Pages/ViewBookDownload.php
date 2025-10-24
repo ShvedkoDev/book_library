@@ -3,10 +3,9 @@
 namespace App\Filament\Resources\BookDownloadResource\Pages;
 
 use App\Filament\Resources\BookDownloadResource;
-use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\Pages\ViewRecord;
 
-class CreateBookDownload extends CreateRecord
+class ViewBookDownload extends ViewRecord
 {
     protected static string $resource = BookDownloadResource::class;
 }

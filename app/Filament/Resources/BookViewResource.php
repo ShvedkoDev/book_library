@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BookDownloadResource\Pages;
-use App\Filament\Resources\BookDownloadResource\RelationManagers;
-use App\Models\BookDownload;
+use App\Filament\Resources\BookViewResource\Pages;
+use App\Filament\Resources\BookViewResource\RelationManagers;
+use App\Models\BookView;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,17 +13,17 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BookDownloadResource extends Resource
+class BookViewResource extends Resource
 {
-    protected static ?string $model = BookDownload::class;
+    protected static ?string $model = BookView::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
+    protected static ?string $navigationIcon = 'heroicon-o-eye';
 
-    protected static ?string $navigationLabel = 'Book Downloads';
+    protected static ?string $navigationLabel = 'Book Views';
 
     protected static ?string $navigationGroup = 'Analytics';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -67,11 +67,11 @@ class BookDownloadResource extends Resource
                     ->weight('bold')
                     ->url(fn ($record) => $record->book ? route('library.show', $record->book->slug) : null)
                     ->openUrlInNewTab(),
-                Tables\Columns\TextColumn::make('book.download_count')
-                    ->label('Total Downloads')
+                Tables\Columns\TextColumn::make('book.view_count')
+                    ->label('Total Views')
                     ->sortable()
                     ->badge()
-                    ->color('info'),
+                    ->color('success'),
                 Tables\Columns\TextColumn::make('user.name')
                     ->sortable()
                     ->label('User')
@@ -83,7 +83,7 @@ class BookDownloadResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->label('Downloaded At')
+                    ->label('Viewed At')
                     ->since(),
             ])
             ->filters([
@@ -118,8 +118,8 @@ class BookDownloadResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBookDownloads::route('/'),
-            'view' => Pages\ViewBookDownload::route('/{record}'),
+            'index' => Pages\ListBookViews::route('/'),
+            'view' => Pages\ViewBookView::route('/{record}'),
         ];
     }
 }

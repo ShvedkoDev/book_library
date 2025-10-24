@@ -225,4 +225,27 @@ class LibraryController extends Controller
             'relatedByCreator'
         ));
     }
+
+    /**
+     * Download a book file
+     */
+    public function download(Book $book, $fileId)
+    {
+        // Find the file
+        $file = $book->files()->findOrFail($fileId);
+
+        // Check if file exists in storage
+        if (!$file->file_path || !\Storage::disk('public')->exists($file->file_path)) {
+            abort(404, 'File not found');
+        }
+
+        // Track the download
+        $this->analytics->trackBookDownload($book, request());
+
+        // Return the file for download
+        return \Storage::disk('public')->download(
+            $file->file_path,
+            $file->filename ?? basename($file->file_path)
+        );
+    }
 }

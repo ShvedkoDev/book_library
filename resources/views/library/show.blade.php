@@ -316,7 +316,7 @@
             <div class="book-actions">
                 @if($book->access_level === 'full' && $pdfFile)
                     <a href="{{ asset('storage/' . $pdfFile->file_path) }}" target="_blank" class="book-action-btn btn-primary">Preview PDF</a>
-                    <a href="{{ asset('storage/' . $pdfFile->file_path) }}" download class="book-action-btn btn-secondary">Download PDF</a>
+                    <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-secondary">Download PDF</a>
                 @elseif($book->access_level === 'limited')
                     <button class="book-action-btn btn-primary" disabled>Limited Preview</button>
                     <button class="book-action-btn btn-secondary" disabled>Request Full Access</button>
