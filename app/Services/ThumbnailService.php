@@ -20,8 +20,8 @@ class ThumbnailService
             ->where('is_primary', true)
             ->first();
 
-        if ($thumbnailFile && $thumbnailFile->file_path && Storage::exists($thumbnailFile->file_path)) {
-            return Storage::url($thumbnailFile->file_path);
+        if ($thumbnailFile && $thumbnailFile->file_path && Storage::disk('public')->exists($thumbnailFile->file_path)) {
+            return Storage::disk('public')->url($thumbnailFile->file_path);
         }
 
         // Try to generate from PDF (Option 1)
@@ -52,16 +52,16 @@ class ThumbnailService
             ->where('is_primary', true)
             ->first();
 
-        if (!$pdfFile || !$pdfFile->file_path || !Storage::exists($pdfFile->file_path)) {
+        if (!$pdfFile || !$pdfFile->file_path || !Storage::disk('public')->exists($pdfFile->file_path)) {
             return null;
         }
 
         try {
-            $pdfPath = Storage::path($pdfFile->file_path);
+            $pdfPath = Storage::disk('public')->path($pdfFile->file_path);
 
             // Generate thumbnail filename
             $thumbnailFilename = 'thumbnails/generated/' . $book->id . '_' . time() . '.jpg';
-            $thumbnailPath = Storage::path($thumbnailFilename);
+            $thumbnailPath = Storage::disk('public')->path($thumbnailFilename);
 
             // Ensure directory exists
             $thumbnailDir = dirname($thumbnailPath);
@@ -84,7 +84,7 @@ class ThumbnailService
             $imagick->clear();
             $imagick->destroy();
 
-            return Storage::url($thumbnailFilename);
+            return Storage::disk('public')->url($thumbnailFilename);
         } catch (\Exception $e) {
             // Log error but don't fail
             logger()->error('Failed to generate PDF thumbnail: ' . $e->getMessage());
@@ -178,7 +178,7 @@ class ThumbnailService
 
             // Generate filename
             $filename = 'thumbnails/placeholders/' . Str::slug($book->title) . '_' . $book->id . '.svg';
-            $filePath = Storage::path($filename);
+            $filePath = Storage::disk('public')->path($filename);
 
             // Ensure directory exists
             $dir = dirname($filePath);
@@ -198,7 +198,7 @@ class ThumbnailService
             // Save to file
             file_put_contents($filePath, $svg);
 
-            return Storage::url($filename);
+            return Storage::disk('public')->url($filename);
         } catch (\Exception $e) {
             logger()->error('Failed to save placeholder thumbnail: ' . $e->getMessage());
             return null;
