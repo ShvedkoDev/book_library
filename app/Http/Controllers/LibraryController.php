@@ -6,10 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Language;
 use App\Models\ClassificationType;
+use App\Services\AnalyticsService;
 use Illuminate\Http\Request;
 
 class LibraryController extends Controller
 {
+    protected $analytics;
+
+    public function __construct(AnalyticsService $analytics)
+    {
+        $this->analytics = $analytics;
+    }
     /**
      * Display a listing of books with search and filters.
      */
@@ -107,6 +114,16 @@ class LibraryController extends Controller
         // Paginate results
         $books = $query->paginate($perPage)->withQueryString();
 
+        // Track search query if present
+        if ($search) {
+            $this->analytics->trackSearch($search, $books->total(), $request);
+        }
+
+        // Track filter usage if filters are applied
+        if (!empty(array_filter($filters))) {
+            $this->analytics->trackFilters($filters, $request);
+        }
+
         // Get filter options for sidebar
         $availableLanguages = Language::whereHas('books', fn($q) => $q->where('is_active', true))
             ->orderBy('name')
@@ -165,8 +182,8 @@ class LibraryController extends Controller
         ->where('is_active', true)
         ->firstOrFail();
 
-        // Increment view count
-        $book->increment('view_count');
+        // Track book view
+        $this->analytics->trackBookView($book, request());
 
         // Get related books
         $relatedByCollection = collect();
