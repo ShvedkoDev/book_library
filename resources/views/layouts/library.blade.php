@@ -220,7 +220,22 @@
                                 <li id="menu-item-1692" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1692"><a href="{{ url('/photo-gallery') }}">Photo Gallery</a></li>
                             </ul>
                         </li>
-                        <li class="menu-item menu-login"><a href="{{ route('login') }}">Login</a></li>
+                        @guest
+                            <li class="menu-item menu-login"><a href="{{ route('login') }}">Login</a></li>
+                        @else
+                            <li class="menu-item menu-item-has-children menu-user">
+                                <a href="#">{{ Auth::user()->name }}</a>
+                                <ul class="sub-menu">
+                                    <li><a href="{{ route('profile.edit') }}">Profile</a></li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                            @csrf
+                                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endguest
                     </ul>
                 </div>
 
@@ -293,9 +308,16 @@
                 </a>
             </div>
             <div class="links">
-
                 <a class="sitemap" href="{{ url('/sitemap') }}" title="sitemap"><i aria-hidden="true" class="fal fa-sitemap"></i> <span>Sitemap</span></a>
-                <a href="{{ route('login') }}" title="user login"><i aria-hidden="true" class="fal fa-sign-in"></i> <span>Log In</span></a>
+                @guest
+                    <a href="{{ route('login') }}" title="user login"><i aria-hidden="true" class="fal fa-sign-in"></i> <span>Log In</span></a>
+                @else
+                    <a href="{{ route('profile.edit') }}" title="user profile"><i aria-hidden="true" class="fal fa-user"></i> <span>{{ Auth::user()->name }}</span></a>
+                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                        @csrf
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" title="logout"><i aria-hidden="true" class="fal fa-sign-out"></i> <span>Log Out</span></a>
+                    </form>
+                @endguest
             </div>
         </div>
     </div>
