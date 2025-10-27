@@ -243,7 +243,7 @@
             {{ $slot }}
 
             <div class="back-to-site">
-                <a href="{{ url('/') }}">← Go to Micronesian Teachers Digital Library</a>
+                <a href="{{ route('library.index') }}">← Go to Micronesian Teachers Digital Library</a>
             </div>
         </div>
     </body>
