@@ -258,6 +258,46 @@
                 }
             });
         }
+
+        // Dropdown Menu Hover/Click Behavior
+        const menuItemsWithChildren = document.querySelectorAll('.menu-item-has-children');
+
+        menuItemsWithChildren.forEach(function(menuItem) {
+            const menuLink = menuItem.querySelector('a');
+            const subMenu = menuItem.querySelector('.sub-menu');
+
+            if (menuLink && subMenu) {
+                // Desktop: Hover behavior
+                menuItem.addEventListener('mouseenter', function() {
+                    if (window.innerWidth >= 768) {
+                        this.classList.add('open');
+                    }
+                });
+
+                menuItem.addEventListener('mouseleave', function() {
+                    if (window.innerWidth >= 768) {
+                        this.classList.remove('open');
+                    }
+                });
+
+                // Mobile: Click behavior
+                menuLink.addEventListener('click', function(e) {
+                    if (window.innerWidth < 768 && this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                        menuItem.classList.toggle('open');
+                    }
+                });
+            }
+        });
+
+        // Close all dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.menu-item-has-children')) {
+                menuItemsWithChildren.forEach(function(item) {
+                    item.classList.remove('open');
+                });
+            }
+        });
     });
 </script>
 
