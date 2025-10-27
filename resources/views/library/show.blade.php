@@ -55,6 +55,7 @@
         flex-direction: column;
         gap: 0.5rem;
         margin-bottom: 1rem;
+        align-items: center;
     }
 
     .book-action-btn {
@@ -64,6 +65,9 @@
         cursor: pointer;
         font-weight: 600;
         transition: all 0.3s;
+        text-align: center;
+        width: 100%;
+        max-width: 200px;
     }
 
     .book-action-btn.btn-primary {
@@ -113,10 +117,6 @@
 
     .user-action:hover {
         background: #e9ecef;
-    }
-
-    .book-info-section {
-        max-width: 900px;
     }
 
     .book-header {
