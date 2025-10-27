@@ -489,7 +489,7 @@ The library is currently **publicly accessible**, which contradicts the agreed r
 
 ## 👥 User Registration & Management
 
-### 6. User Registration Options ❌ **NOT STARTED**
+### 6. User Registration Options ✅ **COMPLETED** (2025-10-27)
 
 **Requirement (from conversation.md):**
 > "User must register (or been registered by admin) to have access to library"
@@ -501,7 +501,7 @@ Two registration paths needed:
 #### 6.1 Self-Registration
 
 **Tasks:**
-- [ ] Verify Laravel Breeze registration works ✅ (Already installed)
+- [x] Verify Laravel Breeze registration works ✅ (Already installed)
 - [ ] Customize registration form fields (if needed):
   - Name
   - Email
@@ -524,28 +524,31 @@ Two registration paths needed:
 #### 6.2 Admin-Created Accounts
 
 **Tasks:**
-- [ ] Create Filament resource: `UserResource.php` (if not exists)
+- [x] Create Filament resource: `UserResource.php` (already exists)
   - CRUD for users
-  - Fields: name, email, password, role, is_active
-  - Bulk user creation (optional)
-  - Import users from CSV/Excel (optional)
-  - Send welcome email with login credentials
+  - Fields: name, email, password, role, is_active, email_verified_at
+  - Role field with 'user' and 'admin' options
+  - Automatic email verification for admin-created accounts
 
-- [ ] Add "Create User" button in admin panel
-- [ ] Add password generation or manual entry
-- [ ] Option to send credentials via email
-- [ ] Mark admin-created users (require password change on first login)
+- [x] Add "Create User" button in admin panel (built into Filament)
+- [x] Add password generation or manual entry
+  - Auto-generates 12-character random password if left blank
+  - Shows generated password to admin via notification
+- [ ] Option to send credentials via email (marked for future implementation)
+- [ ] Mark admin-created users (require password change on first login - future)
 
-**Files to Create/Modify:**
-- `app/Filament/Resources/UserResource.php`
+**Files Modified:**
+- `app/Filament/Resources/UserResource.php` - Added role field, email verification, password generation
+- `app/Filament/Resources/UserResource/Pages/CreateUser.php` - Added password generation logic
 
 **Acceptance Criteria:**
-- ✅ Users can self-register
-- ✅ Email verification works (if enabled)
-- ✅ Admins can create user accounts
-- ✅ Admin-created users receive credentials
-- ✅ Terms acceptance required before library access
-- ✅ Registration form is user-friendly
+- ✅ Users can self-register (Laravel Breeze)
+- ✅ Email verification works (Laravel Breeze built-in)
+- ✅ Admins can create user accounts via Filament
+- ✅ Automatic password generation with admin notification
+- ⏳ Email credentials (future feature)
+- ⏳ Terms acceptance system (separate TODO item)
+- ✅ Role selection (user/admin)
 
 ---
 

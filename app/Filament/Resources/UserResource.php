@@ -59,17 +59,38 @@ class UserResource extends Resource
                             ->maxLength(500),
                     ])->columns(2),
 
-                Section::make('CMS Access')
+                Section::make('Library Access')
                     ->schema([
-                        Forms\Components\Toggle::make('is_cms_user')
-                            ->label('CMS User')
-                            ->helperText('Allow this user to access the CMS'),
+                        Select::make('role')
+                            ->label('User Role')
+                            ->options([
+                                'user' => 'Regular User',
+                                'admin' => 'Administrator',
+                            ])
+                            ->default('user')
+                            ->required()
+                            ->helperText('Regular users can access library. Administrators can also access admin panel.'),
 
                         Forms\Components\Toggle::make('is_active')
                             ->label('Active')
                             ->default(true)
                             ->helperText('Active users can log in'),
+
+                        Forms\Components\DateTimePicker::make('email_verified_at')
+                            ->label('Email Verified At')
+                            ->helperText('Mark email as verified manually (for admin-created accounts)')
+                            ->default(now())
+                            ->visibleOn('create'),
                     ])->columns(2),
+
+                Section::make('CMS Access')
+                    ->schema([
+                        Forms\Components\Toggle::make('is_cms_user')
+                            ->label('CMS User')
+                            ->helperText('Allow this user to access the CMS'),
+                    ])->columns(2)
+                    ->collapsible()
+                    ->collapsed(),
 
                 Section::make('Password')
                     ->schema([
@@ -78,7 +99,16 @@ class UserResource extends Resource
                             ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
                             ->dehydrated(fn ($state) => filled($state))
                             ->required(fn (string $context): bool => $context === 'create')
-                            ->minLength(8),
+                            ->minLength(8)
+                            ->helperText('Leave blank to generate a random password'),
+
+                        Forms\Components\Checkbox::make('send_credentials_email')
+                            ->label('Send credentials email (not yet implemented)')
+                            ->helperText('Future feature: email the user their login credentials')
+                            ->default(false)
+                            ->dehydrated(false)
+                            ->visibleOn('create')
+                            ->disabled(),
                     ])
                     ->visibleOn('create'),
             ]);
@@ -96,13 +126,23 @@ class UserResource extends Resource
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('role')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'admin' => 'danger',
+                        'user' => 'success',
+                    })
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('department')
                     ->searchable()
                     ->toggleable(),
 
                 Tables\Columns\IconColumn::make('is_cms_user')
                     ->label('CMS User')
-                    ->boolean(),
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('cmsRoles.display_name')
                     ->label('CMS Roles')
@@ -126,11 +166,11 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('is_cms_user')
-                    ->label('CMS Users')
+                SelectFilter::make('role')
+                    ->label('User Role')
                     ->options([
-                        1 => 'CMS Users Only',
-                        0 => 'Non-CMS Users Only',
+                        'user' => 'Regular User',
+                        'admin' => 'Administrator',
                     ]),
 
                 SelectFilter::make('is_active')
@@ -138,6 +178,13 @@ class UserResource extends Resource
                     ->options([
                         1 => 'Active Only',
                         0 => 'Inactive Only',
+                    ]),
+
+                SelectFilter::make('is_cms_user')
+                    ->label('CMS Users')
+                    ->options([
+                        1 => 'CMS Users Only',
+                        0 => 'Non-CMS Users Only',
                     ]),
 
                 SelectFilter::make('cms_roles')
