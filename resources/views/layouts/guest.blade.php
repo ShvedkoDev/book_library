@@ -220,6 +220,81 @@
                 border-left: 4px solid #d63638;
             }
 
+            .demo-credentials {
+                background: #fff9e6;
+                border: 1px solid #f0c947;
+                border-left: 4px solid #f0c947;
+                padding: 16px;
+                margin-bottom: 20px;
+                border-radius: 3px;
+                font-size: 13px;
+            }
+
+            .demo-credentials h3 {
+                margin: 0 0 12px 0;
+                font-size: 14px;
+                font-weight: 600;
+                color: #1d2327;
+            }
+
+            .demo-credentials ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .demo-credentials li {
+                margin-bottom: 10px;
+                padding: 8px;
+                background: #fff;
+                border-radius: 3px;
+                border: 1px solid #e0e0e0;
+            }
+
+            .demo-credentials li:last-child {
+                margin-bottom: 0;
+            }
+
+            .demo-credentials .user-role {
+                font-weight: 600;
+                color: #1d2327;
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            .demo-credentials .user-email {
+                color: #2c3338;
+                font-family: Consolas, Monaco, monospace;
+                font-size: 12px;
+                display: block;
+            }
+
+            .demo-credentials .user-password {
+                color: #666;
+                font-family: Consolas, Monaco, monospace;
+                font-size: 12px;
+                display: block;
+            }
+
+            .demo-credentials .badge {
+                display: inline-block;
+                padding: 2px 6px;
+                font-size: 11px;
+                font-weight: 600;
+                border-radius: 3px;
+                margin-left: 6px;
+            }
+
+            .demo-credentials .badge-admin {
+                background: #d63638;
+                color: #fff;
+            }
+
+            .demo-credentials .badge-user {
+                background: #007cba;
+                color: #fff;
+            }
+
             /* Responsive design */
             @media screen and (max-width: 782px) {
                 .login-container {
