@@ -44,7 +44,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->font('"proxima-nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif')           // Start with system font
             ->viteTheme('resources/css/filament/admin/theme.css')
-            // ->login()  // Commented out for testing
+            ->login()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -67,15 +67,15 @@ class AdminPanelProvider extends PanelProvider
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
-                // AuthenticateSession::class,  // Commented out for testing
+                AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->authMiddleware([
+                Authenticate::class,
             ]);
-            // ->authMiddleware([         // Commented out for testing
-            //     Authenticate::class,
-            // ]);
     }
 }
