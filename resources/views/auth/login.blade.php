@@ -1,25 +1,6 @@
 @section('title', 'Login - Micronesian Teachers Digital Library')
 
 <x-guest-layout>
-    <!-- Demo Credentials -->
-    @if(isset($demoUsers) && $demoUsers->isNotEmpty())
-        <div class="demo-credentials">
-            <h3>🔓 Demo Login Credentials</h3>
-            <ul>
-                @foreach($demoUsers as $user)
-                    <li>
-                        <span class="user-role">
-                            {{ $user->name }}
-                            <span class="badge badge-{{ $user->role }}">{{ ucfirst($user->role) }}</span>
-                        </span>
-                        <span class="user-email">📧 {{ $user->email }}</span>
-                        <span class="user-password">🔑 password123</span>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <!-- Session Status -->
     @if (session('status'))
         <div class="login-message">
@@ -74,4 +55,23 @@
             <p><a href="{{ route('register') }}">Don't have an account? Register</a></p>
         @endif
     </div>
+
+    <!-- Demo Credentials -->
+    @if(isset($demoUsers) && $demoUsers->isNotEmpty())
+        <div class="demo-credentials">
+            <h3>Demo Login Credentials</h3>
+            <ul>
+                @foreach($demoUsers as $user)
+                    <li>
+                        <span class="user-role">
+                            {{ $user->name }}
+                            <span class="badge badge-{{ $user->role }}">{{ ucfirst($user->role) }}</span>
+                        </span>
+                        <span class="user-email">{{ $user->email }}</span>
+                        <span class="user-password">password123</span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 </x-guest-layout>

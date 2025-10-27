@@ -225,7 +225,7 @@
                 border: 1px solid #f0c947;
                 border-left: 4px solid #f0c947;
                 padding: 16px;
-                margin-bottom: 20px;
+                margin-top: 20px;
                 border-radius: 3px;
                 font-size: 13px;
             }
