@@ -59,6 +59,18 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(BookBookmark::class);
     }
 
+    public function userBookmarks()
+    {
+        return $this->hasMany(UserBookmark::class);
+    }
+
+    public function bookmarkedBooks()
+    {
+        return $this->belongsToMany(Book::class, 'user_bookmarks')
+            ->withPivot('collection_name', 'notes')
+            ->withTimestamps();
+    }
+
     public function ratings()
     {
         return $this->hasMany(BookRating::class);
@@ -77,6 +89,11 @@ class User extends Authenticatable implements FilamentUser
     public function downloads()
     {
         return $this->hasMany(BookDownload::class);
+    }
+
+    public function bookNotes()
+    {
+        return $this->hasMany(BookNote::class);
     }
 
     public function termsAcceptances()

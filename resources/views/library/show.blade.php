@@ -414,6 +414,16 @@
                 </div>
             </div>
 
+            <!-- Bookmark Button (Auth Required) -->
+            @auth
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+                    <x-bookmark-button
+                        :book="$book"
+                        :isBookmarked="$book->isBookmarkedBy(Auth::id())"
+                    />
+                </div>
+            @endauth
+
             <!-- Share Button (No Auth Required) -->
             <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
                 <x-share-button
@@ -797,6 +807,140 @@
         </div>
     </div>
 
+    <!-- Personal Notes Section -->
+    @auth
+    <div class="notes-section" style="margin-top: 3rem; padding: 2rem; background: #f9f9fa; border-radius: 8px;">
+        <h2 style="margin-bottom: 1.5rem; color: #333;">
+            <i class="fal fa-sticky-note"></i> My Notes
+            @if($userNotes->isNotEmpty())
+                <span style="font-size: 0.875rem; color: #666; font-weight: 400;">({{ $userNotes->count() }})</span>
+            @endif
+        </h2>
+
+        <!-- Add New Note Form -->
+        <div class="add-note-form" style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: #555;">Add a New Note</h3>
+            <form action="{{ route('library.notes.store', $book->id) }}" method="POST">
+                @csrf
+                <div style="margin-bottom: 1rem;">
+                    <label for="note" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Note *</label>
+                    <textarea
+                        name="note"
+                        id="note"
+                        rows="4"
+                        placeholder="Write your thoughts, observations, or reminders about this book..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; resize: vertical; font-family: inherit;"
+                        required
+                        minlength="1"
+                        maxlength="5000"></textarea>
+                    <small style="color: #666; font-size: 0.875rem;">Maximum 5,000 characters. Your notes are private.</small>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label for="page_number" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Page Number (optional)</label>
+                    <input
+                        type="number"
+                        name="page_number"
+                        id="page_number"
+                        min="1"
+                        placeholder="e.g., 42"
+                        style="width: 150px; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit;">
+                </div>
+
+                <button type="submit" style="padding: 0.75rem 1.5rem; background: #007cba; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.3s;">
+                    <i class="fal fa-plus"></i> Add Note
+                </button>
+            </form>
+        </div>
+
+        <!-- Existing Notes -->
+        <div class="existing-notes">
+            <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: #555;">
+                Your Notes
+                @if($userNotes->isEmpty())
+                    <span style="font-size: 0.875rem; color: #999; font-weight: 400;">(None yet)</span>
+                @endif
+            </h3>
+            @forelse($userNotes as $note)
+                <div class="note-item" style="padding: 1.5rem; background: white; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #007cba;">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                        <div style="flex: 1;">
+                            @if($note->page_number)
+                                <span style="display: inline-block; background: #f0f0f0; color: #666; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-bottom: 0.5rem;">
+                                    <i class="fal fa-book-open"></i> Page {{ $note->page_number }}
+                                </span>
+                            @endif
+                            <div style="color: #999; font-size: 0.875rem;">
+                                <i class="fal fa-clock"></i> {{ $note->created_at->format('M d, Y') }}
+                                @if($note->created_at != $note->updated_at)
+                                    (edited {{ $note->updated_at->diffForHumans() }})
+                                @endif
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="editNote({{ $note->id }})" style="background: none; border: 1px solid #007cba; color: #007cba; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                                <i class="fal fa-edit"></i> Edit
+                            </button>
+                            <form action="{{ route('library.notes.destroy', $note->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this note?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="background: none; border: 1px solid #dc3545; color: #dc3545; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                                    <i class="fal fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="note-content-{{ $note->id }}" style="color: #333; line-height: 1.6; white-space: pre-wrap;">{{ $note->note }}</div>
+
+                    <!-- Edit Form (Hidden by default) -->
+                    <div id="note-edit-form-{{ $note->id }}" style="display: none; margin-top: 1rem;">
+                        <form action="{{ route('library.notes.update', $note->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <textarea
+                                name="note"
+                                rows="4"
+                                style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; resize: vertical; font-family: inherit; margin-bottom: 0.5rem;"
+                                required
+                                minlength="1"
+                                maxlength="5000">{{ $note->note }}</textarea>
+                            <div style="margin-bottom: 1rem;">
+                                <input
+                                    type="number"
+                                    name="page_number"
+                                    value="{{ $note->page_number }}"
+                                    min="1"
+                                    placeholder="Page number (optional)"
+                                    style="width: 150px; padding: 0.5rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit;">
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button type="submit" style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                                    <i class="fal fa-check"></i> Save
+                                </button>
+                                <button type="button" onclick="cancelEdit({{ $note->id }})" style="padding: 0.5rem 1rem; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <div style="padding: 2rem; background: white; border-radius: 8px; text-align: center;">
+                    <p style="color: #999;">You haven't added any notes for this book yet. Use the form above to add your first note!</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+    @else
+        <div style="margin-top: 3rem; padding: 2rem; background: #f9f9fa; border-radius: 8px; text-align: center;">
+            <h2 style="margin-bottom: 1rem; color: #333;">
+                <i class="fal fa-sticky-note"></i> Personal Notes
+            </h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Please <a href="{{ route('login') }}" style="color: #007cba; text-decoration: underline;">log in</a> to add personal notes to this book.</p>
+        </div>
+    @endauth
+
     <!-- Access Request Modal -->
     @auth
     <div id="accessRequestModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
@@ -923,6 +1067,21 @@
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
+    }
+
+    // Note editing functions
+    function editNote(noteId) {
+        // Hide the note content
+        document.getElementById('note-content-' + noteId).style.display = 'none';
+        // Show the edit form
+        document.getElementById('note-edit-form-' + noteId).style.display = 'block';
+    }
+
+    function cancelEdit(noteId) {
+        // Show the note content
+        document.getElementById('note-content-' + noteId).style.display = 'block';
+        // Hide the edit form
+        document.getElementById('note-edit-form-' + noteId).style.display = 'none';
     }
 
     // Close modal when clicking outside

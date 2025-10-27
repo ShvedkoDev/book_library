@@ -209,6 +209,7 @@ class LibraryController extends Controller
         // Get user's rating if authenticated
         $userRating = null;
         $userAccessRequest = null;
+        $userNotes = collect();
         if (auth()->check()) {
             $userRating = $book->ratings()->where('user_id', auth()->id())->first();
 
@@ -220,6 +221,9 @@ class LibraryController extends Controller
                 })
                 ->latest()
                 ->first();
+
+            // Get user's notes for this book
+            $userNotes = $book->getNotesForUser(auth()->id());
         }
 
         // Get related books
@@ -264,7 +268,8 @@ class LibraryController extends Controller
             'totalRatings',
             'ratingDistribution',
             'userRating',
-            'userAccessRequest'
+            'userAccessRequest',
+            'userNotes'
         ));
     }
 

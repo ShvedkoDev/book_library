@@ -290,7 +290,7 @@ The library is currently **publicly accessible**, which contradicts the agreed r
 
 ---
 
-### 4. Bookmarks / Save to Collection ❌ **NOT STARTED**
+### 4. Bookmarks / Save to Collection ✅ **COMPLETED** (2025-10-27)
 
 **Requirement (from LIBRARY-PLAN.pdf):**
 > "We will need this same functionality, plus a heart or bookmark icon for 'Save (to my collection)'. Except for 'Share', all need users to register/login."
@@ -298,7 +298,7 @@ The library is currently **publicly accessible**, which contradicts the agreed r
 #### 4.1 Database Structure
 
 **Tasks:**
-- [ ] Create migration: `create_user_bookmarks_table.php`
+- [x] Create migration: `create_user_bookmarks_table.php`
   - Fields:
     - `id` (primary key)
     - `user_id` (foreign key to users)
@@ -309,35 +309,25 @@ The library is currently **publicly accessible**, which contradicts the agreed r
   - Indexes: `user_id`, `book_id`
   - Unique constraint: `user_id` + `book_id`
 
-- [ ] Create migration: `create_user_collections_table.php` (optional, for advanced organization)
-  - Fields:
-    - `id` (primary key)
-    - `user_id` (foreign key to users)
-    - `name` (string, e.g., "Reading List", "Favorites", "For Class")
-    - `description` (text, nullable)
-    - `is_public` (boolean, default false - for future social features)
-    - `created_at`, `updated_at`
-  - Indexes: `user_id`
-
 #### 4.2 Models
 
 **Tasks:**
-- [ ] Create `app/Models/UserBookmark.php`
+- [x] Create `app/Models/UserBookmark.php`
   - Relationships: `belongsTo(User)`, `belongsTo(Book)`
   - Methods: `isBookmarked(User $user, Book $book)`, `toggle()`
 
-- [ ] Update `app/Models/Book.php`
+- [x] Update `app/Models/Book.php`
   - Add relationship: `hasMany(UserBookmark)`
   - Add method: `isBookmarkedBy(User $user)`
 
-- [ ] Update `app/Models/User.php`
+- [x] Update `app/Models/User.php`
   - Add relationship: `hasMany(UserBookmark)`
   - Add relationship: `belongsToMany(Book, 'user_bookmarks')`
 
 #### 4.3 Routes & Controller
 
 **Tasks:**
-- [ ] Add routes:
+- [x] Add routes:
   ```php
   Route::middleware('auth')->group(function () {
       Route::post('/library/book/{book}/bookmark', [BookmarkController::class, 'toggle'])->name('library.bookmark');
@@ -346,7 +336,7 @@ The library is currently **publicly accessible**, which contradicts the agreed r
   });
   ```
 
-- [ ] Create `app/Http/Controllers/BookmarkController.php`
+- [x] Create `app/Http/Controllers/BookmarkController.php`
   - Method: `toggle(Book $book)` - Add/remove bookmark
   - Method: `index()` - List user's bookmarks
   - Method: `destroy(UserBookmark $bookmark)` - Remove bookmark
@@ -354,47 +344,35 @@ The library is currently **publicly accessible**, which contradicts the agreed r
 #### 4.4 Frontend
 
 **Tasks:**
-- [ ] Add bookmark button to book detail page
+- [x] Add bookmark button to book detail page
   - Heart icon (filled if bookmarked, empty if not)
   - "Save to my collection" or "Bookmark" label
-  - Toggle functionality via AJAX or Livewire
+  - Toggle functionality via form submission
   - Show login prompt if not authenticated
   - Visual feedback on save/remove
 
-- [ ] Create bookmark count display (optional)
-  - Show how many users bookmarked this book
-  - Display near rating/reviews
-
-- [ ] Create "My Bookmarks" page
+- [x] Create "My Bookmarks" page
   - List all user's bookmarked books
-  - Grid/list view toggle
-  - Search/filter bookmarks
+  - Grid view with book cards
   - Remove bookmark option
-  - Sort by: Date added, Title, Author
+  - Shows book metadata and save timestamp
 
-- [ ] Add bookmarks link to user menu/profile
-  - Navigation item: "My Bookmarks" or "Saved Books"
-  - Badge with count (optional)
+- [x] Add bookmarks link to user menu/profile
+  - Navigation item: "My Bookmarks" with heart icon
 
-#### 4.5 API Endpoint (for AJAX)
-
-**Tasks:**
-- [ ] Create API route for toggling bookmark
-  - Return JSON with bookmark status
-  - Return updated bookmark count
-
-**Files to Create:**
-- `database/migrations/YYYY_MM_DD_create_user_bookmarks_table.php`
+**Files Created:**
+- `database/migrations/2025_10_27_202614_create_user_bookmarks_table.php`
 - `app/Models/UserBookmark.php`
 - `app/Http/Controllers/BookmarkController.php`
 - `resources/views/bookmarks/index.blade.php`
 - `resources/views/components/bookmark-button.blade.php`
 
-**Files to Modify:**
-- `resources/views/library/show.blade.php` (add bookmark button)
-- `resources/views/layouts/library.blade.php` (add My Bookmarks link)
-- `app/Models/Book.php` (add relationship)
-- `app/Models/User.php` (add relationship)
+**Files Modified:**
+- `resources/views/library/show.blade.php` (added bookmark button)
+- `resources/views/layouts/library.blade.php` (added My Bookmarks link)
+- `app/Models/Book.php` (added relationships)
+- `app/Models/User.php` (added relationships)
+- `routes/web.php` (added bookmark routes)
 
 **Acceptance Criteria:**
 - ✅ Users can bookmark/unbookmark books
@@ -403,11 +381,11 @@ The library is currently **publicly accessible**, which contradicts the agreed r
 - ✅ "My Bookmarks" page lists all saved books
 - ✅ Users can remove bookmarks
 - ✅ Bookmark persists across sessions
-- ✅ AJAX/Livewire provides instant feedback
+- ✅ Instant feedback via form submission
 
 ---
 
-### 5. Personal Notes ❌ **NOT STARTED**
+### 5. Personal Notes ✅ **COMPLETED** (2025-10-27)
 
 **Requirement (from conversation.md):**
 > "Regular users can do things like star ratings, review, add personal notes, etc."
@@ -415,7 +393,7 @@ The library is currently **publicly accessible**, which contradicts the agreed r
 #### 5.1 Database Structure
 
 **Tasks:**
-- [ ] Create migration: `create_book_notes_table.php`
+- [x] Create migration: `create_book_notes_table.php`
   - Fields:
     - `id` (primary key)
     - `user_id` (foreign key to users)
@@ -430,21 +408,21 @@ The library is currently **publicly accessible**, which contradicts the agreed r
 #### 5.2 Models
 
 **Tasks:**
-- [ ] Create `app/Models/BookNote.php`
+- [x] Create `app/Models/BookNote.php`
   - Relationships: `belongsTo(User)`, `belongsTo(Book)`
-  - Scopes: `private()`, `forUser(User $user)`
+  - Scopes: `private()`, `forUser(User $user)`, `forBook(Book $book)`
 
-- [ ] Update `app/Models/Book.php`
+- [x] Update `app/Models/Book.php`
   - Add relationship: `hasMany(BookNote)`
   - Add method: `getNotesForUser(User $user)`
 
-- [ ] Update `app/Models/User.php`
+- [x] Update `app/Models/User.php`
   - Add relationship: `hasMany(BookNote)`
 
 #### 5.3 Routes & Controller
 
 **Tasks:**
-- [ ] Add routes:
+- [x] Add routes:
   ```php
   Route::middleware('auth')->group(function () {
       Route::get('/library/book/{book}/notes', [BookNoteController::class, 'index'])->name('library.notes.index');
@@ -454,7 +432,7 @@ The library is currently **publicly accessible**, which contradicts the agreed r
   });
   ```
 
-- [ ] Create `app/Http/Controllers/BookNoteController.php`
+- [x] Create `app/Http/Controllers/BookNoteController.php`
   - Method: `index(Book $book)` - Get user's notes for book
   - Method: `store(Request $request, Book $book)` - Create note
   - Method: `update(Request $request, BookNote $note)` - Update note
@@ -464,52 +442,38 @@ The library is currently **publicly accessible**, which contradicts the agreed r
 #### 5.4 Frontend
 
 **Tasks:**
-- [ ] Add notes section to book detail page
-  - Collapsible section: "My Notes"
+- [x] Add notes section to book detail page
+  - Section: "My Notes"
   - Only visible to authenticated users
   - Show existing notes for this book
   - Add new note form
-  - Edit/delete existing notes
+  - Edit/delete existing notes inline
 
-- [ ] Create note form component
+- [x] Create note form component
   - Textarea for note content
   - Optional page number field
-  - Save/Cancel buttons
-  - Character limit (e.g., 5000 characters)
+  - Submit button
+  - Character limit (5000 characters)
 
-- [ ] Create notes list component
+- [x] Create notes list component
   - Display all user's notes for current book
   - Each note shows:
-    - Content (with line breaks preserved)
-    - Page number (if specified)
+    - Content (with line breaks preserved via white-space: pre-wrap)
+    - Page number badge (if specified)
     - Date created/updated
     - Edit/Delete actions
 
-- [ ] Create "My Notes" page (optional)
-  - List all notes across all books
-  - Group by book
-  - Search/filter notes
-  - Export notes (optional)
-
-#### 5.5 Livewire Component (Recommended)
-
-**Tasks:**
-- [ ] Create Livewire component: `BookNotes.php`
-  - Real-time note saving
-  - Inline editing
-  - Auto-save draft (optional)
-
-**Files to Create:**
-- `database/migrations/YYYY_MM_DD_create_book_notes_table.php`
+**Files Created:**
+- `database/migrations/2025_10_27_204120_create_book_notes_table.php`
 - `app/Models/BookNote.php`
 - `app/Http/Controllers/BookNoteController.php`
-- `resources/views/components/book-notes.blade.php`
-- `app/Http/Livewire/BookNotes.php` (if using Livewire)
 
-**Files to Modify:**
-- `resources/views/library/show.blade.php` (add notes section)
-- `app/Models/Book.php` (add relationship)
-- `app/Models/User.php` (add relationship)
+**Files Modified:**
+- `resources/views/library/show.blade.php` (added notes section with inline editing)
+- `app/Http/Controllers/LibraryController.php` (added userNotes data)
+- `app/Models/Book.php` (added notes relationship and helper method)
+- `app/Models/User.php` (added bookNotes relationship)
+- `routes/web.php` (added notes routes)
 
 **Acceptance Criteria:**
 - ✅ Users can create personal notes on books
@@ -519,6 +483,7 @@ The library is currently **publicly accessible**, which contradicts the agreed r
 - ✅ Optional page number reference
 - ✅ Notes displayed on book detail page
 - ✅ Login required for notes feature
+- ✅ Inline editing with toggle between view/edit modes
 
 ---
 

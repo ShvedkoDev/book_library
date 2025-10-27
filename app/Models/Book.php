@@ -373,6 +373,16 @@ class Book extends Model
         return $this->hasMany(BookBookmark::class);
     }
 
+    public function userBookmarks()
+    {
+        return $this->hasMany(UserBookmark::class);
+    }
+
+    public function bookmarkedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'user_bookmarks')->withTimestamps();
+    }
+
     public function views()
     {
         return $this->hasMany(BookView::class);
@@ -381,6 +391,11 @@ class Book extends Model
     public function downloads()
     {
         return $this->hasMany(BookDownload::class);
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(BookNote::class);
     }
 
     // Scopes
@@ -518,7 +533,7 @@ class Book extends Model
 
     public function isBookmarkedBy($userId)
     {
-        return $this->bookmarks()->where('user_id', $userId)->exists();
+        return $this->userBookmarks()->where('user_id', $userId)->exists();
     }
 
     public function isRatedBy($userId)
@@ -529,6 +544,11 @@ class Book extends Model
     public function getUserRating($userId)
     {
         return $this->ratings()->where('user_id', $userId)->first();
+    }
+
+    public function getNotesForUser($userId)
+    {
+        return $this->notes()->where('user_id', $userId)->orderBy('created_at', 'desc')->get();
     }
 
     /**
