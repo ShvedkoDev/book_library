@@ -74,7 +74,13 @@
                 <div class="toggle-switch-container">
                     <div class="toggle-switch">
                         <button class="toggle-option {{ request()->is('/') ? 'active' : '' }}" onclick="window.location.href='{{ url('/') }}'" data-module="guide">Resource guide</button>
-                        <button class="toggle-option {{ request()->is('library*') ? 'active' : '' }}" data-module="library">Resource library</button>
+                        @auth
+                            <button class="toggle-option {{ request()->is('library*') ? 'active' : '' }}" onclick="window.location.href='{{ route('library.index') }}'" data-module="library">Resource library</button>
+                        @else
+                            <button class="toggle-option {{ request()->is('library*') ? 'active' : '' }}" onclick="window.location.href='{{ route('library.index') }}'" data-module="library" title="Login required to access library">
+                                Resource library <i class="fal fa-lock" style="font-size: 0.8em; margin-left: 0.25em;"></i>
+                            </button>
+                        @endauth
                     </div>
                 </div>
             </div>

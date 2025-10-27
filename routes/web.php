@@ -12,15 +12,13 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Library routes
-Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
-Route::get('/library/book/{slug}', [LibraryController::class, 'show'])->name('library.show');
-Route::get('/library/book/{book}/view-pdf/{file}', [LibraryController::class, 'viewPdf'])->name('library.view-pdf');
-Route::get('/library/book/{book}/download/{file}', [LibraryController::class, 'download'])->name('library.download');
-Route::post('/library/book/{book}/request-access', [LibraryController::class, 'requestAccess'])->name('library.request-access');
-
-// Review and Rating routes (requires authentication)
-Route::middleware('auth')->group(function () {
+// Library routes (requires authentication)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
+    Route::get('/library/book/{slug}', [LibraryController::class, 'show'])->name('library.show');
+    Route::get('/library/book/{book}/view-pdf/{file}', [LibraryController::class, 'viewPdf'])->name('library.view-pdf');
+    Route::get('/library/book/{book}/download/{file}', [LibraryController::class, 'download'])->name('library.download');
+    Route::post('/library/book/{book}/request-access', [LibraryController::class, 'requestAccess'])->name('library.request-access');
     Route::post('/library/book/{book}/rate', [LibraryController::class, 'submitRating'])->name('library.rate');
     Route::post('/library/book/{book}/review', [LibraryController::class, 'submitReview'])->name('library.review');
 });
