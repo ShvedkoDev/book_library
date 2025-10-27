@@ -69,3 +69,51 @@
         max-height: 50px;
     }
 }
+
+/* Dropdown Menu Styles - Desktop Hover */
+@media screen and (min-width: 768px) {
+    /* Position parent menu item */
+    header .nav-primary .menu-item-has-children {
+        position: relative;
+    }
+
+    /* Hide submenu by default */
+    header .nav-primary .menu-item-has-children .sub-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        min-width: 220px;
+        z-index: 1000;
+        margin-top: 0;
+        padding: 0.5rem 0;
+    }
+
+    /* Show submenu on hover/open */
+    header .nav-primary .menu-item-has-children.open .sub-menu,
+    header .nav-primary .menu-item-has-children:hover .sub-menu {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Submenu link styles */
+    header .nav-primary .sub-menu li a {
+        display: block;
+        padding: 0.75rem 1.25rem;
+        color: #333;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    header .nav-primary .sub-menu li a:hover {
+        background: #f0f0f0;
+        color: #007cba;
+    }
+}
