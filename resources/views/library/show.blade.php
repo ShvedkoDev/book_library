@@ -3,6 +3,7 @@
 @section('title', $book->title . ' - Micronesian Teachers Digital Library')
 @section('description', Str::limit($book->description ?? 'Educational resource for Micronesian teachers', 160))
 @section('og_type', 'book')
+@section('og_image', $book->getThumbnailUrl())
 
 @push('styles')
 <style>
@@ -291,7 +292,7 @@
 @endpush
 
 @section('content')
-<div class="container library-book-detail">
+<div class="container library-book-detail" data-book-id="{{ $book->id }}">
     <!-- Success Messages -->
     @if(session('success'))
         <div style="padding: 1rem; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 6px; margin-bottom: 1rem;">
@@ -411,6 +412,15 @@
                 <div class="rating-text" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #e0e0e0;">
                     {{ number_format($book->view_count) }} {{ Str::plural('view', $book->view_count) }}
                 </div>
+            </div>
+
+            <!-- Share Button (No Auth Required) -->
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+                <x-share-button
+                    :url="route('library.show', $book->slug)"
+                    :title="$book->title"
+                    :description="Str::limit($book->description ?? 'Educational resource for Micronesian teachers', 100)"
+                />
             </div>
         </div>
 

@@ -17,6 +17,10 @@
     <meta property="og:description" content="@yield('description', 'Access over 2,000 educational resources in local languages for Micronesian educators')"/>
     <meta property="og:url" content="{{ url()->current() }}"/>
     <meta property="og:site_name" content="Micronesian Teachers Digital Library"/>
+    @hasSection('og_image')
+        <meta property="og:image" content="@yield('og_image')"/>
+        <meta property="og:image:alt" content="@yield('title', 'Micronesian Teachers Digital Library')"/>
+    @endif
 
     <!-- Stylesheets -->
     <link rel='stylesheet' href='{{ asset('library-assets/css/main.css') }}' type='text/css' media='all'/>

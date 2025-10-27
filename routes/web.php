@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\Api\ShareTrackingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,6 +12,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// API Routes
+// Share tracking - NO AUTH REQUIRED (as per requirements)
+Route::post('/api/track-share', [ShareTrackingController::class, 'trackShare'])->name('api.track-share');
 
 // Library routes (requires authentication)
 Route::middleware(['auth', 'verified'])->group(function () {
