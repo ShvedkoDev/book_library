@@ -91,12 +91,22 @@
                         @if($availableSubjects->isNotEmpty())
                             @foreach($availableSubjects as $subjectType)
                                 @if($subjectType->classificationValues->isNotEmpty())
-                                    <div class="filter-group">
+                                    @php
+                                        $activeSubjectsCount = count(array_intersect(
+                                            $subjectType->classificationValues->pluck('id')->toArray(),
+                                            $filters['subjects'] ?? []
+                                        ));
+                                        $isExpanded = $activeSubjectsCount > 0;
+                                    @endphp
+                                    <div class="filter-group {{ $activeSubjectsCount > 0 ? 'has-active-filters' : '' }}">
                                         <h4 class="filter-toggle" onclick="toggleFilterGroup(this)">
-                                            <i class="fal fa-chevron-right toggle-icon"></i>
+                                            <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
                                             {{ $subjectType->name }}
+                                            @if($activeSubjectsCount > 0)
+                                                <span class="active-filter-badge">{{ $activeSubjectsCount }}</span>
+                                            @endif
                                         </h4>
-                                        <div class="checkbox-group collapsed">
+                                        <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
                                             @foreach($subjectType->classificationValues as $classification)
                                                 <label>
                                                     <input
@@ -119,12 +129,22 @@
                         @if($availableGrades->isNotEmpty())
                             @foreach($availableGrades as $gradeType)
                                 @if($gradeType->classificationValues->isNotEmpty())
-                                    <div class="filter-group">
+                                    @php
+                                        $activeGradesCount = count(array_intersect(
+                                            $gradeType->classificationValues->pluck('id')->toArray(),
+                                            $filters['grades'] ?? []
+                                        ));
+                                        $isExpanded = $activeGradesCount > 0;
+                                    @endphp
+                                    <div class="filter-group {{ $activeGradesCount > 0 ? 'has-active-filters' : '' }}">
                                         <h4 class="filter-toggle" onclick="toggleFilterGroup(this)">
-                                            <i class="fal fa-chevron-right toggle-icon"></i>
+                                            <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
                                             {{ $gradeType->name }}
+                                            @if($activeGradesCount > 0)
+                                                <span class="active-filter-badge">{{ $activeGradesCount }}</span>
+                                            @endif
                                         </h4>
-                                        <div class="checkbox-group collapsed">
+                                        <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
                                             @foreach($gradeType->classificationValues as $classification)
                                                 <label>
                                                     <input
@@ -147,12 +167,22 @@
                         @if($availableTypes->isNotEmpty())
                             @foreach($availableTypes as $typeGroup)
                                 @if($typeGroup->classificationValues->isNotEmpty())
-                                    <div class="filter-group">
+                                    @php
+                                        $activeTypesCount = count(array_intersect(
+                                            $typeGroup->classificationValues->pluck('id')->toArray(),
+                                            $filters['types'] ?? []
+                                        ));
+                                        $isExpanded = $activeTypesCount > 0;
+                                    @endphp
+                                    <div class="filter-group {{ $activeTypesCount > 0 ? 'has-active-filters' : '' }}">
                                         <h4 class="filter-toggle" onclick="toggleFilterGroup(this)">
-                                            <i class="fal fa-chevron-right toggle-icon"></i>
+                                            <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
                                             {{ $typeGroup->name }}
+                                            @if($activeTypesCount > 0)
+                                                <span class="active-filter-badge">{{ $activeTypesCount }}</span>
+                                            @endif
                                         </h4>
-                                        <div class="checkbox-group collapsed">
+                                        <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
                                             @foreach($typeGroup->classificationValues as $classification)
                                                 <label>
                                                     <input
@@ -173,12 +203,19 @@
 
                         <!-- Language Filter -->
                         @if($availableLanguages->isNotEmpty())
-                            <div class="filter-group">
+                            @php
+                                $activeLanguagesCount = count($filters['languages'] ?? []);
+                                $isExpanded = $activeLanguagesCount > 0;
+                            @endphp
+                            <div class="filter-group {{ $activeLanguagesCount > 0 ? 'has-active-filters' : '' }}">
                                 <h4 class="filter-toggle" onclick="toggleFilterGroup(this)">
-                                    <i class="fal fa-chevron-right toggle-icon"></i>
+                                    <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
                                     Language
+                                    @if($activeLanguagesCount > 0)
+                                        <span class="active-filter-badge">{{ $activeLanguagesCount }}</span>
+                                    @endif
                                 </h4>
-                                <div class="checkbox-group collapsed">
+                                <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
                                     @foreach($availableLanguages as $language)
                                         <label>
                                             <input

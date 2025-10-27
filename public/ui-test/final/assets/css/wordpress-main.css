@@ -15162,7 +15162,7 @@ table.background-blue caption, table.background-blue td, table.background-blue t
     border: 1px solid #dbdcdd
 }
 
-.main a {
+.main a:not(.button):not(.btn-primary) {
     color: #005a70
 }
 
@@ -18925,14 +18925,6 @@ header .nav-primary ul > li > ul > li > a:active, header .nav-primary ul > li > 
 #breadcrumb_holder a {
     color: #333;
     text-decoration: none
-}
-
-.template-sitemap li.external-link > a:after, .template-sitemap li.mega-external-link > a:after, header nav a[href*="//"]:not([href*="https://coe.hawaii.edu"]):after, header nav li.external-link a:after {
-    content: "\F08E";
-    display: inline;
-    font-size: .65rem;
-    padding-left: .4rem;
-    white-space: nowrap
 }
 
 @media screen and (min-width: 768px) {
@@ -46888,7 +46880,7 @@ body.osas .island + .island {
 }
 
 .stems2.template-stems2-ulu-guide .title_banner .header-blurb + .header-image {
-    align-items: center;
+    align-items: start;
     background-position: 50%;
     display: flex;
     justify-content: center;
