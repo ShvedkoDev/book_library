@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Language;
 use App\Models\ClassificationType;
+use App\Models\AccessRequest;
 use App\Services\AnalyticsService;
 use Illuminate\Http\Request;
 
@@ -177,6 +178,9 @@ class LibraryController extends Controller
             'learnerLevelClassifications.classificationType',
             'libraryReferences',
             'bookRelationships.relatedBook.files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true),
+            'ratings',
+            'reviews' => fn($q) => $q->where('is_approved', true)->where('is_active', true)->with('user')->latest(),
+            'keywords',
         ])
         ->where('slug', $slug)
         ->where('is_active', true)
@@ -184,6 +188,23 @@ class LibraryController extends Controller
 
         // Track book view
         $this->analytics->trackBookView($book, request());
+
+        // Calculate rating statistics
+        $averageRating = $book->ratings()->avg('rating') ?? 0;
+        $totalRatings = $book->ratings()->count();
+        $ratingDistribution = [
+            5 => $book->ratings()->where('rating', 5)->count(),
+            4 => $book->ratings()->where('rating', 4)->count(),
+            3 => $book->ratings()->where('rating', 3)->count(),
+            2 => $book->ratings()->where('rating', 2)->count(),
+            1 => $book->ratings()->where('rating', 1)->count(),
+        ];
+
+        // Get user's rating if authenticated
+        $userRating = null;
+        if (auth()->check()) {
+            $userRating = $book->ratings()->where('user_id', auth()->id())->first();
+        }
 
         // Get related books
         $relatedByCollection = collect();
@@ -222,8 +243,44 @@ class LibraryController extends Controller
             'book',
             'relatedByCollection',
             'relatedByLanguage',
-            'relatedByCreator'
+            'relatedByCreator',
+            'averageRating',
+            'totalRatings',
+            'ratingDistribution',
+            'userRating'
         ));
+    }
+
+    /**
+     * View a PDF file in the browser
+     */
+    public function viewPdf(Book $book, $fileId)
+    {
+        // Find the file
+        $file = $book->files()->where('file_type', 'pdf')->findOrFail($fileId);
+
+        // Check access level
+        if ($book->access_level === 'unavailable') {
+            abort(403, 'This book is not available for viewing. Please request access.');
+        }
+
+        // Check if file exists in storage
+        if (!$file->file_path || !\Storage::disk('public')->exists($file->file_path)) {
+            abort(404, 'PDF file not found');
+        }
+
+        // Track the view (this is separate from book page views)
+        $this->analytics->trackBookView($book, request());
+
+        // Stream the PDF file for inline viewing
+        return \Storage::disk('public')->response(
+            $file->file_path,
+            $file->filename ?? basename($file->file_path),
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($file->file_path)) . '"'
+            ]
+        );
     }
 
     /**
@@ -233,6 +290,11 @@ class LibraryController extends Controller
     {
         // Find the file
         $file = $book->files()->findOrFail($fileId);
+
+        // Check access level
+        if ($book->access_level === 'unavailable') {
+            abort(403, 'This book is not available for download. Please request access.');
+        }
 
         // Check if file exists in storage
         if (!$file->file_path || !\Storage::disk('public')->exists($file->file_path)) {
@@ -247,5 +309,67 @@ class LibraryController extends Controller
             $file->file_path,
             $file->filename ?? basename($file->file_path)
         );
+    }
+
+    /**
+     * Submit a rating for a book
+     */
+    public function submitRating(Request $request, Book $book)
+    {
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+
+        // Update or create rating
+        $book->ratings()->updateOrCreate(
+            ['user_id' => auth()->id()],
+            ['rating' => $validated['rating']]
+        );
+
+        return back()->with('success', 'Your rating has been saved!');
+    }
+
+    /**
+     * Submit a review for a book
+     */
+    public function submitReview(Request $request, Book $book)
+    {
+        $validated = $request->validate([
+            'review' => 'required|string|min:10|max:2000',
+        ]);
+
+        // Create review (requires approval)
+        $book->reviews()->create([
+            'user_id' => auth()->id(),
+            'review' => $validated['review'],
+            'is_approved' => false, // Reviews require admin approval
+            'is_active' => true,
+        ]);
+
+        return back()->with('success', 'Your review has been submitted and is pending approval. Thank you!');
+    }
+
+    /**
+     * Submit an access request for a book
+     */
+    public function requestAccess(Request $request, Book $book)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'nullable|string|max:2000',
+        ]);
+
+        // Create access request
+        AccessRequest::create([
+            'book_id' => $book->id,
+            'user_id' => auth()->id(),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'message' => $validated['message'] ?? null,
+            'status' => 'pending',
+        ]);
+
+        return back()->with('success', 'Your access request has been submitted. We will contact you via email shortly.');
     }
 }

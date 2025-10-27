@@ -292,6 +292,23 @@
 
 @section('content')
 <div class="container library-book-detail">
+    <!-- Success Messages -->
+    @if(session('success'))
+        <div style="padding: 1rem; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 6px; margin-bottom: 1rem;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div style="padding: 1rem; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 6px; margin-bottom: 1rem;">
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="book-page-container">
         <!-- Book Cover Section -->
         <div class="book-cover-section">
@@ -315,24 +332,47 @@
 
             <div class="book-actions">
                 @if($book->access_level === 'full' && $pdfFile)
-                    <a href="{{ asset('storage/' . $pdfFile->file_path) }}" target="_blank" class="book-action-btn btn-primary">Preview PDF</a>
+                    <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">View PDF</a>
                     <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-secondary">Download PDF</a>
-                @elseif($book->access_level === 'limited')
-                    <button class="book-action-btn btn-primary" disabled>Limited Preview</button>
+                @elseif($book->access_level === 'limited' && $pdfFile)
+                    <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">Limited Preview</a>
                     <button class="book-action-btn btn-secondary" disabled>Request Full Access</button>
                 @else
                     <button class="book-action-btn btn-primary" disabled>Not Available</button>
-                    <button class="book-action-btn btn-secondary">Request Access</button>
+                    @auth
+                        <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
+                            Request Access
+                        </button>
+                    @else
+                        <a href="{{ route('login') }}"
+                           class="book-action-btn btn-secondary"
+                           style="text-decoration: none; text-align: center;"
+                           title="Please log in to request access">
+                            Login to Request Access
+                        </a>
+                    @endauth
                 @endif
             </div>
 
             <div class="book-rating">
                 <div class="stars">
+                    @php
+                        $roundedRating = round($averageRating);
+                    @endphp
                     @for($i = 1; $i <= 5; $i++)
-                        <span class="star {{ $i <= 4 ? '' : 'empty' }}">★</span>
+                        <span class="star {{ $i <= $roundedRating ? '' : 'empty' }}">★</span>
                     @endfor
                 </div>
-                <div class="rating-text">{{ $book->view_count }} views</div>
+                <div class="rating-text">
+                    @if($totalRatings > 0)
+                        {{ number_format($averageRating, 1) }} average ({{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }})
+                    @else
+                        No ratings yet
+                    @endif
+                </div>
+                <div class="rating-text" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #e0e0e0;">
+                    {{ number_format($book->view_count) }} {{ Str::plural('view', $book->view_count) }}
+                </div>
             </div>
         </div>
 
@@ -392,12 +432,12 @@
                     <div>{!! nl2br(e($book->table_of_contents)) !!}</div>
                 @endif
 
-                @if($book->keywords)
+                @if($book->keywords && $book->keywords->isNotEmpty())
                     <div style="margin-top: 1.5rem;">
                         <strong>Keywords:</strong>
-                        @foreach(explode(',', $book->keywords) as $keyword)
+                        @foreach($book->keywords as $keywordObj)
                             <span style="display: inline-block; background: #e9ecef; padding: 0.25rem 0.75rem; margin: 0.25rem; border-radius: 1rem; font-size: 0.875rem;">
-                                {{ trim($keyword) }}
+                                {{ $keywordObj->keyword }}
                             </span>
                         @endforeach
                     </div>
@@ -585,6 +625,189 @@
             </div>
         </div>
     @endif
+
+    <!-- Reviews and Ratings Section -->
+    <div class="reviews-section" style="margin-top: 3rem; padding: 2rem; background: #f9f9f9; border-radius: 8px;">
+        <h2 style="margin-bottom: 1.5rem; color: #333;">Reviews & Ratings</h2>
+
+        <!-- Rating Histogram -->
+        <div class="rating-histogram" style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #555;">Rating Distribution</h3>
+            @if($totalRatings > 0)
+                <div style="display: flex; gap: 2rem; align-items: center;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; font-weight: bold; color: #007cba;">{{ number_format($averageRating, 1) }}</div>
+                        <div class="stars" style="font-size: 1.5rem;">
+                            @for($i = 1; $i <= 5; $i++)
+                                <span class="star {{ $i <= round($averageRating) ? '' : 'empty' }}">★</span>
+                            @endfor
+                        </div>
+                        <div style="color: #666; margin-top: 0.5rem;">{{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }}</div>
+                    </div>
+                    <div style="flex: 1;">
+                        @foreach([5, 4, 3, 2, 1] as $rating)
+                            @php
+                                $count = $ratingDistribution[$rating];
+                                $percentage = $totalRatings > 0 ? ($count / $totalRatings) * 100 : 0;
+                            @endphp
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                <span style="min-width: 60px; color: #666;">{{ $rating }} stars</span>
+                                <div style="flex: 1; height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden;">
+                                    <div style="height: 100%; background: #ffc107; width: {{ $percentage }}%; transition: width 0.3s;"></div>
+                                </div>
+                                <span style="min-width: 60px; text-align: right; color: #666;">{{ $count }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @else
+                <p style="color: #666; text-align: center; padding: 2rem;">No ratings yet. Be the first to rate this book!</p>
+            @endif
+        </div>
+
+        <!-- User Rating Form -->
+        @auth
+            <div class="user-rating-form" style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px;">
+                <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #555;">Rate this book</h3>
+                <form action="{{ route('library.rate', $book->id) }}" method="POST" style="display: flex; align-items: center; gap: 1rem;">
+                    @csrf
+                    <div class="star-rating" style="display: flex; gap: 0.5rem;">
+                        @for($i = 1; $i <= 5; $i++)
+                            <label style="cursor: pointer; font-size: 2rem;">
+                                <input type="radio" name="rating" value="{{ $i }}" style="display: none;"
+                                    {{ $userRating && $userRating->rating == $i ? 'checked' : '' }}
+                                    onchange="this.form.submit()">
+                                <span class="rating-star" data-rating="{{ $i }}"
+                                    style="color: {{ $userRating && $i <= $userRating->rating ? '#ffc107' : '#ddd' }}; transition: color 0.2s;">★</span>
+                            </label>
+                        @endfor
+                    </div>
+                    @if($userRating)
+                        <span style="color: #666;">Your rating: {{ $userRating->rating }}/5</span>
+                    @else
+                        <span style="color: #666;">Click to rate</span>
+                    @endif
+                </form>
+            </div>
+        @else
+            <div style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px; text-align: center;">
+                <p style="color: #666; margin-bottom: 1rem;">Please <a href="{{ route('login') }}" style="color: #007cba; text-decoration: underline;">log in</a> to rate this book.</p>
+            </div>
+        @endauth
+
+        <!-- User Review Form -->
+        @auth
+            <div class="user-review-form" style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px;">
+                <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #555;">Write a review</h3>
+                <form action="{{ route('library.review', $book->id) }}" method="POST">
+                    @csrf
+                    <textarea name="review" rows="5" placeholder="Share your thoughts about this book..."
+                        style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 6px; resize: vertical; font-family: inherit;"
+                        required minlength="10" maxlength="2000"></textarea>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                        <span style="color: #999; font-size: 0.875rem;">Reviews are moderated and will appear after approval.</span>
+                        <button type="submit" style="padding: 0.75rem 1.5rem; background: #007cba; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                            Submit Review
+                        </button>
+                    </div>
+                </form>
+            </div>
+        @else
+            <div style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px; text-align: center;">
+                <p style="color: #666;">Please <a href="{{ route('login') }}" style="color: #007cba; text-decoration: underline;">log in</a> to write a review.</p>
+            </div>
+        @endauth
+
+        <!-- Existing Reviews -->
+        <div class="existing-reviews">
+            <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #555;">User Reviews ({{ $book->reviews->count() }})</h3>
+            @forelse($book->reviews as $review)
+                <div style="padding: 1.5rem; background: white; border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                        <div>
+                            <strong style="color: #333;">{{ $review->user->name }}</strong>
+                            @php
+                                $reviewUserRating = $book->ratings()->where('user_id', $review->user_id)->first();
+                            @endphp
+                            @if($reviewUserRating)
+                                <div class="stars" style="display: inline-block; margin-left: 1rem; font-size: 1rem;">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <span class="star {{ $i <= $reviewUserRating->rating ? '' : 'empty' }}">★</span>
+                                    @endfor
+                                </div>
+                            @endif
+                        </div>
+                        <span style="color: #999; font-size: 0.875rem;">{{ $review->created_at->diffForHumans() }}</span>
+                    </div>
+                    <p style="color: #555; line-height: 1.6; margin: 0;">{{ $review->review }}</p>
+                </div>
+            @empty
+                <div style="padding: 2rem; background: white; border-radius: 8px; text-align: center;">
+                    <p style="color: #999;">No reviews yet. Be the first to review this book!</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Access Request Modal -->
+    @auth
+    <div id="accessRequestModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 8px; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0; color: #333;">Request Access</h2>
+                <button onclick="closeAccessRequestModal()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #999;">&times;</button>
+            </div>
+
+            <p style="color: #666; margin-bottom: 1.5rem;">
+                Fill out the form below to request access to <strong>{{ $book->title }}</strong>. We will review your request and contact you via email.
+            </p>
+
+            <form action="{{ route('library.request-access', $book->id) }}" method="POST">
+                @csrf
+                <div style="margin-bottom: 1rem;">
+                    <label for="access_request_name" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Name *</label>
+                    <input type="text"
+                           id="access_request_name"
+                           name="name"
+                           value="{{ auth()->user()->name }}"
+                           required
+                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit;">
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label for="access_request_email" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Email *</label>
+                    <input type="email"
+                           id="access_request_email"
+                           name="email"
+                           value="{{ auth()->user()->email }}"
+                           required
+                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit;">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="access_request_message" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Message (Optional)</label>
+                    <textarea id="access_request_message"
+                              name="message"
+                              rows="4"
+                              placeholder="Why do you need access to this book?"
+                              style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; resize: vertical; font-family: inherit;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button"
+                            onclick="closeAccessRequestModal()"
+                            style="padding: 0.75rem 1.5rem; background: #f0f0f0; color: #333; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            style="padding: 0.75rem 1.5rem; background: #007cba; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                        Submit Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endauth
 </div>
 @endsection
 
@@ -607,5 +830,63 @@
         // Add active class to clicked tab
         event.target.classList.add('active');
     }
+
+    // Star rating hover effect
+    document.addEventListener('DOMContentLoaded', function() {
+        const starRating = document.querySelector('.star-rating');
+        if (starRating) {
+            const stars = starRating.querySelectorAll('.rating-star');
+            let currentRating = {{ $userRating ? $userRating->rating : 0 }};
+
+            stars.forEach((star, index) => {
+                star.addEventListener('mouseenter', function() {
+                    highlightStars(index + 1);
+                });
+
+                star.addEventListener('mouseleave', function() {
+                    highlightStars(currentRating);
+                });
+            });
+
+            function highlightStars(rating) {
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.style.color = '#ffc107';
+                    } else {
+                        star.style.color = '#ddd';
+                    }
+                });
+            }
+        }
+    });
+
+    // Access Request Modal functions
+    function openAccessRequestModal() {
+        const modal = document.getElementById('accessRequestModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeAccessRequestModal() {
+        const modal = document.getElementById('accessRequestModal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('accessRequestModal');
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeAccessRequestModal();
+                }
+            });
+        }
+    });
 </script>
 @endpush

@@ -26,31 +26,27 @@ class BookReviewResource extends Resource
                     ->required()
                     ->searchable()
                     ->preload(),
-                    
+
                 Forms\Components\Select::make('user_id')
                     ->label('User')
                     ->relationship('user', 'name')
                     ->required()
                     ->searchable()
                     ->preload(),
-                    
-                Forms\Components\Textarea::make('review_text')
+
+                Forms\Components\Textarea::make('review')
                     ->label('Review')
                     ->required()
                     ->rows(4)
                     ->columnSpanFull(),
-                    
+
                 Forms\Components\Toggle::make('is_approved')
+                    ->label('Approved')
                     ->default(false),
-                    
-                Forms\Components\Select::make('approved_by')
-                    ->label('Approved By')
-                    ->relationship('approver', 'name')
-                    ->searchable()
-                    ->preload(),
-                    
-                Forms\Components\DateTimePicker::make('approved_at')
-                    ->label('Approved At'),
+
+                Forms\Components\Toggle::make('is_active')
+                    ->label('Active')
+                    ->default(true),
             ]);
     }
 
@@ -62,27 +58,33 @@ class BookReviewResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->limit(30),
-                    
+
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
                     ->sortable(),
-                    
-                Tables\Columns\TextColumn::make('review_text')
+
+                Tables\Columns\TextColumn::make('review')
+                    ->label('Review')
                     ->limit(50)
                     ->wrap(),
-                    
-                Tables\Columns\ToggleColumn::make('is_approved'),
-                    
-                Tables\Columns\TextColumn::make('approver.name')
-                    ->label('Approved By')
-                    ->placeholder('Not approved'),
-                    
+
+                Tables\Columns\IconColumn::make('is_approved')
+                    ->label('Approved')
+                    ->boolean(),
+
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label('Active')
+                    ->boolean(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_approved'),
+                Tables\Filters\TernaryFilter::make('is_approved')
+                    ->label('Approval Status'),
+                Tables\Filters\TernaryFilter::make('is_active')
+                    ->label('Active Status'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -92,7 +94,8 @@ class BookReviewResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getPages(): array
