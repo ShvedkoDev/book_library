@@ -125,22 +125,28 @@ class LibraryController extends Controller
             $this->analytics->trackFilters($filters, $request);
         }
 
-        // Get filter options for sidebar
+        // Get filter options for sidebar - only show options that are actually used by active books
         $availableLanguages = Language::whereHas('books', fn($q) => $q->where('is_active', true))
             ->orderBy('name')
             ->get(['id', 'name', 'code']);
 
-        // Get classification types with values (skip for now if no books have them)
+        // Get classification types with values - only include values that are actually used by books
         $availableSubjects = ClassificationType::where('slug', 'purpose')
-            ->with('classificationValues')
+            ->with(['classificationValues' => function($q) {
+                $q->whereHas('books', fn($bookQuery) => $bookQuery->where('is_active', true));
+            }])
             ->get();
 
         $availableGrades = ClassificationType::where('slug', 'learner-level')
-            ->with('classificationValues')
+            ->with(['classificationValues' => function($q) {
+                $q->whereHas('books', fn($bookQuery) => $bookQuery->where('is_active', true));
+            }])
             ->get();
 
         $availableTypes = ClassificationType::where('slug', 'type')
-            ->with('classificationValues')
+            ->with(['classificationValues' => function($q) {
+                $q->whereHas('books', fn($bookQuery) => $bookQuery->where('is_active', true));
+            }])
             ->get();
 
         return view('library.index', compact(
