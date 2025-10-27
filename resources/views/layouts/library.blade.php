@@ -101,17 +101,7 @@
                                 <li id="menu-item-1692" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1692"><a href="{{ url('/photo-gallery') }}">Photo Gallery</a></li>
                             </ul>
                         </li>
-                        @auth
-                            <li class="menu-item menu-login"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="menu-item menu-logout">
-                                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                                    @csrf
-                                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
-                                </form>
-                            </li>
-                        @else
-                            <li class="menu-item menu-login"><a href="{{ route('login') }}">Login</a></li>
-                        @endauth
+                        <li class="menu-item menu-login"><a href="{{ route('login') }}">Login</a></li>
                     </ul>
                 </div>
 
@@ -119,10 +109,10 @@
                     <a class="search-toggle" href="#searchform"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Toggle Search</span></a>
                     <div class="search-container" aria-expanded="false">
                         <form role="search" method="get" class="searchform" action="/">
-                            <label for="basic-site-search" id="searchform" class="screen-reader-text">
+                            <label for="basic-site-search" id="searchform" class="screen-reader-text" action="/">
                                 Search for:
                             </label>
-                            <input type="search" class="search-field" id="basic-site-search" placeholder="Search &hellip;" value="" name="s"/>
+                            <input type="search" class="search-field" id="basic-site-search" placeholder="Search …" value="" name="s">
                             <button type="submit" class="search-submit" value="Search"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Site Search</span></button>
                         </form>
                     </div>
