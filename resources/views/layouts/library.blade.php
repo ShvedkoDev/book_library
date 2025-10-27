@@ -78,6 +78,75 @@
                 color: #007cba;
             }
         }
+
+        /* Search Container Dropdown */
+        .menu-search {
+            position: relative;
+        }
+
+        .menu-search .search-container {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            display: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 1rem;
+            min-width: 300px;
+            z-index: 1000;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .menu-search .search-container.active {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-search .searchform {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .menu-search .search-field {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .menu-search .search-field:focus {
+            outline: none;
+            border-color: #007cba;
+            box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.1);
+        }
+
+        .menu-search .search-submit {
+            padding: 0.5rem 1rem;
+            background: #007cba;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .menu-search .search-submit:hover {
+            background: #005a87;
+        }
+
+        @media screen and (max-width: 767px) {
+            .menu-search .search-container {
+                right: auto;
+                left: 0;
+                min-width: 280px;
+            }
+        }
     </style>
 
     @stack('styles')
@@ -158,11 +227,11 @@
                 <div class="menu-search">
                     <a class="search-toggle" href="#searchform"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Toggle Search</span></a>
                     <div class="search-container" aria-expanded="false">
-                        <form role="search" method="get" class="searchform" action="/">
-                            <label for="basic-site-search" id="searchform" class="screen-reader-text" action="/">
+                        <form role="search" method="get" class="searchform" action="{{ route('library.index') }}">
+                            <label for="basic-site-search" id="searchform" class="screen-reader-text">
                                 Search for:
                             </label>
-                            <input type="search" class="search-field" id="basic-site-search" placeholder="Search …" value="" name="s">
+                            <input type="search" class="search-field" id="basic-site-search" placeholder="Search books, authors, topics…" value="" name="search">
                             <button type="submit" class="search-submit" value="Search"><i class="fal fa-search" aria-hidden="true"></i><span class="screen-reader-text">Site Search</span></button>
                         </form>
                     </div>
