@@ -55,7 +55,6 @@
         flex-direction: column;
         gap: 0.5rem;
         margin-bottom: 1rem;
-        align-items: center;
     }
 
     .book-action-btn {
@@ -67,7 +66,8 @@
         transition: all 0.3s;
         text-align: center;
         width: 100%;
-        max-width: 200px;
+        text-decoration: none;
+        display: block;
     }
 
     .book-action-btn.btn-primary {
