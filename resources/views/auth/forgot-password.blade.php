@@ -1,25 +1,43 @@
+@section('title', 'Forgot Password - Micronesian Teachers Digital Library')
+
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <!-- Session Status -->
+    @if (session('status'))
+        <div class="login-message">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    <!-- Validation Errors -->
+    @if ($errors->any())
+        <div class="login-message login-error">
+            @foreach ($errors->all() as $error)
+                <p style="margin: 0;">{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+
+    <div style="margin-bottom: 20px; font-size: 14px; color: #1d2327; line-height: 1.5;">
+        Forgot your password? No problem. Just enter your email address and we will email you a password reset link.
     </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}" class="login-form">
         @csrf
 
         <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" type="email" name="email" class="form-input" value="{{ old('email') }}" required autofocus autocomplete="username">
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+        <!-- Submit Button -->
+        <div class="login-submit">
+            <input type="submit" class="button button-primary button-large" value="Email Password Reset Link">
         </div>
     </form>
+
+    <!-- Links -->
+    <div class="login-links">
+        <p><a href="{{ route('login') }}">Back to Login</a></p>
+    </div>
 </x-guest-layout>
