@@ -202,8 +202,18 @@ class LibraryController extends Controller
 
         // Get user's rating if authenticated
         $userRating = null;
+        $userAccessRequest = null;
         if (auth()->check()) {
             $userRating = $book->ratings()->where('user_id', auth()->id())->first();
+
+            // Check if user has an existing access request for this book
+            $userAccessRequest = AccessRequest::where('book_id', $book->id)
+                ->where(function($q) {
+                    $q->where('user_id', auth()->id())
+                      ->orWhere('email', auth()->user()->email);
+                })
+                ->latest()
+                ->first();
         }
 
         // Get related books
@@ -247,7 +257,8 @@ class LibraryController extends Controller
             'averageRating',
             'totalRatings',
             'ratingDistribution',
-            'userRating'
+            'userRating',
+            'userAccessRequest'
         ));
     }
 
@@ -359,6 +370,23 @@ class LibraryController extends Controller
             'email' => 'required|email|max:255',
             'message' => 'nullable|string|max:2000',
         ]);
+
+        // Check if user already has a pending or approved request
+        $existingRequest = AccessRequest::where('book_id', $book->id)
+            ->where(function($q) use ($validated) {
+                $q->where('user_id', auth()->id())
+                  ->orWhere('email', $validated['email']);
+            })
+            ->whereIn('status', ['pending', 'approved'])
+            ->first();
+
+        if ($existingRequest) {
+            if ($existingRequest->status === 'pending') {
+                return back()->with('info', 'You already have a pending access request for this book. Please wait for our response.');
+            } elseif ($existingRequest->status === 'approved') {
+                return back()->with('info', 'Your access request has already been approved. Please check your email for instructions.');
+            }
+        }
 
         // Create access request
         AccessRequest::create([

@@ -299,6 +299,12 @@
         </div>
     @endif
 
+    @if(session('info'))
+        <div style="padding: 1rem; background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; border-radius: 6px; margin-bottom: 1rem;">
+            {{ session('info') }}
+        </div>
+    @endif
+
     @if($errors->any())
         <div style="padding: 1rem; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 6px; margin-bottom: 1rem;">
             <ul style="margin: 0; padding-left: 1.5rem;">
@@ -340,9 +346,41 @@
                 @else
                     <button class="book-action-btn btn-primary" disabled>Not Available</button>
                     @auth
-                        <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
-                            Request Access
-                        </button>
+                        @if($userAccessRequest)
+                            @if($userAccessRequest->status === 'pending')
+                                <div style="padding: 0.75rem; background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; text-align: center;">
+                                    <strong style="color: #856404;">⏳ Request Pending</strong>
+                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #856404;">
+                                        Your access request is being reviewed.
+                                    </p>
+                                </div>
+                            @elseif($userAccessRequest->status === 'approved')
+                                <div style="padding: 0.75rem; background: #d4edda; border: 1px solid #28a745; border-radius: 6px; text-align: center;">
+                                    <strong style="color: #155724;">✓ Access Approved</strong>
+                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #155724;">
+                                        Your request has been approved. Check your email for instructions.
+                                    </p>
+                                </div>
+                            @elseif($userAccessRequest->status === 'rejected')
+                                <div style="padding: 0.75rem; background: #f8d7da; border: 1px solid #dc3545; border-radius: 6px; text-align: center; margin-bottom: 0.5rem;">
+                                    <strong style="color: #721c24;">✗ Request Rejected</strong>
+                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #721c24;">
+                                        Your previous request was not approved.
+                                    </p>
+                                </div>
+                                <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
+                                    Request Again
+                                </button>
+                            @else
+                                <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
+                                    Request Access
+                                </button>
+                            @endif
+                        @else
+                            <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
+                                Request Access
+                            </button>
+                        @endif
                     @else
                         <a href="{{ route('login') }}"
                            class="book-action-btn btn-secondary"
