@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Book;
 
 class BookSeeder extends Seeder
 {
@@ -254,7 +255,10 @@ class BookSeeder extends Seeder
             ],
         ];
 
-        DB::table('books')->insert($books);
+        // Use Book::create() to trigger model events (slug generation)
+        foreach ($books as $bookData) {
+            Book::create($bookData);
+        }
     }
 
     private function seedBookLanguages()
