@@ -27,6 +27,7 @@ class BookFile extends Model
     {
         return [
             'book_id' => 'integer',
+            'file_path' => 'array',
             'file_size' => 'integer',
             'is_primary' => 'boolean',
             'is_active' => 'boolean',
@@ -90,14 +91,48 @@ class BookFile extends Model
 
     // Helper Methods
 
+    /**
+     * Get the actual file path string from the array/string
+     * Handles both Filament's array format and legacy string format
+     */
+    public function getFilePath(): ?string
+    {
+        if (empty($this->file_path)) {
+            return null;
+        }
+
+        // If already a string, return it
+        if (is_string($this->file_path)) {
+            return $this->file_path;
+        }
+
+        // If it's an array (from Filament FileUpload)
+        if (is_array($this->file_path)) {
+            // Get the first item (Filament stores as array with UUID keys)
+            $firstItem = reset($this->file_path);
+
+            // If the first item is an array/object, get its first value
+            if (is_array($firstItem) || is_object($firstItem)) {
+                $values = is_array($firstItem) ? array_values($firstItem) : array_values((array)$firstItem);
+                return $values[0] ?? null;
+            }
+
+            return $firstItem;
+        }
+
+        return null;
+    }
+
     public function getFullPath()
     {
-        return storage_path('app/' . $this->file_path);
+        $path = $this->getFilePath();
+        return $path ? storage_path('app/public/' . $path) : null;
     }
 
     public function getPublicUrl()
     {
-        return asset('storage/' . $this->file_path);
+        $path = $this->getFilePath();
+        return $path ? asset('storage/' . $path) : null;
     }
 
     public function getFileSizeFormatted()

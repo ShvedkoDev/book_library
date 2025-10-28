@@ -20,8 +20,11 @@ class ThumbnailService
             ->where('is_primary', true)
             ->first();
 
-        if ($thumbnailFile && $thumbnailFile->file_path && Storage::disk('public')->exists($thumbnailFile->file_path)) {
-            return Storage::disk('public')->url($thumbnailFile->file_path);
+        if ($thumbnailFile) {
+            $filePath = $thumbnailFile->getFilePath();
+            if ($filePath && Storage::disk('public')->exists($filePath)) {
+                return Storage::disk('public')->url($filePath);
+            }
         }
 
         // Try to generate from PDF (Option 1)
@@ -52,12 +55,17 @@ class ThumbnailService
             ->where('is_primary', true)
             ->first();
 
-        if (!$pdfFile || !$pdfFile->file_path || !Storage::disk('public')->exists($pdfFile->file_path)) {
+        if (!$pdfFile) {
+            return null;
+        }
+
+        $pdfFilePath = $pdfFile->getFilePath();
+        if (!$pdfFilePath || !Storage::disk('public')->exists($pdfFilePath)) {
             return null;
         }
 
         try {
-            $pdfPath = Storage::disk('public')->path($pdfFile->file_path);
+            $pdfPath = Storage::disk('public')->path($pdfFilePath);
 
             // Generate thumbnail filename
             $thumbnailFilename = 'thumbnails/generated/' . $book->id . '_' . time() . '.jpg';
