@@ -112,6 +112,7 @@ dist
 .cache/
 public
 !public/library-assets/
+!public/build/
 
 # Storybook build outputs
 .out
