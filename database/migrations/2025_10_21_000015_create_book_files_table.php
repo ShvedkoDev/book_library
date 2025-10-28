@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->enum('file_type', ['pdf', 'thumbnail', 'audio', 'video'])->comment('CSV: DOCUMENT/THUMBNAIL/Coupled audio/video');
-            $table->string('file_path', 500)->comment('Full storage path');
-            $table->string('filename', 255)->comment('Original filename');
+            $table->string('file_path', 500)->nullable()->comment('Full storage path - nullable for video files using external_url');
+            $table->string('filename', 255)->nullable()->comment('Original filename - nullable for video files using external_url');
             $table->bigInteger('file_size')->nullable()->comment('In bytes');
             $table->string('mime_type', 100)->nullable();
             $table->boolean('is_primary')->default(false)->comment('Primary vs alternative');
