@@ -18,6 +18,7 @@ yarn-error.log
 .vscode/
 .idea/
 *.swp
+*:Zone.Identifier
 *.swo
 *~
 
@@ -110,6 +111,7 @@ dist
 # Gatsby files
 .cache/
 public
+!public/library-assets/
 
 # Storybook build outputs
 .out
