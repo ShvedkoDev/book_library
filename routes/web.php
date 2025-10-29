@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\BookNoteController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\Api\ShareTrackingController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,4 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// CMS Page preview route (admin only - authorization checked in controller)
+Route::middleware('auth')->get('/admin/pages/{id}/preview', [PageController::class, 'preview'])->name('pages.preview');
+
 require __DIR__.'/auth.php';
+
+// CMS Pages - Catch-all route (must be last to avoid conflicts with other routes)
+Route::get('/{slug}', [PageController::class, 'show'])->name('pages.show')->where('slug', '[a-z0-9\-]+');
