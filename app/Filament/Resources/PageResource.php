@@ -79,11 +79,11 @@ class PageResource extends Resource
                                 'link',
                                 'media',
                                 'table',
-                                'grid',
+                                'grid-builder',
                                 'align-left',
                                 'align-center',
                                 'align-right',
-                                'text-color',
+                                'color',
                                 'highlight',
                                 'hr',
                             ])
