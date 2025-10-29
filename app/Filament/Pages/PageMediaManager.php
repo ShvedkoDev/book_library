@@ -37,6 +37,8 @@ class PageMediaManager extends Page implements HasForms, HasTable
 
     public ?array $data = [];
 
+    protected $cachedFiles = null;
+
     public function mount(): void
     {
         $this->form->fill();
@@ -178,34 +180,48 @@ class PageMediaManager extends Page implements HasForms, HasTable
 
     protected function getTableQuery()
     {
-        $files = collect(Storage::disk('public')->allFiles('page-media'))
-            ->filter(function ($file) {
-                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                return in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'pdf']);
-            })
-            ->map(function ($file) {
-                $fullPath = Storage::disk('public')->path($file);
-                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-                return (object) [
-                    'path' => $file,
-                    'filename' => basename($file),
-                    'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
-                    'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
-                    'type' => $this->getFileType($extension),
-                    'pages_count' => $this->getPagesUsingFileCount($file),
-                ];
-            })
-            ->sortByDesc('modified');
-
-        // Return as a query builder for compatibility
-        return new \Illuminate\Database\Eloquent\Builder(
-            new \Illuminate\Database\Query\Builder(
-                app('db')->connection(),
-                app('db')->getQueryGrammar(),
-                app('db')->getPostProcessor()
-            )
+        // Return a query builder with a model set (required for compatibility)
+        $query = new \Illuminate\Database\Query\Builder(
+            app('db')->connection(),
+            app('db')->getQueryGrammar(),
+            app('db')->getPostProcessor()
         );
+
+        $builder = new \Illuminate\Database\Eloquent\Builder($query);
+        $builder->setModel(new PageModel());
+
+        return $builder;
+    }
+
+    public function getTableRecords(): \Illuminate\Database\Eloquent\Collection
+    {
+        if ($this->cachedFiles === null) {
+            $files = collect(Storage::disk('public')->allFiles('page-media'))
+                ->filter(function ($file) {
+                    $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                    return in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'pdf']);
+                })
+                ->map(function ($file) {
+                    $fullPath = Storage::disk('public')->path($file);
+                    $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+                    return (object) [
+                        'path' => $file,
+                        'filename' => basename($file),
+                        'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
+                        'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
+                        'type' => $this->getFileType($extension),
+                        'pages_count' => $this->getPagesUsingFileCount($file),
+                    ];
+                })
+                ->sortByDesc('modified')
+                ->values();
+
+            // Convert to Eloquent Collection
+            $this->cachedFiles = new \Illuminate\Database\Eloquent\Collection($files->all());
+        }
+
+        return $this->cachedFiles;
     }
 
     protected function getFileType(string $extension): string
