@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Book;
+use App\Models\BookFile;
 use App\Models\FileRecord;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
@@ -185,15 +186,27 @@ class BooksMediaManager extends Page implements HasForms, HasTable
     protected function getBooksUsingFileCount(string $path): int
     {
         $filename = basename($path);
-        return Book::where('file_path', 'like', "%{$filename}%")->count();
+        return BookFile::where('file_path', 'like', "%{$filename}%")
+            ->where('file_type', 'pdf')
+            ->distinct('book_id')
+            ->count('book_id');
     }
 
     protected function getBooksUsingFile(string $path): \Illuminate\Support\Collection
     {
         $filename = basename($path);
-        return Book::where('file_path', 'like', "%{$filename}%")
-            ->select('id', 'title', 'file_path')
+        $bookFiles = BookFile::where('file_path', 'like', "%{$filename}%")
+            ->where('file_type', 'pdf')
+            ->with('book:id,title')
             ->get();
+
+        return $bookFiles->map(function ($bookFile) {
+            return (object) [
+                'id' => $bookFile->book->id ?? null,
+                'title' => $bookFile->book->title ?? 'Unknown',
+                'file_path' => $bookFile->file_path,
+            ];
+        })->filter(fn ($item) => $item->id !== null);
     }
 
     protected function formatBytes(int $bytes, int $precision = 2): string
