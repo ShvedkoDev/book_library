@@ -63,35 +63,35 @@ Simple CMS for managing static content pages with WYSIWYG editing, section ancho
 
 ---
 
-## Phase 2: Models & Relationships
+## Phase 2: Models & Relationships ✅
 
-### 2.1 Page Model
-- [ ] Create `app/Models/Page.php`
-  - [ ] Add fillable fields
-  - [ ] Add casts: `published_at` => `datetime`, `is_published` => `boolean`
-  - [ ] Add `parent()` belongsTo relationship (self-referencing)
-  - [ ] Add `children()` hasMany relationship (self-referencing)
-  - [ ] Add `resourceContributors()` belongsToMany relationship
-  - [ ] Add `sections()` hasMany relationship (if using table)
-  - [ ] Add slug auto-generation from title (in creating event)
-  - [ ] Add method `extractSections()` to parse HTML and extract H2 tags
-  - [ ] Add method `getTableOfContents()` to return sections array
-  - [ ] Add scope `published()` for filtering published pages
-  - [ ] Add accessor `excerpt()` for meta description or truncated content
+### 2.1 Page Model ✅
+- [x] Create `app/Models/Page.php`
+  - [x] Add fillable fields
+  - [x] Add casts: `published_at` => `datetime`, `is_published` => `boolean`
+  - [x] Add `parent()` belongsTo relationship (self-referencing)
+  - [x] Add `children()` hasMany relationship (self-referencing)
+  - [x] Add `resourceContributors()` belongsToMany relationship
+  - [x] Add `sections()` hasMany relationship (if using table)
+  - [x] Add slug auto-generation from title (in creating event)
+  - [x] Add method `extractSections()` to parse HTML and extract H2 tags
+  - [x] Add method `getTableOfContents()` to return sections array
+  - [x] Add scope `published()` for filtering published pages
+  - [x] Add accessor `excerpt()` for meta description or truncated content
 
-### 2.2 ResourceContributor Model
-- [ ] Create `app/Models/ResourceContributor.php`
-  - [ ] Add fillable fields
-  - [ ] Add casts: `is_active` => `boolean`
-  - [ ] Add `pages()` belongsToMany relationship
-  - [ ] Add scope `active()` for filtering active contributors
-  - [ ] Add accessor for full logo URL
+### 2.2 ResourceContributor Model ✅
+- [x] Create `app/Models/ResourceContributor.php`
+  - [x] Add fillable fields
+  - [x] Add casts: `is_active` => `boolean`
+  - [x] Add `pages()` belongsToMany relationship
+  - [x] Add scope `active()` for filtering active contributors
+  - [x] Add accessor for full logo URL
 
-### 2.3 PageSection Model (Optional)
-- [ ] Create `app/Models/PageSection.php` (if using sections table)
-  - [ ] Add fillable fields
-  - [ ] Add `page()` belongsTo relationship
-  - [ ] Add method to generate anchor from heading
+### 2.3 PageSection Model (Optional) ✅
+- [x] Create `app/Models/PageSection.php` (if using sections table)
+  - [x] Add fillable fields
+  - [x] Add `page()` belongsTo relationship
+  - [x] Add method to generate anchor from heading
 
 ---
 
@@ -499,7 +499,7 @@ CREATE TABLE page_sections (
 ## Progress Tracking
 
 - [x] Phase 1: Database Design & Migrations (4/4 complete) ✅
-- [ ] Phase 2: Models & Relationships (0/3 complete)
+- [x] Phase 2: Models & Relationships (3/3 complete) ✅
 - [ ] Phase 3: FilamentPHP Admin Resources (0/3 complete)
 - [ ] Phase 4: WYSIWYG Editor Integration (0/2 complete)
 - [ ] Phase 5: Sections/Anchors Functionality (0/4 complete)
@@ -510,7 +510,7 @@ CREATE TABLE page_sections (
 - [ ] Phase 10: Testing & Refinement (0/4 complete)
 - [ ] Phase 11: Optional Enhancements (0/5 complete)
 
-**Overall Progress: 9%** (1/11 phases complete)
+**Overall Progress: 18%** (2/11 phases complete)
 
 ---
 
