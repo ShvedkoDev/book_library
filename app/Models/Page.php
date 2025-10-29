@@ -297,10 +297,15 @@ class Page extends Model
     /**
      * Get the full URL for this page.
      *
-     * @return string
+     * @return string|null
      */
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
+        // Check if the frontend route exists
+        if (!\Route::has('pages.show')) {
+            return null;
+        }
+
         return route('pages.show', ['slug' => $this->slug]);
     }
 }

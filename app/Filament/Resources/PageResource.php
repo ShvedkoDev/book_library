@@ -208,9 +208,9 @@ class PageResource extends Resource
                 Tables\Actions\Action::make('view')
                     ->label('View')
                     ->icon('heroicon-m-eye')
-                    ->url(fn (Page $record): string => $record->getUrl())
+                    ->url(fn (Page $record): ?string => $record->getUrl())
                     ->openUrlInNewTab()
-                    ->visible(fn (Page $record): bool => $record->isPublished()),
+                    ->visible(fn (Page $record): bool => $record->isPublished() && $record->getUrl() !== null),
                 Tables\Actions\Action::make('previewSections')
                     ->label('Preview Sections')
                     ->icon('heroicon-m-list-bullet')

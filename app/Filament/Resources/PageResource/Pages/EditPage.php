@@ -19,7 +19,7 @@ class EditPage extends EditRecord
                 ->url(fn () => $this->getRecord()->getUrl())
                 ->openUrlInNewTab()
                 ->color('success')
-                ->visible(fn () => $this->getRecord()->isPublished()),
+                ->visible(fn () => $this->getRecord()->isPublished() && $this->getRecord()->getUrl() !== null),
             Actions\Action::make('previewSections')
                 ->label('Preview Sections')
                 ->icon('heroicon-m-list-bullet')
