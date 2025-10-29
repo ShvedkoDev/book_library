@@ -65,10 +65,10 @@ return [
     */
     'accepted_file_types' => ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'application/pdf'],
     'disk' => 'public',
-    'directory' => 'images',
+    'directory' => 'page-media',
     'visibility' => 'public',
-    'preserve_file_names' => false,
-    'max_file_size' => 2042,
+    'preserve_file_names' => true,
+    'max_file_size' => 10240, // 10MB
     'min_file_size' => 0,
     'image_resize_mode' => null,
     'image_crop_aspect_ratio' => null,

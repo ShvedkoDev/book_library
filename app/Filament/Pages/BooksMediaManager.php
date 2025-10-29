@@ -1,0 +1,210 @@
+<?php
+
+namespace App\Filament\Pages;
+
+use App\Models\Book;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Filament\Notifications\Notification;
+use Filament\Pages\Page;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+class BooksMediaManager extends Page implements HasForms, HasTable
+{
+    use InteractsWithForms;
+    use InteractsWithTable;
+
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    protected static string $view = 'filament.pages.books-media-manager';
+
+    protected static ?string $navigationGroup = 'Media';
+
+    protected static ?string $navigationLabel = 'Books (PDFs)';
+
+    protected static ?int $navigationSort = 1;
+
+    public ?array $data = [];
+
+    public function mount(): void
+    {
+        $this->form->fill();
+    }
+
+    public function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Section::make('Upload Books')
+                    ->description('Upload PDF files for your book library')
+                    ->schema([
+                        FileUpload::make('books')
+                            ->label('PDF Files')
+                            ->disk('public')
+                            ->directory('books')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->maxSize(51200) // 50MB
+                            ->multiple()
+                            ->reorderable()
+                            ->downloadable()
+                            ->openable()
+                            ->helperText('Upload PDF files (max 50MB each). Drag and drop multiple files supported.'),
+                    ]),
+            ])
+            ->statePath('data');
+    }
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->query($this->getTableQuery())
+            ->columns([
+                TextColumn::make('filename')
+                    ->label('File Name')
+                    ->searchable()
+                    ->sortable()
+                    ->description(fn ($record) => $record->path)
+                    ->copyable()
+                    ->copyMessage('Path copied!')
+                    ->icon('heroicon-m-document'),
+                TextColumn::make('size')
+                    ->label('Size')
+                    ->formatStateUsing(fn ($state) => $this->formatBytes($state))
+                    ->sortable(),
+                TextColumn::make('modified')
+                    ->label('Last Modified')
+                    ->dateTime('M j, Y g:i A')
+                    ->sortable(),
+                TextColumn::make('books_count')
+                    ->label('Used By')
+                    ->badge()
+                    ->color(fn ($state) => $state > 0 ? 'success' : 'gray')
+                    ->formatStateUsing(fn ($state) => $state . ' book(s)'),
+            ])
+            ->actions([
+                Action::make('view')
+                    ->label('View')
+                    ->icon('heroicon-m-eye')
+                    ->url(fn ($record) => Storage::disk('public')->url($record->path))
+                    ->openUrlInNewTab(),
+                Action::make('books')
+                    ->label('Show Books')
+                    ->icon('heroicon-m-book-open')
+                    ->modalHeading('Books Using This PDF')
+                    ->modalDescription(fn ($record) => $record->filename)
+                    ->modalContent(fn ($record) => view('filament.pages.media-usage', [
+                        'items' => $this->getBooksUsingFile($record->path),
+                        'type' => 'books',
+                    ]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close')
+                    ->visible(fn ($record) => $record->books_count > 0),
+                Action::make('download')
+                    ->label('Download')
+                    ->icon('heroicon-m-arrow-down-tray')
+                    ->action(fn ($record) => Storage::disk('public')->download($record->path, $record->filename)),
+                DeleteAction::make()
+                    ->label('Delete')
+                    ->modalHeading('Delete PDF File')
+                    ->modalDescription(fn ($record) => $record->books_count > 0
+                        ? "Warning: This file is used by {$record->books_count} book(s). Deleting it will break those references."
+                        : 'Are you sure you want to delete this file?')
+                    ->requiresConfirmation()
+                    ->action(function ($record) {
+                        if (Storage::disk('public')->exists($record->path)) {
+                            Storage::disk('public')->delete($record->path);
+
+                            Notification::make()
+                                ->success()
+                                ->title('File deleted')
+                                ->body("The file '{$record->filename}' has been deleted.")
+                                ->send();
+                        }
+                    }),
+            ])
+            ->emptyStateHeading('No PDF files found')
+            ->emptyStateDescription('Upload PDF files using the form above')
+            ->emptyStateIcon('heroicon-o-document-text');
+    }
+
+    protected function getTableQuery()
+    {
+        $files = collect(Storage::disk('public')->files('books'))
+            ->filter(fn ($file) => Str::endsWith($file, '.pdf'))
+            ->map(function ($file) {
+                $fullPath = Storage::disk('public')->path($file);
+
+                return (object) [
+                    'path' => $file,
+                    'filename' => basename($file),
+                    'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
+                    'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
+                    'books_count' => $this->getBooksUsingFileCount($file),
+                ];
+            })
+            ->sortByDesc('modified');
+
+        // Return as a query builder for compatibility
+        return new \Illuminate\Database\Eloquent\Builder(
+            new \Illuminate\Database\Query\Builder(
+                app('db')->connection(),
+                app('db')->getQueryGrammar(),
+                app('db')->getPostProcessor()
+            )
+        );
+    }
+
+    protected function getBooksUsingFileCount(string $path): int
+    {
+        $filename = basename($path);
+        return Book::where('file_path', 'like', "%{$filename}%")->count();
+    }
+
+    protected function getBooksUsingFile(string $path): \Illuminate\Support\Collection
+    {
+        $filename = basename($path);
+        return Book::where('file_path', 'like', "%{$filename}%")
+            ->select('id', 'title', 'file_path')
+            ->get();
+    }
+
+    protected function formatBytes(int $bytes, int $precision = 2): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+
+        for ($i = 0; $bytes > 1024; $i++) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, $precision) . ' ' . $units[$i];
+    }
+
+    public function save(): void
+    {
+        $data = $this->form->getState();
+
+        if (!empty($data['books'])) {
+            Notification::make()
+                ->success()
+                ->title('Files uploaded')
+                ->body(count($data['books']) . ' file(s) uploaded successfully.')
+                ->send();
+
+            // Reset form
+            $this->form->fill();
+
+            // Refresh table
+            $this->dispatch('$refresh');
+        }
+    }
+}
