@@ -13,8 +13,10 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
@@ -125,6 +127,46 @@ class PageMediaManager extends Page implements HasForms, HasTable
                     ->icon('heroicon-m-eye')
                     ->url(fn ($record) => Storage::disk('public')->url($record->path))
                     ->openUrlInNewTab(),
+                EditAction::make()
+                    ->label('Rename')
+                    ->icon('heroicon-m-pencil')
+                    ->form([
+                        TextInput::make('filename')
+                            ->label('File Name')
+                            ->required()
+                            ->maxLength(255)
+                            ->helperText('Enter the new filename (with extension)')
+                    ])
+                    ->fillForm(fn ($record) => [
+                        'filename' => $record->filename,
+                    ])
+                    ->action(function ($record, array $data) {
+                        $oldPath = $record->path;
+                        $directory = dirname($oldPath);
+                        $newPath = $directory . '/' . $data['filename'];
+
+                        if (Storage::disk('public')->exists($oldPath)) {
+                            if (Storage::disk('public')->exists($newPath)) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('File already exists')
+                                    ->body("A file named '{$data['filename']}' already exists.")
+                                    ->send();
+                                return;
+                            }
+
+                            Storage::disk('public')->move($oldPath, $newPath);
+
+                            // Clear cached files
+                            $this->cachedFiles = null;
+
+                            Notification::make()
+                                ->success()
+                                ->title('File renamed')
+                                ->body("The file has been renamed to '{$data['filename']}'.")
+                                ->send();
+                        }
+                    }),
                 Action::make('copy_url')
                     ->label('Copy URL')
                     ->icon('heroicon-m-link')

@@ -14,7 +14,9 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
@@ -82,6 +84,17 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                     ->copyable()
                     ->copyMessage('Path copied!')
                     ->icon('heroicon-m-document'),
+                TextColumn::make('type')
+                    ->label('Type')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'pdf' => 'danger',
+                        'image' => 'success',
+                        'video' => 'info',
+                        'audio' => 'warning',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn ($state) => strtoupper($state)),
                 TextColumn::make('size')
                     ->label('Size')
                     ->formatStateUsing(fn ($state) => $this->formatBytes($state))
@@ -102,6 +115,46 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                     ->icon('heroicon-m-eye')
                     ->url(fn ($record) => Storage::disk('public')->url($record->path))
                     ->openUrlInNewTab(),
+                EditAction::make()
+                    ->label('Rename')
+                    ->icon('heroicon-m-pencil')
+                    ->form([
+                        TextInput::make('filename')
+                            ->label('File Name')
+                            ->required()
+                            ->maxLength(255)
+                            ->helperText('Enter the new filename (with extension)')
+                    ])
+                    ->fillForm(fn ($record) => [
+                        'filename' => $record->filename,
+                    ])
+                    ->action(function ($record, array $data) {
+                        $oldPath = $record->path;
+                        $directory = dirname($oldPath);
+                        $newPath = $directory . '/' . $data['filename'];
+
+                        if (Storage::disk('public')->exists($oldPath)) {
+                            if (Storage::disk('public')->exists($newPath)) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('File already exists')
+                                    ->body("A file named '{$data['filename']}' already exists.")
+                                    ->send();
+                                return;
+                            }
+
+                            Storage::disk('public')->move($oldPath, $newPath);
+
+                            // Clear cached files
+                            $this->cachedFiles = null;
+
+                            Notification::make()
+                                ->success()
+                                ->title('File renamed')
+                                ->body("The file has been renamed to '{$data['filename']}'.")
+                                ->send();
+                        }
+                    }),
                 Action::make('books')
                     ->label('Show Books')
                     ->icon('heroicon-m-book-open')
@@ -161,15 +214,16 @@ class BooksMediaManager extends Page implements HasForms, HasTable
     {
         if ($this->cachedFiles === null) {
             $files = collect(Storage::disk('public')->files('books'))
-                ->filter(fn ($file) => Str::endsWith($file, '.pdf'))
                 ->map(function ($file) {
                     $fullPath = Storage::disk('public')->path($file);
+                    $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
                     return FileRecord::make([
                         'path' => $file,
                         'filename' => basename($file),
                         'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
                         'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
+                        'type' => $this->getFileType($extension),
                         'books_count' => $this->getBooksUsingFileCount($file),
                     ]);
                 })
@@ -181,6 +235,22 @@ class BooksMediaManager extends Page implements HasForms, HasTable
         }
 
         return $this->cachedFiles;
+    }
+
+    protected function getFileType(string $extension): string
+    {
+        return match(strtolower($extension)) {
+            'pdf' => 'pdf',
+            'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp' => 'image',
+            'mp4', 'avi', 'mov', 'wmv', 'flv', 'webm' => 'video',
+            'mp3', 'wav', 'ogg', 'm4a', 'flac' => 'audio',
+            'doc', 'docx' => 'word',
+            'xls', 'xlsx' => 'excel',
+            'ppt', 'pptx' => 'powerpoint',
+            'txt', 'rtf' => 'text',
+            'zip', 'rar', '7z', 'tar', 'gz' => 'archive',
+            default => 'other',
+        };
     }
 
     protected function getBooksUsingFileCount(string $path): int

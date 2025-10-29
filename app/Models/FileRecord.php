@@ -44,6 +44,7 @@ class FileRecord extends Model
         'type',
         'pages_count',
         'books_count',
+        'thumbnail',
     ];
 
     /**
