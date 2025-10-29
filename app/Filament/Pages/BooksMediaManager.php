@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Book;
+use App\Models\FileRecord;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -70,8 +71,7 @@ class BooksMediaManager extends Page implements HasForms, HasTable
     {
         return $table
             ->query($this->getTableQuery())
-            ->recordAction(null) // Disable row click action for non-model records
-            ->recordUrl(null) // Disable row URL for non-model records
+            ->paginated(false) // Disable pagination since we're loading all files
             ->columns([
                 TextColumn::make('filename')
                     ->label('File Name')
@@ -143,7 +143,7 @@ class BooksMediaManager extends Page implements HasForms, HasTable
 
     protected function getTableQuery()
     {
-        // Return a query builder with a model set (required for compatibility)
+        // Return a query builder with FileRecord model set
         $query = new \Illuminate\Database\Query\Builder(
             app('db')->connection(),
             app('db')->getQueryGrammar(),
@@ -151,7 +151,7 @@ class BooksMediaManager extends Page implements HasForms, HasTable
         );
 
         $builder = new \Illuminate\Database\Eloquent\Builder($query);
-        $builder->setModel(new Book());
+        $builder->setModel(new FileRecord());
 
         return $builder;
     }
@@ -164,13 +164,13 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                 ->map(function ($file) {
                     $fullPath = Storage::disk('public')->path($file);
 
-                    return (object) [
+                    return FileRecord::make([
                         'path' => $file,
                         'filename' => basename($file),
                         'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
                         'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
                         'books_count' => $this->getBooksUsingFileCount($file),
-                    ];
+                    ]);
                 })
                 ->sortByDesc('modified')
                 ->values();
@@ -226,11 +226,4 @@ class BooksMediaManager extends Page implements HasForms, HasTable
         }
     }
 
-    /**
-     * Override to prevent record action checks on non-model records
-     */
-    public function getTableRecordAction(): ?string
-    {
-        return null;
-    }
 }

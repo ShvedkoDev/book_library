@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Page as PageModel;
+use App\Models\FileRecord;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -81,8 +82,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
     {
         return $table
             ->query($this->getTableQuery())
-            ->recordAction(null) // Disable row click action for non-model records
-            ->recordUrl(null) // Disable row URL for non-model records
+            ->paginated(false) // Disable pagination since we're loading all files
             ->columns([
                 ImageColumn::make('thumbnail')
                     ->label('Preview')
@@ -182,7 +182,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
 
     protected function getTableQuery()
     {
-        // Return a query builder with a model set (required for compatibility)
+        // Return a query builder with FileRecord model set
         $query = new \Illuminate\Database\Query\Builder(
             app('db')->connection(),
             app('db')->getQueryGrammar(),
@@ -190,7 +190,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
         );
 
         $builder = new \Illuminate\Database\Eloquent\Builder($query);
-        $builder->setModel(new PageModel());
+        $builder->setModel(new FileRecord());
 
         return $builder;
     }
@@ -207,14 +207,14 @@ class PageMediaManager extends Page implements HasForms, HasTable
                     $fullPath = Storage::disk('public')->path($file);
                     $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-                    return (object) [
+                    return FileRecord::make([
                         'path' => $file,
                         'filename' => basename($file),
                         'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
                         'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
                         'type' => $this->getFileType($extension),
                         'pages_count' => $this->getPagesUsingFileCount($file),
-                    ];
+                    ]);
                 })
                 ->sortByDesc('modified')
                 ->values();
@@ -285,11 +285,4 @@ class PageMediaManager extends Page implements HasForms, HasTable
         }
     }
 
-    /**
-     * Override to prevent record action checks on non-model records
-     */
-    public function getTableRecordAction(): ?string
-    {
-        return null;
-    }
 }
