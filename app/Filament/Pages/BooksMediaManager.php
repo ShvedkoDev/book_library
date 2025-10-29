@@ -239,4 +239,21 @@ class BooksMediaManager extends Page implements HasForms, HasTable
         }
     }
 
+    /**
+     * Override to prevent Filament from querying the database for file records.
+     * Since FileRecord instances are in-memory only, we need to find them from our cached collection.
+     */
+    public function getTableRecord($key): ?FileRecord
+    {
+        $records = $this->getTableRecords();
+
+        foreach ($records as $record) {
+            if ($record->getKey() === $key) {
+                return $record;
+            }
+        }
+
+        return null;
+    }
+
 }
