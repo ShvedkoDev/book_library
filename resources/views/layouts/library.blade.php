@@ -77,6 +77,19 @@
                 background: #f0f0f0;
                 color: #007cba;
             }
+
+            /* Active menu item styles */
+            header .nav-primary .menu-item.current-menu-item > a,
+            header .nav-primary .menu-item.current-menu-ancestor > a {
+                color: #007cba;
+                font-weight: 600;
+            }
+
+            header .nav-primary .sub-menu .menu-item.current-menu-item > a {
+                background: #e6f3f9;
+                color: #007cba;
+                font-weight: 600;
+            }
         }
 
         /* Search Container Dropdown */
@@ -220,6 +233,47 @@
                                 <li id="menu-item-1692" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1692"><a href="{{ url('/photo-gallery') }}">Photo Gallery</a></li>
                             </ul>
                         </li>
+
+                        {{-- Dynamic CMS Pages --}}
+                        @if(isset($cmsPages) && $cmsPages->count() > 0)
+                            @foreach($cmsPages as $page)
+                                @php
+                                    $isActive = request()->is($page->slug) || request()->is($page->slug . '/*');
+                                    $hasActiveChild = false;
+                                    if ($page->children->count() > 0) {
+                                        foreach ($page->children as $child) {
+                                            if (request()->is($child->slug) || request()->is($child->slug . '/*')) {
+                                                $hasActiveChild = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                @endphp
+
+                                @if($page->children->count() > 0)
+                                    {{-- Page with children (dropdown) --}}
+                                    <li class="menu-item menu-item-has-children menu-item-cms menu-item-page-{{ $page->id }} {{ $isActive || $hasActiveChild ? 'current-menu-item current-menu-ancestor' : '' }}">
+                                        <a href="{{ route('pages.show', $page->slug) }}">{{ $page->title }}</a>
+                                        <ul class="sub-menu">
+                                            @foreach($page->children as $childPage)
+                                                @php
+                                                    $isChildActive = request()->is($childPage->slug) || request()->is($childPage->slug . '/*');
+                                                @endphp
+                                                <li class="menu-item menu-item-cms-child menu-item-page-{{ $childPage->id }} {{ $isChildActive ? 'current-menu-item' : '' }}">
+                                                    <a href="{{ route('pages.show', $childPage->slug) }}">{{ $childPage->title }}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @else
+                                    {{-- Page without children (single link) --}}
+                                    <li class="menu-item menu-item-cms menu-item-page-{{ $page->id }} {{ $isActive ? 'current-menu-item' : '' }}">
+                                        <a href="{{ route('pages.show', $page->slug) }}">{{ $page->title }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
+                        @endif
+
                         @guest
                             <li class="menu-item menu-login"><a href="{{ route('login') }}">Login</a></li>
                         @else

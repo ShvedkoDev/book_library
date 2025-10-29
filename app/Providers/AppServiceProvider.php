@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Http\ViewComposers\NavigationComposer;
 use App\Models\Page;
 use App\Observers\PageObserver;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,5 +25,8 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register Page observer for automatic section syncing
         Page::observe(PageObserver::class);
+
+        // Register view composer for navigation menu
+        View::composer('layouts.library', NavigationComposer::class);
     }
 }
