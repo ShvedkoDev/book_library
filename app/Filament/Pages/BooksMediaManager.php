@@ -70,6 +70,8 @@ class BooksMediaManager extends Page implements HasForms, HasTable
     {
         return $table
             ->query($this->getTableQuery())
+            ->recordAction(null) // Disable row click action for non-model records
+            ->recordUrl(null) // Disable row URL for non-model records
             ->columns([
                 TextColumn::make('filename')
                     ->label('File Name')
