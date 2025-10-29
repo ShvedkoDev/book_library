@@ -19,59 +19,6 @@
         align-items: start;
     }
 
-    /* Table of Contents Styles */
-    .toc-sidebar {
-        position: sticky;
-        top: 2rem;
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .toc-sidebar h3 {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #1f2937;
-        margin: 0 0 1rem 0;
-        padding-bottom: 0.75rem;
-        border-bottom: 2px solid #e5e7eb;
-    }
-
-    .toc-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .toc-list li {
-        margin-bottom: 0.5rem;
-    }
-
-    .toc-list a {
-        display: block;
-        color: #4b5563;
-        text-decoration: none;
-        padding: 0.5rem 0.75rem;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        transition: all 0.2s ease;
-    }
-
-    .toc-list a:hover {
-        background: #f3f4f6;
-        color: #1f2937;
-        transform: translateX(4px);
-    }
-
-    .toc-list a.active {
-        background: #e0f2fe;
-        color: #0369a1;
-        font-weight: 600;
-    }
-
-    /* Main Content Styles */
     .page-content {
         background: white;
         border-radius: 8px;
@@ -226,89 +173,10 @@
         font-weight: 600;
     }
 
-    /* Resource Contributors Section */
-    .contributors-section {
-        margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 2px solid #e5e7eb;
-    }
-
-    .contributors-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1f2937;
-        margin-bottom: 1.5rem;
-    }
-
-    .contributors-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .contributor-card {
-        background: #f9fafb;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 1.5rem;
-        transition: all 0.2s ease;
-    }
-
-    .contributor-card:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .contributor-logo {
-        width: 100%;
-        max-width: 150px;
-        height: auto;
-        margin: 0 auto 1rem auto;
-        display: block;
-        border-radius: 4px;
-    }
-
-    .contributor-name {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #1f2937;
-        margin-bottom: 0.25rem;
-    }
-
-    .contributor-org {
-        font-size: 0.9rem;
-        color: #6b7280;
-        margin-bottom: 0.75rem;
-    }
-
-    .contributor-description {
-        font-size: 0.9rem;
-        color: #4b5563;
-        line-height: 1.6;
-        margin-bottom: 1rem;
-    }
-
-    .contributor-website {
-        display: inline-block;
-        color: #0369a1;
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    .contributor-website:hover {
-        text-decoration: underline;
-    }
-
     /* Responsive Design */
     @media (max-width: 1024px) {
         .page-layout {
             grid-template-columns: 1fr;
-        }
-
-        .toc-sidebar {
-            position: static;
-            margin-bottom: 2rem;
         }
     }
 
@@ -324,10 +192,6 @@
         .page-title {
             font-size: 2rem;
         }
-
-        .contributors-grid {
-            grid-template-columns: 1fr;
-        }
     }
 </style>
 @endpush
@@ -335,20 +199,7 @@
 <div class="page-container">
     <div class="page-layout">
         <!-- Table of Contents Sidebar -->
-        @if(count($tableOfContents) > 0)
-        <aside class="toc-sidebar">
-            <h3>Table of Contents</h3>
-            <ul class="toc-list">
-                @foreach($tableOfContents as $section)
-                <li>
-                    <a href="{{ $section['url'] }}" class="toc-link">
-                        {{ $section['heading'] }}
-                    </a>
-                </li>
-                @endforeach
-            </ul>
-        </aside>
-        @endif
+        <x-page-toc :sections="$tableOfContents" />
 
         <!-- Main Content -->
         <main class="page-content">
@@ -391,97 +242,8 @@
             </article>
 
             <!-- Resource Contributors Section -->
-            @if($page->resourceContributors->count() > 0)
-            <section class="contributors-section">
-                <h2 class="contributors-title">Resource Contributors</h2>
-                <div class="contributors-grid">
-                    @foreach($page->resourceContributors as $contributor)
-                    <div class="contributor-card">
-                        @if($contributor->logo)
-                        <img src="{{ Storage::url($contributor->logo) }}"
-                             alt="{{ $contributor->name }}"
-                             class="contributor-logo">
-                        @endif
-                        <h3 class="contributor-name">{{ $contributor->name }}</h3>
-                        @if($contributor->organization)
-                        <p class="contributor-org">{{ $contributor->organization }}</p>
-                        @endif
-                        @if($contributor->description)
-                        <p class="contributor-description">{{ $contributor->description }}</p>
-                        @endif
-                        @if($contributor->website_url)
-                        <a href="{{ $contributor->website_url }}"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="contributor-website">
-                            Visit Website →
-                        </a>
-                        @endif
-                    </div>
-                    @endforeach
-                </div>
-            </section>
-            @endif
+            <x-resource-contributors :contributors="$page->resourceContributors" />
         </main>
     </div>
 </div>
 
-@push('scripts')
-<script>
-    // Smooth scroll for TOC links
-    document.querySelectorAll('.toc-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-
-                // Update URL without scrolling
-                history.pushState(null, null, '#' + targetId);
-            }
-        });
-    });
-
-    // Highlight active section in TOC based on scroll position
-    window.addEventListener('scroll', function() {
-        const sections = document.querySelectorAll('.page-body h2[id]');
-        const tocLinks = document.querySelectorAll('.toc-link');
-
-        let currentSection = '';
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (window.pageYOffset >= sectionTop - 100) {
-                currentSection = section.getAttribute('id');
-            }
-        });
-
-        tocLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + currentSection) {
-                link.classList.add('active');
-            }
-        });
-    });
-
-    // Handle direct anchor links on page load
-    if (window.location.hash) {
-        setTimeout(() => {
-            const targetId = window.location.hash.substring(1);
-            const targetElement = document.getElementById(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        }, 100);
-    }
-</script>
-@endpush
