@@ -210,40 +210,49 @@ Simple CMS for managing static content pages with WYSIWYG editing, section ancho
 
 ---
 
-## Phase 5: Sections/Anchors Functionality
+## Phase 5: Sections/Anchors Functionality ✅
 
-### 5.1 H2 Extraction Service
-- [ ] Create `app/Services/PageSectionExtractor.php`
-  - [ ] Method: `extractSectionsFromHtml($html)`
-    - [ ] Parse HTML content
-    - [ ] Find all H2 tags
-    - [ ] Extract text content
-    - [ ] Generate URL-friendly anchors (slug format)
-    - [ ] Return array of ['heading' => 'text', 'anchor' => 'slug']
-  - [ ] Method: `injectAnchorIds($html)`
-    - [ ] Parse HTML
-    - [ ] Add `id="anchor-slug"` to each H2 tag
-    - [ ] Return modified HTML
-  - [ ] Handle duplicate headings (append -2, -3, etc.)
+### 5.1 H2 Extraction Service ✅
+- [x] Create `app/Services/PageSectionExtractor.php`
+  - [x] Method: `extractSectionsFromHtml($html)`
+    - [x] Parse HTML content
+    - [x] Find all H2 tags
+    - [x] Extract text content
+    - [x] Generate URL-friendly anchors (slug format)
+    - [x] Return array of ['heading' => 'text', 'anchor' => 'slug', 'order' => int]
+  - [x] Method: `injectAnchorIds($html)`
+    - [x] Parse HTML
+    - [x] Add `id="anchor-slug"` to each H2 tag
+    - [x] Return modified HTML
+  - [x] Handle duplicate headings (append -2, -3, etc.)
+  - [x] Method: `buildTableOfContents($sections)` for structured TOC
 
-### 5.2 Page Model Integration
-- [ ] Update Page model:
-  - [ ] Add method `getTableOfContents()` using PageSectionExtractor
-  - [ ] Add accessor `contentWithAnchors()` that injects anchor IDs
-  - [ ] Cache TOC in model property to avoid re-parsing
+### 5.2 Page Model Integration ✅
+- [x] Update Page model:
+  - [x] Refactor `extractSections()` to use PageSectionExtractor service
+  - [x] Update `getTableOfContents()` using PageSectionExtractor with caching
+  - [x] Refactor `getContentWithAnchors()` to use service's `injectAnchorIds()`
+  - [x] Add accessor `contentWithAnchorsAttribute()`
+  - [x] Cache TOC in `$cachedToc` model property to avoid re-parsing
 
-### 5.3 Optional: Store Sections in Database
-- [ ] Create observer `app/Observers/PageObserver.php`
-  - [ ] On `saved` event: extract sections and update `page_sections` table
-  - [ ] Clear old sections and insert new ones
-  - [ ] This allows for custom anchor editing in admin
+### 5.3 Store Sections in Database ✅
+- [x] Create observer `app/Observers/PageObserver.php`
+  - [x] On `saved` event: extract sections and update `page_sections` table
+  - [x] Clear old sections and insert new ones
+  - [x] Clear cached TOC on save
+  - [x] On `deleting` event: clean up sections
+  - [x] On `restored` event: re-extract and save sections
+- [x] Register observer in `AppServiceProvider`
 
-### 5.4 Admin Panel Section Preview
-- [ ] Add custom Filament action to Page resource: "Preview Sections"
-  - [ ] Extract sections from current content
-  - [ ] Display in modal with heading and anchor
-  - [ ] Allow copying anchors to clipboard
-  - [ ] Show example: `#section-anchor`
+### 5.4 Admin Panel Section Preview ✅
+- [x] Enhanced custom Filament action "Preview Sections"
+  - [x] Extract sections from current content
+  - [x] Display in modal with heading and anchor
+  - [x] Copy-to-clipboard button for each anchor
+  - [x] Visual feedback on successful copy
+  - [x] Shows example format: `#section-anchor`
+  - [x] Numbered list with visual styling
+  - [x] Dark mode support
 
 ---
 
@@ -500,7 +509,7 @@ CREATE TABLE page_sections (
 - [x] Phase 2: Models & Relationships (3/3 complete) ✅
 - [x] Phase 3: FilamentPHP Admin Resources (3/3 complete) ✅
 - [x] Phase 4: WYSIWYG Editor Integration (1/1 complete) ✅
-- [ ] Phase 5: Sections/Anchors Functionality (0/4 complete)
+- [x] Phase 5: Sections/Anchors Functionality (4/4 complete) ✅
 - [ ] Phase 6: Media Management (0/4 complete)
 - [ ] Phase 7: Frontend Routes & Controllers (0/2 complete)
 - [ ] Phase 8: Frontend Views & Components (0/4 complete)
@@ -508,7 +517,7 @@ CREATE TABLE page_sections (
 - [ ] Phase 10: Testing & Refinement (0/4 complete)
 - [ ] Phase 11: Optional Enhancements (0/5 complete)
 
-**Overall Progress: 36%** (4/11 phases complete)
+**Overall Progress: 45%** (5/11 phases complete)
 
 ---
 

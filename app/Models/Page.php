@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\PageSectionExtractor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,6 +13,13 @@ use Illuminate\Support\Str;
 class Page extends Model
 {
     use SoftDeletes;
+
+    /**
+     * Cache for table of contents to avoid re-parsing.
+     *
+     * @var array|null
+     */
+    protected ?array $cachedToc = null;
 
     /**
      * The attributes that are mass assignable.
@@ -166,7 +174,7 @@ class Page extends Model
     }
 
     /**
-     * Extract H2 sections from the page content.
+     * Extract H2 sections from the page content using PageSectionExtractor service.
      *
      * @return array
      */
@@ -176,74 +184,47 @@ class Page extends Model
             return [];
         }
 
-        $sections = [];
-        $dom = new \DOMDocument();
-
-        // Suppress errors for malformed HTML
-        libxml_use_internal_errors(true);
-        $dom->loadHTML(mb_convert_encoding($this->content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        libxml_clear_errors();
-
-        $h2Tags = $dom->getElementsByTagName('h2');
-
-        foreach ($h2Tags as $index => $h2) {
-            $heading = trim($h2->textContent);
-            if (!empty($heading)) {
-                $anchor = $this->generateAnchor($heading, $index);
-                $sections[] = [
-                    'heading' => $heading,
-                    'anchor' => $anchor,
-                    'order' => $index,
-                ];
-            }
-        }
-
-        return $sections;
+        $extractor = app(PageSectionExtractor::class);
+        return $extractor->extractSectionsFromHtml($this->content);
     }
 
     /**
-     * Generate an anchor from a heading.
-     *
-     * @param string $heading
-     * @param int $index
-     * @return string
-     */
-    protected function generateAnchor(string $heading, int $index): string
-    {
-        $anchor = Str::slug($heading);
-
-        // If anchor is empty or too short, use index
-        if (empty($anchor) || strlen($anchor) < 2) {
-            $anchor = "section-{$index}";
-        }
-
-        return $anchor;
-    }
-
-    /**
-     * Get table of contents from sections.
+     * Get table of contents from sections with caching.
      *
      * @return array
      */
     public function getTableOfContents(): array
     {
+        // Return cached TOC if available
+        if ($this->cachedToc !== null) {
+            return $this->cachedToc;
+        }
+
         // Try to get from database first
         if ($this->relationLoaded('sections') && $this->sections->isNotEmpty()) {
-            return $this->sections->map(function ($section) {
+            $toc = $this->sections->map(function ($section) {
                 return [
                     'heading' => $section->heading,
                     'anchor' => $section->anchor,
                     'order' => $section->order,
+                    'url' => '#' . $section->anchor,
                 ];
             })->toArray();
+        } else {
+            // Otherwise extract from content
+            $sections = $this->extractSections();
+            $extractor = app(PageSectionExtractor::class);
+            $toc = $extractor->buildTableOfContents($sections);
         }
 
-        // Otherwise extract from content
-        return $this->extractSections();
+        // Cache the result
+        $this->cachedToc = $toc;
+
+        return $toc;
     }
 
     /**
-     * Get content with anchor IDs injected into H2 tags.
+     * Get content with anchor IDs injected into H2 tags using PageSectionExtractor service.
      *
      * @return string
      */
@@ -253,27 +234,18 @@ class Page extends Model
             return '';
         }
 
-        $sections = $this->extractSections();
-        if (empty($sections)) {
-            return $this->content;
-        }
+        $extractor = app(PageSectionExtractor::class);
+        return $extractor->injectAnchorIds($this->content);
+    }
 
-        $content = $this->content;
-        $dom = new \DOMDocument();
-
-        libxml_use_internal_errors(true);
-        $dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        libxml_clear_errors();
-
-        $h2Tags = $dom->getElementsByTagName('h2');
-
-        foreach ($h2Tags as $index => $h2) {
-            if (isset($sections[$index])) {
-                $h2->setAttribute('id', $sections[$index]['anchor']);
-            }
-        }
-
-        return $dom->saveHTML();
+    /**
+     * Accessor for content with anchors.
+     *
+     * @return string
+     */
+    public function getContentWithAnchorsAttribute(): string
+    {
+        return $this->getContentWithAnchors();
     }
 
     /**
