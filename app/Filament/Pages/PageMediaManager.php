@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Page;
+use App\Models\Page as PageModel;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -226,13 +226,13 @@ class PageMediaManager extends Page implements HasForms, HasTable
     protected function getPagesUsingFileCount(string $path): int
     {
         $filename = basename($path);
-        return Page::where('content', 'like', "%{$filename}%")->count();
+        return PageModel::where('content', 'like', "%{$filename}%")->count();
     }
 
     protected function getPagesUsingFile(string $path): \Illuminate\Support\Collection
     {
         $filename = basename($path);
-        return Page::where('content', 'like', "%{$filename}%")
+        return PageModel::where('content', 'like', "%{$filename}%")
             ->select('id', 'title', 'content')
             ->get();
     }
