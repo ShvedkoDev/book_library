@@ -6,6 +6,7 @@ use App\Filament\Resources\PageResource\Pages;
 use App\Filament\Resources\PageResource\RelationManagers;
 use App\Models\Page;
 use App\Models\ResourceContributor;
+use FilamentTiptapEditor\TiptapEditor;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -63,24 +64,35 @@ class PageResource extends Resource
                 Forms\Components\Section::make('Content')
                     ->description('Page content and body')
                     ->schema([
-                        Forms\Components\RichEditor::make('content')
-                            ->toolbarButtons([
+                        TiptapEditor::make('content')
+                            ->profile('default')
+                            ->tools([
+                                'heading',
                                 'bold',
                                 'italic',
                                 'underline',
                                 'strike',
-                                'h2',
-                                'h3',
                                 'bulletList',
                                 'orderedList',
-                                'link',
                                 'blockquote',
                                 'codeBlock',
+                                'link',
+                                'media',
+                                'table',
+                                'grid',
+                                'align-left',
+                                'align-center',
+                                'align-right',
+                                'textColor',
+                                'highlight',
+                                'hr',
                             ])
-                            ->fileAttachmentsDisk('public')
-                            ->fileAttachmentsDirectory('page-media')
+                            ->disk('public')
+                            ->directory('page-media')
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'])
+                            ->maxSize(5120) // 5MB
                             ->columnSpanFull()
-                            ->helperText('Use H2 tags for sections that will appear in the table of contents'),
+                            ->helperText('Use H2 headings for sections that will appear in the table of contents'),
                     ]),
 
                 // SEO & Metadata Section
