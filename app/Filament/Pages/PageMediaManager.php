@@ -83,6 +83,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
             ->query($this->getTableQuery())
             ->recordAction(null) // Disable row click action for non-model records
             ->recordUrl(null) // Disable row URL for non-model records
+            ->recordKey(fn ($record) => md5($record->path)) // Provide unique key for non-model records
             ->columns([
                 ImageColumn::make('thumbnail')
                     ->label('Preview')
@@ -283,5 +284,13 @@ class PageMediaManager extends Page implements HasForms, HasTable
             // Refresh table
             $this->dispatch('$refresh');
         }
+    }
+
+    /**
+     * Override to prevent record action checks on non-model records
+     */
+    public function getTableRecordAction(): ?string
+    {
+        return null;
     }
 }
