@@ -7,11 +7,96 @@
 
 @push('styles')
 <style>
+    /* CSS Variables for colors and common values */
+    :root {
+        /* Primary colors */
+        --color-primary: #007cba;
+        --color-primary-dark: #005a8a;
+
+        /* Status colors */
+        --color-success: #155724;
+        --color-success-bg: #d4edda;
+        --color-success-border: #c3e6cb;
+
+        --color-info: #0c5460;
+        --color-info-bg: #d1ecf1;
+        --color-info-border: #bee5eb;
+
+        --color-warning: #856404;
+        --color-warning-bg: #fff3cd;
+        --color-warning-border: #ffc107;
+
+        --color-danger: #721c24;
+        --color-danger-bg: #f8d7da;
+        --color-danger-border: #f5c6cb;
+
+        --color-approved: #28a745;
+        --color-rejected: #dc3545;
+
+        /* Text colors */
+        --color-text-primary: #333;
+        --color-text-secondary: #666;
+        --color-text-muted: #999;
+        --color-text-light: #555;
+
+        /* Background colors */
+        --color-bg-white: #ffffff;
+        --color-bg-light: #f8f9fa;
+        --color-bg-gray: #f9f9f9;
+        --color-bg-light-gray: #f0f0f0;
+        --color-bg-secondary: #e9ecef;
+
+        /* Border colors */
+        --color-border: #ddd;
+        --color-border-light: #e0e0e0;
+        --color-border-dark: #ccc;
+
+        /* Rating colors */
+        --color-star: #ffc107;
+        --color-star-empty: #ddd;
+
+        /* Spacing */
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 0.75rem;
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.5rem;
+        --spacing-2xl: 2rem;
+        --spacing-3xl: 3rem;
+
+        /* Border radius */
+        --radius-sm: 3px;
+        --radius-md: 4px;
+        --radius-lg: 6px;
+        --radius-xl: 8px;
+        --radius-pill: 1rem;
+
+        /* Font sizes */
+        --font-xs: 0.65rem;
+        --font-sm: 0.75rem;
+        --font-base: 0.875rem;
+        --font-md: 0.9rem;
+        --font-lg: 1rem;
+        --font-xl: 1.1rem;
+        --font-2xl: 1.2rem;
+        --font-3xl: 1.5rem;
+        --font-4xl: 2rem;
+        --font-5xl: 3rem;
+
+        /* Shadows */
+        --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+        --shadow-md: 0 2px 4px rgba(0,0,0,0.1);
+
+        /* Transitions */
+        --transition-fast: 0.2s;
+        --transition-normal: 0.3s;
+    }
+
     /* Main content container - max 1020px */
     .library-book-detail {
         max-width: 1020px;
         margin: 0 auto;
-        padding: 0 1rem;
+        padding: 0 var(--spacing-lg);
     }
 
     .book-page-container {
@@ -523,6 +608,662 @@
         display: none;
     }
 
+    /* Alert and Status Messages */
+    .alert {
+        padding: var(--spacing-lg);
+        border: 1px solid;
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .alert-success {
+        background: var(--color-success-bg);
+        color: var(--color-success);
+        border-color: var(--color-success-border);
+    }
+
+    .alert-info {
+        background: var(--color-info-bg);
+        color: var(--color-info);
+        border-color: var(--color-info-border);
+    }
+
+    .alert-error {
+        background: var(--color-danger-bg);
+        color: var(--color-danger);
+        border-color: var(--color-danger-border);
+    }
+
+    .alert ul {
+        margin: 0;
+        padding-left: var(--spacing-xl);
+    }
+
+    .status-box {
+        padding: var(--spacing-md);
+        border: 1px solid;
+        border-radius: var(--radius-lg);
+        text-align: center;
+    }
+
+    .status-pending {
+        background: var(--color-warning-bg);
+        border-color: var(--color-warning-border);
+    }
+
+    .status-pending strong {
+        color: var(--color-warning);
+    }
+
+    .status-pending p {
+        margin: var(--spacing-sm) 0 0 0;
+        font-size: var(--font-base);
+        color: var(--color-warning);
+    }
+
+    .status-approved {
+        background: var(--color-success-bg);
+        border-color: var(--color-approved);
+    }
+
+    .status-approved strong {
+        color: var(--color-success);
+    }
+
+    .status-approved p {
+        margin: var(--spacing-sm) 0 0 0;
+        font-size: var(--font-base);
+        color: var(--color-success);
+    }
+
+    .status-rejected {
+        background: var(--color-danger-bg);
+        border-color: var(--color-rejected);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .status-rejected strong {
+        color: var(--color-danger);
+    }
+
+    .status-rejected p {
+        margin: var(--spacing-sm) 0 0 0;
+        font-size: var(--font-base);
+        color: var(--color-danger);
+    }
+
+    /* Divider and spacing utilities */
+    .divider-top {
+        margin-top: var(--spacing-lg);
+        padding-top: var(--spacing-lg);
+        border-top: 1px solid var(--color-border-light);
+    }
+
+    .text-link {
+        text-decoration: none;
+        text-align: center;
+    }
+
+    /* Edition info */
+    .edition-info {
+        font-size: var(--font-md);
+        color: var(--color-text-secondary);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    /* Reader statistics */
+    .reader-stats-flex {
+        display: flex;
+        gap: var(--spacing-2xl);
+        margin: var(--spacing-lg) 0;
+        flex-wrap: wrap;
+    }
+
+    .reader-stat-item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+    .stat-text {
+        color: var(--color-text-secondary);
+    }
+
+    .stat-text strong {
+        font-weight: 600;
+    }
+
+    /* Keyword badges */
+    .keyword-badge {
+        display: inline-block;
+        background: var(--color-bg-secondary);
+        padding: var(--spacing-xs) var(--spacing-md);
+        margin: var(--spacing-xs);
+        border-radius: var(--radius-pill);
+        font-size: var(--font-base);
+    }
+
+    /* Section containers */
+    .section-wrapper {
+        margin: var(--spacing-2xl) 0;
+    }
+
+    .section-wrapper-small {
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .section-text {
+        line-height: 1.6;
+        color: var(--color-text-light);
+    }
+
+    .section-text-wide {
+        line-height: 1.8;
+        color: var(--color-text-light);
+    }
+
+    /* Tab sections and headers */
+    .tab-section {
+        margin: var(--spacing-3xl) 0;
+    }
+
+    .section-title {
+        margin-bottom: var(--spacing-xl);
+        color: var(--color-text-primary);
+        font-size: var(--font-3xl);
+    }
+
+    .section-separator {
+        border: none;
+        border-top: 1px solid var(--color-border-light);
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+        margin-top: var(--spacing-3xl);
+        padding: var(--spacing-2xl);
+        background: var(--color-bg-gray);
+        border-radius: var(--radius-xl);
+    }
+
+    .reviews-section h2 {
+        margin-bottom: var(--spacing-xl);
+        color: var(--color-text-primary);
+    }
+
+    .rating-histogram,
+    .user-rating-form,
+    .user-review-form,
+    .review-item,
+    .review-guest-message {
+        margin-bottom: var(--spacing-2xl);
+        padding: var(--spacing-xl);
+        background: var(--color-bg-white);
+        border-radius: var(--radius-xl);
+    }
+
+    .rating-histogram h3,
+    .user-rating-form h3,
+    .user-review-form h3 {
+        font-size: var(--font-2xl);
+        margin-bottom: var(--spacing-lg);
+        color: var(--color-text-light);
+    }
+
+    .rating-center {
+        display: flex;
+        gap: var(--spacing-2xl);
+        align-items: center;
+    }
+
+    .rating-score-display {
+        text-align: center;
+    }
+
+    .rating-score-number {
+        font-size: var(--font-5xl);
+        font-weight: bold;
+        color: var(--color-primary);
+    }
+
+    .rating-score-stars {
+        font-size: var(--font-3xl);
+    }
+
+    .rating-score-count {
+        color: var(--color-text-secondary);
+        margin-top: var(--spacing-sm);
+    }
+
+    .rating-bars {
+        flex: 1;
+    }
+
+    .rating-bar-row {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .rating-bar-label {
+        min-width: 60px;
+        color: var(--color-text-secondary);
+    }
+
+    .rating-bar-container {
+        flex: 1;
+        height: 20px;
+        background: var(--color-border-light);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+    }
+
+    .rating-bar-fill {
+        height: 100%;
+        background: var(--color-star);
+        transition: width var(--transition-normal);
+    }
+
+    .rating-bar-count {
+        min-width: 60px;
+        text-align: right;
+        color: var(--color-text-secondary);
+    }
+
+    .rating-empty-state {
+        color: var(--color-text-secondary);
+        text-align: center;
+        padding: var(--spacing-2xl);
+    }
+
+    /* Rating Form */
+    .star-rating-form {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-lg);
+    }
+
+    .star-rating {
+        display: flex;
+        gap: var(--spacing-sm);
+    }
+
+    .star-rating label {
+        cursor: pointer;
+        font-size: var(--font-4xl);
+    }
+
+    .rating-text {
+        color: var(--color-text-secondary);
+    }
+
+    /* Review Form */
+    .review-form-field {
+        width: 100%;
+        padding: var(--spacing-lg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        resize: vertical;
+        font-family: inherit;
+    }
+
+    .review-form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: var(--spacing-lg);
+    }
+
+    .review-form-note {
+        color: var(--color-text-muted);
+        font-size: var(--font-base);
+    }
+
+    .btn-submit {
+        padding: var(--spacing-md) var(--spacing-xl);
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    /* Review Item */
+    .review-item {
+        padding: var(--spacing-xl);
+        background: var(--color-bg-white);
+        border-radius: var(--radius-xl);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .review-author {
+        font-weight: bold;
+        color: var(--color-text-primary);
+    }
+
+    .review-rating {
+        display: inline-block;
+        margin-left: var(--spacing-lg);
+        font-size: var(--font-lg);
+    }
+
+    .review-date {
+        color: var(--color-text-muted);
+        font-size: var(--font-base);
+    }
+
+    .review-text {
+        color: var(--color-text-light);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .guest-message {
+        text-align: center;
+    }
+
+    .guest-message p {
+        color: var(--color-text-secondary);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .guest-message a {
+        color: var(--color-primary);
+        text-decoration: underline;
+    }
+
+    /* Notes Section */
+    .notes-section {
+        margin-top: var(--spacing-3xl);
+        padding: var(--spacing-2xl);
+        background: var(--color-bg-light);
+        border-radius: var(--radius-xl);
+    }
+
+    .notes-section h2 {
+        margin-bottom: var(--spacing-xl);
+        color: var(--color-text-primary);
+    }
+
+    .notes-section h2 span {
+        font-size: var(--font-base);
+        color: var(--color-text-secondary);
+        font-weight: 400;
+    }
+
+    .add-note-form,
+    .note-item {
+        margin-bottom: var(--spacing-2xl);
+        padding: var(--spacing-xl);
+        background: var(--color-bg-white);
+        border-radius: var(--radius-xl);
+    }
+
+    .add-note-form h3,
+    .existing-notes h3 {
+        font-size: var(--font-xl);
+        margin-bottom: var(--spacing-lg);
+        color: var(--color-text-light);
+    }
+
+    .note-field-label {
+        display: block;
+        margin-bottom: var(--spacing-sm);
+        font-weight: 600;
+        color: var(--color-text-primary);
+    }
+
+    .note-field-input {
+        width: 100%;
+        padding: var(--spacing-md);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        resize: vertical;
+        font-family: inherit;
+    }
+
+    .note-field-small {
+        font-size: var(--font-base);
+        color: var(--color-text-secondary);
+    }
+
+    .note-field-page-input {
+        width: 150px;
+        padding: var(--spacing-md);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        font-family: inherit;
+    }
+
+    .note-field-margin {
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .btn-add-note {
+        padding: var(--spacing-md) var(--spacing-xl);
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        font-weight: 600;
+        transition: background var(--transition-normal);
+    }
+
+    .note-item {
+        border-left: 4px solid var(--color-primary);
+    }
+
+    .note-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .note-item-header > div:first-child {
+        flex: 1;
+    }
+
+    .note-page-badge {
+        display: inline-block;
+        background: var(--color-bg-light-gray);
+        color: var(--color-text-secondary);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-md);
+        font-size: var(--font-sm);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .note-date {
+        color: var(--color-text-muted);
+        font-size: var(--font-base);
+    }
+
+    .note-actions {
+        display: flex;
+        gap: var(--spacing-sm);
+    }
+
+    .btn-note-edit,
+    .btn-note-delete {
+        background: none;
+        padding: var(--spacing-sm) var(--spacing-lg);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-size: var(--font-base);
+    }
+
+    .btn-note-edit {
+        border: 1px solid var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    .btn-note-delete {
+        border: 1px solid var(--color-rejected);
+        color: var(--color-rejected);
+    }
+
+    .note-content {
+        color: var(--color-text-primary);
+        line-height: 1.6;
+        white-space: pre-wrap;
+    }
+
+    .note-edit-form {
+        display: none;
+        margin-top: var(--spacing-lg);
+    }
+
+    .note-edit-form textarea {
+        width: 100%;
+        padding: var(--spacing-md);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        resize: vertical;
+        font-family: inherit;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .note-edit-actions {
+        display: flex;
+        gap: var(--spacing-sm);
+    }
+
+    .btn-note-save {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        background: var(--color-approved);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-size: var(--font-base);
+    }
+
+    .btn-note-cancel {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        background: #6c757d;
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-size: var(--font-base);
+    }
+
+    .notes-empty-state {
+        padding: var(--spacing-2xl);
+        background: var(--color-bg-white);
+        border-radius: var(--radius-xl);
+        text-align: center;
+    }
+
+    .notes-empty-state p {
+        color: var(--color-text-muted);
+    }
+
+    .notes-guest-section {
+        margin-top: var(--spacing-3xl);
+        padding: var(--spacing-2xl);
+        background: var(--color-bg-light);
+        border-radius: var(--radius-xl);
+        text-align: center;
+    }
+
+    .notes-guest-section h2 {
+        margin-bottom: var(--spacing-lg);
+        color: var(--color-text-primary);
+    }
+
+    .notes-guest-section p {
+        color: var(--color-text-secondary);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    /* Access Request Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background: var(--color-bg-white);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-2xl);
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        color: var(--color-text-primary);
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: var(--font-4xl);
+        cursor: pointer;
+        color: var(--color-text-muted);
+    }
+
+    .modal-description {
+        color: var(--color-text-secondary);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: var(--spacing-lg);
+        justify-content: flex-end;
+    }
+
+    .btn-modal-cancel {
+        padding: var(--spacing-md) var(--spacing-xl);
+        background: var(--color-bg-light-gray);
+        color: var(--color-text-primary);
+        border: none;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .btn-modal-submit {
+        padding: var(--spacing-md) var(--spacing-xl);
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+        font-weight: 600;
+    }
+
     @media (max-width: 768px) {
         .book-page-container {
             grid-template-columns: 1fr;
@@ -549,20 +1290,20 @@
 <div class="container library-book-detail" data-book-id="{{ $book->id }}">
     <!-- Success Messages -->
     @if(session('success'))
-        <div style="padding: 1rem; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 6px; margin-bottom: 1rem;">
+        <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
 
     @if(session('info'))
-        <div style="padding: 1rem; background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; border-radius: 6px; margin-bottom: 1rem;">
+        <div class="alert alert-info">
             {{ session('info') }}
         </div>
     @endif
 
     @if($errors->any())
-        <div style="padding: 1rem; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 6px; margin-bottom: 1rem;">
-            <ul style="margin: 0; padding-left: 1.5rem;">
+        <div class="alert alert-error">
+            <ul>
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -612,25 +1353,19 @@
                     @auth
                         @if($userAccessRequest)
                             @if($userAccessRequest->status === 'pending')
-                                <div style="padding: 0.75rem; background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; text-align: center;">
-                                    <strong style="color: #856404;">⏳ Request Pending</strong>
-                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #856404;">
-                                        Your access request is being reviewed.
-                                    </p>
+                                <div class="status-box status-pending">
+                                    <strong>⏳ Request Pending</strong>
+                                    <p>Your access request is being reviewed.</p>
                                 </div>
                             @elseif($userAccessRequest->status === 'approved')
-                                <div style="padding: 0.75rem; background: #d4edda; border: 1px solid #28a745; border-radius: 6px; text-align: center;">
-                                    <strong style="color: #155724;">✓ Access Approved</strong>
-                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #155724;">
-                                        Your request has been approved. Check your email for instructions.
-                                    </p>
+                                <div class="status-box status-approved">
+                                    <strong>✓ Access Approved</strong>
+                                    <p>Your request has been approved. Check your email for instructions.</p>
                                 </div>
                             @elseif($userAccessRequest->status === 'rejected')
-                                <div style="padding: 0.75rem; background: #f8d7da; border: 1px solid #dc3545; border-radius: 6px; text-align: center; margin-bottom: 0.5rem;">
-                                    <strong style="color: #721c24;">✗ Request Rejected</strong>
-                                    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #721c24;">
-                                        Your previous request was not approved.
-                                    </p>
+                                <div class="status-box status-rejected">
+                                    <strong>✗ Request Rejected</strong>
+                                    <p>Your previous request was not approved.</p>
                                 </div>
                                 <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
                                     Request Again
@@ -647,8 +1382,7 @@
                         @endif
                     @else
                         <a href="{{ route('login', ['redirect' => url()->current()]) }}"
-                           class="book-action-btn btn-secondary"
-                           style="text-decoration: none; text-align: center;"
+                           class="book-action-btn btn-secondary text-link"
                            title="Please log in to request access">
                             Login to Request Access
                         </a>
@@ -657,7 +1391,7 @@
             </div>
 
             <!-- Bookmark Button (Auth Required) -->
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+            <div class="divider-top">
                 @auth
                     <x-bookmark-button
                         :book="$book"
@@ -671,7 +1405,7 @@
             </div>
 
             <!-- Share Button (No Auth Required) -->
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+            <div class="divider-top">
                 <x-share-button
                     :url="route('library.show', $book->slug)"
                     :title="$book->title"
@@ -741,14 +1475,14 @@
 
             <div class="book-header">
                 @if($book->collection && !empty($book->collection->name))
-                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">
+                    <div class="edition-info">
                         An edition from {{ $book->collection->name }}
                         @if($book->publication_year)
                             <span>({{ $book->publication_year }})</span>
                         @endif
                     </div>
                 @elseif($book->publication_year)
-                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">
+                    <div class="edition-info">
                         First published in {{ $book->publication_year }}
                     </div>
                 @endif
@@ -763,15 +1497,15 @@
                 </div>
 
                 <!-- Reader Stats -->
-                <div style="display: flex; gap: 2rem; margin: 1rem 0; flex-wrap: wrap;">
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="reader-stats-flex">
+                    <div class="reader-stat-item">
                         <div class="stars">
                             @php $roundedRating = round($averageRating); @endphp
                             @for($i = 1; $i <= 5; $i++)
                                 <span class="star {{ $i <= $roundedRating ? '' : 'empty' }}">★</span>
                             @endfor
                         </div>
-                        <span style="color: #666;">
+                        <span class="stat-text">
                             @if($totalRatings > 0)
                                 {{ number_format($averageRating, 1) }} ({{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }})
                             @else
@@ -779,8 +1513,8 @@
                             @endif
                         </span>
                     </div>
-                    <div style="color: #666;">
-                        <span style="font-weight: 600;">{{ number_format($book->view_count) }}</span> views
+                    <div class="stat-text">
+                        <strong>{{ number_format($book->view_count) }}</strong> views
                     </div>
                 </div>
             </div>
@@ -852,7 +1586,7 @@
                             <div class="link-box">
                                 <h3>Keywords</h3>
                                 @foreach($book->keywords as $keywordObj)
-                                    <span style="display: inline-block; background: #e9ecef; padding: 0.25rem 0.75rem; margin: 0.25rem; border-radius: 1rem; font-size: 0.875rem;">
+                                    <span class="keyword-badge">
                                         {{ $keywordObj->keyword }}
                                     </span>
                                 @endforeach
@@ -864,18 +1598,18 @@
 
             <!-- Abstract and Table of Contents -->
             @if($book->abstract || $book->table_of_contents)
-                <div style="margin: 2rem 0;">
+                <div class="section-wrapper">
                     @if($book->abstract)
-                        <div style="margin-bottom: 1.5rem;">
+                        <div class="section-wrapper-small">
                             <h3>Abstract</h3>
-                            <p style="line-height: 1.6; color: #555;">{{ $book->abstract }}</p>
+                            <p class="section-text">{{ $book->abstract }}</p>
                         </div>
                     @endif
 
                     @if($book->table_of_contents)
                         <div>
                             <h3>Table of Contents</h3>
-                            <div style="line-height: 1.8; color: #555;">{!! nl2br(e($book->table_of_contents)) !!}</div>
+                            <div class="section-text-wide">{!! nl2br(e($book->table_of_contents)) !!}</div>
                         </div>
                     @endif
                 </div>
@@ -883,9 +1617,9 @@
 
             <!-- Details Section -->
             <a id="details" name="details" class="section-anchor"></a>
-            <div class="tab-section" style="margin: 3rem 0;">
-                <h2 style="margin-bottom: 1.5rem; color: #333; font-size: 1.5rem;">Book Details</h2>
-                <hr style="border: none; border-top: 1px solid #e0e0e0; margin-bottom: 2rem;">
+            <div class="tab-section">
+                <h2 class="section-title">Book Details</h2>
+                <hr class="section-separator">
                 <div class="book-details-grid">
                     <div class="detail-group">
                         <h3>Contributors</h3>
@@ -975,12 +1709,12 @@
 
             <!-- Library Locations Section -->
             <a id="library" name="library" class="section-anchor"></a>
-            <div class="tab-section" style="margin: 3rem 0;">
-                <h2 style="margin-bottom: 1.5rem; color: #333; font-size: 1.5rem;">Library Locations</h2>
-                <hr style="border: none; border-top: 1px solid #e0e0e0; margin-bottom: 2rem;">
+            <div class="tab-section">
+                <h2 class="section-title">Library Locations</h2>
+                <hr class="section-separator">
                 @if($book->libraryReferences->isNotEmpty())
                     @foreach($book->libraryReferences as $reference)
-                        <div class="detail-group" style="margin-bottom: 1.5rem;">
+                        <div class="detail-group section-wrapper-small">
                             <h3>{{ $reference->library_name }}</h3>
                             @if($reference->reference_number)
                                 <div class="detail-item">
@@ -1072,53 +1806,53 @@
 
     <!-- Reviews and Ratings Section -->
     <a id="reader-observations" name="reader-observations" class="section-anchor"></a>
-    <div class="reviews-section tab-section" style="margin-top: 3rem; padding: 2rem; background: #f9f9f9; border-radius: 8px;">
-        <h2 style="margin-bottom: 1.5rem; color: #333;">Reviews & Ratings</h2>
+    <div class="reviews-section">
+        <h2>Reviews & Ratings</h2>
 
         <!-- Rating Histogram -->
-        <div class="rating-histogram" style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px;">
-            <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #555;">Rating Distribution</h3>
+        <div class="rating-histogram">
+            <h3>Rating Distribution</h3>
             @if($totalRatings > 0)
-                <div style="display: flex; gap: 2rem; align-items: center;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 3rem; font-weight: bold; color: #007cba;">{{ number_format($averageRating, 1) }}</div>
-                        <div class="stars" style="font-size: 1.5rem;">
+                <div class="rating-center">
+                    <div class="rating-score-display">
+                        <div class="rating-score-number">{{ number_format($averageRating, 1) }}</div>
+                        <div class="stars rating-score-stars">
                             @for($i = 1; $i <= 5; $i++)
                                 <span class="star {{ $i <= round($averageRating) ? '' : 'empty' }}">★</span>
                             @endfor
                         </div>
-                        <div style="color: #666; margin-top: 0.5rem;">{{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }}</div>
+                        <div class="rating-score-count">{{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }}</div>
                     </div>
-                    <div style="flex: 1;">
+                    <div class="rating-bars">
                         @foreach([5, 4, 3, 2, 1] as $rating)
                             @php
                                 $count = $ratingDistribution[$rating];
                                 $percentage = $totalRatings > 0 ? ($count / $totalRatings) * 100 : 0;
                             @endphp
-                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                                <span style="min-width: 60px; color: #666;">{{ $rating }} stars</span>
-                                <div style="flex: 1; height: 20px; background: #e0e0e0; border-radius: 10px; overflow: hidden;">
-                                    <div style="height: 100%; background: #ffc107; width: {{ $percentage }}%; transition: width 0.3s;"></div>
+                            <div class="rating-bar-row">
+                                <span class="rating-bar-label">{{ $rating }} stars</span>
+                                <div class="rating-bar-container">
+                                    <div class="rating-bar-fill" style="width: {{ $percentage }}%;"></div>
                                 </div>
-                                <span style="min-width: 60px; text-align: right; color: #666;">{{ $count }}</span>
+                                <span class="rating-bar-count">{{ $count }}</span>
                             </div>
                         @endforeach
                     </div>
                 </div>
             @else
-                <p style="color: #666; text-align: center; padding: 2rem;">No ratings yet. Be the first to rate this book!</p>
+                <p class="rating-empty-state">No ratings yet. Be the first to rate this book!</p>
             @endif
         </div>
 
         <!-- User Rating Form -->
         @auth
-            <div class="user-rating-form" style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px;">
-                <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #555;">Rate this book</h3>
-                <form action="{{ route('library.rate', $book->id) }}" method="POST" style="display: flex; align-items: center; gap: 1rem;">
+            <div class="user-rating-form">
+                <h3>Rate this book</h3>
+                <form action="{{ route('library.rate', $book->id) }}" method="POST" class="star-rating-form">
                     @csrf
-                    <div class="star-rating" style="display: flex; gap: 0.5rem;">
+                    <div class="star-rating">
                         @for($i = 1; $i <= 5; $i++)
-                            <label style="cursor: pointer; font-size: 2rem;">
+                            <label>
                                 <input type="radio" name="rating" value="{{ $i }}" style="display: none;"
                                     {{ $userRating && $userRating->rating == $i ? 'checked' : '' }}
                                     onchange="this.form.submit()">
@@ -1128,67 +1862,67 @@
                         @endfor
                     </div>
                     @if($userRating)
-                        <span style="color: #666;">Your rating: {{ $userRating->rating }}/5</span>
+                        <span class="rating-text">Your rating: {{ $userRating->rating }}/5</span>
                     @else
-                        <span style="color: #666;">Click to rate</span>
+                        <span class="rating-text">Click to rate</span>
                     @endif
                 </form>
             </div>
         @else
-            <div style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px; text-align: center;">
-                <p style="color: #666; margin-bottom: 1rem;">Please <a href="{{ route('login', ['redirect' => url()->current()]) }}" style="color: #007cba; text-decoration: underline;">log in</a> to rate this book.</p>
+            <div class="review-guest-message guest-message">
+                <p>Please <a href="{{ route('login', ['redirect' => url()->current()]) }}">log in</a> to rate this book.</p>
             </div>
         @endauth
 
         <!-- User Review Form -->
         @auth
-            <div class="user-review-form" style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px;">
-                <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #555;">Write a review</h3>
+            <div class="user-review-form">
+                <h3>Write a review</h3>
                 <form action="{{ route('library.review', $book->id) }}" method="POST">
                     @csrf
                     <textarea name="review" rows="5" placeholder="Share your thoughts about this book..."
-                        style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 6px; resize: vertical; font-family: inherit;"
+                        class="review-form-field"
                         required minlength="10" maxlength="2000"></textarea>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
-                        <span style="color: #999; font-size: 0.875rem;">Reviews are moderated and will appear after approval.</span>
-                        <button type="submit" style="padding: 0.75rem 1.5rem; background: #007cba; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    <div class="review-form-footer">
+                        <span class="review-form-note">Reviews are moderated and will appear after approval.</span>
+                        <button type="submit" class="btn-submit">
                             Submit Review
                         </button>
                     </div>
                 </form>
             </div>
         @else
-            <div style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px; text-align: center;">
-                <p style="color: #666;">Please <a href="{{ route('login', ['redirect' => url()->current()]) }}" style="color: #007cba; text-decoration: underline;">log in</a> to write a review.</p>
+            <div class="review-guest-message guest-message">
+                <p>Please <a href="{{ route('login', ['redirect' => url()->current()]) }}">log in</a> to write a review.</p>
             </div>
         @endauth
 
         <!-- Existing Reviews -->
         <div class="existing-reviews">
-            <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: #555;">User Reviews ({{ $book->reviews->count() }})</h3>
+            <h3>User Reviews ({{ $book->reviews->count() }})</h3>
             @forelse($book->reviews as $review)
-                <div style="padding: 1.5rem; background: white; border-radius: 8px; margin-bottom: 1rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                <div class="review-item">
+                    <div class="review-header">
                         <div>
-                            <strong style="color: #333;">{{ $review->user->name }}</strong>
+                            <span class="review-author">{{ $review->user->name }}</span>
                             @php
                                 $reviewUserRating = $book->ratings()->where('user_id', $review->user_id)->first();
                             @endphp
                             @if($reviewUserRating)
-                                <div class="stars" style="display: inline-block; margin-left: 1rem; font-size: 1rem;">
+                                <div class="stars review-rating">
                                     @for($i = 1; $i <= 5; $i++)
                                         <span class="star {{ $i <= $reviewUserRating->rating ? '' : 'empty' }}">★</span>
                                     @endfor
                                 </div>
                             @endif
                         </div>
-                        <span style="color: #999; font-size: 0.875rem;">{{ $review->created_at->diffForHumans() }}</span>
+                        <span class="review-date">{{ $review->created_at->diffForHumans() }}</span>
                     </div>
-                    <p style="color: #555; line-height: 1.6; margin: 0;">{{ $review->review }}</p>
+                    <p class="review-text">{{ $review->review }}</p>
                 </div>
             @empty
-                <div style="padding: 2rem; background: white; border-radius: 8px; text-align: center;">
-                    <p style="color: #999;">No reviews yet. Be the first to review this book!</p>
+                <div class="review-item guest-message">
+                    <p>No reviews yet. Be the first to review this book!</p>
                 </div>
             @endforelse
         </div>
@@ -1196,45 +1930,45 @@
 
     <!-- Personal Notes Section -->
     @auth
-    <div class="notes-section" style="margin-top: 3rem; padding: 2rem; background: #f9f9fa; border-radius: 8px;">
-        <h2 style="margin-bottom: 1.5rem; color: #333;">
+    <div class="notes-section">
+        <h2>
             <i class="fal fa-sticky-note"></i> My Notes
             @if($userNotes->isNotEmpty())
-                <span style="font-size: 0.875rem; color: #666; font-weight: 400;">({{ $userNotes->count() }})</span>
+                <span>({{ $userNotes->count() }})</span>
             @endif
         </h2>
 
         <!-- Add New Note Form -->
-        <div class="add-note-form" style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px;">
-            <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: #555;">Add a New Note</h3>
+        <div class="add-note-form">
+            <h3>Add a New Note</h3>
             <form action="{{ route('library.notes.store', $book->id) }}" method="POST">
                 @csrf
-                <div style="margin-bottom: 1rem;">
-                    <label for="note" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Note *</label>
+                <div class="note-field-margin">
+                    <label for="note" class="note-field-label">Note *</label>
                     <textarea
                         name="note"
                         id="note"
                         rows="4"
                         placeholder="Write your thoughts, observations, or reminders about this book..."
-                        style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; resize: vertical; font-family: inherit;"
+                        class="note-field-input"
                         required
                         minlength="1"
                         maxlength="5000"></textarea>
-                    <small style="color: #666; font-size: 0.875rem;">Maximum 5,000 characters. Your notes are private.</small>
+                    <small class="note-field-small">Maximum 5,000 characters. Your notes are private.</small>
                 </div>
 
-                <div style="margin-bottom: 1rem;">
-                    <label for="page_number" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Page Number (optional)</label>
+                <div class="note-field-margin">
+                    <label for="page_number" class="note-field-label">Page Number (optional)</label>
                     <input
                         type="number"
                         name="page_number"
                         id="page_number"
                         min="1"
                         placeholder="e.g., 42"
-                        style="width: 150px; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit;">
+                        class="note-field-page-input">
                 </div>
 
-                <button type="submit" style="padding: 0.75rem 1.5rem; background: #007cba; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.3s;">
+                <button type="submit" class="btn-add-note">
                     <i class="fal fa-plus"></i> Add Note
                 </button>
             </form>
@@ -1242,70 +1976,69 @@
 
         <!-- Existing Notes -->
         <div class="existing-notes">
-            <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: #555;">
+            <h3>
                 Your Notes
                 @if($userNotes->isEmpty())
-                    <span style="font-size: 0.875rem; color: #999; font-weight: 400;">(None yet)</span>
+                    <span>(None yet)</span>
                 @endif
             </h3>
             @forelse($userNotes as $note)
-                <div class="note-item" style="padding: 1.5rem; background: white; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #007cba;">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
-                        <div style="flex: 1;">
+                <div class="note-item">
+                    <div class="note-item-header">
+                        <div>
                             @if($note->page_number)
-                                <span style="display: inline-block; background: #f0f0f0; color: #666; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-bottom: 0.5rem;">
+                                <span class="note-page-badge">
                                     <i class="fal fa-book-open"></i> Page {{ $note->page_number }}
                                 </span>
                             @endif
-                            <div style="color: #999; font-size: 0.875rem;">
+                            <div class="note-date">
                                 <i class="fal fa-clock"></i> {{ $note->created_at->format('M d, Y') }}
                                 @if($note->created_at != $note->updated_at)
                                     (edited {{ $note->updated_at->diffForHumans() }})
                                 @endif
                             </div>
                         </div>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button onclick="editNote({{ $note->id }})" style="background: none; border: 1px solid #007cba; color: #007cba; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                        <div class="note-actions">
+                            <button onclick="editNote({{ $note->id }})" class="btn-note-edit">
                                 <i class="fal fa-edit"></i> Edit
                             </button>
                             <form action="{{ route('library.notes.destroy', $note->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this note?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" style="background: none; border: 1px solid #dc3545; color: #dc3545; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                                <button type="submit" class="btn-note-delete">
                                     <i class="fal fa-trash"></i> Delete
                                 </button>
                             </form>
                         </div>
                     </div>
 
-                    <div id="note-content-{{ $note->id }}" style="color: #333; line-height: 1.6; white-space: pre-wrap;">{{ $note->note }}</div>
+                    <div id="note-content-{{ $note->id }}" class="note-content">{{ $note->note }}</div>
 
                     <!-- Edit Form (Hidden by default) -->
-                    <div id="note-edit-form-{{ $note->id }}" style="display: none; margin-top: 1rem;">
+                    <div id="note-edit-form-{{ $note->id }}" class="note-edit-form">
                         <form action="{{ route('library.notes.update', $note->id) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <textarea
                                 name="note"
                                 rows="4"
-                                style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; resize: vertical; font-family: inherit; margin-bottom: 0.5rem;"
                                 required
                                 minlength="1"
                                 maxlength="5000">{{ $note->note }}</textarea>
-                            <div style="margin-bottom: 1rem;">
+                            <div class="note-field-margin">
                                 <input
                                     type="number"
                                     name="page_number"
                                     value="{{ $note->page_number }}"
                                     min="1"
                                     placeholder="Page number (optional)"
-                                    style="width: 150px; padding: 0.5rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit;">
+                                    class="note-field-page-input">
                             </div>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button type="submit" style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                            <div class="note-edit-actions">
+                                <button type="submit" class="btn-note-save">
                                     <i class="fal fa-check"></i> Save
                                 </button>
-                                <button type="button" onclick="cancelEdit({{ $note->id }})" style="padding: 0.5rem 1rem; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+                                <button type="button" onclick="cancelEdit({{ $note->id }})" class="btn-note-cancel">
                                     Cancel
                                 </button>
                             </div>
@@ -1313,73 +2046,73 @@
                     </div>
                 </div>
             @empty
-                <div style="padding: 2rem; background: white; border-radius: 8px; text-align: center;">
-                    <p style="color: #999;">You haven't added any notes for this book yet. Use the form above to add your first note!</p>
+                <div class="notes-empty-state">
+                    <p>You haven't added any notes for this book yet. Use the form above to add your first note!</p>
                 </div>
             @endforelse
         </div>
     </div>
     @else
-        <div style="margin-top: 3rem; padding: 2rem; background: #f9f9fa; border-radius: 8px; text-align: center;">
-            <h2 style="margin-bottom: 1rem; color: #333;">
+        <div class="notes-guest-section">
+            <h2>
                 <i class="fal fa-sticky-note"></i> Personal Notes
             </h2>
-            <p style="color: #666; margin-bottom: 1.5rem;">Please <a href="{{ route('login') }}" style="color: #007cba; text-decoration: underline;">log in</a> to add personal notes to this book.</p>
+            <p>Please <a href="{{ route('login') }}">log in</a> to add personal notes to this book.</p>
         </div>
     @endauth
 
     <!-- Access Request Modal -->
     @auth
-    <div id="accessRequestModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
-        <div style="background: white; border-radius: 8px; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h2 style="margin: 0; color: #333;">Request Access</h2>
-                <button onclick="closeAccessRequestModal()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #999;">&times;</button>
+    <div id="accessRequestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Request Access</h2>
+                <button onclick="closeAccessRequestModal()" class="modal-close">&times;</button>
             </div>
 
-            <p style="color: #666; margin-bottom: 1.5rem;">
+            <p class="modal-description">
                 Fill out the form below to request access to <strong>{{ $book->title }}</strong>. We will review your request and contact you via email.
             </p>
 
             <form action="{{ route('library.request-access', $book->id) }}" method="POST">
                 @csrf
-                <div style="margin-bottom: 1rem;">
-                    <label for="access_request_name" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Name *</label>
+                <div class="note-field-margin">
+                    <label for="access_request_name" class="note-field-label">Name *</label>
                     <input type="text"
                            id="access_request_name"
                            name="name"
                            value="{{ auth()->user()->name }}"
                            required
-                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit;">
+                           class="note-field-input">
                 </div>
 
-                <div style="margin-bottom: 1rem;">
-                    <label for="access_request_email" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Email *</label>
+                <div class="note-field-margin">
+                    <label for="access_request_email" class="note-field-label">Email *</label>
                     <input type="email"
                            id="access_request_email"
                            name="email"
                            value="{{ auth()->user()->email }}"
                            required
-                           style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit;">
+                           class="note-field-input">
                 </div>
 
-                <div style="margin-bottom: 1.5rem;">
-                    <label for="access_request_message" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Message (Optional)</label>
+                <div class="note-field-margin">
+                    <label for="access_request_message" class="note-field-label">Message (Optional)</label>
                     <textarea id="access_request_message"
                               name="message"
                               rows="4"
                               placeholder="Why do you need access to this book?"
-                              style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; resize: vertical; font-family: inherit;"></textarea>
+                              class="note-field-input"></textarea>
                 </div>
 
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <div class="modal-actions">
                     <button type="button"
                             onclick="closeAccessRequestModal()"
-                            style="padding: 0.75rem 1.5rem; background: #f0f0f0; color: #333; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                            class="btn-modal-cancel">
                         Cancel
                     </button>
                     <button type="submit"
-                            style="padding: 0.75rem 1.5rem; background: #007cba; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                            class="btn-modal-submit">
                         Submit Request
                     </button>
                 </div>
