@@ -256,7 +256,7 @@
     /* Sticky Navigation Bar (OpenLibrary style) */
     .nav-bar-wrapper {
         position: sticky;
-        top: 0;
+        top: 140px;
         background: white;
         z-index: 100;
         padding: 0.5rem 1rem 0.5rem 0;
@@ -392,7 +392,7 @@
     .section-anchor {
         display: block;
         position: relative;
-        top: -80px;
+        top: -200px;
         visibility: hidden;
     }
 
@@ -2201,7 +2201,7 @@
                 const targetId = this.getAttribute('href').substring(1);
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
-                    const offsetTop = targetSection.offsetTop - 80;
+                    const offsetTop = targetSection.offsetTop - 200;
                     window.scrollTo({
                         top: offsetTop,
                         behavior: 'smooth'
