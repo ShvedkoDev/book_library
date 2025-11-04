@@ -791,47 +791,47 @@
     }
 
     .section-title {
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-sm);
         color: var(--color-text-primary);
-        font-size: var(--font-3xl);
+        font-size: 1.25rem;
     }
 
     .section-separator {
         border: none;
         border-top: 1px solid var(--color-border-light);
-        margin-bottom: var(--spacing-2xl);
+        margin-bottom: var(--spacing-md);
     }
 
     /* Book Info Cards (OpenLibrary style) */
     .book-info-cards {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: var(--spacing-lg);
-        margin-bottom: var(--spacing-3xl);
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: var(--spacing-lg);
     }
 
     .info-card {
         border: 1px solid var(--color-border);
-        border-radius: var(--radius-lg);
-        padding: var(--spacing-lg);
+        border-radius: var(--radius-md);
+        padding: 0.625rem;
         background: var(--color-bg-white);
         text-align: center;
     }
 
     .info-card-label {
         display: block;
-        font-size: var(--font-sm);
+        font-size: 0.75rem;
         color: var(--color-text-secondary);
-        margin-bottom: var(--spacing-sm);
+        margin-bottom: 0.25rem;
         font-weight: 500;
     }
 
     .info-card-value {
         display: block;
-        font-size: var(--font-lg);
+        font-size: 0.875rem;
         color: var(--color-primary);
         font-weight: 600;
-        line-height: 1.4;
+        line-height: 1.3;
     }
 
     .info-card-value.publisher {
@@ -846,12 +846,12 @@
 
     /* Book Details Two-Column Layout (OpenLibrary style) */
     .details-section {
-        margin-bottom: var(--spacing-2xl);
+        margin-bottom: var(--spacing-lg);
     }
 
     .details-subsection {
-        margin-bottom: var(--spacing-xl);
-        padding-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-sm);
         border-bottom: 1px solid var(--color-border-light);
     }
 
@@ -860,31 +860,31 @@
     }
 
     .details-subsection-title {
-        font-size: 1rem;
+        font-size: 0.875rem;
         font-weight: 600;
         color: var(--color-text-primary);
-        margin-bottom: var(--spacing-sm);
-        line-height: 1.4;
+        margin-bottom: 0.375rem;
+        line-height: 1.3;
     }
 
     .details-row {
         display: grid;
-        grid-template-columns: 150px 1fr;
-        gap: var(--spacing-md);
-        margin-bottom: var(--spacing-xs);
+        grid-template-columns: 130px 1fr;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
         align-items: start;
-        line-height: 1.6;
+        line-height: 1.5;
     }
 
     .details-label {
         color: var(--color-text-secondary);
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         font-weight: 400;
     }
 
     .details-value {
         color: var(--color-text-primary);
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
     }
 
     .details-value a {
@@ -899,7 +899,7 @@
     @media (max-width: 640px) {
         .details-row {
             grid-template-columns: 1fr;
-            gap: var(--spacing-xs);
+            gap: 0.125rem;
         }
 
         .details-label {
