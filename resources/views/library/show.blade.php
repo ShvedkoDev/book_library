@@ -257,7 +257,7 @@
     .nav-bar-wrapper {
         display: block;
         position: sticky;
-        top: 140px;
+        top: 118px;
         background: #ffffff !important;
         background-color: #ffffff !important;
         z-index: 100;
@@ -265,7 +265,7 @@
         border-bottom: 1px solid #e8e8e8;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         transition: box-shadow 0.3s ease;
-        margin: 2rem -1rem 0 0;
+        margin: 0 -1rem 1rem 0;
         opacity: 1 !important;
     }
 
@@ -746,10 +746,18 @@
 
     .stat-text {
         color: var(--color-text-secondary);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
     }
 
     .stat-text strong {
         font-weight: 600;
+    }
+
+    .stat-text i {
+        color: var(--color-text-muted);
+        font-size: 0.9em;
     }
 
     /* Keyword badges */
@@ -1533,7 +1541,10 @@
                         </span>
                     </div>
                     <div class="stat-text">
-                        <strong>{{ number_format($book->view_count) }}</strong> views
+                        <i class="fal fa-eye"></i> <strong>{{ number_format($book->view_count) }}</strong> {{ Str::plural('view', $book->view_count) }}
+                    </div>
+                    <div class="stat-text">
+                        <i class="fal fa-download"></i> <strong>{{ number_format($book->download_count) }}</strong> {{ Str::plural('download', $book->download_count) }}
                     </div>
                 </div>
             </div>
