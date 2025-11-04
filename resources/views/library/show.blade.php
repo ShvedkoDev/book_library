@@ -790,7 +790,7 @@
         margin: var(--spacing-3xl) 0;
     }
 
-    .section-title {
+    h2.section-title {
         margin-bottom: var(--spacing-sm);
         color: var(--color-text-primary);
         font-size: 1.25rem;
@@ -852,14 +852,9 @@
     .details-subsection {
         margin-bottom: var(--spacing-md);
         padding-bottom: var(--spacing-sm);
-        border-bottom: 1px solid var(--color-border-light);
     }
 
-    .details-subsection:last-child {
-        border-bottom: none;
-    }
-
-    .details-subsection-title {
+    h3.details-subsection-title {
         font-size: 0.875rem;
         font-weight: 600;
         color: var(--color-text-primary);
