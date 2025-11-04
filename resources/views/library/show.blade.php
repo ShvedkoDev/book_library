@@ -258,10 +258,16 @@
         position: sticky;
         top: 0;
         background: white;
-        z-index: 100;
+        z-index: 1000;
+        padding: 0.5rem 1rem 0.5rem 0;
         border-bottom: 1px solid #e8e8e8;
-        margin: 2rem -1rem 0 -1rem;
-        padding: 0.5rem 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: box-shadow 0.3s ease;
+        margin: 2rem -1rem 0 0;
+    }
+
+    .nav-bar-wrapper.scrolled {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     /* Edit Info Section (OpenLibrary style) */
@@ -2153,6 +2159,8 @@
     document.addEventListener('DOMContentLoaded', function() {
         const sections = document.querySelectorAll('.section-anchor');
         const navLinks = document.querySelectorAll('.nav-bar a');
+        const navBarWrapper = document.querySelector('.nav-bar-wrapper');
+        let navBarOffset = navBarWrapper ? navBarWrapper.offsetTop : 0;
 
         // Update active state based on scroll position
         function updateActiveNav() {
@@ -2173,6 +2181,15 @@
                     parent.classList.add('selected');
                 }
             });
+
+            // Add/remove scrolled class for enhanced shadow
+            if (navBarWrapper) {
+                if (window.pageYOffset > navBarOffset) {
+                    navBarWrapper.classList.add('scrolled');
+                } else {
+                    navBarWrapper.classList.remove('scrolled');
+                }
+            }
         }
 
         window.addEventListener('scroll', updateActiveNav);
