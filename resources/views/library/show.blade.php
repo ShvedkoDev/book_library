@@ -258,7 +258,7 @@
         position: sticky;
         top: 0;
         background: white;
-        z-index: 1000;
+        z-index: 100;
         padding: 0.5rem 1rem 0.5rem 0;
         border-bottom: 1px solid #e8e8e8;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
