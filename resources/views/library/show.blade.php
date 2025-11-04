@@ -257,17 +257,20 @@
     .nav-bar-wrapper {
         position: sticky;
         top: 140px;
-        background: white;
+        background: #ffffff;
+        background-color: #ffffff;
         z-index: 100;
         padding: 0.5rem 1rem 0.5rem 0;
         border-bottom: 1px solid #e8e8e8;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         transition: box-shadow 0.3s ease;
         margin: 2rem -1rem 0 0;
+        opacity: 1;
     }
 
     .nav-bar-wrapper.scrolled {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
     }
 
     /* Edit Info Section (OpenLibrary style) */
@@ -381,11 +384,13 @@
 
     .nav-bar li.selected a {
         background: #007cba;
-        color: white;
+        background-color: #007cba;
+        color: #ffffff !important;
     }
 
     .nav-bar a:hover:not(.nav-bar li.selected a) {
         background: #f0f0f0;
+        background-color: #f0f0f0;
         color: #333;
     }
 
