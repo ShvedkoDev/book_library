@@ -339,11 +339,20 @@
 
             <div class="book-actions">
                 @if($book->access_level === 'full' && $pdfFile)
-                    <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">View PDF</a>
-                    <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-secondary">Download PDF</a>
+                    @auth
+                        <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">View PDF</a>
+                        <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-secondary">Download PDF</a>
+                    @else
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to view PDF">Login to View PDF</a>
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to download">Login to Download</a>
+                    @endauth
                 @elseif($book->access_level === 'limited' && $pdfFile)
-                    <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">Limited Preview</a>
-                    <button class="book-action-btn btn-secondary" disabled>Request Full Access</button>
+                    @auth
+                        <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">Limited Preview</a>
+                        <button class="book-action-btn btn-secondary" disabled>Request Full Access</button>
+                    @else
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to preview">Login to Preview</a>
+                    @endauth
                 @else
                     <button class="book-action-btn btn-primary" disabled>Not Available</button>
                     @auth
@@ -383,7 +392,7 @@
                             </button>
                         @endif
                     @else
-                        <a href="{{ route('login') }}"
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}"
                            class="book-action-btn btn-secondary"
                            style="text-decoration: none; text-align: center;"
                            title="Please log in to request access">
@@ -415,14 +424,18 @@
             </div>
 
             <!-- Bookmark Button (Auth Required) -->
-            @auth
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+                @auth
                     <x-bookmark-button
                         :book="$book"
                         :isBookmarked="$book->isBookmarkedBy(Auth::id())"
                     />
-                </div>
-            @endauth
+                @else
+                    <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to save to collection">
+                        Login to Save to Collection
+                    </a>
+                @endauth
+            </div>
 
             <!-- Share Button (No Auth Required) -->
             <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
@@ -749,7 +762,7 @@
             </div>
         @else
             <div style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px; text-align: center;">
-                <p style="color: #666; margin-bottom: 1rem;">Please <a href="{{ route('login') }}" style="color: #007cba; text-decoration: underline;">log in</a> to rate this book.</p>
+                <p style="color: #666; margin-bottom: 1rem;">Please <a href="{{ route('login', ['redirect' => url()->current()]) }}" style="color: #007cba; text-decoration: underline;">log in</a> to rate this book.</p>
             </div>
         @endauth
 
@@ -772,7 +785,7 @@
             </div>
         @else
             <div style="margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 8px; text-align: center;">
-                <p style="color: #666;">Please <a href="{{ route('login') }}" style="color: #007cba; text-decoration: underline;">log in</a> to write a review.</p>
+                <p style="color: #666;">Please <a href="{{ route('login', ['redirect' => url()->current()]) }}" style="color: #007cba; text-decoration: underline;">log in</a> to write a review.</p>
             </div>
         @endauth
 

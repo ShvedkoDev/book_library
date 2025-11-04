@@ -15,7 +15,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
         // Get demo users for development/testing
         $demoUsers = User::whereIn('email', [
@@ -25,6 +25,11 @@ class AuthenticatedSessionController extends Controller
             'sarah.prof@uog.edu',
             'james.lib@fsmgov.org'
         ])->get(['name', 'email', 'role']);
+
+        // If a redirect parameter is provided, store it as the intended URL
+        if ($request->has('redirect')) {
+            $request->session()->put('url.intended', $request->input('redirect'));
+        }
 
         return view('auth.login', compact('demoUsers'));
     }

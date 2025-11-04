@@ -20,12 +20,17 @@ Route::get('/dashboard', function () {
 // Share tracking - NO AUTH REQUIRED (as per requirements)
 Route::post('/api/track-share', [ShareTrackingController::class, 'trackShare'])->name('api.track-share');
 
-// Library routes (requires authentication)
+// Library routes - PUBLIC ACCESS (browsing and viewing books)
+Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
+Route::get('/library/book/{slug}', [LibraryController::class, 'show'])->name('library.show');
+
+// Library routes - REQUIRES AUTHENTICATION (interactive features)
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
-    Route::get('/library/book/{slug}', [LibraryController::class, 'show'])->name('library.show');
+    // PDF viewing and downloading
     Route::get('/library/book/{book}/view-pdf/{file}', [LibraryController::class, 'viewPdf'])->name('library.view-pdf');
     Route::get('/library/book/{book}/download/{file}', [LibraryController::class, 'download'])->name('library.download');
+
+    // Book interactions (rating, review, access request)
     Route::post('/library/book/{book}/request-access', [LibraryController::class, 'requestAccess'])->name('library.request-access');
     Route::post('/library/book/{book}/rate', [LibraryController::class, 'submitRating'])->name('library.rate');
     Route::post('/library/book/{book}/review', [LibraryController::class, 'submitReview'])->name('library.review');
