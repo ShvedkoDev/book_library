@@ -834,18 +834,74 @@
         line-height: 1.4;
     }
 
-    .info-card-value a {
-        color: var(--color-primary);
-        text-decoration: none;
-    }
-
-    .info-card-value a:hover {
-        text-decoration: underline;
+    .info-card-value.publisher {
+        font-size: 0.75rem;
     }
 
     @media (max-width: 640px) {
         .book-info-cards {
             grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Book Details Two-Column Layout (OpenLibrary style) */
+    .details-section {
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .details-subsection {
+        margin-bottom: var(--spacing-2xl);
+        padding-bottom: var(--spacing-xl);
+        border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .details-subsection:last-child {
+        border-bottom: none;
+    }
+
+    .details-subsection-title {
+        font-size: var(--font-lg);
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .details-row {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
+        align-items: start;
+    }
+
+    .details-label {
+        color: var(--color-text-secondary);
+        font-size: var(--font-base);
+        font-weight: 500;
+    }
+
+    .details-value {
+        color: var(--color-text-primary);
+        font-size: var(--font-base);
+    }
+
+    .details-value a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    .details-value a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+        .details-row {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-xs);
+        }
+
+        .details-label {
+            font-weight: 600;
         }
     }
 
@@ -1605,32 +1661,32 @@
                 </div>
             @endif
 
-            <!-- Edition Omniline -->
-            <div class="edition-omniline">
-                @if($book->publication_year)
-                    <div class="edition-omniline-item">
-                        <div>Publish Date</div>
-                        <span>{{ $book->publication_year }}</span>
-                    </div>
-                @endif
-                @if($book->publisher)
-                    <div class="edition-omniline-item">
-                        <div>Publisher</div>
-                        <span>{{ $book->publisher->name }}</span>
-                    </div>
-                @endif
-                @if($book->languages->isNotEmpty())
-                    <div class="edition-omniline-item">
-                        <div>Language</div>
-                        <span>{{ $book->languages->pluck('name')->join(', ') }}</span>
-                    </div>
-                @endif
-                @if($book->pages)
-                    <div class="edition-omniline-item">
-                        <div>Pages</div>
-                        <span>{{ $book->pages }}</span>
-                    </div>
-                @endif
+            <!-- Info Cards (OpenLibrary style) -->
+            <div class="book-info-cards">
+                <div class="info-card">
+                    <span class="info-card-label">Publish Date</span>
+                    <span class="info-card-value">{{ $book->publication_year ?? 'N/A' }}</span>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-label">Publisher</span>
+                    <span class="info-card-value publisher">
+                        @if($book->publisher)
+                            {{ $book->publisher->name }}
+                        @else
+                            N/A
+                        @endif
+                    </span>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-label">Language</span>
+                    <span class="info-card-value">
+                            {{ $book->languages->isNotEmpty() ? $book->languages->pluck('name')->join(', ') : 'N/A' }}
+                        </span>
+                </div>
+                <div class="info-card">
+                    <span class="info-card-label">Pages</span>
+                    <span class="info-card-value">{{ $book->pages ?? 'N/A' }}</span>
+                </div>
             </div>
 
             <!-- Subjects Section -->
@@ -1694,116 +1750,101 @@
                 <h2 class="section-title">Book Details</h2>
                 <hr class="section-separator">
 
-                <!-- Info Cards (OpenLibrary style) -->
-                <div class="book-info-cards">
-                    <div class="info-card">
-                        <span class="info-card-label">Publish Date</span>
-                        <span class="info-card-value">{{ $book->publication_year ?? 'N/A' }}</span>
-                    </div>
-                    <div class="info-card">
-                        <span class="info-card-label">Publisher</span>
-                        <span class="info-card-value">
-                            @if($book->publisher)
-                                <a href="#">{{ $book->publisher->name }}</a>
-                            @else
-                                N/A
-                            @endif
-                        </span>
-                    </div>
-                    <div class="info-card">
-                        <span class="info-card-label">Language</span>
-                        <span class="info-card-value">
-                            {{ $book->languages->isNotEmpty() ? $book->languages->pluck('name')->join(', ') : 'N/A' }}
-                        </span>
-                    </div>
-                    <div class="info-card">
-                        <span class="info-card-label">Pages</span>
-                        <span class="info-card-value">{{ $book->pages ?? 'N/A' }}</span>
-                    </div>
-                </div>
-
-                <div class="book-details-grid">
-                    <div class="detail-group">
-                        <h3>Contributors</h3>
-                        @if($book->creators->isNotEmpty())
-                            @foreach($book->creators as $creator)
-                                <div class="detail-item">
-                                    <span class="detail-label">{{ $creator->pivot->role ?? 'Author' }}:</span>
-                                    <span class="detail-value">{{ $creator->name }}</span>
-                                </div>
-                            @endforeach
-                        @endif
+                <div class="details-section">
+                    <!-- Edition Notes -->
+                    <div class="details-subsection">
+                        <h3 class="details-subsection-title">Edition Notes</h3>
                         @if($book->publisher)
-                            <div class="detail-item">
-                                <span class="detail-label">Publisher:</span>
-                                <span class="detail-value">{{ $book->publisher->name }}</span>
+                            <div class="details-row">
+                                <span class="details-label">Publisher</span>
+                                <span class="details-value">{{ $book->publisher->name }}</span>
+                            </div>
+                        @endif
+                        @if($book->publication_year)
+                            <div class="details-row">
+                                <span class="details-label">Copyright Date</span>
+                                <span class="details-value">{{ $book->publication_year }}</span>
                             </div>
                         @endif
                     </div>
 
-                    <div class="detail-group">
-                        <h3>Classifications</h3>
-                        @if($book->purposeClassifications->isNotEmpty())
-                            <div class="detail-item">
-                                <span class="detail-label">Subject:</span>
-                                <span class="detail-value">{{ $book->purposeClassifications->pluck('value')->join(', ') }}</span>
-                            </div>
-                        @endif
-                        @if($book->learnerLevelClassifications->isNotEmpty())
-                            <div class="detail-item">
-                                <span class="detail-label">Grade Level:</span>
-                                <span class="detail-value">{{ $book->learnerLevelClassifications->pluck('value')->join(', ') }}</span>
-                            </div>
-                        @endif
-                        @if($book->languages->isNotEmpty())
-                            <div class="detail-item">
-                                <span class="detail-label">Language:</span>
-                                <span class="detail-value">{{ $book->languages->pluck('name')->join(', ') }}</span>
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="detail-group">
-                        <h3>Publication Details</h3>
-                        <div class="detail-item">
-                            <span class="detail-label">Year:</span>
-                            <span class="detail-value">{{ $book->publication_year ?? 'N/A' }}</span>
+                    <!-- Classifications -->
+                    @if($book->purposeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty())
+                        <div class="details-subsection">
+                            <h3 class="details-subsection-title">Classifications</h3>
+                            @if($book->purposeClassifications->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Subject</span>
+                                    <span class="details-value">{{ $book->purposeClassifications->pluck('value')->join(', ') }}</span>
+                                </div>
+                            @endif
+                            @if($book->learnerLevelClassifications->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Grade Level</span>
+                                    <span class="details-value">{{ $book->learnerLevelClassifications->pluck('value')->join(', ') }}</span>
+                                </div>
+                            @endif
                         </div>
-                        @if($book->pages)
-                            <div class="detail-item">
-                                <span class="detail-label">Pages:</span>
-                                <span class="detail-value">{{ $book->pages }}</span>
-                            </div>
-                        @endif
-                        @if($book->physical_type)
-                            <div class="detail-item">
-                                <span class="detail-label">Type:</span>
-                                <span class="detail-value">{{ $book->physical_type }}</span>
-                            </div>
-                        @endif
-                    </div>
+                    @endif
 
-                    @if($book->isbn_10 || $book->isbn_13 || $book->palm_code)
-                        <div class="detail-group">
-                            <h3>Identifiers</h3>
+                    <!-- The Physical Object -->
+                    @if($book->pages || $book->physical_type)
+                        <div class="details-subsection">
+                            <h3 class="details-subsection-title">The Physical Object</h3>
+                            @if($book->pages)
+                                <div class="details-row">
+                                    <span class="details-label">Number of pages</span>
+                                    <span class="details-value">{{ $book->pages }}</span>
+                                </div>
+                            @endif
+                            @if($book->physical_type)
+                                <div class="details-row">
+                                    <span class="details-label">Format</span>
+                                    <span class="details-value">{{ $book->physical_type }}</span>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+
+                    <!-- Edition Identifiers -->
+                    @if($book->isbn_10 || $book->isbn_13 || $book->palm_code || $book->internal_id)
+                        <div class="details-subsection">
+                            <h3 class="details-subsection-title">Edition Identifiers</h3>
+                            @if($book->internal_id)
+                                <div class="details-row">
+                                    <span class="details-label">MTDL ID</span>
+                                    <span class="details-value">{{ $book->internal_id }}</span>
+                                </div>
+                            @endif
                             @if($book->isbn_10)
-                                <div class="detail-item">
-                                    <span class="detail-label">ISBN-10:</span>
-                                    <span class="detail-value">{{ $book->isbn_10 }}</span>
+                                <div class="details-row">
+                                    <span class="details-label">ISBN 10</span>
+                                    <span class="details-value">{{ $book->isbn_10 }}</span>
                                 </div>
                             @endif
                             @if($book->isbn_13)
-                                <div class="detail-item">
-                                    <span class="detail-label">ISBN-13:</span>
-                                    <span class="detail-value">{{ $book->isbn_13 }}</span>
+                                <div class="details-row">
+                                    <span class="details-label">ISBN 13</span>
+                                    <span class="details-value">{{ $book->isbn_13 }}</span>
                                 </div>
                             @endif
                             @if($book->palm_code)
-                                <div class="detail-item">
-                                    <span class="detail-label">PALM Code:</span>
-                                    <span class="detail-value">{{ $book->palm_code }}</span>
+                                <div class="details-row">
+                                    <span class="details-label">PALM Code</span>
+                                    <span class="details-value">{{ $book->palm_code }}</span>
                                 </div>
                             @endif
+                        </div>
+                    @endif
+
+                    <!-- Work Identifiers -->
+                    @if($book->id)
+                        <div class="details-subsection">
+                            <h3 class="details-subsection-title">Work Identifiers</h3>
+                            <div class="details-row">
+                                <span class="details-label">Work ID</span>
+                                <span class="details-value">{{ $book->id }}</span>
+                            </div>
                         </div>
                     @endif
                 </div>
