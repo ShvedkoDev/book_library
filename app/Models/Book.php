@@ -398,6 +398,11 @@ class Book extends Model
         return $this->hasMany(BookNote::class);
     }
 
+    public function updated_by_user()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
     // Scopes
 
     public function scopeActive($query)

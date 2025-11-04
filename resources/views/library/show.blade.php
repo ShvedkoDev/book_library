@@ -7,9 +7,16 @@
 
 @push('styles')
 <style>
+    /* Main content container - max 1020px */
+    .library-book-detail {
+        max-width: 1020px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
     .book-page-container {
         display: grid;
-        grid-template-columns: 300px 1fr;
+        grid-template-columns: 225px 1fr;
         gap: 2rem;
         padding: 2rem 0;
     }
@@ -130,16 +137,15 @@
     }
 
     .book-title {
-        font-size: 2.5rem;
+        font-size: 2rem;
         margin: 0.5rem 0;
         color: #333;
     }
 
-    .book-subtitle {
-        font-size: 1.5rem;
+    h2.book-subtitle {
+        font-size: 1rem;
         color: #666;
-        font-weight: 400;
-        margin: 0.5rem 0;
+        margin-top: 0!important;
     }
 
     .book-author {
@@ -160,6 +166,140 @@
     .book-description {
         margin: 2rem 0;
         line-height: 1.6;
+    }
+
+    /* Sticky Navigation Bar (OpenLibrary style) */
+    .nav-bar-wrapper {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 100;
+        border-bottom: 2px solid #e0e0e0;
+        margin: 2rem -1rem 0 -1rem;
+        padding: 0 1rem;
+    }
+
+    /* Edit Info Section (OpenLibrary style) */
+    .edit-info-section {
+        float: right;
+        margin: 0 0 1rem 1.5rem;
+        max-width: 280px;
+    }
+
+    .edit-info-content {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 0.5rem 0.75rem;
+        background: white;
+    }
+
+    .edit-meta {
+        font-size: 0.65rem;
+    }
+
+    .edit-user {
+        color: #666;
+        margin-bottom: 0.25rem;
+        line-height: 1;
+    }
+
+    .editor-link {
+        color: #007cba;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .editor-link:hover {
+        text-decoration: underline;
+    }
+
+    .edit-date {
+        font-size: 0.65rem;
+        color: #999;
+        line-height: 1;
+    }
+
+    .history-link {
+        color: #007cba;
+        text-decoration: none;
+    }
+
+    .history-link:hover {
+        text-decoration: underline;
+    }
+
+    .edit-button-wrapper {
+        text-align: right;
+        border-top: 1px solid #e0e0e0;
+        padding-top: 0.75rem;
+        margin-top: 0.75rem;
+    }
+
+    .edit-btn {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        background-color: #f8f9fa;
+        color: #333;
+        text-decoration: none;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-weight: 600;
+        font-size: 0.6rem;
+        transition: all 0.2s;
+    }
+
+    .edit-btn:hover {
+        background-color: #e9ecef;
+        border-color: #adb5bd;
+    }
+
+    /* Clear float after book header */
+    .book-header::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .nav-bar {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-bar li {
+        flex-shrink: 0;
+    }
+
+    .nav-bar a {
+        display: block;
+        padding: 1rem 1.5rem;
+        color: #666;
+        text-decoration: none;
+        font-weight: 600;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+        white-space: nowrap;
+    }
+
+    .nav-bar li.selected a,
+    .nav-bar a:hover {
+        color: #007cba;
+        border-bottom-color: #007cba;
+    }
+
+    .section-anchor {
+        display: block;
+        position: relative;
+        top: -80px;
+        visibility: hidden;
+    }
+
+    .section-anchor--no-height {
+        height: 0;
     }
 
     .book-nav-tabs {
@@ -279,6 +419,110 @@
         font-weight: 600;
     }
 
+    /* Subjects Section (OpenLibrary style) */
+    .subjects {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: #f9f9f9;
+        border-radius: 8px;
+    }
+
+    .subjects-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .link-box {
+        padding: 0;
+    }
+
+    .link-box h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .link-box a {
+        color: #007cba;
+        text-decoration: none;
+        margin-right: 0.5rem;
+        transition: color 0.2s;
+    }
+
+    .link-box a:hover {
+        color: #005a8a;
+        text-decoration: underline;
+    }
+
+    .link-box a:after {
+        content: ",";
+        color: #666;
+    }
+
+    .link-box a:last-child:after {
+        content: "";
+    }
+
+    /* Edition omniline (OpenLibrary style) */
+    .edition-omniline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+        padding: 1rem 0;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .edition-omniline-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .edition-omniline-item > div:first-child {
+        font-size: 0.875rem;
+        color: #666;
+        font-weight: 600;
+    }
+
+    .edition-omniline-item span,
+    .edition-omniline-item a {
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .edition-omniline-item a {
+        color: #007cba;
+        text-decoration: none;
+    }
+
+    .edition-omniline-item a:hover {
+        text-decoration: underline;
+    }
+
+    /* Read more/less functionality */
+    .read-more__content {
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .read-more__toggle {
+        background: none;
+        border: none;
+        color: #007cba;
+        cursor: pointer;
+        font-weight: 600;
+        padding: 0.5rem 0;
+        font-size: 0.95rem;
+    }
+
+    .read-more__toggle--less {
+        display: none;
+    }
+
     @media (max-width: 768px) {
         .book-page-container {
             grid-template-columns: 1fr;
@@ -286,6 +530,16 @@
 
         .book-cover-section {
             position: static;
+        }
+
+        .edit-info-section {
+            float: none;
+            margin: 1rem 0;
+            max-width: 100%;
+        }
+
+        .nav-bar-wrapper {
+            margin: 2rem 0 0 0;
         }
     }
 </style>
@@ -402,27 +656,6 @@
                 @endif
             </div>
 
-            <div class="book-rating">
-                <div class="stars">
-                    @php
-                        $roundedRating = round($averageRating);
-                    @endphp
-                    @for($i = 1; $i <= 5; $i++)
-                        <span class="star {{ $i <= $roundedRating ? '' : 'empty' }}">★</span>
-                    @endfor
-                </div>
-                <div class="rating-text">
-                    @if($totalRatings > 0)
-                        {{ number_format($averageRating, 1) }} average ({{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }})
-                    @else
-                        No ratings yet
-                    @endif
-                </div>
-                <div class="rating-text" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #e0e0e0;">
-                    {{ number_format($book->view_count) }} {{ Str::plural('view', $book->view_count) }}
-                </div>
-            </div>
-
             <!-- Bookmark Button (Auth Required) -->
             <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
                 @auth
@@ -449,11 +682,75 @@
 
         <!-- Book Info Section -->
         <div class="book-info-section">
+            <!-- Sticky Navigation Bar -->
+            <span class="nav-bar-wrapper sticky">
+                <ul class="nav-bar work-menu">
+                    <li class="selected">
+                        <a href="#overview">Overview</a>
+                    </li>
+                    <li>
+                        <a href="#details">Details</a>
+                    </li>
+                    <li>
+                        <a href="#reader-observations">Reviews ({{ $book->reviews->count() }})</a>
+                    </li>
+                    <li>
+                        <a href="#library">Library Locations</a>
+                    </li>
+                    <li>
+                        <a href="#related-books">Related Books</a>
+                    </li>
+                </ul>
+            </span>
+
+            <a id="overview" name="overview" class="section-anchor section-anchor--no-height"></a>
+
+            <!-- Edit Info Section (OpenLibrary style) - floated right -->
+            <div class="edit-info-section">
+                <div class="edit-info-content">
+                    <div class="edit-meta">
+                        <div class="edit-user">
+                            Last edited by
+                            @if($book->updated_by_user)
+                                <a href="#" class="editor-link">{{ $book->updated_by_user->name }}</a>
+                            @else
+                                <span>System</span>
+                            @endif
+                        </div>
+                        <div class="edit-date">
+                            {{ $book->updated_at->format('F j, Y') }}
+                            @if($book->id)
+                                | <a href="#" class="history-link" title="View edit history">History</a>
+                            @endif
+                        </div>
+                    </div>
+                    @auth
+                        @if(auth()->user()->isAdmin())
+                            <div class="edit-button-wrapper">
+                                <a href="{{ route('filament.admin.resources.books.edit', $book) }}"
+                                   class="edit-btn"
+                                   title="Edit this book"
+                                   target="_blank">
+                                    Edit
+                                </a>
+                            </div>
+                        @endif
+                    @endauth
+                </div>
+            </div>
+
             <div class="book-header">
-                @if($book->collection)
-                    <a href="{{ route('library.index', ['collection' => $book->collection->slug]) }}" class="collection-link">
-                        {{ $book->collection->title }}
-                    </a>
+                @if($book->collection && !empty($book->collection->name))
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">
+                        An edition from {{ $book->collection->name }}
+                        @if($book->publication_year)
+                            <span>({{ $book->publication_year }})</span>
+                        @endif
+                    </div>
+                @elseif($book->publication_year)
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">
+                        First published in {{ $book->publication_year }}
+                    </div>
                 @endif
                 <h1 class="book-title">{{ $book->title }}</h1>
                 @if($book->subtitle)
@@ -464,59 +761,131 @@
                         by {{ $book->creators->pluck('name')->join(', ') }}
                     @endif
                 </div>
-                <div class="book-meta">
-                    @if($book->publication_year)
-                        <span>Published {{ $book->publication_year }}</span>
-                        <span>•</span>
-                    @endif
-                    @if($book->pages)
-                        <span>{{ $book->pages }} pages</span>
-                        <span>•</span>
-                    @endif
-                    @if($book->languages->isNotEmpty())
-                        <span>{{ $book->languages->pluck('name')->join(', ') }}</span>
-                    @endif
+
+                <!-- Reader Stats -->
+                <div style="display: flex; gap: 2rem; margin: 1rem 0; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="stars">
+                            @php $roundedRating = round($averageRating); @endphp
+                            @for($i = 1; $i <= 5; $i++)
+                                <span class="star {{ $i <= $roundedRating ? '' : 'empty' }}">★</span>
+                            @endfor
+                        </div>
+                        <span style="color: #666;">
+                            @if($totalRatings > 0)
+                                {{ number_format($averageRating, 1) }} ({{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }})
+                            @else
+                                No ratings yet
+                            @endif
+                        </span>
+                    </div>
+                    <div style="color: #666;">
+                        <span style="font-weight: 600;">{{ number_format($book->view_count) }}</span> views
+                    </div>
                 </div>
             </div>
 
+            <!-- Book Description with Read More -->
             @if($book->description)
-                <div class="book-description">
-                    <p>{{ $book->description }}</p>
+                <div class="book-description read-more">
+                    <div class="read-more__content" id="book-description" style="max-height: 120px;">
+                        <p>{{ $book->description }}</p>
+                    </div>
+                    @if(strlen($book->description) > 300)
+                        <button class="read-more__toggle read-more__toggle--more" onclick="toggleReadMore()">Read more ▼</button>
+                        <button class="read-more__toggle read-more__toggle--less" onclick="toggleReadMore()">Read less ▲</button>
+                    @endif
                 </div>
             @endif
 
-            <!-- Content Navigation -->
-            <nav class="book-nav-tabs">
-                <button class="book-nav-tab active" onclick="showTab('overview')">Overview</button>
-                <button class="book-nav-tab" onclick="showTab('details')">Details</button>
-                <button class="book-nav-tab" onclick="showTab('library')">Library Locations</button>
-            </nav>
-
-            <!-- Overview Tab -->
-            <div class="book-content-section active" id="overview">
-                @if($book->abstract)
-                    <p>{{ $book->abstract }}</p>
+            <!-- Edition Omniline -->
+            <div class="edition-omniline">
+                @if($book->publication_year)
+                    <div class="edition-omniline-item">
+                        <div>Publish Date</div>
+                        <span>{{ $book->publication_year }}</span>
+                    </div>
                 @endif
-
-                @if($book->table_of_contents)
-                    <h3>Table of Contents</h3>
-                    <div>{!! nl2br(e($book->table_of_contents)) !!}</div>
+                @if($book->publisher)
+                    <div class="edition-omniline-item">
+                        <div>Publisher</div>
+                        <span>{{ $book->publisher->name }}</span>
+                    </div>
                 @endif
-
-                @if($book->keywords && $book->keywords->isNotEmpty())
-                    <div style="margin-top: 1.5rem;">
-                        <strong>Keywords:</strong>
-                        @foreach($book->keywords as $keywordObj)
-                            <span style="display: inline-block; background: #e9ecef; padding: 0.25rem 0.75rem; margin: 0.25rem; border-radius: 1rem; font-size: 0.875rem;">
-                                {{ $keywordObj->keyword }}
-                            </span>
-                        @endforeach
+                @if($book->languages->isNotEmpty())
+                    <div class="edition-omniline-item">
+                        <div>Language</div>
+                        <span>{{ $book->languages->pluck('name')->join(', ') }}</span>
+                    </div>
+                @endif
+                @if($book->pages)
+                    <div class="edition-omniline-item">
+                        <div>Pages</div>
+                        <span>{{ $book->pages }}</span>
                     </div>
                 @endif
             </div>
 
-            <!-- Details Tab -->
-            <div class="book-content-section" id="details">
+            <!-- Subjects Section -->
+            @if($book->purposeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty() || $book->keywords->isNotEmpty())
+                <div class="subjects">
+                    <div class="subjects-content">
+                        @if($book->purposeClassifications->isNotEmpty())
+                            <div class="link-box">
+                                <h3>Subjects</h3>
+                                @foreach($book->purposeClassifications as $classification)
+                                    <a href="{{ route('library.index', ['purpose' => $classification->slug]) }}">{{ $classification->value }}</a>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        @if($book->learnerLevelClassifications->isNotEmpty())
+                            <div class="link-box">
+                                <h3>Grade Levels</h3>
+                                @foreach($book->learnerLevelClassifications as $classification)
+                                    <a href="{{ route('library.index', ['learner_level' => $classification->slug]) }}">{{ $classification->value }}</a>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        @if($book->keywords && $book->keywords->isNotEmpty())
+                            <div class="link-box">
+                                <h3>Keywords</h3>
+                                @foreach($book->keywords as $keywordObj)
+                                    <span style="display: inline-block; background: #e9ecef; padding: 0.25rem 0.75rem; margin: 0.25rem; border-radius: 1rem; font-size: 0.875rem;">
+                                        {{ $keywordObj->keyword }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
+            <!-- Abstract and Table of Contents -->
+            @if($book->abstract || $book->table_of_contents)
+                <div style="margin: 2rem 0;">
+                    @if($book->abstract)
+                        <div style="margin-bottom: 1.5rem;">
+                            <h3>Abstract</h3>
+                            <p style="line-height: 1.6; color: #555;">{{ $book->abstract }}</p>
+                        </div>
+                    @endif
+
+                    @if($book->table_of_contents)
+                        <div>
+                            <h3>Table of Contents</h3>
+                            <div style="line-height: 1.8; color: #555;">{!! nl2br(e($book->table_of_contents)) !!}</div>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
+            <!-- Details Section -->
+            <a id="details" name="details" class="section-anchor"></a>
+            <div class="tab-section" style="margin: 3rem 0;">
+                <h2 style="margin-bottom: 1.5rem; color: #333; font-size: 1.5rem;">Book Details</h2>
+                <hr style="border: none; border-top: 1px solid #e0e0e0; margin-bottom: 2rem;">
                 <div class="book-details-grid">
                     <div class="detail-group">
                         <h3>Contributors</h3>
@@ -604,8 +973,11 @@
                 </div>
             </div>
 
-            <!-- Library Locations Tab -->
-            <div class="book-content-section" id="library">
+            <!-- Library Locations Section -->
+            <a id="library" name="library" class="section-anchor"></a>
+            <div class="tab-section" style="margin: 3rem 0;">
+                <h2 style="margin-bottom: 1.5rem; color: #333; font-size: 1.5rem;">Library Locations</h2>
+                <hr style="border: none; border-top: 1px solid #e0e0e0; margin-bottom: 2rem;">
                 @if($book->libraryReferences->isNotEmpty())
                     @foreach($book->libraryReferences as $reference)
                         <div class="detail-group" style="margin-bottom: 1.5rem;">
@@ -646,6 +1018,7 @@
     </div>
 
     <!-- Related Books Sections -->
+    <a id="related-books" name="related-books" class="section-anchor"></a>
     @if($relatedByCollection->isNotEmpty())
         <div class="related-books">
             <h2>More books from the same collection</h2>
@@ -698,7 +1071,8 @@
     @endif
 
     <!-- Reviews and Ratings Section -->
-    <div class="reviews-section" style="margin-top: 3rem; padding: 2rem; background: #f9f9f9; border-radius: 8px;">
+    <a id="reader-observations" name="reader-observations" class="section-anchor"></a>
+    <div class="reviews-section tab-section" style="margin-top: 3rem; padding: 2rem; background: #f9f9f9; border-radius: 8px;">
         <h2 style="margin-bottom: 1.5rem; color: #333;">Reviews & Ratings</h2>
 
         <!-- Rating Histogram -->
@@ -1018,23 +1392,67 @@
 
 @push('scripts')
 <script>
-    function showTab(tabId) {
-        // Hide all content sections
-        document.querySelectorAll('.book-content-section').forEach(section => {
-            section.classList.remove('active');
-        });
+    // Read More/Less functionality
+    function toggleReadMore() {
+        const content = document.getElementById('book-description');
+        const moreBtn = document.querySelector('.read-more__toggle--more');
+        const lessBtn = document.querySelector('.read-more__toggle--less');
 
-        // Remove active class from all tabs
-        document.querySelectorAll('.book-nav-tab').forEach(tab => {
-            tab.classList.remove('active');
-        });
-
-        // Show selected content section
-        document.getElementById(tabId).classList.add('active');
-
-        // Add active class to clicked tab
-        event.target.classList.add('active');
+        if (content.style.maxHeight === '120px' || !content.style.maxHeight) {
+            content.style.maxHeight = 'none';
+            moreBtn.style.display = 'none';
+            lessBtn.style.display = 'block';
+        } else {
+            content.style.maxHeight = '120px';
+            moreBtn.style.display = 'block';
+            lessBtn.style.display = 'none';
+        }
     }
+
+    // Sticky Navigation Active State
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('.section-anchor');
+        const navLinks = document.querySelectorAll('.nav-bar a');
+
+        // Update active state based on scroll position
+        function updateActiveNav() {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                const parent = link.parentElement;
+                parent.classList.remove('selected');
+                if (link.getAttribute('href') === '#' + current) {
+                    parent.classList.add('selected');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav);
+
+        // Smooth scroll to sections
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    const offsetTop = targetSection.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
 
     // Star rating hover effect
     document.addEventListener('DOMContentLoaded', function() {
