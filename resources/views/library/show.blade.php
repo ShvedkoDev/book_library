@@ -259,9 +259,9 @@
         top: 0;
         background: white;
         z-index: 100;
-        border-bottom: 2px solid #e0e0e0;
+        border-bottom: 1px solid #e8e8e8;
         margin: 2rem -1rem 0 -1rem;
-        padding: 0 1rem;
+        padding: 0.5rem 1rem;
     }
 
     /* Edit Info Section (OpenLibrary style) */
@@ -353,6 +353,7 @@
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
+        gap: 0.5rem;
     }
 
     .nav-bar li {
@@ -361,19 +362,25 @@
 
     .nav-bar a {
         display: block;
-        padding: 1rem 1.5rem;
+        padding: 0.5rem 1.25rem;
         color: #666;
         text-decoration: none;
-        font-weight: 600;
-        border-bottom: 3px solid transparent;
-        transition: all 0.3s;
+        font-weight: 500;
+        font-size: 0.9rem;
+        border-radius: 20px;
+        transition: all 0.2s ease;
         white-space: nowrap;
+        background: transparent;
     }
 
-    .nav-bar li.selected a,
-    .nav-bar a:hover {
-        color: #007cba;
-        border-bottom-color: #007cba;
+    .nav-bar li.selected a {
+        background: #007cba;
+        color: white;
+    }
+
+    .nav-bar a:hover:not(.nav-bar li.selected a) {
+        background: #f0f0f0;
+        color: #333;
     }
 
     .section-anchor {
