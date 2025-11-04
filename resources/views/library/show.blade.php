@@ -846,12 +846,12 @@
 
     /* Book Details Two-Column Layout (OpenLibrary style) */
     .details-section {
-        margin-bottom: var(--spacing-3xl);
+        margin-bottom: var(--spacing-2xl);
     }
 
     .details-subsection {
-        margin-bottom: var(--spacing-2xl);
-        padding-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-xl);
+        padding-bottom: var(--spacing-md);
         border-bottom: 1px solid var(--color-border-light);
     }
 
@@ -860,29 +860,31 @@
     }
 
     .details-subsection-title {
-        font-size: var(--font-lg);
+        font-size: 1rem;
         font-weight: 600;
         color: var(--color-text-primary);
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.4;
     }
 
     .details-row {
         display: grid;
-        grid-template-columns: 180px 1fr;
-        gap: var(--spacing-lg);
-        margin-bottom: var(--spacing-md);
+        grid-template-columns: 150px 1fr;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xs);
         align-items: start;
+        line-height: 1.6;
     }
 
     .details-label {
         color: var(--color-text-secondary);
-        font-size: var(--font-base);
-        font-weight: 500;
+        font-size: 0.875rem;
+        font-weight: 400;
     }
 
     .details-value {
         color: var(--color-text-primary);
-        font-size: var(--font-base);
+        font-size: 0.875rem;
     }
 
     .details-value a {
