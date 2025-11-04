@@ -211,10 +211,6 @@
         background: #e9ecef;
     }
 
-    .book-header {
-        margin-bottom: 2rem;
-    }
-
     .collection-link {
         color: #007cba;
         text-decoration: none;
@@ -248,9 +244,9 @@
         margin-right: 0.5rem;
     }
 
-    .book-description {
-        margin: 2rem 0;
+    .book-description p{
         line-height: 1.6;
+        font-size: 1rem;
     }
 
     /* Sticky Navigation Bar (OpenLibrary style) */
@@ -804,6 +800,53 @@
         border: none;
         border-top: 1px solid var(--color-border-light);
         margin-bottom: var(--spacing-2xl);
+    }
+
+    /* Book Info Cards (OpenLibrary style) */
+    .book-info-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .info-card {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-lg);
+        background: var(--color-bg-white);
+        text-align: center;
+    }
+
+    .info-card-label {
+        display: block;
+        font-size: var(--font-sm);
+        color: var(--color-text-secondary);
+        margin-bottom: var(--spacing-sm);
+        font-weight: 500;
+    }
+
+    .info-card-value {
+        display: block;
+        font-size: var(--font-lg);
+        color: var(--color-primary);
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .info-card-value a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    .info-card-value a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+        .book-info-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
 
     /* Reviews Section */
@@ -1650,6 +1693,35 @@
             <div class="tab-section">
                 <h2 class="section-title">Book Details</h2>
                 <hr class="section-separator">
+
+                <!-- Info Cards (OpenLibrary style) -->
+                <div class="book-info-cards">
+                    <div class="info-card">
+                        <span class="info-card-label">Publish Date</span>
+                        <span class="info-card-value">{{ $book->publication_year ?? 'N/A' }}</span>
+                    </div>
+                    <div class="info-card">
+                        <span class="info-card-label">Publisher</span>
+                        <span class="info-card-value">
+                            @if($book->publisher)
+                                <a href="#">{{ $book->publisher->name }}</a>
+                            @else
+                                N/A
+                            @endif
+                        </span>
+                    </div>
+                    <div class="info-card">
+                        <span class="info-card-label">Language</span>
+                        <span class="info-card-value">
+                            {{ $book->languages->isNotEmpty() ? $book->languages->pluck('name')->join(', ') : 'N/A' }}
+                        </span>
+                    </div>
+                    <div class="info-card">
+                        <span class="info-card-label">Pages</span>
+                        <span class="info-card-value">{{ $book->pages ?? 'N/A' }}</span>
+                    </div>
+                </div>
+
                 <div class="book-details-grid">
                     <div class="detail-group">
                         <h3>Contributors</h3>
