@@ -255,22 +255,23 @@
 
     /* Sticky Navigation Bar (OpenLibrary style) */
     .nav-bar-wrapper {
+        display: block;
         position: sticky;
         top: 140px;
-        background: #ffffff;
-        background-color: #ffffff;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
         z-index: 100;
         padding: 0.5rem 1rem 0.5rem 0;
         border-bottom: 1px solid #e8e8e8;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         transition: box-shadow 0.3s ease;
         margin: 2rem -1rem 0 0;
-        opacity: 1;
+        opacity: 1 !important;
     }
 
     .nav-bar-wrapper.scrolled {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        background-color: #ffffff;
+        background-color: #ffffff !important;
     }
 
     /* Edit Info Section (OpenLibrary style) */
@@ -1435,7 +1436,7 @@
         <!-- Book Info Section -->
         <div class="book-info-section">
             <!-- Sticky Navigation Bar -->
-            <span class="nav-bar-wrapper sticky">
+            <div class="nav-bar-wrapper sticky">
                 <ul class="nav-bar work-menu">
                     <li class="selected">
                         <a href="#overview">Overview</a>
@@ -1453,7 +1454,7 @@
                         <a href="#related-books">Related Books</a>
                     </li>
                 </ul>
-            </span>
+            </div>
 
             <a id="overview" name="overview" class="section-anchor section-anchor--no-height"></a>
 
