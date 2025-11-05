@@ -1,7 +1,7 @@
-@props(['books', 'title'])
+@props(['books', 'title', 'sectionId'])
 
 @if($books->isNotEmpty())
-    <div class="related-books">
+    <div class="related-books" id="{{ $sectionId }}">
         <h3 class="section-title text-left">{{ $title }}</h3>
         <div class="books-grid">
             @foreach($books as $relatedBook)
@@ -166,3 +166,30 @@
     }
 }
 </style>
+
+@if(method_exists($books, 'hasPages') && $books->hasPages())
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the pagination page name from the paginator
+        const pageName = '{{ $books->getPageName() }}';
+        const sectionId = '{{ $sectionId }}';
+
+        // Check if this section's page parameter exists in the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageParam = urlParams.get(pageName);
+
+        // If there's a page parameter for this section, scroll to it
+        if (pageParam && pageParam !== '1') {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                setTimeout(function() {
+                    section.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 100);
+            }
+        }
+    });
+    </script>
+@endif

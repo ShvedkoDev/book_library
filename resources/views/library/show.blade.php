@@ -1408,6 +1408,10 @@
             margin: 2rem 0 0 0;
         }
     }
+
+    .main a:not(.button):not(.btn-primary) {
+        color: var(--color-white);
+    }
 </style>
 @endpush
 
@@ -1916,9 +1920,9 @@
 
     <!-- Related Books Sections -->
     <a id="related-books" name="related-books" class="section-anchor"></a>
-    <x-library.related-books :books="$relatedByCollection" title="More books from the same collection" />
-    <x-library.related-books :books="$relatedByLanguage" title="More books in the same language" />
-    <x-library.related-books :books="$relatedByCreator" title="More books by the same author" />
+    <x-library.related-books :books="$relatedByCollection" title="More books from the same collection" sectionId="related-by-collection" />
+    <x-library.related-books :books="$relatedByLanguage" title="More books in the same language" sectionId="related-by-language" />
+    <x-library.related-books :books="$relatedByCreator" title="More books by the same author" sectionId="related-by-creator" />
 
     <!-- Reviews and Ratings Section -->
     <a id="reader-observations" name="reader-observations" class="section-anchor"></a>
