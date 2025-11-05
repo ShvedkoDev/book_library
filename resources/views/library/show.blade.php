@@ -1916,56 +1916,9 @@
 
     <!-- Related Books Sections -->
     <a id="related-books" name="related-books" class="section-anchor"></a>
-    @if($relatedByCollection->isNotEmpty())
-        <div class="related-books">
-            <h3 class="section-title text-left">More books from the same collection</h3>
-            <div class="books-grid">
-                @foreach($relatedByCollection->take(6) as $relatedBook)
-                    <div class="book-card">
-                        <img src="{{ $relatedBook->getThumbnailUrl() }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        <div class="book-card-title">{{ Str::limit($relatedBook->title, 50) }}</div>
-                        <div class="book-card-author">{{ $relatedBook->creators->pluck('name')->join(', ') }}</div>
-                        <div class="book-card-meta">{{ $relatedBook->publication_year }}</div>
-                        <a href="{{ route('library.show', $relatedBook->slug) }}" class="book-card-btn">View</a>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
-    @if($relatedByLanguage->isNotEmpty())
-        <div class="related-books">
-            <h3 class="section-title text-left">More books in the same language</h3>
-            <div class="books-grid">
-                @foreach($relatedByLanguage->take(6) as $relatedBook)
-                    <div class="book-card">
-                        <img src="{{ $relatedBook->getThumbnailUrl() }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        <div class="book-card-title">{{ Str::limit($relatedBook->title, 50) }}</div>
-                        <div class="book-card-author">{{ $relatedBook->creators->pluck('name')->join(', ') }}</div>
-                        <div class="book-card-meta">{{ $relatedBook->publication_year }}</div>
-                        <a href="{{ route('library.show', $relatedBook->slug) }}" class="book-card-btn">View</a>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
-    @if($relatedByCreator->isNotEmpty())
-        <div class="related-books">
-            <h3 class="section-title text-left">More books by the same author</h3>
-            <div class="books-grid">
-                @foreach($relatedByCreator->take(6) as $relatedBook)
-                    <div class="book-card">
-                        <img src="{{ $relatedBook->getThumbnailUrl() }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        <div class="book-card-title">{{ Str::limit($relatedBook->title, 50) }}</div>
-                        <div class="book-card-author">{{ $relatedBook->creators->pluck('name')->join(', ') }}</div>
-                        <div class="book-card-meta">{{ $relatedBook->publication_year }}</div>
-                        <a href="{{ route('library.show', $relatedBook->slug) }}" class="book-card-btn">View</a>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
+    <x-library.related-books :books="$relatedByCollection" title="More books from the same collection" />
+    <x-library.related-books :books="$relatedByLanguage" title="More books in the same language" />
+    <x-library.related-books :books="$relatedByCreator" title="More books by the same author" />
 
     <!-- Reviews and Ratings Section -->
     <a id="reader-observations" name="reader-observations" class="section-anchor"></a>

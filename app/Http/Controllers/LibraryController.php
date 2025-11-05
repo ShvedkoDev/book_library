@@ -226,37 +226,37 @@ class LibraryController extends Controller
             $userNotes = $book->getNotesForUser(auth()->id());
         }
 
-        // Get related books
-        $relatedByCollection = collect();
+        // Get related books with pagination
         if ($book->collection_id) {
             $relatedByCollection = Book::where('collection_id', $book->collection_id)
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->limit(6)
-                ->get();
+                ->paginate(6, ['*'], 'collection_page');
+        } else {
+            $relatedByCollection = collect();
         }
 
-        $relatedByLanguage = collect();
         if ($book->languages->isNotEmpty()) {
             $languageIds = $book->languages->pluck('id');
             $relatedByLanguage = Book::whereHas('languages', fn($q) => $q->whereIn('languages.id', $languageIds))
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->limit(6)
-                ->get();
+                ->paginate(6, ['*'], 'language_page');
+        } else {
+            $relatedByLanguage = collect();
         }
 
-        $relatedByCreator = collect();
         if ($book->creators->isNotEmpty()) {
             $creatorIds = $book->creators->pluck('id');
             $relatedByCreator = Book::whereHas('creators', fn($q) => $q->whereIn('creators.id', $creatorIds))
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->limit(6)
-                ->get();
+                ->paginate(6, ['*'], 'creator_page');
+        } else {
+            $relatedByCreator = collect();
         }
 
         return view('library.show', compact(
