@@ -3,193 +3,186 @@
 @if($books->isNotEmpty())
     <div class="related-books" id="{{ $sectionId }}">
         <h3 class="section-title text-left">{{ $title }}</h3>
-        <div class="books-grid">
-            @foreach($books as $relatedBook)
-                <div class="book-card">
-                    <img src="{{ $relatedBook->getThumbnailUrl() }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                    <div class="book-card-title">{{ Str::limit($relatedBook->title, 50) }}</div>
-                    <div class="book-card-author">{{ $relatedBook->creators->pluck('name')->join(', ') }}</div>
-                    <div class="book-card-meta">{{ $relatedBook->publication_year }}</div>
-                    <a href="{{ route('library.show', $relatedBook->slug) }}" class="book-card-btn">View</a>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Pagination -->
-        @if(method_exists($books, 'hasPages') && $books->hasPages())
-            <div class="related-books-pagination">
-                <div class="pagination-controls">
-                    @if($books->onFirstPage())
-                        <button class="pagination-btn nav-arrow" disabled>←</button>
-                    @else
-                        <a href="{{ $books->previousPageUrl() }}" class="pagination-btn nav-arrow">←</a>
-                    @endif
-
-                    @php
-                        $currentPage = $books->currentPage();
-                        $lastPage = $books->lastPage();
-                        $start = max(1, $currentPage - 2);
-                        $end = min($lastPage, $currentPage + 2);
-
-                        // Adjust to always show 5 pages if possible
-                        if ($end - $start < 4) {
-                            if ($start == 1) {
-                                $end = min($lastPage, $start + 4);
-                            } else {
-                                $start = max(1, $end - 4);
-                            }
-                        }
-                    @endphp
-
-                    @if($start > 1)
-                        <a href="{{ $books->url(1) }}" class="pagination-btn">1</a>
-                        @if($start > 2)
-                            <span class="pagination-ellipsis">...</span>
-                        @endif
-                    @endif
-
-                    @for($page = $start; $page <= $end; $page++)
-                        @if($page == $currentPage)
-                            <button class="pagination-btn active">{{ $page }}</button>
-                        @else
-                            <a href="{{ $books->url($page) }}" class="pagination-btn">{{ $page }}</a>
-                        @endif
-                    @endfor
-
-                    @if($end < $lastPage)
-                        @if($end < $lastPage - 1)
-                            <span class="pagination-ellipsis">...</span>
-                        @endif
-                        <a href="{{ $books->url($lastPage) }}" class="pagination-btn">{{ $lastPage }}</a>
-                    @endif
-
-                    @if($books->hasMorePages())
-                        <a href="{{ $books->nextPageUrl() }}" class="pagination-btn nav-arrow">→</a>
-                    @else
-                        <button class="pagination-btn nav-arrow" disabled>→</button>
-                    @endif
-                </div>
-
-                <div class="pagination-info">
-                    Showing {{ $books->firstItem() }} to {{ $books->lastItem() }} of {{ $books->total() }} entries
-                </div>
+        <div class="books-scroll-container">
+            <button class="scroll-arrow scroll-arrow-left" id="scroll-left-{{ $sectionId }}" onclick="scrollBooks('{{ $sectionId }}', 'left')" style="display: none;" disabled>
+                <i class="fal fa-chevron-left"></i>
+            </button>
+            <div class="books-grid-scroll" id="books-grid-{{ $sectionId }}">
+                @foreach($books as $relatedBook)
+                    <a href="{{ route('library.show', $relatedBook->slug) }}" class="book-card">
+                        <img src="{{ $relatedBook->getThumbnailUrl() }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
+                        <div class="book-card-title">{{ $relatedBook->title }}</div>
+                        <div class="book-card-author">
+                            @if($relatedBook->creators->count() > 1)
+                                {{ $relatedBook->creators->first()->name }} et al.
+                            @elseif($relatedBook->creators->count() === 1)
+                                {{ $relatedBook->creators->first()->name }}
+                            @endif
+                        </div>
+                    </a>
+                @endforeach
             </div>
-        @endif
+            <button class="scroll-arrow scroll-arrow-right" id="scroll-right-{{ $sectionId }}" onclick="scrollBooks('{{ $sectionId }}', 'right')" style="display: none;">
+                <i class="fal fa-chevron-right"></i>
+            </button>
+        </div>
     </div>
 @endif
 
 <style>
-.related-books-pagination {
-    margin-top: 1.5rem;
+.books-scroll-container {
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.books-grid-scroll {
+    display: flex;
     gap: 0.75rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    padding: 0.5rem 0;
+    flex: 1;
 }
 
-.pagination-controls {
-    display: flex;
-    gap: 0.25rem;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
+.books-grid-scroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
-.pagination-btn {
-    min-width: 32px;
-    height: 32px;
-    padding: 0;
-    border: 1px solid transparent;
-    background: transparent;
-    color: #1e73be;
-    text-decoration: none;
-    border-radius: 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.scroll-arrow {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #007cba;
+    color: white;
+    border: none;
     cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.2s;
-}
-
-.pagination-btn:hover {
-    background: rgba(30, 115, 190, 0.1);
-    color: #1e73be;
-}
-
-.pagination-btn.active {
-    background: #1e73be;
-    color: white;
-    font-weight: 600;
-}
-
-.pagination-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
-
-.pagination-btn:disabled:hover {
-    background: transparent;
-}
-
-.pagination-btn.nav-arrow {
-    background: #1e73be;
-    color: white;
-}
-
-.pagination-btn.nav-arrow:hover {
-    background: #155a8a;
-}
-
-.pagination-ellipsis {
-    color: #999;
-    padding: 0 0.25rem;
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 10;
 }
 
-.pagination-info {
-    font-size: 0.875rem;
-    color: #666;
-    text-align: center;
+.scroll-arrow:hover:not(:disabled) {
+    background: #005a8a;
+    transform: scale(1.1);
+}
+
+.scroll-arrow:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.scroll-arrow:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+.scroll-arrow i {
+    font-size: 1rem;
 }
 
 @media (max-width: 768px) {
-    .pagination-controls {
-        font-size: 0.75rem;
+    .scroll-arrow {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
     }
 
-    .pagination-btn {
-        min-width: 28px;
-        height: 28px;
-        font-size: 0.75rem;
+    .scroll-arrow i {
+        font-size: 0.875rem;
     }
 }
 </style>
 
-@if(method_exists($books, 'hasPages') && $books->hasPages())
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get the pagination page name from the paginator
-        const pageName = '{{ $books->getPageName() }}';
-        const sectionId = '{{ $sectionId }}';
+<script>
+function scrollBooks(sectionId, direction) {
+    const grid = document.getElementById('books-grid-' + sectionId);
+    if (!grid) return;
 
-        // Check if this section's page parameter exists in the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const pageParam = urlParams.get(pageName);
+    const scrollAmount = 300; // Pixels to scroll
 
-        // If there's a page parameter for this section, scroll to it
-        if (pageParam && pageParam !== '1') {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                setTimeout(function() {
-                    section.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }, 100);
-            }
+    if (direction === 'left') {
+        grid.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
+    } else {
+        grid.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    // Update arrow visibility after scroll
+    setTimeout(() => updateArrowVisibility(sectionId), 100);
+}
+
+function updateArrowVisibility(sectionId) {
+    const grid = document.getElementById('books-grid-' + sectionId);
+    const leftArrow = document.getElementById('scroll-left-' + sectionId);
+    const rightArrow = document.getElementById('scroll-right-' + sectionId);
+
+    if (!grid || !leftArrow || !rightArrow) return;
+
+    // Check if content is scrollable
+    const hasOverflow = grid.scrollWidth > grid.clientWidth;
+
+    if (!hasOverflow) {
+        // No overflow - hide both arrows
+        leftArrow.style.display = 'none';
+        rightArrow.style.display = 'none';
+        return;
+    }
+
+    // Has overflow - show both arrows and enable/disable based on scroll position
+    leftArrow.style.display = 'flex';
+    rightArrow.style.display = 'flex';
+
+    const scrollLeft = grid.scrollLeft;
+    const maxScroll = grid.scrollWidth - grid.clientWidth;
+
+    // Disable/enable left arrow
+    if (scrollLeft <= 0) {
+        leftArrow.disabled = true;
+    } else {
+        leftArrow.disabled = false;
+    }
+
+    // Disable/enable right arrow
+    if (scrollLeft >= maxScroll - 1) {
+        rightArrow.disabled = true;
+    } else {
+        rightArrow.disabled = false;
+    }
+}
+
+// Initialize arrow visibility on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Update for all sections
+    const sections = ['related-by-collection', 'related-by-language', 'related-by-creator'];
+    sections.forEach(sectionId => {
+        updateArrowVisibility(sectionId);
+
+        // Add scroll event listener to update arrows while scrolling
+        const grid = document.getElementById('books-grid-' + sectionId);
+        if (grid) {
+            grid.addEventListener('scroll', () => updateArrowVisibility(sectionId));
         }
     });
-    </script>
-@endif
+
+    // Update on window resize
+    window.addEventListener('resize', () => {
+        sections.forEach(sectionId => updateArrowVisibility(sectionId));
+    });
+});
+</script>

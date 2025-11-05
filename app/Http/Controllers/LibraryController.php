@@ -226,13 +226,14 @@ class LibraryController extends Controller
             $userNotes = $book->getNotesForUser(auth()->id());
         }
 
-        // Get related books with pagination
+        // Get related books (up to 20 each)
         if ($book->collection_id) {
             $relatedByCollection = Book::where('collection_id', $book->collection_id)
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->paginate(6, ['*'], 'collection_page');
+                ->limit(20)
+                ->get();
         } else {
             $relatedByCollection = collect();
         }
@@ -243,7 +244,8 @@ class LibraryController extends Controller
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->paginate(6, ['*'], 'language_page');
+                ->limit(20)
+                ->get();
         } else {
             $relatedByLanguage = collect();
         }
@@ -254,7 +256,8 @@ class LibraryController extends Controller
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->paginate(6, ['*'], 'creator_page');
+                ->limit(20)
+                ->get();
         } else {
             $relatedByCreator = collect();
         }

@@ -439,12 +439,6 @@
         gap: 2rem;
     }
 
-    .detail-group h3 {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-        color: #333;
-    }
-
     .detail-item {
         display: flex;
         margin-bottom: 0.75rem;
@@ -453,15 +447,16 @@
     .detail-label {
         font-weight: 600;
         min-width: 140px;
-        color: #555;
+        font-size: 0.875rem;
     }
 
     .detail-value {
-        color: #333;
+        font-size: 0.875rem;
     }
 
     .related-books {
         margin-top: 3rem;
+        width: 100%;
     }
 
     .books-grid {
@@ -471,38 +466,64 @@
         margin-top: 1rem;
     }
 
+    .books-grid-scroll .book-card {
+        flex-shrink: 0;
+        width: 156px;
+    }
+
     .book-card {
         background: white;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         padding: 0.5rem;
         text-align: center;
-        transition: box-shadow 0.3s;
+        transition: all 0.3s;
         display: flex;
         flex-direction: column;
         height: 100%;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
     }
 
     .book-card:hover {
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
     }
 
     .book-card-cover {
-        width: 100%;
+        width: 137px !important;
+        height: 206px !important;
+        min-width: 137px;
+        min-height: 206px;
+        max-width: 137px;
+        max-height: 206px;
         border-radius: 4px;
-        margin-bottom: 0.75rem;
+        margin: 0 auto 0.75rem auto;
+        object-fit: cover;
+        display: block;
     }
 
     .book-card-title {
         font-weight: 600;
         margin-bottom: 0.5rem;
         font-size: 0.75rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+        min-height: calc(0.75rem * 1.4 * 2);
+        text-decoration: none;
     }
 
     .book-card-author {
         font-size: 0.65rem;
         color: #666;
         margin-bottom: 0.5rem;
+        text-decoration: none;
     }
 
     .book-card-meta {
@@ -1408,10 +1429,6 @@
             margin: 2rem 0 0 0;
         }
     }
-
-    .main a:not(.button):not(.btn-primary) {
-        color: var(--color-white);
-    }
 </style>
 @endpush
 
@@ -1693,7 +1710,7 @@
             </div>
 
             <!-- Subjects Section -->
-            @if($book->purposeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty() || $book->keywords->isNotEmpty())
+            @if($book->purposeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty() || $book->keywords->isNotEmpty() || $book->authors->isNotEmpty() || $book->illustrators->isNotEmpty())
                 <div class="">
                     <div class="subjects-content">
                         <!-- People Section -->
@@ -1882,7 +1899,7 @@
                 @if($book->libraryReferences->isNotEmpty())
                     @foreach($book->libraryReferences as $reference)
                         <div class="detail-group section-wrapper-small">
-                            <h3>{{ $reference->library_name }}</h3>
+                            <h3 class="details-subsection-title">{{ $reference->library_name }}</h3>
                             @if($reference->reference_number)
                                 <div class="detail-item">
                                     <span class="detail-label">Reference Number:</span>
