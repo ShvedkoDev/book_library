@@ -927,15 +927,16 @@
 
     /* Reviews Section */
     .reviews-section {
-        margin-top: var(--spacing-3xl);
-        padding: var(--spacing-2xl);
+        margin-top: var(--spacing-xl);
+        padding: var(--spacing-lg);
         background: var(--color-bg-gray);
-        border-radius: var(--radius-xl);
+        border-radius: var(--radius-md);
     }
 
     .reviews-section h2 {
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-md);
         color: var(--color-text-primary);
+        font-size: var(--font-xl);
     }
 
     .rating-histogram,
@@ -943,23 +944,23 @@
     .user-review-form,
     .review-item,
     .review-guest-message {
-        margin-bottom: var(--spacing-2xl);
-        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-md);
         background: var(--color-bg-white);
-        border-radius: var(--radius-xl);
+        border-radius: var(--radius-md);
     }
 
     .rating-histogram h3,
     .user-rating-form h3,
     .user-review-form h3 {
-        font-size: var(--font-2xl);
-        margin-bottom: var(--spacing-lg);
+        font-size: var(--font-lg);
+        margin-bottom: var(--spacing-sm);
         color: var(--color-text-light);
     }
 
     .rating-center {
         display: flex;
-        gap: var(--spacing-2xl);
+        gap: var(--spacing-lg);
         align-items: center;
     }
 
@@ -968,18 +969,19 @@
     }
 
     .rating-score-number {
-        font-size: var(--font-5xl);
+        font-size: var(--font-3xl);
         font-weight: bold;
         color: var(--color-primary);
     }
 
     .rating-score-stars {
-        font-size: var(--font-3xl);
+        font-size: var(--font-xl);
     }
 
     .rating-score-count {
         color: var(--color-text-secondary);
-        margin-top: var(--spacing-sm);
+        margin-top: var(--spacing-xs);
+        font-size: var(--font-sm);
     }
 
     .rating-bars {
@@ -989,8 +991,8 @@
     .rating-bar-row {
         display: flex;
         align-items: center;
-        gap: var(--spacing-lg);
-        margin-bottom: var(--spacing-sm);
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-xs);
     }
 
     .rating-bar-label {
@@ -1021,97 +1023,102 @@
     .rating-empty-state {
         color: var(--color-text-secondary);
         text-align: center;
-        padding: var(--spacing-2xl);
+        padding: var(--spacing-md);
     }
 
     /* Rating Form */
     .star-rating-form {
         display: flex;
         align-items: center;
-        gap: var(--spacing-lg);
+        gap: var(--spacing-md);
     }
 
     .star-rating {
         display: flex;
-        gap: var(--spacing-sm);
+        gap: var(--spacing-xs);
     }
 
     .star-rating label {
         cursor: pointer;
-        font-size: var(--font-4xl);
+        font-size: var(--font-2xl);
     }
 
     .rating-text {
         color: var(--color-text-secondary);
+        font-size: var(--font-sm);
     }
 
     /* Review Form */
     .review-form-field {
         width: 100%;
-        padding: var(--spacing-lg);
+        padding: var(--spacing-md);
         border: 1px solid var(--color-border);
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         resize: vertical;
         font-family: inherit;
+        font-size: var(--font-base);
     }
 
     .review-form-footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: var(--spacing-lg);
+        margin-top: var(--spacing-md);
     }
 
     .review-form-note {
         color: var(--color-text-muted);
-        font-size: var(--font-base);
+        font-size: var(--font-xs);
     }
 
     .btn-submit {
-        padding: var(--spacing-md) var(--spacing-xl);
+        padding: var(--spacing-sm) var(--spacing-lg);
         background: var(--color-primary);
         color: white;
         border: none;
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         cursor: pointer;
         font-weight: 600;
+        font-size: var(--font-base);
     }
 
     /* Review Item */
     .review-item {
-        padding: var(--spacing-xl);
+        padding: var(--spacing-md);
         background: var(--color-bg-white);
-        border-radius: var(--radius-xl);
-        margin-bottom: var(--spacing-lg);
+        border-radius: var(--radius-md);
+        margin-bottom: var(--spacing-md);
     }
 
     .review-header {
         display: flex;
         justify-content: space-between;
         align-items: start;
-        margin-bottom: var(--spacing-sm);
+        margin-bottom: var(--spacing-xs);
     }
 
     .review-author {
         font-weight: bold;
         color: var(--color-text-primary);
+        font-size: var(--font-base);
     }
 
     .review-rating {
         display: inline-block;
-        margin-left: var(--spacing-lg);
-        font-size: var(--font-lg);
+        margin-left: var(--spacing-md);
+        font-size: var(--font-md);
     }
 
     .review-date {
         color: var(--color-text-muted);
-        font-size: var(--font-base);
+        font-size: var(--font-xs);
     }
 
     .review-text {
         color: var(--color-text-light);
-        line-height: 1.6;
+        line-height: 1.5;
         margin: 0;
+        font-size: var(--font-base);
     }
 
     .guest-message {
@@ -1120,7 +1127,8 @@
 
     .guest-message p {
         color: var(--color-text-secondary);
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-sm);
+        font-size: var(--font-base);
     }
 
     .guest-message a {
@@ -1130,79 +1138,84 @@
 
     /* Notes Section */
     .notes-section {
-        margin-top: var(--spacing-3xl);
-        padding: var(--spacing-2xl);
+        margin-top: var(--spacing-xl);
+        padding: var(--spacing-lg);
         background: var(--color-bg-light);
-        border-radius: var(--radius-xl);
+        border-radius: var(--radius-md);
     }
 
     .notes-section h2 {
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-md);
         color: var(--color-text-primary);
+        font-size: var(--font-xl);
     }
 
     .notes-section h2 span {
-        font-size: var(--font-base);
+        font-size: var(--font-sm);
         color: var(--color-text-secondary);
         font-weight: 400;
     }
 
     .add-note-form,
     .note-item {
-        margin-bottom: var(--spacing-2xl);
-        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-md);
         background: var(--color-bg-white);
-        border-radius: var(--radius-xl);
+        border-radius: var(--radius-md);
     }
 
     .add-note-form h3,
     .existing-notes h3 {
-        font-size: var(--font-xl);
-        margin-bottom: var(--spacing-lg);
+        font-size: var(--font-lg);
+        margin-bottom: var(--spacing-sm);
         color: var(--color-text-light);
     }
 
     .note-field-label {
         display: block;
-        margin-bottom: var(--spacing-sm);
+        margin-bottom: var(--spacing-xs);
         font-weight: 600;
         color: var(--color-text-primary);
+        font-size: var(--font-base);
     }
 
     .note-field-input {
         width: 100%;
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm);
         border: 1px solid var(--color-border);
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         resize: vertical;
         font-family: inherit;
+        font-size: var(--font-base);
     }
 
     .note-field-small {
-        font-size: var(--font-base);
+        font-size: var(--font-xs);
         color: var(--color-text-secondary);
     }
 
     .note-field-page-input {
         width: 150px;
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm);
         border: 1px solid var(--color-border);
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         font-family: inherit;
+        font-size: var(--font-base);
     }
 
     .note-field-margin {
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
     }
 
     .btn-add-note {
-        padding: var(--spacing-md) var(--spacing-xl);
+        padding: var(--spacing-sm) var(--spacing-lg);
         background: var(--color-primary);
         color: white;
         border: none;
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         cursor: pointer;
         font-weight: 600;
+        font-size: var(--font-base);
         transition: background var(--transition-normal);
     }
 
@@ -1214,7 +1227,7 @@
         display: flex;
         justify-content: space-between;
         align-items: start;
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
     }
 
     .note-item-header > div:first-child {
@@ -1226,28 +1239,28 @@
         background: var(--color-bg-light-gray);
         color: var(--color-text-secondary);
         padding: var(--spacing-xs) var(--spacing-sm);
-        border-radius: var(--radius-md);
-        font-size: var(--font-sm);
-        margin-bottom: var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        font-size: var(--font-xs);
+        margin-bottom: var(--spacing-xs);
     }
 
     .note-date {
         color: var(--color-text-muted);
-        font-size: var(--font-base);
+        font-size: var(--font-xs);
     }
 
     .note-actions {
         display: flex;
-        gap: var(--spacing-sm);
+        gap: var(--spacing-xs);
     }
 
     .btn-note-edit,
     .btn-note-delete {
         background: none;
-        padding: var(--spacing-sm) var(--spacing-lg);
-        border-radius: var(--radius-md);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-sm);
         cursor: pointer;
-        font-size: var(--font-base);
+        font-size: var(--font-xs);
     }
 
     .btn-note-edit {
@@ -1262,77 +1275,82 @@
 
     .note-content {
         color: var(--color-text-primary);
-        line-height: 1.6;
+        line-height: 1.5;
         white-space: pre-wrap;
+        font-size: var(--font-base);
     }
 
     .note-edit-form {
         display: none;
-        margin-top: var(--spacing-lg);
+        margin-top: var(--spacing-sm);
     }
 
     .note-edit-form textarea {
         width: 100%;
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm);
         border: 1px solid var(--color-border);
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         resize: vertical;
         font-family: inherit;
-        margin-bottom: var(--spacing-sm);
+        margin-bottom: var(--spacing-xs);
+        font-size: var(--font-base);
     }
 
     .note-edit-actions {
         display: flex;
-        gap: var(--spacing-sm);
+        gap: var(--spacing-xs);
     }
 
     .btn-note-save {
-        padding: var(--spacing-sm) var(--spacing-lg);
+        padding: var(--spacing-xs) var(--spacing-md);
         background: var(--color-approved);
         color: white;
         border: none;
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-sm);
         cursor: pointer;
-        font-size: var(--font-base);
+        font-size: var(--font-xs);
     }
 
     .btn-note-cancel {
-        padding: var(--spacing-sm) var(--spacing-lg);
+        padding: var(--spacing-xs) var(--spacing-md);
         background: #6c757d;
         color: white;
         border: none;
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-sm);
         cursor: pointer;
-        font-size: var(--font-base);
+        font-size: var(--font-xs);
     }
 
     .notes-empty-state {
-        padding: var(--spacing-2xl);
+        padding: var(--spacing-md);
         background: var(--color-bg-white);
-        border-radius: var(--radius-xl);
+        border-radius: var(--radius-md);
         text-align: center;
     }
 
     .notes-empty-state p {
         color: var(--color-text-muted);
+        font-size: var(--font-base);
     }
 
     .notes-guest-section {
-        margin-top: var(--spacing-3xl);
-        padding: var(--spacing-2xl);
+        margin-top: var(--spacing-xl);
+        padding: var(--spacing-lg);
         background: var(--color-bg-light);
-        border-radius: var(--radius-xl);
+        border-radius: var(--radius-md);
         text-align: center;
     }
 
     .notes-guest-section h2 {
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
         color: var(--color-text-primary);
+        font-size: var(--font-xl);
     }
 
     .notes-guest-section p {
         color: var(--color-text-secondary);
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-md);
+        font-size: var(--font-base);
     }
 
     /* Access Request Modal */
@@ -1351,8 +1369,8 @@
 
     .modal-content {
         background: var(--color-bg-white);
-        border-radius: var(--radius-xl);
-        padding: var(--spacing-2xl);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-lg);
         max-width: 500px;
         width: 90%;
         max-height: 90vh;
@@ -1363,51 +1381,55 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-md);
     }
 
     .modal-header h2 {
         margin: 0;
         color: var(--color-text-primary);
+        font-size: var(--font-xl);
     }
 
     .modal-close {
         background: none;
         border: none;
-        font-size: var(--font-4xl);
+        font-size: var(--font-2xl);
         cursor: pointer;
         color: var(--color-text-muted);
     }
 
     .modal-description {
         color: var(--color-text-secondary);
-        margin-bottom: var(--spacing-xl);
+        margin-bottom: var(--spacing-md);
+        font-size: var(--font-base);
     }
 
     .modal-actions {
         display: flex;
-        gap: var(--spacing-lg);
+        gap: var(--spacing-md);
         justify-content: flex-end;
     }
 
     .btn-modal-cancel {
-        padding: var(--spacing-md) var(--spacing-xl);
+        padding: var(--spacing-sm) var(--spacing-lg);
         background: var(--color-bg-light-gray);
         color: var(--color-text-primary);
         border: none;
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         cursor: pointer;
         font-weight: 600;
+        font-size: var(--font-base);
     }
 
     .btn-modal-submit {
-        padding: var(--spacing-md) var(--spacing-xl);
+        padding: var(--spacing-sm) var(--spacing-lg);
         background: var(--color-primary);
         color: white;
         border: none;
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         cursor: pointer;
         font-weight: 600;
+        font-size: var(--font-base);
     }
 
     @media (max-width: 768px) {
