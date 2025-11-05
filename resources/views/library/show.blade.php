@@ -101,7 +101,7 @@
 
     .book-page-container {
         display: grid;
-        grid-template-columns: 225px 1fr;
+        grid-template-columns: 180px 1fr;
         gap: 2rem;
         padding: 2rem 0;
     }
@@ -121,7 +121,7 @@
 
     .access-status {
         padding: 0.5rem;
-        border-radius: 6px;
+        border-radius: 4px;
         text-align: center;
         margin-bottom: 1rem;
         font-weight: 600;
@@ -150,9 +150,9 @@
     }
 
     .book-action-btn {
-        padding: 0.75rem;
+        padding: 0.5rem;
         border: none;
-        border-radius: 6px;
+        border-radius: 4px;
         cursor: pointer;
         font-weight: 600;
         transition: all 0.3s;
@@ -466,8 +466,8 @@
 
     .books-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
+        gap: 0.5rem;
         margin-top: 1rem;
     }
 
@@ -475,9 +475,12 @@
         background: white;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
-        padding: 1rem;
+        padding: 0.5rem;
         text-align: center;
         transition: box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
 
     .book-card:hover {
@@ -493,17 +496,17 @@
     .book-card-title {
         font-weight: 600;
         margin-bottom: 0.5rem;
-        font-size: 0.95rem;
+        font-size: 0.75rem;
     }
 
     .book-card-author {
-        font-size: 0.875rem;
+        font-size: 0.65rem;
         color: #666;
         margin-bottom: 0.5rem;
     }
 
     .book-card-meta {
-        font-size: 0.8rem;
+        font-size: 0.65rem;
         color: #999;
         margin-bottom: 0.75rem;
     }
@@ -512,11 +515,13 @@
         width: 100%;
         padding: 0.5rem;
         background-color: #007cba;
-        color: white;
+        color: white!important;
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        font-weight: 600;
+        text-decoration: none;
+        margin-top: auto;
+        display: inline-block;
     }
 
     /* Subjects Section (OpenLibrary style) */
@@ -535,13 +540,6 @@
 
     .link-box {
         padding: 0;
-    }
-
-    .link-box h3 {
-        font-size: 1.1rem;
-        margin-bottom: 0.75rem;
-        color: #333;
-        font-weight: 600;
     }
 
     .link-box a {
@@ -788,6 +786,10 @@
     /* Tab sections and headers */
     .tab-section {
         margin: var(--spacing-3xl) 0;
+    }
+
+    .tab-section p {
+        font-size: 0.8125rem;
     }
 
     h2.section-title {
@@ -1688,31 +1690,52 @@
 
             <!-- Subjects Section -->
             @if($book->purposeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty() || $book->keywords->isNotEmpty())
-                <div class="subjects">
+                <div class="">
                     <div class="subjects-content">
+                        <!-- People Section -->
+                        @if($book->authors->isNotEmpty() || $book->illustrators->isNotEmpty())
+                            @if($book->authors->isNotEmpty())
+                                <div class="link-box">
+                                    <h3 class="details-subsection-title">Authors</h3>
+                                    @foreach($book->authors as $author)
+                                        <p class="details-value">{{ $author->name }}</p>
+                                    @endforeach
+                                </div>
+                            @endif
+
+                            @if($book->illustrators->isNotEmpty())
+                                <div class="link-box">
+                                    <h3 class="details-subsection-title">Illustrators</h3>
+                                    @foreach($book->illustrators as $illustrator)
+                                        <p class="details-value">{{ $illustrator->name }}</p>
+                                    @endforeach
+                                </div>
+                            @endif
+                        @endif
+
                         @if($book->purposeClassifications->isNotEmpty())
                             <div class="link-box">
-                                <h3>Subjects</h3>
+                                <h3 class="details-subsection-title">Subjects</h3>
                                 @foreach($book->purposeClassifications as $classification)
-                                    <a href="{{ route('library.index', ['purpose' => $classification->slug]) }}">{{ $classification->value }}</a>
+                                    <p class="details-value">{{ $classification->value }}</p>
                                 @endforeach
                             </div>
                         @endif
 
                         @if($book->learnerLevelClassifications->isNotEmpty())
                             <div class="link-box">
-                                <h3>Grade Levels</h3>
+                                <h3 class="details-subsection-title">Grade Levels</h3>
                                 @foreach($book->learnerLevelClassifications as $classification)
-                                    <a href="{{ route('library.index', ['learner_level' => $classification->slug]) }}">{{ $classification->value }}</a>
+                                    <p class="details-value">{{ $classification->value }}</p>
                                 @endforeach
                             </div>
                         @endif
 
                         @if($book->keywords && $book->keywords->isNotEmpty())
                             <div class="link-box">
-                                <h3>Keywords</h3>
+                                <h3 class="details-subsection-title">Keywords</h3>
                                 @foreach($book->keywords as $keywordObj)
-                                    <span class="keyword-badge">
+                                    <span class="details-value">
                                         {{ $keywordObj->keyword }}
                                     </span>
                                 @endforeach
@@ -1744,7 +1767,7 @@
             <!-- Details Section -->
             <a id="details" name="details" class="section-anchor"></a>
             <div class="tab-section">
-                <h2 class="section-title">Book Details</h2>
+                <h2 class="section-title text-left">Book Details</h2>
                 <hr class="section-separator">
 
                 <div class="details-section">
@@ -1850,7 +1873,7 @@
             <!-- Library Locations Section -->
             <a id="library" name="library" class="section-anchor"></a>
             <div class="tab-section">
-                <h2 class="section-title">Library Locations</h2>
+                <h2 class="section-title text-left">Library Locations</h2>
                 <hr class="section-separator">
                 @if($book->libraryReferences->isNotEmpty())
                     @foreach($book->libraryReferences as $reference)
@@ -1895,7 +1918,7 @@
     <a id="related-books" name="related-books" class="section-anchor"></a>
     @if($relatedByCollection->isNotEmpty())
         <div class="related-books">
-            <h2>More books from the same collection</h2>
+            <h3 class="section-title text-left">More books from the same collection</h3>
             <div class="books-grid">
                 @foreach($relatedByCollection->take(6) as $relatedBook)
                     <div class="book-card">
@@ -1912,7 +1935,7 @@
 
     @if($relatedByLanguage->isNotEmpty())
         <div class="related-books">
-            <h2>More books in the same language</h2>
+            <h3 class="section-title text-left">More books in the same language</h3>
             <div class="books-grid">
                 @foreach($relatedByLanguage->take(6) as $relatedBook)
                     <div class="book-card">
@@ -1929,7 +1952,7 @@
 
     @if($relatedByCreator->isNotEmpty())
         <div class="related-books">
-            <h2>More books by the same author</h2>
+            <h3 class="section-title text-left">More books by the same author</h3>
             <div class="books-grid">
                 @foreach($relatedByCreator->take(6) as $relatedBook)
                     <div class="book-card">
@@ -1951,7 +1974,7 @@
 
         <!-- Rating Histogram -->
         <div class="rating-histogram">
-            <h3>Rating Distribution</h3>
+            <h3 class="section-title text-left">Rating Distribution</h3>
             @if($totalRatings > 0)
                 <div class="rating-center">
                     <div class="rating-score-display">
@@ -1987,7 +2010,7 @@
         <!-- User Rating Form -->
         @auth
             <div class="user-rating-form">
-                <h3>Rate this book</h3>
+                <h3 class="section-title text-left">Rate this book</h3>
                 <form action="{{ route('library.rate', $book->id) }}" method="POST" class="star-rating-form">
                     @csrf
                     <div class="star-rating">
@@ -2017,7 +2040,7 @@
         <!-- User Review Form -->
         @auth
             <div class="user-review-form">
-                <h3>Write a review</h3>
+                <h3 class="section-title text-left">Write a review</h3>
                 <form action="{{ route('library.review', $book->id) }}" method="POST">
                     @csrf
                     <textarea name="review" rows="5" placeholder="Share your thoughts about this book..."
@@ -2039,7 +2062,7 @@
 
         <!-- Existing Reviews -->
         <div class="existing-reviews">
-            <h3>User Reviews ({{ $book->reviews->count() }})</h3>
+            <h3 class="section-title text-left">User Reviews ({{ $book->reviews->count() }})</h3>
             @forelse($book->reviews as $review)
                 <div class="review-item">
                     <div class="review-header">
@@ -2080,7 +2103,7 @@
 
         <!-- Add New Note Form -->
         <div class="add-note-form">
-            <h3>Add a New Note</h3>
+            <h3 class="section-title text-left">Add a New Note</h3>
             <form action="{{ route('library.notes.store', $book->id) }}" method="POST">
                 @csrf
                 <div class="note-field-margin">
@@ -2116,7 +2139,7 @@
 
         <!-- Existing Notes -->
         <div class="existing-notes">
-            <h3>
+            <h3 class="section-title text-left">
                 Your Notes
                 @if($userNotes->isEmpty())
                     <span>(None yet)</span>
