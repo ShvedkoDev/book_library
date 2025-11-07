@@ -16,7 +16,7 @@
 
             <div class="space-y-2">
                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                    <span class="font-medium">File:</span> {{ basename($data['csv_file']) }}
+                    <span class="font-medium">File:</span> {{ is_array($data['csv_file']) ? basename($data['csv_file'][0] ?? '') : basename($data['csv_file']) }}
                 </p>
                 <p class="text-sm text-gray-600 dark:text-gray-400">
                     <span class="font-medium">Mode:</span> {{ ucfirst(str_replace('_', ' ', $data['mode'] ?? 'upsert')) }}

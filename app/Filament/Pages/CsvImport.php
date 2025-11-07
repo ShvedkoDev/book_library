@@ -128,7 +128,10 @@ class CsvImport extends Page implements HasForms
 
         try {
             $importService = app(BookCsvImportService::class);
-            $filePath = Storage::disk('local')->path($data['csv_file']);
+
+            // Handle array or string from file upload
+            $csvFile = is_array($data['csv_file']) ? $data['csv_file'][0] : $data['csv_file'];
+            $filePath = Storage::disk('local')->path($csvFile);
 
             $validation = $importService->validateCsv($filePath);
 
@@ -181,13 +184,16 @@ class CsvImport extends Page implements HasForms
 
         try {
             $importService = app(BookCsvImportService::class);
-            $filePath = Storage::disk('local')->path($data['csv_file']);
+
+            // Handle array or string from file upload
+            $csvFile = is_array($data['csv_file']) ? $data['csv_file'][0] : $data['csv_file'];
+            $filePath = Storage::disk('local')->path($csvFile);
 
             $options = [
                 'mode' => $data['mode'] ?? 'upsert',
                 'create_missing_relations' => $data['create_missing_relations'] ?? false,
                 'skip_invalid_rows' => $data['skip_invalid_rows'] ?? false,
-                'original_filename' => basename($data['csv_file']),
+                'original_filename' => basename($csvFile),
             ];
 
             // Perform import
