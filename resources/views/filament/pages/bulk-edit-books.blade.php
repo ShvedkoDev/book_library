@@ -26,6 +26,16 @@
                     <span>Find & Replace</span>
                 </button>
 
+                {{-- Export Actions --}}
+                <button id="export-csv-btn" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition disabled:opacity-50">
+                    <span>📥</span>
+                    <span>Export CSV</span>
+                </button>
+                <button id="export-excel-btn" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition disabled:opacity-50">
+                    <span>📊</span>
+                    <span>Export Excel</span>
+                </button>
+
                 {{-- Save Action --}}
                 <button id="save-changes-btn" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition disabled:opacity-50">
                     <span id="save-icon">💾</span>
@@ -1157,7 +1167,46 @@
                         document.getElementById('find-replace-modal').classList.add('hidden');
                     });
 
-                    console.log('Tabulator table initialized with all features: data loading, editors, validation, tracking, bulk operations, and save functionality');
+                    // ========================================
+                    // PHASE 9: EXPORT/IMPORT
+                    // ========================================
+
+                    // 9.1: Export to CSV
+                    document.getElementById('export-csv-btn').addEventListener('click', function() {
+                        console.log('Exporting to CSV...');
+
+                        const timestamp = new Date().toISOString().slice(0, 10);
+                        const filename = `books_export_${timestamp}.csv`;
+
+                        table.download("csv", filename, {
+                            delimiter: ",",
+                            bom: true, // Add UTF-8 BOM for Excel compatibility
+                        });
+
+                        document.getElementById('status-message').textContent = 'CSV export started...';
+                        setTimeout(() => {
+                            document.getElementById('status-message').textContent = '';
+                        }, 2000);
+                    });
+
+                    // 9.2: Export to Excel (XLSX)
+                    document.getElementById('export-excel-btn').addEventListener('click', function() {
+                        console.log('Exporting to Excel...');
+
+                        const timestamp = new Date().toISOString().slice(0, 10);
+                        const filename = `books_export_${timestamp}.xlsx`;
+
+                        table.download("xlsx", filename, {
+                            sheetName: "Books",
+                        });
+
+                        document.getElementById('status-message').textContent = 'Excel export started...';
+                        setTimeout(() => {
+                            document.getElementById('status-message').textContent = '';
+                        }, 2000);
+                    });
+
+                    console.log('Tabulator table initialized with all features: data loading, editors, validation, tracking, bulk operations, save, and export functionality');
                 } // end initializeTable
             });
         </script>
