@@ -662,15 +662,107 @@
                         });
                     });
 
-                    // Attach validation check to save button
-                    document.getElementById('save-changes-btn').addEventListener('click', function() {
-                        console.log('Save button clicked, validating changes...');
-                        if (validateAllChanges(table)) {
-                            console.log('Validation passed! Ready to save.');
-                            document.getElementById('status-message').textContent = 'Validation passed - save functionality coming in Phase 8';
-                        } else {
-                            console.log('Validation failed, cannot save.');
+                    // ========================================
+                    // PHASE 8: SAVE & SYNC WITH BACKEND
+                    // ========================================
+
+                    // Save changes function
+                    async function saveChanges() {
+                        const changes = window.getEditedData();
+
+                        if (changes.length === 0) {
+                            alert('No changes to save');
+                            return;
                         }
+
+                        // Validate all changes before saving
+                        if (!validateAllChanges(table)) {
+                            console.log('Validation failed, cannot save.');
+                            return;
+                        }
+
+                        // Show loading indicator
+                        const saveButton = document.getElementById('save-changes-btn');
+                        const saveIcon = document.getElementById('save-icon');
+                        saveIcon.textContent = '⏳';
+                        saveButton.disabled = true;
+                        document.getElementById('status-message').textContent = 'Saving changes...';
+
+                        try {
+                            const response = await fetch('/api/admin/bulk-editing/books/update', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken,
+                                    'Accept': 'application/json',
+                                },
+                                credentials: 'same-origin',
+                                body: JSON.stringify({changes}),
+                            });
+
+                            const data = await response.json();
+
+                            if (response.ok && data.success) {
+                                // Clear edit history
+                                window.clearEditHistory();
+
+                                // Show success message
+                                document.getElementById('status-message').textContent = data.message;
+                                document.getElementById('status-message').className = 'text-green-600 dark:text-green-400';
+
+                                setTimeout(() => {
+                                    document.getElementById('status-message').textContent = '';
+                                    document.getElementById('status-message').className = 'text-gray-500';
+                                }, 5000);
+
+                                console.log('Save successful:', data);
+                            } else if (response.status === 422) {
+                                // Validation errors from server
+                                displayServerValidationErrors(data);
+                            } else {
+                                throw new Error(data.message || 'Failed to save changes');
+                            }
+                        } catch (error) {
+                            console.error('Save error:', error);
+                            document.getElementById('status-message').textContent = 'Error: ' + error.message;
+                            document.getElementById('status-message').className = 'text-red-600 dark:text-red-400';
+
+                            setTimeout(() => {
+                                document.getElementById('status-message').textContent = '';
+                                document.getElementById('status-message').className = 'text-gray-500';
+                            }, 5000);
+                        } finally {
+                            // Reset button
+                            saveIcon.textContent = '💾';
+                            saveButton.disabled = false;
+                        }
+                    }
+
+                    // Display server validation errors
+                    function displayServerValidationErrors(data) {
+                        let errorText = 'Server validation failed:\n';
+
+                        if (data.errors) {
+                            Object.keys(data.errors).forEach(field => {
+                                data.errors[field].forEach(error => {
+                                    errorText += `\n• ${field}: ${error}`;
+                                });
+                            });
+                        } else if (data.message) {
+                            errorText += '\n• ' + data.message;
+                        }
+
+                        alert(errorText);
+                        document.getElementById('status-message').textContent = 'Validation failed - check console';
+                        document.getElementById('status-message').className = 'text-red-600 dark:text-red-400';
+
+                        console.error('Server validation errors:', data);
+                    }
+
+                    // Attach save function to button
+                    document.getElementById('save-changes-btn').addEventListener('click', function() {
+                        console.log('Save button clicked');
+                        saveChanges();
                     });
 
                     // Update status message when data loads
@@ -1065,7 +1157,7 @@
                         document.getElementById('find-replace-modal').classList.add('hidden');
                     });
 
-                    console.log('Tabulator table initialized with remote data, editors, edit tracking, and bulk operations');
+                    console.log('Tabulator table initialized with all features: data loading, editors, validation, tracking, bulk operations, and save functionality');
                 } // end initializeTable
             });
         </script>
