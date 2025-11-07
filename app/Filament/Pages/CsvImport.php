@@ -113,7 +113,7 @@ class CsvImport extends Page implements HasForms
             ->statePath('data');
     }
 
-    public function validate(): void
+    public function validateCsv(): void
     {
         $data = $this->form->getState();
 
@@ -223,11 +223,11 @@ class CsvImport extends Page implements HasForms
     protected function getFormActions(): array
     {
         return [
-            Forms\Components\Actions\Action::make('validate')
+            Forms\Components\Actions\Action::make('validateCsv')
                 ->label('Validate Only')
                 ->icon('heroicon-o-check-circle')
                 ->color('info')
-                ->action('validate'),
+                ->action('validateCsv'),
 
             Forms\Components\Actions\Action::make('import')
                 ->label('Import CSV')
