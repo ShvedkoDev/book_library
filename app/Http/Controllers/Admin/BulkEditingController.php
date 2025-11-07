@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Models\Publisher;
+use App\Models\Collection;
+use App\Models\Language;
+use App\Models\Creator;
 use Illuminate\Http\Request;
 
 class BulkEditingController extends Controller
@@ -108,5 +112,73 @@ class BulkEditingController extends Controller
                 'message' => 'Error updating books: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * Get all publishers for dropdown
+     */
+    public function publishers()
+    {
+        $publishers = Publisher::orderBy('name', 'asc')
+            ->get(['id', 'name'])
+            ->map(function ($publisher) {
+                return [
+                    'value' => $publisher->id,
+                    'label' => $publisher->name,
+                ];
+            });
+
+        return response()->json($publishers);
+    }
+
+    /**
+     * Get all collections for dropdown
+     */
+    public function collections()
+    {
+        $collections = Collection::orderBy('name', 'asc')
+            ->get(['id', 'name'])
+            ->map(function ($collection) {
+                return [
+                    'value' => $collection->id,
+                    'label' => $collection->name,
+                ];
+            });
+
+        return response()->json($collections);
+    }
+
+    /**
+     * Get all languages for multi-select
+     */
+    public function languages()
+    {
+        $languages = Language::orderBy('name', 'asc')
+            ->get(['id', 'name'])
+            ->map(function ($language) {
+                return [
+                    'value' => $language->id,
+                    'label' => $language->name,
+                ];
+            });
+
+        return response()->json($languages);
+    }
+
+    /**
+     * Get all creators for multi-select
+     */
+    public function creators()
+    {
+        $creators = Creator::orderBy('name', 'asc')
+            ->get(['id', 'name'])
+            ->map(function ($creator) {
+                return [
+                    'value' => $creator->id,
+                    'label' => $creator->name,
+                ];
+            });
+
+        return response()->json($creators);
     }
 }
