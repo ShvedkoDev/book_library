@@ -25,6 +25,19 @@ class BookResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Placeholder::make('duplication_info')
+                    ->label('Duplication Information')
+                    ->content(fn ($record) => $record && $record->isDuplicate()
+                        ? view('filament.components.duplication-info', [
+                            'record' => $record,
+                            'sourceBook' => $record->duplicatedFrom,
+                            'duplicatedAt' => $record->duplicated_at,
+                        ])
+                        : null
+                    )
+                    ->visible(fn ($record) => $record && $record->isDuplicate())
+                    ->columnSpanFull(),
+
                 Forms\Components\Section::make('Identifiers')
                     ->schema([
                         Forms\Components\TextInput::make('internal_id')
@@ -538,7 +551,23 @@ class BookResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable()
-                    ->limit(50),
+                    ->limit(50)
+                    ->description(fn ($record) => $record->isDuplicate()
+                        ? '📋 Duplicated from: ' . ($record->duplicatedFrom?->title ?? 'Unknown')
+                        : ($record->hasBeenDuplicated()
+                            ? '✨ Duplicated ' . $record->getDuplicateCount() . ' time(s)'
+                            : null
+                        )
+                    ),
+
+                Tables\Columns\TextColumn::make('duplication_status')
+                    ->label('Status')
+                    ->badge()
+                    ->getStateUsing(fn ($record) => $record->isDuplicate() ? 'Duplicate' : null)
+                    ->color('info')
+                    ->icon('heroicon-o-document-duplicate')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(false),
 
                 Tables\Columns\TextColumn::make('creators.name')
                     ->badge()
@@ -624,10 +653,124 @@ class BookResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+
+                Tables\Actions\Action::make('duplicate')
+                    ->label('Duplicate')
+                    ->icon('heroicon-o-document-duplicate')
+                    ->color('info')
+                    ->requiresConfirmation()
+                    ->modalHeading('Duplicate Book')
+                    ->modalDescription(fn ($record) => "Create a copy of \"{$record->title}\" with all relationships and classifications.")
+                    ->modalSubmitActionLabel('Duplicate')
+                    ->action(function ($record) {
+                        try {
+                            // Validate before duplication
+                            $validation = $record->canBeDuplicated();
+
+                            if (!$validation['valid']) {
+                                \Filament\Notifications\Notification::make()
+                                    ->danger()
+                                    ->title('Cannot Duplicate Book')
+                                    ->body(implode("\n", $validation['errors']))
+                                    ->persistent()
+                                    ->send();
+                                return;
+                            }
+
+                            // Perform duplication
+                            $duplicate = $record->duplicate([
+                                'clear_title' => true,
+                                'append_copy_suffix' => false,
+                            ]);
+
+                            // Success notification with link to edit the duplicate
+                            \Filament\Notifications\Notification::make()
+                                ->success()
+                                ->title('Book Duplicated Successfully!')
+                                ->body("Created duplicate of \"{$record->title}\". Click to edit the new book.")
+                                ->actions([
+                                    \Filament\Notifications\Actions\Action::make('edit')
+                                        ->label('Edit New Book')
+                                        ->url(static::getUrl('edit', ['record' => $duplicate->id]))
+                                        ->button(),
+                                    \Filament\Notifications\Actions\Action::make('view')
+                                        ->label('View List')
+                                        ->url(static::getUrl('index'))
+                                        ->button(),
+                                ])
+                                ->persistent()
+                                ->send();
+
+                        } catch (\Exception $e) {
+                            \Filament\Notifications\Notification::make()
+                                ->danger()
+                                ->title('Duplication Failed')
+                                ->body($e->getMessage())
+                                ->persistent()
+                                ->send();
+                        }
+                    })
+                    ->successNotification(null), // Disable default notification, we have custom one
+
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('duplicate')
+                        ->label('Duplicate Selected')
+                        ->icon('heroicon-o-document-duplicate')
+                        ->color('info')
+                        ->requiresConfirmation()
+                        ->modalHeading('Duplicate Multiple Books')
+                        ->modalDescription(fn ($records) => "You are about to duplicate " . count($records) . " book(s). Each book will be copied with all its relationships and classifications.")
+                        ->modalSubmitActionLabel('Duplicate All')
+                        ->action(function ($records) {
+                            $duplicationService = app(\App\Services\BookDuplicationService::class);
+                            $bookIds = $records->pluck('id')->toArray();
+
+                            try {
+                                $results = $duplicationService->bulkDuplicate($bookIds, [
+                                    'clear_title' => true,
+                                    'append_copy_suffix' => false,
+                                ]);
+
+                                $successCount = count($results['success']);
+                                $failedCount = count($results['failed']);
+
+                                if ($successCount > 0) {
+                                    \Filament\Notifications\Notification::make()
+                                        ->success()
+                                        ->title("Duplicated {$successCount} Book(s)")
+                                        ->body($failedCount > 0 ? "{$failedCount} book(s) failed to duplicate." : "All books duplicated successfully!")
+                                        ->persistent()
+                                        ->send();
+                                }
+
+                                if ($failedCount > 0) {
+                                    $errorMessages = collect($results['failed'])
+                                        ->map(fn($failure) => "Book ID {$failure['book_id']}: {$failure['error']}")
+                                        ->join("\n");
+
+                                    \Filament\Notifications\Notification::make()
+                                        ->danger()
+                                        ->title('Some Duplications Failed')
+                                        ->body($errorMessages)
+                                        ->persistent()
+                                        ->send();
+                                }
+
+                            } catch (\Exception $e) {
+                                \Filament\Notifications\Notification::make()
+                                    ->danger()
+                                    ->title('Bulk Duplication Failed')
+                                    ->body($e->getMessage())
+                                    ->persistent()
+                                    ->send();
+                            }
+                        })
+                        ->deselectRecordsAfterCompletion()
+                        ->successNotification(null), // Custom notifications
+
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
