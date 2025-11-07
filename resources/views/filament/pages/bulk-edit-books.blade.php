@@ -2,10 +2,13 @@
     <div class="space-y-4">
         {{-- Toolbar --}}
         <div class="flex items-center justify-between gap-4 flex-wrap">
-            <div class="flex gap-2 flex-wrap">
-                {{-- Filters will go here --}}
-                <div class="text-sm text-gray-600 dark:text-gray-400">
-                    Filters will be added in next phase
+            <div class="flex gap-4 flex-wrap items-center">
+                {{-- Keyboard Shortcuts Info --}}
+                <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded">
+                    💡 <strong>Tip:</strong>
+                    <span class="ml-1">Shift+Click for range selection</span>
+                    <span class="ml-2">Ctrl/Cmd+C to copy</span>
+                    <span class="ml-2">Ctrl/Cmd+V to paste</span>
                 </div>
             </div>
             <div class="flex gap-2 flex-wrap">
@@ -238,6 +241,21 @@
                     ajaxLoader: true,
                     ajaxLoaderLoading: "<div class='p-4 text-center text-gray-600'>Loading books...</div>",
                     ajaxLoaderError: "<div class='p-4 text-center text-red-500'>Error loading data. Please refresh.</div>",
+
+                    // Enable range selection
+                    selectableRange: true,
+                    selectableRangeMode: "click",
+
+                    // Enable clipboard (copy/paste)
+                    clipboard: true,
+                    clipboardCopyRowRange: "range",
+                    clipboardCopyConfig: {
+                        rowHeaders: false,
+                        columnHeaders: false,
+                    },
+                    clipboardCopyStyled: false,
+                    clipboardPasteParser: "range",
+                    clipboardPasteAction: "range",
 
                     // Table columns with editors
                     columns: [
@@ -534,6 +552,34 @@
                     table.on("dataLoadError", function(error) {
                         console.error('Error loading data:', error);
                         document.getElementById('status-message').textContent = 'Error loading data';
+                    });
+
+                    // Clipboard events
+                    table.on("clipboardCopied", function(clipboard) {
+                        console.log('Copied to clipboard:', clipboard);
+                        document.getElementById('status-message').textContent = 'Data copied to clipboard';
+                        setTimeout(() => {
+                            document.getElementById('status-message').textContent = '';
+                        }, 2000);
+                    });
+
+                    table.on("clipboardPasted", function(clipboard, rowData, rows) {
+                        console.log('Pasted from clipboard:', {
+                            clipboard: clipboard,
+                            affectedRows: rows.length
+                        });
+                        document.getElementById('status-message').textContent = `Pasted data into ${rows.length} row(s)`;
+                        setTimeout(() => {
+                            document.getElementById('status-message').textContent = '';
+                        }, 2000);
+                    });
+
+                    table.on("clipboardPasteError", function(clipboard) {
+                        console.error('Paste error:', clipboard);
+                        document.getElementById('status-message').textContent = 'Error pasting data';
+                        setTimeout(() => {
+                            document.getElementById('status-message').textContent = '';
+                        }, 3000);
                     });
 
                     // Get edited data function - returns array of changed book objects
