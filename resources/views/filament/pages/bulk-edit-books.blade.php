@@ -41,42 +41,62 @@
         <div class="flex items-center justify-between gap-4 flex-wrap">
             <div class="flex gap-4 flex-wrap items-center">
                 {{-- Keyboard Shortcuts Info --}}
-                <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded">
-                    💡 <strong>Tip:</strong>
-                    <span class="ml-1">Shift+Click for range selection</span>
-                    <span class="ml-2">Ctrl/Cmd+C to copy</span>
-                    <span class="ml-2">Ctrl/Cmd+V to paste</span>
+                <div class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+                    <div class="fi-section-content-ctn p-4">
+                        <div class="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-4 flex-wrap">
+                            <div class="flex items-center gap-1.5">
+                                <x-filament::icon icon="heroicon-o-light-bulb" class="h-4 w-4 text-warning-500" />
+                                <span class="font-semibold">Tips:</span>
+                            </div>
+                            <span class="flex items-center gap-1">
+                                <kbd class="px-1.5 py-0.5 text-xs font-semibold bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded">Double-click</kbd>
+                                to edit
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <kbd class="px-1.5 py-0.5 text-xs font-semibold bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded">Shift+Click</kbd>
+                                range select
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <kbd class="px-1.5 py-0.5 text-xs font-semibold bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded">Ctrl/Cmd+C</kbd>
+                                copy
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <kbd class="px-1.5 py-0.5 text-xs font-semibold bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded">Ctrl/Cmd+V</kbd>
+                                paste
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="flex gap-2 flex-wrap">
+            <div class="flex gap-3 flex-wrap">
                 {{-- Bulk Operations --}}
-                <button id="bulk-update-btn" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition disabled:opacity-50">
-                    <span>🔄</span>
-                    <span>Bulk Update</span>
+                <button id="bulk-update-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-custom fi-btn-color-primary fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 focus-visible:ring-custom-500/50 dark:bg-custom-500 dark:hover:bg-custom-400 dark:focus-visible:ring-custom-400/50 fi-ac-action fi-ac-btn-action" style="--c-400:var(--primary-400);--c-500:var(--primary-500);--c-600:var(--primary-600);">
+                    <x-filament::icon icon="heroicon-o-arrow-path" class="fi-btn-icon h-5 w-5" />
+                    <span class="fi-btn-label">Bulk Update</span>
                 </button>
-                <button id="fill-down-btn" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition disabled:opacity-50">
-                    <span>⬇️</span>
-                    <span>Fill Down</span>
+                <button id="fill-down-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-gray fi-btn-color-gray fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-white text-gray-950 hover:bg-gray-50 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 ring-1 ring-gray-950/10 dark:ring-white/20 fi-ac-btn-action">
+                    <x-filament::icon icon="heroicon-o-arrow-down-tray" class="fi-btn-icon h-5 w-5" />
+                    <span class="fi-btn-label">Fill Down</span>
                 </button>
-                <button id="find-replace-btn" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition disabled:opacity-50">
-                    <span>🔍</span>
-                    <span>Find & Replace</span>
+                <button id="find-replace-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-gray fi-btn-color-gray fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-white text-gray-950 hover:bg-gray-50 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 ring-1 ring-gray-950/10 dark:ring-white/20 fi-ac-btn-action">
+                    <x-filament::icon icon="heroicon-o-magnifying-glass" class="fi-btn-icon h-5 w-5" />
+                    <span class="fi-btn-label">Find & Replace</span>
                 </button>
 
                 {{-- Export Actions --}}
-                <button id="export-csv-btn" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition disabled:opacity-50">
-                    <span>📥</span>
-                    <span>Export CSV</span>
+                <button id="export-csv-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-gray fi-btn-color-gray fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-white text-gray-950 hover:bg-gray-50 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 ring-1 ring-gray-950/10 dark:ring-white/20 fi-ac-btn-action">
+                    <x-filament::icon icon="heroicon-o-document-arrow-down" class="fi-btn-icon h-5 w-5" />
+                    <span class="fi-btn-label">Export CSV</span>
                 </button>
-                <button id="export-excel-btn" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition disabled:opacity-50">
-                    <span>📊</span>
-                    <span>Export Excel</span>
+                <button id="export-excel-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-custom fi-btn-color-success fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 focus-visible:ring-custom-500/50 dark:bg-custom-500 dark:hover:bg-custom-400 dark:focus-visible:ring-custom-400/50 fi-ac-btn-action" style="--c-400:var(--success-400);--c-500:var(--success-500);--c-600:var(--success-600);">
+                    <x-filament::icon icon="heroicon-o-table-cells" class="fi-btn-icon h-5 w-5" />
+                    <span class="fi-btn-label">Export Excel</span>
                 </button>
 
                 {{-- Save Action --}}
-                <button id="save-changes-btn" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition disabled:opacity-50">
-                    <span id="save-icon">💾</span>
-                    <span>Save Changes (<span id="save-count">0</span>)</span>
+                <button id="save-changes-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-custom fi-btn-color-primary fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 focus-visible:ring-custom-500/50 dark:bg-custom-500 dark:hover:bg-custom-400 dark:focus-visible:ring-custom-400/50 fi-ac-action fi-ac-btn-action" style="--c-400:var(--primary-400);--c-500:var(--primary-500);--c-600:var(--primary-600);">
+                    <x-filament::icon id="save-icon" icon="heroicon-o-check-circle" class="fi-btn-icon h-5 w-5" />
+                    <span class="fi-btn-label">Save Changes (<span id="save-count">0</span>)</span>
                 </button>
             </div>
         </div>
@@ -85,12 +105,17 @@
         <div id="bulk-edit-table" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700"></div>
 
         {{-- Status Bar --}}
-        <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-            <div class="flex items-center gap-2">
-                <span>Unsaved changes:</span>
-                <span id="edit-count" class="font-bold text-orange-600">0 changes</span>
+        <div class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+            <div class="fi-section-content-ctn p-4">
+                <div class="flex items-center justify-between text-sm">
+                    <div class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                        <x-filament::icon icon="heroicon-o-pencil-square" class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                        <span>Unsaved changes:</span>
+                        <span id="edit-count" class="font-semibold text-warning-600 dark:text-warning-500">0 changes</span>
+                    </div>
+                    <div id="status-message" class="text-gray-600 dark:text-gray-400 font-medium"></div>
+                </div>
             </div>
-            <div id="status-message" class="text-gray-500"></div>
         </div>
     </div>
 
@@ -126,12 +151,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
-                    <button id="apply-bulk-update" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                        Apply
+                <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 flex flex-row-reverse gap-3">
+                    <button id="apply-bulk-update" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-custom fi-btn-color-primary fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 focus-visible:ring-custom-500/50 dark:bg-custom-500 dark:hover:bg-custom-400 dark:focus-visible:ring-custom-400/50" style="--c-400:var(--primary-400);--c-500:var(--primary-500);--c-600:var(--primary-600);">
+                        <span class="fi-btn-label">Apply</span>
                     </button>
-                    <button id="cancel-bulk-update" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
-                        Cancel
+                    <button id="cancel-bulk-update" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-gray fi-btn-color-gray fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-white text-gray-950 hover:bg-gray-50 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 ring-1 ring-gray-950/10 dark:ring-white/20">
+                        <span class="fi-btn-label">Cancel</span>
                     </button>
                 </div>
             </div>
@@ -173,20 +198,23 @@
                         <div id="find-results" class="text-sm text-gray-600 dark:text-gray-400 min-h-[20px]"></div>
                     </div>
                 </div>
-                <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
-                    <button id="replace-all-btn" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                        Replace All
+                <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 flex flex-row-reverse gap-3">
+                    <button id="replace-all-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-custom fi-btn-color-primary fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 focus-visible:ring-custom-500/50 dark:bg-custom-500 dark:hover:bg-custom-400 dark:focus-visible:ring-custom-400/50" style="--c-400:var(--primary-400);--c-500:var(--primary-500);--c-600:var(--primary-600);">
+                        <span class="fi-btn-label">Replace All</span>
                     </button>
-                    <button id="find-btn" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                        Find
+                    <button id="find-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-gray fi-btn-color-gray fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-white text-gray-950 hover:bg-gray-50 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 ring-1 ring-gray-950/10 dark:ring-white/20">
+                        <span class="fi-btn-label">Find</span>
                     </button>
-                    <button id="cancel-find-replace" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
-                        Cancel
+                    <button id="cancel-find-replace" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-gray fi-btn-color-gray fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-white text-gray-950 hover:bg-gray-50 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 ring-1 ring-gray-950/10 dark:ring-white/20">
+                        <span class="fi-btn-label">Cancel</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
+    {{-- Load Tabulator library --}}
+    @vite(['resources/js/tabulator.js'])
 
     {{-- Validation Error Styling --}}
     @push('styles')
@@ -439,6 +467,11 @@
 
                 // Custom Validators
                 var yearRangeValidator = function(cell, value, parameters) {
+                    // Safety check for parameters
+                    if (!parameters) {
+                        parameters = { min: 1900, max: new Date().getFullYear() };
+                    }
+
                     const currentYear = new Date().getFullYear();
                     const minYear = parameters.min || 1900;
                     const maxYear = parameters.max || currentYear;
@@ -544,6 +577,9 @@
                     ajaxLoaderLoading: "<div class='p-4 text-center text-gray-600'>Loading books...</div>",
                     ajaxLoaderError: "<div class='p-4 text-center text-red-500'>Error loading data. Please refresh.</div>",
 
+                    // Enable editing on double-click to avoid conflict with range selection
+                    editTriggerEvent: "dblclick",
+
                     // Enable range selection
                     selectableRange: true,
                     selectableRangeMode: "click",
@@ -559,9 +595,8 @@
                     clipboardPasteParser: "range",
                     clipboardPasteAction: "range",
 
-                    // Enable row selection
-                    selectable: true,
-                    selectableRollingSelection: false,
+                    // Enable row selection - set to large number for unlimited selection
+                    selectable: 9999,
 
                     // Table columns with editors
                     columns: [
@@ -573,6 +608,8 @@
                             headerSort: false,
                             width: 50,
                             frozen: true,
+                            cssClass: "tabulator-row-select-column",
+                            clickMenu: false,
                         },
 
                         // ID - Read only
@@ -778,28 +815,85 @@
                             }
                         },
 
-                        // Featured - Toggle
+                        // Featured - Dropdown Yes/No
                         {
                             title: "Featured",
                             field: "is_featured",
                             width: 100,
                             headerSort: false,
                             hozAlign: "center",
-                            editor: "tickCross",
-                            formatter: "tickCross",
+                            editor: "list",
+                            editorParams: {
+                                values: [
+                                    {label: "Yes", value: 1},
+                                    {label: "No", value: 0},
+                                ],
+                                clearable: false,
+                                listOnEmpty: true,
+                            },
+                            formatter: function(cell) {
+                                const value = cell.getValue();
+                                if (value == 1 || value === true || value === "1") {
+                                    return '<span class="text-green-600 font-bold">✓ Yes</span>';
+                                } else {
+                                    return '<span class="text-gray-400">✗ No</span>';
+                                }
+                            },
                         },
 
-                        // Active - Toggle
+                        // Active - Dropdown Yes/No
                         {
                             title: "Active",
                             field: "is_active",
                             width: 100,
                             headerSort: false,
                             hozAlign: "center",
-                            editor: "tickCross",
-                            formatter: "tickCross",
+                            editor: "list",
+                            editorParams: {
+                                values: [
+                                    {label: "Yes", value: 1},
+                                    {label: "No", value: 0},
+                                ],
+                                clearable: false,
+                                listOnEmpty: true,
+                            },
+                            formatter: function(cell) {
+                                const value = cell.getValue();
+                                if (value == 1 || value === true || value === "1") {
+                                    return '<span class="text-green-600 font-bold">✓ Yes</span>';
+                                } else {
+                                    return '<span class="text-gray-400">✗ No</span>';
+                                }
+                            },
                         },
                     ],
+                    });
+
+                    // Completely disable range selection on checkbox column
+                    table.on("cellClick", function(e, cell){
+                        const column = cell.getColumn();
+                        const definition = column.getDefinition();
+
+                        if (definition.formatter === "rowSelection") {
+                            // Prevent range selection from interfering
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            return false;
+                        }
+                    });
+
+                    // Also handle mousedown to prevent range selection starting
+                    table.on("cellMouseDown", function(e, cell){
+                        const column = cell.getColumn();
+                        const definition = column.getDefinition();
+
+                        if (definition.formatter === "rowSelection") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            return false;
+                        }
                     });
 
                     // Track edited cells
@@ -846,6 +940,48 @@
                             errors: errorMsg
                         });
                     });
+
+                    // Prevent clicks and keyboard events inside editor from interfering with editing
+                    // Stop all mouse events on input/textarea/select elements to prevent interference
+                    const tableElement = document.getElementById('bulk-edit-table');
+
+                    ['mousedown', 'mouseup', 'click'].forEach(eventType => {
+                        tableElement.addEventListener(eventType, function(e) {
+                            // Check if click is on row selection checkbox column
+                            const cell = e.target.closest('.tabulator-cell');
+                            const isCheckbox = e.target.type === 'checkbox';
+
+                            // Check if cell has our custom CSS class for row selection
+                            const isCheckboxColumn = cell && (
+                                cell.classList.contains('tabulator-row-select-column') ||
+                                cell.querySelector('input[type="checkbox"][tabulator-field]') || // Header checkbox
+                                (isCheckbox && !e.target.closest('.tabulator-editor')) // Row checkbox (not in editor)
+                            );
+
+                            // IMPORTANT: Don't interfere with checkbox column at all - let Tabulator handle it
+                            if (isCheckboxColumn) {
+                                return; // Let event bubble naturally for checkboxes
+                            }
+
+                            // Check if the target is an input, textarea, or select element (for editing cells)
+                            if (e.target.matches('input, textarea, select')) {
+                                // Stop the event from reaching Tabulator's range selection handlers
+                                e.stopPropagation();
+                            }
+                        }, false); // Use bubble phase to let Tabulator handle it first
+                    });
+
+                    // Allow arrow keys and other keyboard navigation inside editors
+                    tableElement.addEventListener('keydown', function(e) {
+                        // Check if the target is an input, textarea, or select element
+                        if (e.target.matches('input, textarea, select')) {
+                            // Allow arrow keys, Home, End, Delete, Backspace to work inside editor
+                            const allowedKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Delete', 'Backspace'];
+                            if (allowedKeys.includes(e.key)) {
+                                e.stopPropagation();
+                            }
+                        }
+                    }, true);
 
                     // ========================================
                     // PHASE 8: SAVE & SYNC WITH BACKEND
