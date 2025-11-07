@@ -1,6 +1,5 @@
-import './bootstrap';
-
-import Alpine from 'alpinejs';
+// Import Tabulator CSS
+import 'tabulator-tables/dist/css/tabulator.min.css';
 
 // Import Tabulator
 import { TabulatorFull as Tabulator } from 'tabulator-tables';
@@ -14,6 +13,4 @@ window.Tabulator = Tabulator;
 // Make XLSX globally available
 window.XLSX = XLSX;
 
-window.Alpine = Alpine;
-
-Alpine.start();
+console.log('Tabulator and XLSX loaded successfully');
