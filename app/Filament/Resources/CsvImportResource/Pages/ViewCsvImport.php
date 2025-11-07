@@ -78,10 +78,10 @@ class ViewCsvImport extends ViewRecord
                             ]),
                         Infolists\Components\Grid::make(2)
                             ->schema([
-                                Infolists\Components\TextEntry::make('getSuccessRate')
+                                Infolists\Components\TextEntry::make('success_rate')
                                     ->label('Success Rate')
-                                    ->formatStateUsing(fn ($record) => $record->getSuccessRate() . '%')
-                                    ->color(fn ($record) => $record->getSuccessRate() >= 90 ? 'success' : ($record->getSuccessRate() >= 70 ? 'warning' : 'danger')),
+                                    ->formatStateUsing(fn ($state) => $state . '%')
+                                    ->color(fn ($state) => $state >= 90 ? 'success' : ($state >= 70 ? 'warning' : 'danger')),
                             ]),
                     ]),
 
