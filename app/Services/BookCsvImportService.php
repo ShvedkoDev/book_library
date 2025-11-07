@@ -519,6 +519,138 @@ class BookCsvImportService
     }
 
     /**
+     * Preview what changes would be made without actually importing
+     *
+     * @param string $filePath
+     * @param string $mode
+     * @return array
+     */
+    public function previewCsv(string $filePath, string $mode = 'upsert'): array
+    {
+        $preview = [
+            'stats' => [
+                'will_create' => 0,
+                'will_update' => 0,
+                'will_skip' => 0,
+                'total' => 0,
+            ],
+            'creates' => [],
+            'updates' => [],
+            'skips' => [],
+        ];
+
+        try {
+            $handle = fopen($filePath, 'r');
+            if (!$handle) {
+                throw new Exception("Unable to open file: {$filePath}");
+            }
+
+            // Read headers
+            $headers = fgetcsv($handle);
+
+            // Check for database mapping row
+            $secondRow = fgetcsv($handle);
+            $isSecondRowMapping = $this->isHeaderRow($secondRow);
+
+            if (!$isSecondRowMapping) {
+                // Reset to read second row as data
+                fseek($handle, 0);
+                fgetcsv($handle); // Skip header
+            }
+
+            // Process each row
+            while (($row = fgetcsv($handle)) !== false) {
+                if (empty(array_filter($row))) {
+                    continue; // Skip empty rows
+                }
+
+                $preview['stats']['total']++;
+
+                // Map row to data
+                $data = array_combine($headers, $row);
+                $bookData = $this->extractBookData($data);
+
+                // Find existing book
+                $existingBook = $this->findExistingBook($bookData);
+
+                // Determine action
+                if ($mode === 'create_only' && $existingBook) {
+                    $preview['stats']['will_skip']++;
+                    $preview['skips'][] = [
+                        'title' => $bookData['title'],
+                        'id' => $bookData['internal_id'] ?? $bookData['palm_code'],
+                        'reason' => 'Already exists',
+                    ];
+                } elseif ($mode === 'update_only' && !$existingBook) {
+                    $preview['stats']['will_skip']++;
+                    $preview['skips'][] = [
+                        'title' => $bookData['title'],
+                        'id' => $bookData['internal_id'] ?? $bookData['palm_code'],
+                        'reason' => 'Not found for update',
+                    ];
+                } elseif ($existingBook && $mode !== 'create_duplicates') {
+                    // Will update
+                    $preview['stats']['will_update']++;
+                    $changes = $this->detectChanges($existingBook, $bookData);
+                    $preview['updates'][] = [
+                        'id' => $existingBook->internal_id ?? $existingBook->palm_code,
+                        'title' => $existingBook->title,
+                        'changes' => $changes,
+                    ];
+                } else {
+                    // Will create
+                    $preview['stats']['will_create']++;
+                    $preview['creates'][] = [
+                        'title' => $bookData['title'],
+                        'internal_id' => $bookData['internal_id'] ?? null,
+                        'palm_code' => $bookData['palm_code'] ?? null,
+                    ];
+                }
+            }
+
+            fclose($handle);
+
+        } catch (Exception $e) {
+            Log::error('Preview CSV Error', ['exception' => $e->getMessage()]);
+            throw $e;
+        }
+
+        return $preview;
+    }
+
+    /**
+     * Detect changes between existing book and new data
+     *
+     * @param Book $book
+     * @param array $newData
+     * @return array
+     */
+    protected function detectChanges(Book $book, array $newData): array
+    {
+        $changes = [];
+
+        // Compare each field
+        foreach ($newData as $field => $newValue) {
+            $oldValue = $book->$field ?? null;
+
+            // Normalize for comparison
+            if ($oldValue != $newValue) {
+                // Skip if both are empty
+                if (empty($oldValue) && empty($newValue)) {
+                    continue;
+                }
+
+                $changes[$field] = [
+                    'old' => $oldValue,
+                    'new' => $newValue,
+                ];
+            }
+        }
+
+        return $changes;
+    }
+
+    /**
      * Set import session (for queue jobs)
      *
      * @param CsvImport $importSession

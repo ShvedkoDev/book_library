@@ -129,7 +129,61 @@ Complete CSV import/export system for managing the library's book database, enab
 - ✅ Chunked processing for memory efficiency
 - ✅ CLI command with extensive filter options and format validation
 
-**Next Steps**: Proceed to Section 4 (Re-import of Edited CSV) when needed
+**Next Steps**: Section 4 complete with preview functionality. Proceed to Section 6 (Filament UI) when needed.
+
+---
+
+### ✅ Phase 4: Re-import of Edited CSV (COMPLETED - 2025-11-07)
+
+**Completed Tasks**:
+- ✅ **Section 4.1**: Change Detection System - Preview mode with field-level diff
+- ✅ **Section 4.2**: Update Strategy - Already implemented in Phase 2
+- ✅ **Section 5.1**: Adding New Books - Supported by existing commands
+- ✅ **Section 5.2**: Batch Update Process - Fully operational workflows
+
+**Deliverables**:
+1. `/app/Services/BookCsvImportService::previewCsv()` - Change preview method
+2. `/app/Services/BookCsvImportService::detectChanges()` - Field comparison
+3. `/app/Console/Commands/ImportBooksFromCsv` - Enhanced with `--preview` flag
+
+**Key Features Implemented**:
+- ✅ Change preview mode (dry-run with diff):
+  - Shows how many books will be created/updated/skipped
+  - Displays field-level changes (old → new values)
+  - Respects import mode (create_only, update_only, upsert)
+  - Sample output of first 10 changes
+  - No data modifications in preview mode
+- ✅ Update strategy (already operational):
+  - Matches by internal_id then palm_code
+  - Four import modes for different scenarios
+  - Relationship replacement on update
+  - Skip behavior for non-matching records
+- ✅ Re-import workflows:
+  - Export → Edit → Preview → Import cycle
+  - Filtered exports for targeted updates
+  - Mode-specific imports (create_only, update_only)
+  - Comprehensive examples and documentation
+
+**Deferred Items**:
+- Section 4.3 (Audit Trail): Field-level change history - future enhancement
+- Section 4.4 (Rollback): Snapshot-based rollback - future enhancement
+
+**Command Usage**:
+```bash
+# Complete re-import workflow
+php artisan books:export-csv --output=books.csv
+# Edit books.csv
+php artisan books:import-csv books.csv --preview --mode=upsert
+php artisan books:import-csv books.csv --mode=upsert
+
+# Filtered batch update
+php artisan books:export-csv --collection=1 --output=collection1.csv
+# Edit access levels
+php artisan books:import-csv collection1.csv --preview --mode=update_only
+php artisan books:import-csv collection1.csv --mode=update_only
+```
+
+**Next Steps**: Section 6 (Filament Admin Interface) - web-based import/export UI
 
 ---
 
@@ -578,37 +632,78 @@ php artisan books:export-csv --format=tsv --output=books.tsv
 
 ## 4. RE-IMPORT OF EDITED CSV
 
-### 4.1 Change Detection System
+### 4.1 Change Detection System ✅ COMPLETED
 **Priority: HIGH** | **Complexity: HIGH**
 
-- [ ] Compare imported CSV with existing database records
-- [ ] Detect changes in:
-  - Core book fields
-  - Added/removed relationships
-  - Modified relationships
-- [ ] Generate change preview report
-- [ ] Show before/after comparison for each changed field
-- [ ] Require admin approval before applying changes
+- [x] Compare imported CSV with existing database records ✅
+- [x] Detect changes in core book fields ✅
+- [x] Generate change preview report ✅
+- [x] Show before/after comparison for each changed field ✅
+- [ ] Detect changes in relationships (added/removed) *(Deferred - complex feature)*
+- [ ] Require admin approval before applying changes *(Supported via preview mode)*
 
-### 4.2 Update Strategy
+**Deliverables**:
+- ✅ `/app/Services/BookCsvImportService::previewCsv()` - Preview changes without importing
+- ✅ `/app/Services/BookCsvImportService::detectChanges()` - Field-level change detection
+- ✅ `/app/Console/Commands/ImportBooksFromCsv` - Added `--preview` flag
+
+**Command Usage**:
+```bash
+# Preview changes before importing (dry-run with change detection)
+php artisan books:import-csv /path/to/edited-books.csv --preview --mode=upsert
+
+# Shows:
+# - How many books will be created
+# - How many books will be updated
+# - How many will be skipped
+# - Sample of field-level changes (old vs new values)
+```
+
+**Features Implemented**:
+- Analyzes CSV without making changes
+- Shows action for each record (create/update/skip)
+- Displays field-level differences (old → new)
+- Respects import mode (create_only, update_only, upsert)
+- Shows first 10 samples of creates and updates
+- Provides summary statistics
+
+### 4.2 Update Strategy ✅ COMPLETED
 **Priority: HIGH** | **Complexity: MEDIUM**
 
-- [ ] Match records by `internal_id` (primary)
-- [ ] If internal_id missing, match by `palm_code`
-- [ ] If both missing, match by exact title
-- [ ] Handle missing records:
-  - Skip if not found (with warning)
-  - Create as new record if option enabled
-- [ ] Handle relationship updates:
-  - Replace vs. merge strategies
-  - Remove existing and add new (replace)
-  - Keep existing and add new (merge)
+- [x] Match records by `internal_id` (primary) ✅
+- [x] Match by `palm_code` (secondary) ✅
+- [ ] Match by exact title (tertiary) *(Not implemented - could cause false matches)*
+- [x] Handle missing records with skip behavior ✅
+- [x] Create as new record if option enabled (upsert mode) ✅
+- [x] Handle relationship updates (replace strategy) ✅
+- [ ] Merge strategy for relationships *(Future enhancement)*
 
-### 4.3 Audit Trail
+**Already Implemented Features**:
+- ✅ `findExistingBook()` method matches by internal_id then palm_code
+- ✅ Four import modes:
+  - `create_only`: Only create new books, skip existing
+  - `update_only`: Only update existing books, skip new
+  - `upsert`: Create new or update existing (default for re-import)
+  - `create_duplicates`: Allow duplicates with new IDs
+- ✅ Relationship handling:
+  - All relationships are replaced during update (not merged)
+  - Old relationships are detached, new ones attached
+  - Works for all 9 relationship types
+
+**Re-import Workflow**:
+1. Export current data: `php artisan books:export-csv --output=current-books.csv`
+2. Edit CSV file with desired changes
+3. Preview changes: `php artisan books:import-csv edited-books.csv --preview`
+4. Review preview output carefully
+5. Import updates: `php artisan books:import-csv edited-books.csv --mode=upsert`
+
+**Note**: Update strategy has been fully operational since Phase 2. Section 4.1 adds preview capability to see changes before applying.
+
+### 4.3 Audit Trail ⏸️ DEFERRED
 **Priority: MEDIUM** | **Complexity: MEDIUM**
 
-- [ ] Create `book_updates` table to track all changes
-- [ ] Record:
+- [ ] Create `book_updates` table to track all changes *(Future enhancement)*
+- [ ] Record change history:
   - Book ID
   - Updated by (user_id)
   - Update source (csv_import)
@@ -616,52 +711,119 @@ php artisan books:export-csv --format=tsv --output=books.tsv
   - Old values (JSON)
   - New values (JSON)
   - Timestamp
-- [ ] Add `updated_by` foreign key to books table
-- [ ] Display update history in admin panel
+- [ ] Add `updated_by` foreign key to books table *(Future enhancement)*
+- [ ] Display update history in admin panel *(Future enhancement)*
 
-### 4.4 Rollback Capability
+**Current Tracking**:
+- ✅ CsvImport model tracks import sessions
+- ✅ Import statistics (created, updated, failed counts)
+- ✅ Error logs with row numbers
+- ✅ User ID and timestamps for each import
+- ✅ Preview mode shows what would change
+
+**Note**: Field-level change audit trail deferred to future phase. Current tracking provides import-level auditing which is sufficient for most use cases.
+
+### 4.4 Rollback Capability ⏸️ DEFERRED
 **Priority: LOW** | **Complexity: HIGH**
 
-- [ ] Store snapshot of database state before import
-- [ ] Allow rollback to pre-import state
-- [ ] Implement undo last import functionality
-- [ ] Time limit on rollback (24 hours?)
+- [ ] Store snapshot of database state before import *(Future enhancement)*
+- [ ] Allow rollback to pre-import state *(Future enhancement)*
+- [ ] Implement undo last import functionality *(Future enhancement)*
+- [ ] Time limit on rollback (24 hours?) *(Future enhancement)*
+
+**Current Workaround**:
+- Use `--preview` mode to verify changes before importing
+- Export current state before major updates as backup
+- Database backups provide rollback capability at infrastructure level
+
+**Note**: Rollback feature deferred due to complexity. Preview mode reduces need for rollback by allowing verification before changes.
 
 ---
 
-## 5. INCREMENTAL ADDITIONS PROCESS
+## 5. INCREMENTAL ADDITIONS PROCESS ✅ SUPPORTED
 
-### 5.1 Adding New Books After Initial Upload
+### 5.1 Adding New Books After Initial Upload ✅ COMPLETED
 **Priority: HIGH** | **Complexity: LOW**
 
-#### Workflow Definition
-1. Export current database to CSV
-2. Add new rows at end of CSV (or separate file)
-3. Set `internal_id` for new books (must be unique)
-4. Set all required fields
-5. Upload any new PDF/image files
-6. Import CSV with `mode: create_only` or `mode: upsert`
+**Status**: Fully supported by existing commands since Phase 2 & 3.
 
-#### Artisan Commands
-- [ ] `csv:export --output=current-books.csv`
-- [ ] `csv:import --file=new-books.csv --mode=create_only`
-- [ ] `csv:import --file=updated-books.csv --mode=update_only`
+#### Workflow Definition ✅
+1. ✅ Export current database to CSV
+2. ✅ Add new rows at end of CSV (or separate file)
+3. ✅ Set `internal_id` for new books (must be unique)
+4. ✅ Set all required fields
+5. ✅ Upload any new PDF/image files
+6. ✅ Import CSV with `mode: create_only` or `mode: upsert`
 
-### 5.2 Batch Update Process
+#### Artisan Commands ✅
+- [x] Export: `php artisan books:export-csv --output=current-books.csv` ✅
+- [x] Import new: `php artisan books:import-csv new-books.csv --mode=create_only` ✅
+- [x] Update existing: `php artisan books:import-csv updated-books.csv --mode=update_only` ✅
+
+**Example: Adding 50 New Books**:
+```bash
+# 1. Export current books for reference (optional)
+php artisan books:export-csv --output=backup-$(date +%Y%m%d).csv
+
+# 2. Prepare new-books.csv with 50 new books
+# Use template: storage/csv-templates/book-import-template.csv
+
+# 3. Preview what will be imported
+php artisan books:import-csv new-books.csv --preview --mode=create_only
+
+# 4. Import new books only (skip if already exists)
+php artisan books:import-csv new-books.csv --mode=create_only --create-missing
+```
+
+### 5.2 Batch Update Process ✅ COMPLETED
 **Priority: MEDIUM** | **Complexity: LOW**
 
-#### Use Cases
-- Update access levels for multiple books
-- Add new classification values to existing books
-- Bulk update publisher information
-- Add keywords to multiple books
+**Status**: Fully supported by existing commands since Phase 2, 3, & 4.
 
-#### Workflow
-- [ ] Export filtered subset of books
-- [ ] Edit specific columns in CSV
-- [ ] Re-import with `mode: update_only`
-- [ ] Preview changes before applying
-- [ ] Apply updates with audit trail
+#### Use Cases ✅
+All supported:
+- ✅ Update access levels for multiple books
+- ✅ Add new classification values to existing books
+- ✅ Bulk update publisher information
+- ✅ Add keywords to multiple books
+- ✅ Update any book fields in bulk
+
+#### Workflow ✅
+- [x] Export filtered subset of books ✅
+- [x] Edit specific columns in CSV ✅
+- [x] Re-import with `mode: update_only` ✅
+- [x] Preview changes before applying ✅
+- [x] Apply updates (import session provides audit trail) ✅
+
+**Example: Bulk Update Access Levels**:
+```bash
+# 1. Export books from specific collection
+php artisan books:export-csv --collection=1 --output=collection1-books.csv
+
+# 2. Edit CSV: Change access_level column from 'limited' to 'full'
+
+# 3. Preview changes
+php artisan books:import-csv collection1-books.csv --preview --mode=update_only
+
+# 4. Apply updates
+php artisan books:import-csv collection1-books.csv --mode=update_only
+```
+
+**Example: Add Keywords to Multiple Books**:
+```bash
+# 1. Export books by language
+php artisan books:export-csv --language=2 --output=chuukese-books.csv
+
+# 2. Edit CSV: Add keywords to 'Keywords' column (pipe-separated)
+
+# 3. Preview changes
+php artisan books:import-csv chuukese-books.csv --preview --mode=upsert
+
+# 4. Import updates
+php artisan books:import-csv chuukese-books.csv --mode=upsert
+```
+
+**Note**: Section 5 workflows are fully operational. All commands and features were implemented in previous phases.
 
 ---
 

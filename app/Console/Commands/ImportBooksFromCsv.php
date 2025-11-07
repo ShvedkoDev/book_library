@@ -17,6 +17,7 @@ class ImportBooksFromCsv extends Command
                             {file : Path to CSV file}
                             {--mode=upsert : Import mode (create_only, update_only, upsert, create_duplicates)}
                             {--validate-only : Only validate, do not import}
+                            {--preview : Show what would change without importing}
                             {--create-missing : Create missing relations (collections, publishers, creators)}
                             {--skip-invalid : Skip invalid rows instead of failing}
                             {--user-id=1 : User ID for import session}';
@@ -76,6 +77,21 @@ class ImportBooksFromCsv extends Command
         // If validate-only, stop here
         if ($this->option('validate-only')) {
             $this->info('Validation-only mode. No data was imported.');
+            return self::SUCCESS;
+        }
+
+        // If preview mode, show changes and stop
+        if ($this->option('preview')) {
+            $this->info('Generating preview of changes...');
+            $this->newLine();
+
+            $mode = $this->option('mode');
+            $preview = $importService->previewCsv($filePath, $mode);
+
+            $this->displayPreview($preview);
+
+            $this->newLine();
+            $this->info('Preview complete. No data was changed.');
             return self::SUCCESS;
         }
 
@@ -168,6 +184,76 @@ class ImportBooksFromCsv extends Command
                     $remaining = count($errors) - 5;
                     $this->warn("  ... and {$remaining} more errors");
                 }
+            }
+        }
+    }
+
+    /**
+     * Display preview of changes
+     */
+    protected function displayPreview(array $preview): void
+    {
+        $this->line('<fg=cyan>Import Preview Summary:</>');
+        $this->newLine();
+
+        // Summary stats
+        $this->table(
+            ['Action', 'Count'],
+            [
+                ['Will Create', $preview['stats']['will_create']],
+                ['Will Update', $preview['stats']['will_update']],
+                ['Will Skip', $preview['stats']['will_skip']],
+                ['Total', $preview['stats']['total']],
+            ]
+        );
+
+        // Show sample of updates (if any)
+        if (!empty($preview['updates']) && count($preview['updates']) > 0) {
+            $this->newLine();
+            $this->line('<fg=cyan>Sample of Updates (first 10):</>');
+            $this->newLine();
+
+            foreach (array_slice($preview['updates'], 0, 10) as $update) {
+                $this->line("<fg=yellow>Book: {$update['title']} ({$update['id']})</>");
+
+                if (!empty($update['changes'])) {
+                    foreach ($update['changes'] as $field => $change) {
+                        $old = is_array($change['old']) ? json_encode($change['old']) : ($change['old'] ?? 'null');
+                        $new = is_array($change['new']) ? json_encode($change['new']) : ($change['new'] ?? 'null');
+
+                        // Truncate long values
+                        $old = strlen($old) > 50 ? substr($old, 0, 47) . '...' : $old;
+                        $new = strlen($new) > 50 ? substr($new, 0, 47) . '...' : $new;
+
+                        $this->line("  <fg=gray>{$field}:</> '{$old}' → '{$new}'");
+                    }
+                } else {
+                    $this->line("  <fg=gray>(No changes detected)</>");
+                }
+
+                $this->newLine();
+            }
+
+            $remaining = count($preview['updates']) - 10;
+            if ($remaining > 0) {
+                $this->line("<fg=gray>... and {$remaining} more updates</>");
+            }
+        }
+
+        // Show sample of creates (if any)
+        if (!empty($preview['creates']) && count($preview['creates']) > 0) {
+            $this->newLine();
+            $this->line('<fg=cyan>Sample of New Books (first 10):</>');
+            $this->newLine();
+
+            foreach (array_slice($preview['creates'], 0, 10) as $create) {
+                $id = $create['internal_id'] ?? $create['palm_code'] ?? 'N/A';
+                $this->line("  <fg=green>+</> {$create['title']} ({$id})");
+            }
+
+            $remaining = count($preview['creates']) - 10;
+            if ($remaining > 0) {
+                $this->line("<fg=gray>... and {$remaining} more new books</>");
             }
         }
     }
