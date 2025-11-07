@@ -41,26 +41,101 @@
                     return;
                 }
 
-                // Initialize Tabulator table (basic setup for now)
+                // Get CSRF token
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+                // Initialize Tabulator table with remote data
                 let table = new window.Tabulator("#bulk-edit-table", {
-                    height: "500px",
+                    height: "600px",
                     layout: "fitColumns",
-                    placeholder: "Loading books...",
+                    placeholder: "No books available",
+
+                    // Enable remote pagination
+                    pagination: true,
+                    paginationMode: "remote",
+                    paginationSize: 50,
+                    paginationSizeSelector: [25, 50, 100, 200],
+
+                    // Ajax configuration for remote data
+                    ajaxURL: "/api/admin/bulk-editing/books",
+                    ajaxConfig: {
+                        method: "GET",
+                        headers: {
+                            "X-CSRF-TOKEN": csrfToken,
+                            "Accept": "application/json",
+                        },
+                        credentials: "same-origin",
+                    },
+
+                    // Map pagination parameters to Laravel format
+                    ajaxURLGenerator: function(url, config, params) {
+                        url += "?page=" + params.page;
+                        url += "&size=" + params.size;
+                        return url;
+                    },
+
+                    // Handle response from server
+                    ajaxResponse: function(url, params, response) {
+                        console.log('API Response:', response);
+                        return {
+                            last_page: response.last_page,
+                            data: response.data,
+                        };
+                    },
+
+                    // Loading messages
+                    ajaxLoader: true,
+                    ajaxLoaderLoading: "<div class='p-4 text-center text-gray-600'>Loading books...</div>",
+                    ajaxLoaderError: "<div class='p-4 text-center text-red-500'>Error loading data. Please refresh.</div>",
+
+                    // Table columns
                     columns: [
-                        {title: "ID", field: "id", width: 80},
-                        {title: "Title", field: "title", width: 300},
-                        {title: "Year", field: "publication_year", width: 100},
-                        {title: "Status", field: "is_active", width: 100, formatter: "tickCross"},
-                    ],
-                    data: [
-                        {id: 1, title: "Sample Book 1", publication_year: 2023, is_active: true},
-                        {id: 2, title: "Sample Book 2", publication_year: 2024, is_active: true},
-                        {id: 3, title: "Sample Book 3", publication_year: 2025, is_active: false},
+                        {title: "ID", field: "id", width: 80, headerSort: false},
+                        {title: "Title", field: "title", width: 300, headerSort: false},
+                        {title: "Publisher", field: "publisher.name", width: 200, headerSort: false,
+                            formatter: function(cell) {
+                                return cell.getValue() || '-';
+                            }
+                        },
+                        {title: "Collection", field: "collection.name", width: 200, headerSort: false,
+                            formatter: function(cell) {
+                                return cell.getValue() || '-';
+                            }
+                        },
+                        {title: "Year", field: "publication_year", width: 100, headerSort: false},
+                        {title: "Access", field: "access_level", width: 120, headerSort: false,
+                            formatter: function(cell) {
+                                const value = cell.getValue();
+                                const badges = {
+                                    full: '<span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Full</span>',
+                                    limited: '<span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Limited</span>',
+                                    unavailable: '<span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">Unavailable</span>',
+                                };
+                                return badges[value] || value;
+                            }
+                        },
+                        {title: "Featured", field: "is_featured", width: 100, headerSort: false,
+                            hozAlign: "center", formatter: "tickCross"
+                        },
+                        {title: "Active", field: "is_active", width: 100, headerSort: false,
+                            hozAlign: "center", formatter: "tickCross"
+                        },
                     ],
                 });
 
-                document.getElementById('status-message').textContent = 'Tabulator initialized successfully ✓';
-                console.log('Tabulator table initialized:', table);
+                // Update status message when data loads
+                table.on("dataLoaded", function(data) {
+                    document.getElementById('status-message').textContent = 'Loaded ' + data.length + ' books';
+                    console.log('Data loaded:', data.length, 'books');
+                });
+
+                // Handle load errors
+                table.on("dataLoadError", function(error) {
+                    console.error('Error loading data:', error);
+                    document.getElementById('status-message').textContent = 'Error loading data';
+                });
+
+                console.log('Tabulator table initialized with remote data');
             });
         </script>
     @endpush
