@@ -56,6 +56,36 @@ Route::middleware('auth')->group(function () {
 // CMS Page preview route (admin only - authorization checked in controller)
 Route::middleware('auth')->get('/admin/pages/{id}/preview', [PageController::class, 'preview'])->name('pages.preview');
 
+// CSV Template & Export Download routes (admin only)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/csv/download-template/{type}', function ($type) {
+        $filename = $type === 'example' ? 'book-import-example.csv' : 'book-import-template.csv';
+        $filePath = storage_path('csv-templates/' . $filename);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'Template file not found');
+        }
+
+        return response()->download($filePath, $filename);
+    })->name('csv.download-template');
+
+    Route::get('/csv/download-export/{filename}', function ($filename) {
+        $filePath = storage_path('csv-exports/' . $filename);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'Export file not found');
+        }
+
+        // Check if file is older than 24 hours and delete
+        if (filemtime($filePath) < time() - 86400) {
+            unlink($filePath);
+            abort(404, 'Export file has expired (24 hour limit)');
+        }
+
+        return response()->download($filePath, $filename)->deleteFileAfterSend(false);
+    })->name('csv.download-export');
+});
+
 require __DIR__.'/auth.php';
 
 // CMS Pages - Catch-all route (must be last to avoid conflicts with other routes)
