@@ -16,6 +16,57 @@ class EditBook extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('duplicate')
+                ->label('Duplicate This Book')
+                ->icon('heroicon-o-document-duplicate')
+                ->color('info')
+                ->requiresConfirmation()
+                ->modalHeading('Duplicate This Book')
+                ->modalDescription(fn () => "Create a copy of \"{$this->record->title}\" with all relationships and classifications.")
+                ->modalSubmitActionLabel('Duplicate')
+                ->action(function () {
+                    try {
+                        // Validate before duplication
+                        $validation = $this->record->canBeDuplicated();
+
+                        if (!$validation['valid']) {
+                            Notification::make()
+                                ->danger()
+                                ->title('Cannot Duplicate Book')
+                                ->body(implode("\n", $validation['errors']))
+                                ->persistent()
+                                ->send();
+                            return;
+                        }
+
+                        // Perform duplication
+                        $duplicate = $this->record->duplicate([
+                            'clear_title' => false,
+                            'append_copy_suffix' => true, // Add " (Copy)" to title
+                        ]);
+
+                        // Success notification with redirect option
+                        Notification::make()
+                            ->success()
+                            ->title('Book Duplicated Successfully!')
+                            ->body("Created duplicate of \"{$this->record->title}\". Redirecting to edit the new book...")
+                            ->persistent()
+                            ->send();
+
+                        // Redirect to edit the duplicate
+                        $this->redirect($this->getResource()::getUrl('edit', ['record' => $duplicate->id]));
+
+                    } catch (\Exception $e) {
+                        Notification::make()
+                            ->danger()
+                            ->title('Duplication Failed')
+                            ->body($e->getMessage())
+                            ->persistent()
+                            ->send();
+                    }
+                })
+                ->successNotification(null), // Custom notification
+
             Actions\DeleteAction::make(),
         ];
     }
