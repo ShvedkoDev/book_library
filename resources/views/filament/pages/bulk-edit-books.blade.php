@@ -360,7 +360,7 @@
                             }
                         },
 
-                        // Publication Year - Numeric input
+                        // Publication Year - Numeric input with custom validator
                         {
                             title: "Year",
                             field: "publication_year",
@@ -374,7 +374,7 @@
                                     max: new Date().getFullYear().toString(),
                                 },
                             },
-                            validator: ["integer", "min:1900", "max:" + new Date().getFullYear()],
+                            validator: [yearRangeValidator, {min: 1900, max: new Date().getFullYear()}],
                         },
 
                         // Pages - Numeric input
