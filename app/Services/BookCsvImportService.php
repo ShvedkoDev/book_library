@@ -87,6 +87,9 @@ class BookCsvImportService
                 return $this->getValidationResult();
             }
 
+            // Remove BOM from first header if present
+            $headers = $this->removeBomFromHeaders($headers);
+
             // Validate required columns exist
             $this->validateHeaders($headers);
 
@@ -270,6 +273,9 @@ class BookCsvImportService
     {
         $handle = fopen($filePath, 'r');
         $headers = fgetcsv($handle);
+
+        // Remove BOM from first header if present
+        $headers = $this->removeBomFromHeaders($headers);
 
         // Check if second row is database mapping
         $secondRow = fgetcsv($handle);
@@ -613,6 +619,9 @@ class BookCsvImportService
             // Read headers
             $headers = fgetcsv($handle);
 
+            // Remove BOM from first header if present
+            $headers = $this->removeBomFromHeaders($headers);
+
             // Check for database mapping row
             $secondRow = fgetcsv($handle);
             $isSecondRowMapping = $this->isHeaderRow($secondRow);
@@ -944,6 +953,32 @@ class BookCsvImportService
                 'exception' => $e->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Remove UTF-8 BOM (Byte Order Mark) from headers if present
+     *
+     * CSV files saved with UTF-8 BOM (e.g., from Excel) include invisible
+     * characters (EF BB BF) at the start of the file, which gets included
+     * in the first header. This method strips the BOM to ensure proper
+     * header matching.
+     *
+     * @param array $headers
+     * @return array Headers with BOM removed from first element
+     */
+    protected function removeBomFromHeaders(array $headers): array
+    {
+        if (empty($headers)) {
+            return $headers;
+        }
+
+        // UTF-8 BOM is three bytes: EF BB BF (displayed as ﻿)
+        $bom = "\xEF\xBB\xBF";
+
+        // Remove BOM from first header if present
+        $headers[0] = str_replace($bom, '', $headers[0]);
+
+        return $headers;
     }
 
     /**
