@@ -94,7 +94,7 @@ Complete CSV import/export system for managing the library's book database, enab
 - ✅ **Section 3.1**: Core Export Service - Full implementation
 - ✅ **Section 3.2**: Export Filters & Options - All basic filters implemented
 - ✅ **Section 3.3**: Relationship Flattening - All 9 relationship types
-- ✅ **Section 3.4**: Export Formats - CSV format complete
+- ✅ **Section 3.4**: Export Formats - CSV and TSV formats complete
 
 **Deliverables**:
 1. `/app/Services/BookCsvExportService.php` - Complete export service (~600 lines)
@@ -102,6 +102,9 @@ Complete CSV import/export system for managing the library's book database, enab
 
 **Key Features Implemented**:
 - ✅ Export all books or filtered subsets
+- ✅ Multiple export formats:
+  - CSV (comma-delimited with optional BOM)
+  - TSV (tab-delimited, better for texts with commas)
 - ✅ Comprehensive filtering system:
   - Date ranges (created_at, updated_at)
   - Access level (single or multiple)
@@ -120,10 +123,11 @@ Complete CSV import/export system for managing the library's book database, enab
   - Library references (UH, COM with all fields)
   - Book relationships (4 types with internal IDs)
 - ✅ Reverse mappings (full/unavailable/limited → Y/N/L)
-- ✅ UTF-8 with BOM for Excel compatibility
+- ✅ UTF-8 with BOM for Excel compatibility (CSV only)
+- ✅ Proper delimiter handling (comma vs tab)
 - ✅ Two-row headers (readable + database mapping)
 - ✅ Chunked processing for memory efficiency
-- ✅ CLI command with extensive filter options
+- ✅ CLI command with extensive filter options and format validation
 
 **Next Steps**: Proceed to Section 4 (Re-import of Edited CSV) when needed
 
@@ -536,18 +540,25 @@ php artisan books:import-csv /path/to/books.csv --mode=upsert --create-missing
 **Priority: LOW** | **Complexity: LOW**
 
 - [x] CSV (default): Standard comma-separated ✅
-- [ ] TSV: Tab-separated (better for texts with commas) *(Future enhancement)*
+- [x] TSV: Tab-separated (better for texts with commas) ✅
 - [ ] Excel: Generate .xlsx file with formatting *(Future enhancement)*
 - [ ] JSON: For programmatic use *(Future enhancement)*
 
 **Current Implementation**:
-- CSV format fully implemented with proper escaping
-- UTF-8 encoding with optional BOM for Excel compatibility
-- Configurable separator (default: comma)
-- Two-row header system (readable + database mapping)
+- ✅ CSV format fully implemented with proper escaping
+- ✅ TSV format fully implemented with tab delimiter
+- ✅ UTF-8 encoding with optional BOM for Excel compatibility (CSV only)
+- ✅ Proper field delimiter handling (comma for CSV, tab for TSV)
+- ✅ Multi-value separator remains pipe (|) for both formats
+- ✅ Two-row header system (readable + database mapping)
+
+**Format Details**:
+- **CSV**: Comma-delimited fields, optional UTF-8 BOM, proper quote escaping
+- **TSV**: Tab-delimited fields, no BOM, better for texts containing commas
 
 **Command Usage**:
 ```bash
+# Export as CSV (default)
 php artisan books:export-csv
   [--output=/path/to/file.csv]
   [--format=csv]
@@ -558,6 +569,9 @@ php artisan books:export-csv
   [--year-from=2000]
   [--no-bom]
   [--chunk-size=100]
+
+# Export as TSV
+php artisan books:export-csv --format=tsv --output=books.tsv
 ```
 
 ---

@@ -11,14 +11,16 @@ class BookCsvExportService
 {
     protected array $config;
     protected array $fieldMapping;
-    protected string $separator;
+    protected string $separator;  // Multi-value separator (pipe for relationships)
+    protected string $fieldDelimiter;  // Field delimiter (comma for CSV, tab for TSV)
     protected array $headers = [];
 
     public function __construct()
     {
         $this->config = config('csv-import');
         $this->fieldMapping = $this->config['field_mapping'];
-        $this->separator = $this->config['separator'];
+        $this->separator = $this->config['separator'];  // Pipe separator for multi-value fields
+        $this->fieldDelimiter = ',';  // Default to CSV (comma-separated)
     }
 
     /**
@@ -43,6 +45,14 @@ class BookCsvExportService
     public function export(Builder $query, array $options = []): string
     {
         try {
+            // Set field delimiter based on format
+            $format = strtolower($options['format'] ?? 'csv');
+            $this->fieldDelimiter = match ($format) {
+                'tsv' => "\t",
+                'csv' => ',',
+                default => ',',
+            };
+
             // Apply filters
             $query = $this->applyFilters($query, $options);
 
@@ -62,8 +72,8 @@ class BookCsvExportService
                 throw new Exception("Unable to create export file: {$filePath}");
             }
 
-            // Write BOM for Excel compatibility
-            if ($options['include_bom'] ?? true) {
+            // Write BOM for Excel compatibility (for CSV only, not TSV)
+            if (($options['include_bom'] ?? true) && $format === 'csv') {
                 fputs($handle, "\xEF\xBB\xBF");
             }
 
@@ -199,14 +209,14 @@ class BookCsvExportService
         });
 
         // Write header row
-        fputcsv($handle, $headers);
+        fputcsv($handle, $headers, $this->fieldDelimiter);
 
         // Optionally write database mapping row
         if ($options['include_mapping_row'] ?? true) {
             $mappingRow = array_map(function ($header) {
                 return $this->fieldMapping[$header] ?? '';
             }, $headers);
-            fputcsv($handle, $mappingRow);
+            fputcsv($handle, $mappingRow, $this->fieldDelimiter);
         }
 
         // Store headers for data writing
@@ -228,7 +238,7 @@ class BookCsvExportService
         $query->chunk($chunkSize, function ($books) use ($handle, $options) {
             foreach ($books as $book) {
                 $rowData = $this->formatBookForCsv($book, $options);
-                fputcsv($handle, $rowData);
+                fputcsv($handle, $rowData, $this->fieldDelimiter);
             }
         });
     }

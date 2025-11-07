@@ -35,7 +35,7 @@ class ExportBooksToCsv extends Command
      *
      * @var string
      */
-    protected $description = 'Export books to CSV file with optional filters';
+    protected $description = 'Export books to CSV/TSV file with optional filters';
 
     /**
      * Execute the console command.
@@ -43,6 +43,13 @@ class ExportBooksToCsv extends Command
     public function handle(BookCsvExportService $exportService): int
     {
         try {
+            // Validate format
+            $format = strtolower($this->option('format') ?? 'csv');
+            if (!in_array($format, ['csv', 'tsv'])) {
+                $this->error("Invalid format '{$format}'. Supported formats: csv, tsv");
+                return Command::FAILURE;
+            }
+
             $this->info('Starting book export...');
             $this->newLine();
 
@@ -169,10 +176,18 @@ class ExportBooksToCsv extends Command
      */
     protected function displayConfiguration(array $options): void
     {
+        $format = strtoupper($options['format'] ?? 'csv');
+
         $this->line('<fg=cyan>Export Configuration:</>');
         $this->line('-------------------');
-        $this->line('Format: ' . strtoupper($options['format'] ?? 'csv'));
-        $this->line('Include BOM: ' . ($options['include_bom'] ? 'Yes' : 'No'));
+        $this->line('Format: ' . $format);
+
+        if ($format === 'CSV') {
+            $this->line('Include BOM: ' . ($options['include_bom'] ? 'Yes' : 'No'));
+        } else {
+            $this->line('Field Separator: Tab (\\t)');
+        }
+
         $this->line('Include Mapping Row: ' . ($options['include_mapping_row'] ? 'Yes' : 'No'));
         $this->line('Chunk Size: ' . $options['chunk_size']);
 
