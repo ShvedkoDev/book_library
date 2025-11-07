@@ -154,15 +154,15 @@ Is_featured, Is_active, Sort_order
 
 ## 2. CSV IMPORT SYSTEM
 
-### 2.1 Core Import Service
+### 2.1 Core Import Service ✅ COMPLETED
 **Priority: HIGH** | **Complexity: HIGH**
 
-- [ ] Create `App\Services\BookCsvImportService` class
-- [ ] Implement CSV parsing with Laravel CSV libraries
-- [ ] Build field mapper (CSV columns → database fields)
-- [ ] Implement batch processing for large files (chunk size: 100 rows)
-- [ ] Add transaction support (rollback on critical errors)
-- [ ] Track import session (timestamps, user, file info)
+- [x] Create `App\Services\BookCsvImportService` class
+- [x] Implement CSV parsing with PHP native functions (no external libraries needed)
+- [x] Build field mapper (CSV columns → database fields)
+- [x] Implement batch processing for large files (chunk size: 100 rows)
+- [x] Add transaction support (rollback on critical errors)
+- [x] Track import session (timestamps, user, file info)
 
 #### Key Methods to Implement
 ```php
@@ -174,18 +174,18 @@ Is_featured, Is_active, Sort_order
 - handleErrors($errors): void
 ```
 
-### 2.2 Import Validation System
+### 2.2 Import Validation System ✅ COMPLETED
 **Priority: HIGH** | **Complexity: MEDIUM**
 
-- [ ] Validate CSV structure (headers match expected columns)
-- [ ] Validate required fields (title, internal_id if updating)
-- [ ] Validate data types (integers, dates, enums)
-- [ ] Validate enum values (physical_type, access_level)
-- [ ] Validate foreign key references (collection, publisher, languages)
-- [ ] Check for duplicate internal_ids
-- [ ] Check for duplicate palm_codes
-- [ ] Validate file references (check if files exist)
-- [ ] Create validation report with line numbers and specific errors
+- [x] Validate CSV structure (headers match expected columns)
+- [x] Validate required fields (title, internal_id if updating)
+- [x] Validate data types (integers, dates, enums)
+- [x] Validate enum values (physical_type, access_level)
+- [x] Validate foreign key references (collection, publisher, languages)
+- [x] Check for duplicate internal_ids
+- [x] Check for duplicate palm_codes
+- [ ] Validate file references (check if files exist) *(Deferred - files validated during import)*
+- [x] Create validation report with line numbers and specific errors
 
 #### Validation Rules
 ```php
@@ -198,48 +198,49 @@ Is_featured, Is_active, Sort_order
 - physical_type: in:book,journal,magazine,workbook,poster,other
 ```
 
-### 2.3 Duplicate Detection & Conflict Resolution
+### 2.3 Duplicate Detection & Conflict Resolution ✅ COMPLETED
 **Priority: HIGH** | **Complexity: MEDIUM**
 
-- [ ] Implement duplicate detection strategies:
+- [x] Implement duplicate detection strategies:
   - By `internal_id` (primary)
   - By `palm_code` (secondary)
-  - By title + publication_year (fuzzy match)
-- [ ] Create import mode options:
+  - ~~By title + publication_year (fuzzy match)~~ *(Not implemented - exact match only)*
+- [x] Create import mode options:
   - `create_only`: Skip existing records
   - `update_only`: Only update existing records
   - `upsert`: Create new or update existing (default)
   - `create_duplicates`: Allow duplicates with new IDs
-- [ ] Build conflict resolution interface (show differences)
-- [ ] Allow user to choose resolution strategy before import
+- [ ] Build conflict resolution interface (show differences) *(Deferred to Filament UI)*
+- [x] Allow user to choose resolution strategy before import (via CLI --mode flag)
 
-### 2.4 Relationship Resolution
+### 2.4 Relationship Resolution ✅ COMPLETED
 **Priority: HIGH** | **Complexity: HIGH**
 
-#### Collection & Publisher Resolution
-- [ ] Lookup by name (exact match, case-insensitive)
-- [ ] Create new if `create_missing_relations` option enabled
-- [ ] Report unresolved references
+#### Collection & Publisher Resolution ✅
+- [x] Lookup by name (exact match, case-insensitive)
+- [x] Create new if `create_missing_relations` option enabled
+- [x] Report unresolved references
 
-#### Language Resolution
-- [ ] Lookup languages by code or name
-- [ ] Handle multiple languages (pipe-separated)
-- [ ] Set primary language flag
-- [ ] Create book_languages pivot records
+#### Language Resolution ✅
+- [x] Lookup languages by code or name
+- [x] Handle multiple languages (pipe-separated)
+- [x] Set primary language flag
+- [x] Create book_languages pivot records
 
-#### Creator Resolution (Authors, Illustrators, Editors)
-- [ ] Parse creator names from CSV
-- [ ] Lookup or create Creator records
-- [ ] Determine creator_type (author, illustrator, editor, other)
-- [ ] Parse optional role_description
-- [ ] Set sort_order based on CSV order
-- [ ] Create book_creators pivot records
+#### Creator Resolution (Authors, Illustrators, Editors) ✅
+- [x] Parse creator names from CSV
+- [x] Lookup or create Creator records
+- [x] Determine creator_type (author, illustrator, editor, other)
+- [x] Parse optional role_description
+- [x] Set sort_order based on CSV order
+- [x] Create book_creators pivot records
+- [x] **Bonus**: Auto-detect creator type from role (translator, compiler, adapter, etc.)
 
-#### Classification Resolution
-- [ ] Lookup ClassificationValue by label and type
-- [ ] Handle multiple values per classification type
-- [ ] Create book_classifications pivot records
-- [ ] Map CSV columns to classification types:
+#### Classification Resolution ✅
+- [x] Lookup ClassificationValue by label and type
+- [x] Handle multiple values per classification type
+- [x] Create book_classifications pivot records
+- [x] Map CSV columns to classification types:
   - Purpose → 'purpose'
   - Genre → 'genre'
   - Sub_genre → 'sub-genre'
@@ -247,53 +248,56 @@ Is_featured, Is_active, Sort_order
   - Themes_uses → 'themes-uses'
   - Learner_level → 'learner-level'
 
-#### Geographic Location Resolution
-- [ ] Lookup GeographicLocation by name
-- [ ] Create book_locations pivot records
+#### Geographic Location Resolution ✅
+- [x] Lookup GeographicLocation by name
+- [x] Create book_locations pivot records
 
-#### Keyword Processing
-- [ ] Parse keywords (pipe-separated)
-- [ ] Create BookKeyword records
+#### Keyword Processing ✅
+- [x] Parse keywords (pipe-separated)
+- [x] Create BookKeyword records
 
-#### File Association
-- [ ] Validate file paths exist
-- [ ] Create BookFile records
-- [ ] Set primary flags for main PDF and thumbnail
-- [ ] Handle multiple audio/video files
+#### File Association ✅
+- [x] Validate file paths exist
+- [x] Create BookFile records
+- [x] Set primary flags for main PDF and thumbnail
+- [x] Handle multiple audio/video files
+- [x] **Bonus**: Auto-construct file paths and detect MIME types
 
-#### Book Relationships
-- [ ] Resolve related book IDs (by internal_id)
-- [ ] Create BookRelationship records
-- [ ] Handle bidirectional relationships if needed
+#### Book Relationships ✅
+- [x] Resolve related book IDs (by internal_id)
+- [x] Create BookRelationship records
+- [ ] Handle bidirectional relationships if needed *(Deferred - create manually if needed)*
 
-### 2.5 Error Handling & Reporting
+### 2.5 Error Handling & Reporting ✅ COMPLETED
 **Priority: HIGH** | **Complexity: MEDIUM**
 
-- [ ] Collect all errors during import (don't stop on first error)
-- [ ] Create detailed error report:
+- [x] Collect all errors during import (don't stop on first error)
+- [x] Create detailed error report:
   - Row number
   - Column name
   - Error type (validation, missing reference, file not found)
   - Error message
-  - Suggested fix
-- [ ] Generate import summary:
+  - ~~Suggested fix~~ *(Not implemented - manual review needed)*
+- [x] Generate import summary:
   - Total rows processed
   - Successfully imported
   - Updated records
   - Failed records
-  - Warnings
-- [ ] Save error log to `/storage/logs/csv-imports/`
-- [ ] Email error report to admin if requested
+  - Warnings (skipped rows)
+- [x] Save error log to database (csv_imports table)
+- [ ] Email error report to admin if requested *(Deferred to notification system)*
 
-### 2.6 Progress Tracking & Background Processing
+### 2.6 Progress Tracking & Background Processing ✅ PARTIALLY COMPLETED
 **Priority: MEDIUM** | **Complexity: MEDIUM**
 
-- [ ] Implement queue job: `ImportBooksFromCsv`
-- [ ] Add progress tracking using Laravel queues
-- [ ] Store import status in database (imports table)
-- [ ] Real-time progress updates via Livewire polling or websockets
-- [ ] Allow cancellation of in-progress imports
-- [ ] Clean up failed imports (optional rollback)
+- [ ] Implement queue job: `ImportBooksFromCsv` *(Deferred - future enhancement)*
+- [ ] Add progress tracking using Laravel queues *(Deferred - future enhancement)*
+- [x] Store import status in database (csv_imports table) ✅
+- [ ] Real-time progress updates via Livewire polling or websockets *(Deferred to Filament UI)*
+- [ ] Allow cancellation of in-progress imports *(Deferred - future enhancement)*
+- [ ] Clean up failed imports (optional rollback) *(Deferred - future enhancement)*
+
+**Note**: Progress tracking infrastructure is in place (CsvImport model with status, counters, timing). Background processing will be added when needed for large imports.
 
 ### 2.7 Initial Bulk Upload Process
 **Priority: HIGH** | **Complexity: HIGH**
@@ -756,29 +760,34 @@ Is_featured, Is_active, Sort_order
 
 ## 12. MIGRATION & DEPLOYMENT
 
-### 12.1 Migration Plan ✅ PARTIALLY COMPLETED
+### 12.1 Migration Plan ✅ COMPLETED
 **Priority: HIGH** | **Complexity: LOW**
 
-- [ ] Create migration for `csv_imports` table
-- [ ] Add `updated_by` field to books table *(Already exists - added earlier)*
+- [x] Create migration for `csv_imports` table ✅
+- [x] Add `updated_by` field to books table *(Already exists - added earlier)*
 - [x] Create storage directories:
-  - [ ] `/storage/csv-imports/` *(To be created during import development)*
-  - [ ] `/storage/csv-exports/` *(To be created during export development)*
+  - [x] `/storage/csv-imports/` ✅
+  - [x] `/storage/csv-exports/` ✅
   - [x] `/storage/csv-templates/` ✅
-  - [ ] `/storage/logs/csv-imports/` *(To be created during import development)*
-- [ ] Add necessary permissions
+  - [x] `/storage/logs/csv-imports/` ✅
+- [ ] Add necessary permissions *(Deferred - will be set during deployment)*
 
-### 12.2 Configuration
+### 12.2 Configuration ✅ COMPLETED
 **Priority: MEDIUM** | **Complexity: LOW**
 
-- [ ] Create config file: `config/csv-import.php`:
-  - Chunk size
-  - Max file size
-  - Timeout settings
-  - Storage paths
-  - Email settings
-  - Default import mode
-- [ ] Add environment variables for sensitive settings
+- [x] Create config file: `config/csv-import.php`: ✅
+  - Chunk size (100 rows)
+  - Max file size (50MB)
+  - Timeout settings (600 seconds)
+  - Storage paths (all directories)
+  - Email settings (placeholders)
+  - Default import mode (upsert)
+  - Field mappings (65+ fields)
+  - Validation rules
+  - Access level mappings
+  - Physical type mappings
+  - Classification/relationship type mappings
+- [ ] Add environment variables for sensitive settings *(Optional - defaults work fine)*
 
 ### 12.3 Deployment Checklist
 **Priority: MEDIUM** | **Complexity: LOW**
