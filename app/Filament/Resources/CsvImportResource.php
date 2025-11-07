@@ -103,7 +103,7 @@ class CsvImportResource extends Resource
                             ->rows(10)
                             ->columnSpanFull(),
                     ])
-                    ->visible(fn ($record) => !empty($record->error_log)),
+                    ->visible(fn ($record) => !empty($record?->error_log)),
             ]);
     }
 
@@ -176,7 +176,7 @@ class CsvImportResource extends Resource
                     ->sortable()
                     ->color('danger')
                     ->badge()
-                    ->visible(fn ($record) => $record->failed_rows > 0),
+                    ->visible(fn ($record) => $record?->failed_rows > 0),
 
                 Tables\Columns\TextColumn::make('created_count')
                     ->numeric()
