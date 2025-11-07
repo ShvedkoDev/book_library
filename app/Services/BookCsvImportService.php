@@ -184,6 +184,11 @@ class BookCsvImportService
             // Mark as completed
             $this->importSession->markAsCompleted();
 
+            // Run post-import quality checks if enabled
+            if ($options['run_quality_checks'] ?? true) {
+                $this->runQualityChecks();
+            }
+
         } catch (Exception $e) {
             Log::error('CSV Import Error', [
                 'import_id' => $this->importSession->id,
@@ -757,5 +762,51 @@ class BookCsvImportService
         ]);
 
         return true;
+    }
+
+    /**
+     * Run post-import quality checks
+     *
+     * @return void
+     */
+    protected function runQualityChecks(): void
+    {
+        if (!$this->importSession) {
+            return;
+        }
+
+        try {
+            Log::info('Running post-import quality checks', [
+                'import_id' => $this->importSession->id,
+            ]);
+
+            // Get books that were created or updated in this import
+            // For now, we'll run quality checks on all books since we don't track
+            // which books were affected by a specific import
+            // This could be optimized by tracking book IDs during import
+
+            $qualityService = app(\App\Services\DataQualityService::class);
+
+            // Run quality checks
+            $report = $qualityService->runQualityChecks(
+                null, // Check all books (could be optimized to check only affected books)
+                $this->importSession->id,
+                false // Don't clear existing issues
+            );
+
+            Log::info('Post-import quality checks completed', [
+                'import_id' => $this->importSession->id,
+                'total_issues' => $report['total_issues_found'],
+                'critical_issues' => $report['critical_issues'],
+                'warnings' => $report['warnings'],
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Post-import quality check failed', [
+                'import_id' => $this->importSession->id,
+                'exception' => $e->getMessage(),
+            ]);
+            // Don't fail the import if quality checks fail
+        }
     }
 }

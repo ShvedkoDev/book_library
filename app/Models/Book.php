@@ -403,6 +403,13 @@ class Book extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    // Relationships - Data Quality
+
+    public function dataQualityIssues()
+    {
+        return $this->hasMany(DataQualityIssue::class);
+    }
+
     // Scopes
 
     public function scopeActive($query)

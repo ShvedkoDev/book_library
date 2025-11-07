@@ -66,6 +66,7 @@ return [
         'skip_invalid_rows' => false,
         'send_completion_email' => false,
         'enable_transactions' => true,
+        'run_quality_checks' => env('CSV_IMPORT_RUN_QUALITY_CHECKS', true), // Run post-import quality checks
     ],
 
     /*

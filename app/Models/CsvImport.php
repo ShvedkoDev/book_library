@@ -62,6 +62,11 @@ class CsvImport extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function dataQualityIssues()
+    {
+        return $this->hasMany(DataQualityIssue::class);
+    }
+
     // Scopes
 
     public function scopeCompleted($query)
