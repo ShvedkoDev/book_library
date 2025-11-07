@@ -679,8 +679,8 @@ class BookResource extends Resource
 
                             // Perform duplication
                             $duplicate = $record->duplicate([
-                                'clear_title' => true,
-                                'append_copy_suffix' => false,
+                                'clear_title' => false,
+                                'append_copy_suffix' => true, // Add " (Copy)" to title
                             ]);
 
                             // Success notification with link to edit the duplicate
@@ -730,8 +730,8 @@ class BookResource extends Resource
 
                             try {
                                 $results = $duplicationService->bulkDuplicate($bookIds, [
-                                    'clear_title' => true,
-                                    'append_copy_suffix' => false,
+                                    'clear_title' => false,
+                                    'append_copy_suffix' => true, // Add " (Copy)" to title
                                 ]);
 
                                 $successCount = count($results['success']);
