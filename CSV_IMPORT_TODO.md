@@ -41,6 +41,7 @@ Complete CSV import/export system for managing the library's book database, enab
 - ✅ **Section 2.4**: Relationship Resolution - All 9 relationship types
 - ✅ **Section 2.5**: Error Handling & Reporting - Row-level error tracking
 - ✅ **Section 2.6**: Progress Tracking & Background Processing - Queue job implemented
+- ✅ **Section 2.7**: Initial Bulk Upload Process - Tools & documentation ready
 - ✅ **Section 12.1**: CSV Imports Migration - Database table created
 - ✅ **Section 12.1**: Storage Directories - All directories created
 
@@ -53,7 +54,9 @@ Complete CSV import/export system for managing the library's book database, enab
 6. `/database/migrations/..._create_csv_imports_table.php` - Migration
 7. `/app/Console/Commands/ImportBooksFromCsv.php` - CLI import command
 8. `/app/Jobs/ImportBooksFromCsvJob.php` - Background queue job
-9. `/storage/csv-imports/`, `/storage/csv-exports/`, `/storage/logs/csv-imports/` - Directories
+9. `/app/Console/Commands/CheckImportPrerequisites.php` - Prerequisites checker
+10. `/docs/BULK_UPLOAD_GUIDE.md` - Comprehensive bulk upload guide
+11. `/storage/csv-imports/`, `/storage/csv-exports/`, `/storage/logs/csv-imports/` - Directories
 
 **Key Features Implemented**:
 - ✅ CSV parsing with PHP native functions (no external dependencies)
@@ -350,40 +353,100 @@ Is_featured, Is_active, Sort_order
 
 **Note**: Complete background processing infrastructure in place. Queue worker handles large imports with automatic retries, progress tracking, and error handling.
 
-### 2.7 Initial Bulk Upload Process
+### 2.7 Initial Bulk Upload Process ✅ TOOLS & DOCUMENTATION COMPLETED
 **Priority: HIGH** | **Complexity: HIGH**
 
-#### Pre-Import Checklist
-- [ ] Ensure all related data exists:
+**Status**: Tools and documentation completed. Actual execution pending production data availability.
+
+#### Pre-Import Checklist Tools ✅
+- [x] Created prerequisite checker command: `php artisan books:check-prerequisites`
+  - Verifies all related data exists (Collections, Publishers, Languages, etc.)
+  - Checks storage directories exist and are writable
+  - Validates configuration settings
+  - Checks queue worker status
+  - Can check specific CSV file structure
+  - Provides detailed pass/warning/fail report
+- [x] Created comprehensive bulk upload guide: `/docs/BULK_UPLOAD_GUIDE.md`
+  - Step-by-step instructions for entire process
+  - Prerequisites checklist with commands
+  - CSV preparation guidelines
+  - Validation workflow
+  - Import execution with all modes explained
+  - Troubleshooting guide
+  - Post-import verification steps
+  - Re-import and update processes
+  - Best practices and performance expectations
+
+#### Pre-Import Checklist (Manual Tasks - Awaiting Production Data)
+- [ ] Ensure all related data exists *(Use: `php artisan books:check-prerequisites --detailed`)*:
   - Collections
   - Publishers
-  - Languages
-  - Classification Types & Values
+  - Languages *(REQUIRED - cannot be auto-created)*
+  - Classification Types & Values *(6 types required)*
   - Creators (or enable auto-creation)
   - Geographic Locations
 - [ ] Upload all PDF files to `/storage/app/public/books/pdfs/`
 - [ ] Upload all thumbnail images to `/storage/app/public/books/thumbnails/`
-- [ ] Prepare CSV file with 1000+ book records
+- [ ] Prepare CSV file with 1000+ book records *(Use template from `/storage/csv-templates/`)*
 
-#### Import Configuration for Initial Upload
+#### Import Configuration for Initial Upload ✅
+Recommended command:
+```bash
+php artisan books:import-csv /path/to/books.csv \
+  --mode=upsert \
+  --create-missing \
+  --skip-invalid
+```
+
+Alternative configuration via options array:
 ```php
 [
     'mode' => 'upsert',
     'create_missing_relations' => true,
     'validate_file_references' => true,
-    'skip_invalid_rows' => false,  // Fail if any critical errors
-    'send_completion_email' => true,
+    'skip_invalid_rows' => true,  // Skip rows with errors, continue import
 ]
 ```
 
-#### Execution Steps
-- [ ] Run validation-only pass first: `csv:import --validate-only`
-- [ ] Review validation report
-- [ ] Fix any errors in CSV
-- [ ] Run actual import: `csv:import --file=books.csv`
-- [ ] Monitor progress in admin panel
-- [ ] Review import summary
-- [ ] Verify data integrity with spot checks
+#### Execution Steps (Documented - Awaiting Production Data)
+- [x] Documentation: Validation-only pass workflow
+  - Command: `php artisan books:import-csv <file> --validate-only`
+  - Validation report interpretation
+- [x] Documentation: Error review and fixing process
+  - Common validation errors
+  - How to fix issues in CSV
+- [x] Documentation: Actual import execution
+  - Command: `php artisan books:import-csv <file> --mode=upsert --create-missing`
+  - Progress monitoring
+- [x] Documentation: Import summary review
+  - Success metrics
+  - Error log analysis
+- [x] Documentation: Data integrity verification
+  - Database queries for spot checks
+  - Admin panel verification
+  - Frontend testing
+- [ ] *Actual execution pending production CSV file with 1000+ books*
+
+**Deliverables**:
+- ✅ `/app/Console/Commands/CheckImportPrerequisites.php` - Comprehensive prerequisites checker
+- ✅ `/docs/BULK_UPLOAD_GUIDE.md` - Complete bulk upload guide (40+ pages)
+
+**Command Usage**:
+```bash
+# Check all prerequisites
+php artisan books:check-prerequisites --detailed
+
+# Check specific CSV file
+php artisan books:check-prerequisites --csv-file=/path/to/books.csv
+
+# Validate CSV before import
+php artisan books:import-csv /path/to/books.csv --validate-only
+
+# Execute bulk import
+php artisan books:import-csv /path/to/books.csv --mode=upsert --create-missing
+```
+
+**Note**: All tools and documentation are complete and ready for use. Actual bulk upload execution requires production CSV file and PDF files to be provided.
 
 ---
 
