@@ -1,6 +1,10 @@
 {
+  "_xlsx-ohJLVff9.js": {
+    "file": "assets/xlsx-ohJLVff9.js",
+    "name": "xlsx"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-CxMx_vSw.css",
+    "file": "assets/app-ukfEf6cV.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "names": [
@@ -8,7 +12,7 @@
     ]
   },
   "resources/css/filament/admin/theme.css": {
-    "file": "assets/theme-BcA4PwFI.css",
+    "file": "assets/theme-Ba7Ogsh0.css",
     "src": "resources/css/filament/admin/theme.css",
     "isEntry": true,
     "names": [
@@ -16,9 +20,24 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-De1Tg0wl.js",
+    "file": "assets/app-foMu_xVH.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "imports": [
+      "_xlsx-ohJLVff9.js"
+    ]
+  },
+  "resources/js/tabulator.js": {
+    "file": "assets/tabulator-C7on00NR.js",
+    "name": "tabulator",
+    "src": "resources/js/tabulator.js",
+    "isEntry": true,
+    "imports": [
+      "_xlsx-ohJLVff9.js"
+    ],
+    "css": [
+      "assets/tabulator-DOaQeZzI.css"
+    ]
   }
 }
