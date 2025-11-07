@@ -61,11 +61,23 @@ Implement a comprehensive book duplication system that allows admins to copy exi
 - **Key Insight**: 63% of book data can be auto-populated from duplication
 
 ### 1.3 UX Design
-- [ ] Sketch duplication workflow wireframes
-- [ ] Design "Duplicate" button placement (list view + edit view)
-- [ ] Design duplicate confirmation modal/page
-- [ ] Plan visual indicators for duplicated books
-- [ ] Design quick-edit form for duplicated books
+- [x] Sketch duplication workflow wireframes
+- [x] Design "Duplicate" button placement (list view + edit view)
+- [x] Design duplicate confirmation modal/page
+- [x] Plan visual indicators for duplicated books
+- [x] Design quick-edit form for duplicated books
+
+**✅ COMPLETED** - See `UX_DESIGN.md` for comprehensive UX documentation including:
+- **3 User Flows**: Quick duplication from list, duplication from edit, quick-edit after duplication
+- **Button Placements**: List view actions, edit view header, bulk actions
+- **Modal Designs**: Simple confirmation, advanced options, series-aware modals
+- **Quick-Edit Form**: Color-coded field priorities (🔴 Required, 🟡 Review, 🟢 Copied)
+- **Visual Indicators**: Duplicated badges, source links, field state indicators, success notifications
+- **4 Wireframes**: ASCII art wireframes for all major screens
+- **Interaction Patterns**: Progressive disclosure, keyboard-first workflow, smart defaults
+- **Edge Cases**: 4 edge cases + 2 error states documented with solutions
+- **Accessibility**: ARIA labels, keyboard navigation, color-blind friendly
+- **Mobile Design**: Responsive layouts and touch-optimized interfaces
 
 ---
 
