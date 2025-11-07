@@ -154,10 +154,88 @@
     {{-- Validation Error Styling --}}
     @push('styles')
         <style>
+            /* Custom Tabulator Theme for Filament */
+            .tabulator {
+                font-size: 14px;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+            }
+
+            .tabulator-header {
+                background: #f9fafb;
+                border-bottom: 2px solid #e5e7eb;
+            }
+
+            .tabulator-header .tabulator-col {
+                background: #f9fafb;
+                border-right: 1px solid #e5e7eb;
+                font-weight: 600;
+                color: #374151;
+            }
+
+            .tabulator-row {
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            .tabulator-row:hover {
+                background: #f9fafb;
+            }
+
+            .tabulator-cell {
+                padding: 8px 12px;
+            }
+
+            .tabulator-cell.tabulator-editing {
+                border: 2px solid #3b82f6;
+                background: #ffffff;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+
+            /* Dark Mode Support */
+            .dark .tabulator {
+                background: #1f2937;
+                border-color: #374151;
+            }
+
+            .dark .tabulator-header {
+                background: #111827;
+                border-bottom-color: #374151;
+            }
+
+            .dark .tabulator-header .tabulator-col {
+                background: #111827;
+                border-right-color: #374151;
+                color: #f9fafb;
+            }
+
+            .dark .tabulator-row {
+                background: #1f2937;
+                border-bottom-color: #374151;
+            }
+
+            .dark .tabulator-row:hover {
+                background: #374151;
+            }
+
+            .dark .tabulator-cell {
+                color: #f9fafb;
+                border-right-color: #374151;
+            }
+
+            .dark .tabulator-cell.tabulator-editing {
+                background: #374151;
+                border-color: #60a5fa;
+                box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+            }
+
             /* Validation error styling */
             .tabulator-cell.tabulator-validation-fail {
                 border: 2px solid #ef4444 !important;
                 background-color: #fee2e2 !important;
+            }
+
+            .dark .tabulator-cell.tabulator-validation-fail {
+                background-color: #7f1d1d !important;
             }
 
             .tabulator-cell.tabulator-validation-fail:hover::after {
@@ -185,6 +263,14 @@
                 background-color: #fde68a !important;
             }
 
+            .dark .tabulator-row.row-changed {
+                background-color: #78350f !important;
+            }
+
+            .dark .tabulator-row.row-changed:hover {
+                background-color: #92400e !important;
+            }
+
             /* Selected row styling */
             .tabulator-row.tabulator-selected {
                 background-color: #dbeafe !important;
@@ -192,6 +278,31 @@
 
             .tabulator-row.tabulator-selected:hover {
                 background-color: #bfdbfe !important;
+            }
+
+            .dark .tabulator-row.tabulator-selected {
+                background-color: #1e3a8a !important;
+            }
+
+            .dark .tabulator-row.tabulator-selected:hover {
+                background-color: #1e40af !important;
+            }
+
+            /* Pagination styling */
+            .tabulator-footer {
+                border-top: 1px solid #e5e7eb;
+                background: #f9fafb;
+                padding: 8px;
+            }
+
+            .dark .tabulator-footer {
+                border-top-color: #374151;
+                background: #111827;
+            }
+
+            /* Loading overlay */
+            .tabulator-loader {
+                border-radius: 8px;
             }
         </style>
     @endpush
@@ -1206,7 +1317,28 @@
                         }, 2000);
                     });
 
-                    console.log('Tabulator table initialized with all features: data loading, editors, validation, tracking, bulk operations, save, and export functionality');
+                    // ========================================
+                    // PHASE 10: UI POLISH & UX
+                    // ========================================
+
+                    // 10.2.3: Keyboard Shortcuts - Ctrl+S to Save
+                    document.addEventListener('keydown', function(e) {
+                        // Ctrl+S or Cmd+S
+                        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                            e.preventDefault();
+                            console.log('Ctrl+S pressed - triggering save');
+                            saveChanges();
+                        }
+                    });
+
+                    // 10.5.1: Mobile Viewport Notice
+                    if (window.innerWidth < 768) {
+                        setTimeout(() => {
+                            alert('⚠️ Bulk editing works best on desktop.\n\nSome features may be limited on mobile devices.\n\nFor best experience, please use a desktop computer or tablet in landscape mode.');
+                        }, 500);
+                    }
+
+                    console.log('Tabulator table initialized with all features: data loading, editors, validation, tracking, bulk operations, save, export, and UI polish');
                 } // end initializeTable
             });
         </script>
