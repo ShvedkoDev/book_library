@@ -487,7 +487,18 @@
                         // Clear validation error on successful edit
                         cell.getElement().removeAttribute('data-validation-error');
 
-                        console.log('Cell edited:', {row: rowId, field: field, value: cell.getValue()});
+                        // Enhanced logging with old and new values
+                        console.log('Cell edited:', {
+                            row: rowId,
+                            field: field,
+                            oldValue: cell.getOldValue(),
+                            newValue: cell.getValue(),
+                        });
+                    });
+
+                    // Track any data changes (optional)
+                    table.on("dataChanged", function(data) {
+                        console.log("Table data changed, current row count:", data.length);
                     });
 
                     // Handle validation failures
@@ -525,7 +536,48 @@
                         document.getElementById('status-message').textContent = 'Error loading data';
                     });
 
-                    console.log('Tabulator table initialized with remote data and editors');
+                    // Get edited data function - returns array of changed book objects
+                    window.getEditedData = function() {
+                        const editedCells = table.getEditedCells();
+                        const changes = {};
+
+                        editedCells.forEach(cell => {
+                            const bookId = cell.getRow().getData().id;
+                            const field = cell.getField();
+                            const value = cell.getValue();
+
+                            if (!changes[bookId]) {
+                                changes[bookId] = {id: bookId};
+                            }
+                            changes[bookId][field] = value;
+                        });
+
+                        const result = Object.values(changes);
+                        console.log('Edited data retrieved:', result);
+                        return result;
+                    };
+
+                    // Clear edit history function
+                    window.clearEditHistory = function() {
+                        const editedCellsArray = table.getEditedCells();
+                        editedCellsArray.forEach(cell => {
+                            cell.clearEdited();
+                        });
+
+                        // Clear visual indicators
+                        table.getRows().forEach(row => {
+                            row.getElement().classList.remove('row-changed');
+                        });
+
+                        // Clear tracking set
+                        editedCells.clear();
+                        document.getElementById('edit-count').textContent = '0 changes';
+                        document.getElementById('save-count').textContent = '0';
+
+                        console.log('Edit history cleared');
+                    };
+
+                    console.log('Tabulator table initialized with remote data, editors, and edit tracking');
                 } // end initializeTable
             });
         </script>
