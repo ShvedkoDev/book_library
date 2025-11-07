@@ -32,6 +32,7 @@ class CsvImport extends Model
         'started_at',
         'completed_at',
         'duration_seconds',
+        'performance_metrics',
         'ip_address',
         'user_agent',
     ];
@@ -41,6 +42,7 @@ class CsvImport extends Model
         return [
             'options' => 'array',
             'error_summary' => 'array',
+            'performance_metrics' => 'array',
             'total_rows' => 'integer',
             'processed_rows' => 'integer',
             'successful_rows' => 'integer',

@@ -33,6 +33,12 @@ class BookCsvImportService
     protected int $currentRow = 0;
     protected ?CsvImport $importSession = null;
 
+    // Performance tracking
+    protected int $startMemory = 0;
+    protected int $peakMemory = 0;
+    protected float $startTime = 0;
+    protected int $processedCount = 0;
+
     public function __construct()
     {
         $this->config = config('csv-import');
@@ -148,6 +154,9 @@ class BookCsvImportService
      */
     public function importCsv(string $filePath, array $options = [], ?int $userId = null): CsvImport
     {
+        // Initialize performance tracking
+        $this->startPerformanceTracking();
+
         // Create import session
         $this->importSession = CsvImport::create([
             'user_id' => $userId ?? auth()->id() ?? 1,
@@ -162,6 +171,12 @@ class BookCsvImportService
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);
+
+        // Apply database optimizations if enabled
+        $optimizationsEnabled = $options['enable_db_optimizations'] ?? $this->config['performance']['enable_db_optimizations'] ?? true;
+        if ($optimizationsEnabled) {
+            $this->enableDatabaseOptimizations();
+        }
 
         try {
             // Validate first
@@ -181,8 +196,19 @@ class BookCsvImportService
             // Process the CSV file
             $this->processCsvFile($filePath, $options);
 
-            // Mark as completed
-            $this->importSession->markAsCompleted();
+            // Mark as completed with performance metrics
+            $metrics = $this->getPerformanceMetrics();
+            $this->importSession->update([
+                'status' => 'completed',
+                'completed_at' => now(),
+                'duration_seconds' => now()->diffInSeconds($this->importSession->started_at),
+                'performance_metrics' => $metrics,
+            ]);
+
+            // Disable database optimizations if enabled
+            if ($optimizationsEnabled) {
+                $this->disableDatabaseOptimizations();
+            }
 
             // Run post-import quality checks if enabled
             if ($options['run_quality_checks'] ?? true) {
@@ -190,6 +216,10 @@ class BookCsvImportService
             }
 
         } catch (Exception $e) {
+            // Disable database optimizations on error
+            if ($optimizationsEnabled) {
+                $this->disableDatabaseOptimizations();
+            }
             Log::error('CSV Import Error', [
                 'import_id' => $this->importSession->id,
                 'exception' => $e->getMessage(),
@@ -291,6 +321,9 @@ class BookCsvImportService
                     $this->importSession->incrementFailed();
                     $this->importSession->addError($rowNumber, 'general', $result['error'] ?? 'Unknown error');
                 }
+
+                // Update performance tracking
+                $this->updatePerformanceTracking();
 
                 DB::commit();
 
@@ -807,6 +840,104 @@ class BookCsvImportService
                 'exception' => $e->getMessage(),
             ]);
             // Don't fail the import if quality checks fail
+        }
+    }
+
+    /**
+     * Initialize performance tracking
+     *
+     * @return void
+     */
+    protected function startPerformanceTracking(): void
+    {
+        $this->startMemory = memory_get_usage(true);
+        $this->startTime = microtime(true);
+        $this->processedCount = 0;
+        $this->peakMemory = $this->startMemory;
+    }
+
+    /**
+     * Update performance tracking
+     *
+     * @return void
+     */
+    protected function updatePerformanceTracking(): void
+    {
+        $this->processedCount++;
+        $currentMemory = memory_get_usage(true);
+        if ($currentMemory > $this->peakMemory) {
+            $this->peakMemory = $currentMemory;
+        }
+    }
+
+    /**
+     * Get performance metrics
+     *
+     * @return array
+     */
+    protected function getPerformanceMetrics(): array
+    {
+        $endTime = microtime(true);
+        $endMemory = memory_get_usage(true);
+        $duration = $endTime - $this->startTime;
+
+        return [
+            'start_memory_mb' => round($this->startMemory / 1024 / 1024, 2),
+            'end_memory_mb' => round($endMemory / 1024 / 1024, 2),
+            'peak_memory_mb' => round($this->peakMemory / 1024 / 1024, 2),
+            'memory_used_mb' => round(($this->peakMemory - $this->startMemory) / 1024 / 1024, 2),
+            'duration_seconds' => round($duration, 2),
+            'rows_processed' => $this->processedCount,
+            'rows_per_second' => $this->processedCount > 0 && $duration > 0
+                ? round($this->processedCount / $duration, 2)
+                : 0,
+        ];
+    }
+
+    /**
+     * Enable database optimizations for bulk import
+     *
+     * @return void
+     */
+    protected function enableDatabaseOptimizations(): void
+    {
+        try {
+            // Disable foreign key checks for faster inserts
+            if ($this->config['performance']['disable_foreign_keys'] ?? true) {
+                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                Log::info('Foreign key checks disabled for import optimization');
+            }
+
+            // Disable query log to save memory
+            DB::connection()->disableQueryLog();
+
+            Log::info('Database optimizations enabled for import');
+        } catch (Exception $e) {
+            Log::warning('Failed to enable database optimizations', [
+                'exception' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Disable database optimizations (restore normal behavior)
+     *
+     * @return void
+     */
+    protected function disableDatabaseOptimizations(): void
+    {
+        try {
+            // Re-enable foreign key checks
+            if ($this->config['performance']['disable_foreign_keys'] ?? true) {
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                Log::info('Foreign key checks re-enabled after import');
+            }
+
+            Log::info('Database optimizations disabled after import');
+        } catch (Exception $e) {
+            Log::warning('Failed to disable database optimizations', [
+                'exception' => $e->getMessage(),
+            ]);
         }
     }
 }

@@ -79,6 +79,39 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Performance Optimization
+    |--------------------------------------------------------------------------
+    |
+    | Settings to optimize import performance for large files.
+    | These options can significantly speed up bulk imports.
+    |
+    */
+    'performance' => [
+        // Enable database optimizations (disable foreign keys, query log)
+        'enable_db_optimizations' => env('CSV_IMPORT_DB_OPTIMIZATIONS', true),
+
+        // Disable foreign key checks during import (re-enabled after)
+        'disable_foreign_keys' => env('CSV_IMPORT_DISABLE_FOREIGN_KEYS', true),
+
+        // Track performance metrics (memory, speed, etc.)
+        'track_performance' => env('CSV_IMPORT_TRACK_PERFORMANCE', true),
+
+        // Log slow imports (imports slower than this threshold in seconds)
+        'slow_import_threshold' => env('CSV_IMPORT_SLOW_THRESHOLD', 300), // 5 minutes
+
+        // Memory limit warning threshold (MB)
+        'memory_warning_threshold' => env('CSV_IMPORT_MEMORY_WARNING', 256),
+
+        // Performance targets for monitoring
+        'targets' => [
+            'min_rows_per_second' => 10,
+            'max_memory_mb' => 512,
+            'max_duration_minutes' => 10,
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | CSV Field Mapping
     |--------------------------------------------------------------------------
     |
