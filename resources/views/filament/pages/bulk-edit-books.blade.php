@@ -30,6 +30,42 @@
         </div>
     </div>
 
+    {{-- Validation Error Styling --}}
+    @push('styles')
+        <style>
+            /* Validation error styling */
+            .tabulator-cell.tabulator-validation-fail {
+                border: 2px solid #ef4444 !important;
+                background-color: #fee2e2 !important;
+            }
+
+            .tabulator-cell.tabulator-validation-fail:hover::after {
+                content: attr(data-validation-error);
+                position: absolute;
+                background: #ef4444;
+                color: white;
+                padding: 6px 10px;
+                border-radius: 4px;
+                font-size: 12px;
+                z-index: 1000;
+                top: 100%;
+                left: 0;
+                white-space: nowrap;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                margin-top: 2px;
+            }
+
+            /* Changed row styling */
+            .tabulator-row.row-changed {
+                background-color: #fef3c7 !important;
+            }
+
+            .tabulator-row.row-changed:hover {
+                background-color: #fde68a !important;
+            }
+        </style>
+    @endpush
+
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -95,6 +131,68 @@
                     console.error('Error loading lookup data:', error);
                     document.getElementById('status-message').textContent = 'Error loading lookup data';
                 });
+
+                // Custom Validators
+                var yearRangeValidator = function(cell, value, parameters) {
+                    const currentYear = new Date().getFullYear();
+                    const minYear = parameters.min || 1900;
+                    const maxYear = parameters.max || currentYear;
+
+                    if (!value) return true; // Allow empty if not required
+
+                    const year = parseInt(value);
+                    if (isNaN(year)) {
+                        return `Must be a valid year`;
+                    }
+                    if (year < minYear || year > maxYear) {
+                        return `Year must be between ${minYear} and ${maxYear}`;
+                    }
+                    return true;
+                };
+
+                var publisherExistsValidator = function(cell, value, parameters) {
+                    if (!value) return true; // Allow empty
+                    const exists = publishers.some(p => p.value === value);
+                    return exists ? true : "Publisher does not exist";
+                };
+
+                var collectionExistsValidator = function(cell, value, parameters) {
+                    if (!value) return true; // Allow empty
+                    const exists = collections.some(c => c.value === value);
+                    return exists ? true : "Collection does not exist";
+                };
+
+                // Batch validation function
+                function validateAllChanges(table) {
+                    const editedCells = table.getEditedCells();
+                    const errors = [];
+
+                    editedCells.forEach(cell => {
+                        const valid = cell.validate();
+                        if (valid !== true) {
+                            errors.push({
+                                row: cell.getRow().getPosition(),
+                                column: cell.getColumn().getDefinition().title,
+                                error: valid,
+                            });
+                        }
+                    });
+
+                    if (errors.length > 0) {
+                        displayValidationErrors(errors);
+                        return false;
+                    }
+                    return true;
+                }
+
+                function displayValidationErrors(errors) {
+                    let errorText = 'Validation errors:\n';
+                    errors.forEach(err => {
+                        errorText += `\n• Row ${err.row}, ${err.column}: ${err.error}`;
+                    });
+                    alert(errorText);
+                    document.getElementById('status-message').textContent = `${errors.length} validation error(s) found`;
+                }
 
                 function initializeTable() {
                     // Initialize Tabulator table with remote data
@@ -235,6 +333,7 @@
                                 allowEmpty: true,
                                 listOnEmpty: true,
                             },
+                            validator: publisherExistsValidator,
                             formatter: function(cell) {
                                 const pub = publishers.find(p => p.value === cell.getValue());
                                 return pub ? pub.label : '-';
@@ -254,6 +353,7 @@
                                 allowEmpty: true,
                                 listOnEmpty: true,
                             },
+                            validator: collectionExistsValidator,
                             formatter: function(cell) {
                                 const col = collections.find(c => c.value === cell.getValue());
                                 return col ? col.label : '-';
@@ -381,7 +481,36 @@
                         document.getElementById('edit-count').textContent = editedCells.size + ' changes';
                         document.getElementById('save-count').textContent = editedCells.size;
 
+                        // Mark row as changed
+                        cell.getRow().getElement().classList.add('row-changed');
+
+                        // Clear validation error on successful edit
+                        cell.getElement().removeAttribute('data-validation-error');
+
                         console.log('Cell edited:', {row: rowId, field: field, value: cell.getValue()});
+                    });
+
+                    // Handle validation failures
+                    table.on("validationFailed", function(cell, value, validators) {
+                        // Add error message to cell for hover tooltip
+                        const errorMsg = validators.map(v => v.error || v).join(', ');
+                        cell.getElement().setAttribute('data-validation-error', errorMsg);
+                        console.log('Validation failed:', {
+                            field: cell.getField(),
+                            value: value,
+                            errors: errorMsg
+                        });
+                    });
+
+                    // Attach validation check to save button
+                    document.getElementById('save-changes-btn').addEventListener('click', function() {
+                        console.log('Save button clicked, validating changes...');
+                        if (validateAllChanges(table)) {
+                            console.log('Validation passed! Ready to save.');
+                            document.getElementById('status-message').textContent = 'Validation passed - save functionality coming in Phase 8';
+                        } else {
+                            console.log('Validation failed, cannot save.');
+                        }
                     });
 
                     // Update status message when data loads
