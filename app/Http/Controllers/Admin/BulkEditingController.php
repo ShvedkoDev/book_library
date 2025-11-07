@@ -73,6 +73,7 @@ class BulkEditingController extends Controller
             'changes.*.title' => 'sometimes|string|max:500',
             'changes.*.subtitle' => 'sometimes|nullable|string|max:500',
             'changes.*.translated_title' => 'sometimes|nullable|string|max:500',
+            'changes.*.description' => 'sometimes|nullable|string',
             'changes.*.publication_year' => 'sometimes|nullable|integer|min:1900|max:' . date('Y'),
             'changes.*.pages' => 'sometimes|nullable|integer|min:1',
             'changes.*.publisher_id' => 'sometimes|nullable|exists:publishers,id',

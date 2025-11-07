@@ -186,6 +186,41 @@
                             }
                         },
 
+                        // Translated Title - Text input
+                        {
+                            title: "Translated Title",
+                            field: "translated_title",
+                            width: 250,
+                            headerSort: false,
+                            editor: "input",
+                            editorParams: {
+                                selectContents: true,
+                                elementAttributes: {
+                                    maxlength: "500",
+                                },
+                            },
+                            validator: "maxLength:500",
+                            formatter: function(cell) {
+                                return cell.getValue() || '-';
+                            }
+                        },
+
+                        // Description - Textarea
+                        {
+                            title: "Description",
+                            field: "description",
+                            width: 300,
+                            headerSort: false,
+                            editor: "textarea",
+                            editorParams: {
+                                elementAttributes: {
+                                    rows: "4",
+                                },
+                                verticalNavigation: "editor",
+                            },
+                            formatter: "textarea",
+                        },
+
                         // Publisher - Dropdown
                         {
                             title: "Publisher",
