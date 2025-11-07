@@ -172,6 +172,33 @@ class BookCsvImportService
             'user_agent' => request()->userAgent(),
         ]);
 
+        // Create backup before import if enabled
+        $createBackup = $options['create_backup'] ?? $this->config['backup']['create_before_import'] ?? false;
+        if ($createBackup) {
+            try {
+                $backupService = app(DatabaseBackupService::class);
+                $backupResult = $backupService->createBackupBeforeImport($this->importSession->id);
+
+                if ($backupResult['success']) {
+                    Log::info('Created backup before import', [
+                        'import_id' => $this->importSession->id,
+                        'backup_file' => $backupResult['filename'],
+                        'backup_size' => $backupResult['size_mb'] . ' MB',
+                    ]);
+                } else {
+                    Log::warning('Failed to create backup before import', [
+                        'import_id' => $this->importSession->id,
+                        'error' => $backupResult['error'],
+                    ]);
+                }
+            } catch (\Exception $e) {
+                Log::warning('Backup creation failed', [
+                    'import_id' => $this->importSession->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
         // Apply database optimizations if enabled
         $optimizationsEnabled = $options['enable_db_optimizations'] ?? $this->config['performance']['enable_db_optimizations'] ?? true;
         if ($optimizationsEnabled) {

@@ -112,6 +112,26 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Backup & Recovery
+    |--------------------------------------------------------------------------
+    |
+    | Automatic database backup before CSV imports
+    |
+    */
+
+    'backup' => [
+        // Automatically create database backup before import
+        'create_before_import' => env('CSV_IMPORT_CREATE_BACKUP', false),
+
+        // Backup retention period in days
+        'retention_days' => env('CSV_IMPORT_BACKUP_RETENTION', 30),
+
+        // Enable automatic cleanup of old backups
+        'auto_cleanup' => env('CSV_IMPORT_BACKUP_AUTO_CLEANUP', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | CSV Field Mapping
     |--------------------------------------------------------------------------
     |

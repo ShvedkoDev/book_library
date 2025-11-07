@@ -1760,25 +1760,82 @@ php artisan books:verify-quality
 
 **Status**: Comprehensive validation and sanitization implemented. Laravel framework provides built-in protection against common vulnerabilities (SQL injection, XSS, CSRF). CSV validation prevents malformed data import.
 
-### 11.3 Backup & Recovery ⚠️ DEFERRED
+### 11.3 Backup & Recovery ✅ COMPLETED
 **Priority: HIGH** | **Complexity: LOW**
 
-- [ ] Automatic database backup before import *(Deferred - deployment/ops responsibility)*
-- [ ] Keep backup for 30 days *(Deferred - deployment/ops responsibility)*
-- [ ] Document restoration process *(Deferred - deployment documentation)*
-- [ ] Test backup/restore procedure *(Deferred - deployment/ops responsibility)*
+- [x] Automatic database backup before import ✅
+- [x] Keep backup for 30 days (configurable retention) ✅
+- [x] Document restoration process ✅
+- [x] Test backup/restore procedure ✅
 
-**Status**: Backup and recovery is typically handled at the deployment/operations level rather than application level. Database transactions provide rollback capability for failed imports. For production deployment, implement database backup strategy:
-- Regular automated backups (daily/hourly)
-- Point-in-time recovery capability
-- Backup retention policy
-- Tested restore procedures
+**Status**: ✅ **COMPLETED** - Full backup and recovery system implemented
 
-**Recommendations for Deployment**:
-- Use automated database backup solution (e.g., AWS RDS automated backups, mysqldump cron jobs)
-- Implement before-import manual backup option if needed
-- Document restore procedures in deployment documentation
-- Consider export-before-import workflow as safety net
+**Implementation Details**:
+- Created `DatabaseBackupService` with full backup/restore functionality
+- Integrated automatic backup before CSV import (optional via config)
+- Created three Artisan commands:
+  - `php artisan db:backup` - Create manual or automated backups
+  - `php artisan db:restore` - Restore from backup with confirmation
+  - `php artisan db:backup-cleanup` - Remove old backups (30+ days)
+- Added backup configuration to `config/csv-import.php`
+- Backup retention: 30 days (configurable)
+- Uses `mysqldump` and `mysql` CLI tools
+- Automatic cleanup with dry-run option
+- Comprehensive logging and error handling
+
+**Configuration** (`config/csv-import.php`):
+```php
+'backup' => [
+    'create_before_import' => env('CSV_IMPORT_CREATE_BACKUP', false),
+    'retention_days' => env('CSV_IMPORT_BACKUP_RETENTION', 30),
+    'auto_cleanup' => env('CSV_IMPORT_BACKUP_AUTO_CLEANUP', true),
+],
+```
+
+**Usage Examples**:
+```bash
+# Create backup before import
+php artisan db:backup --reason=before-import
+
+# List all backups
+php artisan db:backup --list
+
+# Show statistics
+php artisan db:backup --stats
+
+# Restore from latest backup
+php artisan db:restore --latest
+
+# Restore from specific backup
+php artisan db:restore backup_2025-11-07_12-00-00.sql
+
+# Clean up old backups (30+ days)
+php artisan db:backup-cleanup
+
+# Dry run (see what would be deleted)
+php artisan db:backup-cleanup --dry-run
+
+# Custom retention period
+php artisan db:backup-cleanup --days=60
+```
+
+**Files Created**:
+- `app/Services/DatabaseBackupService.php` - Main backup service
+- `app/Console/Commands/DatabaseBackup.php` - Backup command
+- `app/Console/Commands/DatabaseRestore.php` - Restore command
+- `app/Console/Commands/DatabaseBackupCleanup.php` - Cleanup command
+
+**Integration with CSV Import**:
+Backups can be automatically created before CSV import by:
+1. Setting `CSV_IMPORT_CREATE_BACKUP=true` in `.env`, or
+2. Passing `'create_backup' => true` in import options
+
+**Production Recommendations**:
+- Enable automatic backup before large imports
+- Schedule daily cleanup: `0 3 * * * php artisan db:backup-cleanup`
+- Monitor backup storage space
+- Test restore procedure quarterly
+- Consider off-site backup replication for disaster recovery
 
 ---
 
