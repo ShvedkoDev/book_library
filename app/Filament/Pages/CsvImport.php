@@ -136,21 +136,39 @@ class CsvImport extends Page implements HasForms
             $validation = $importService->validateCsv($filePath);
 
             if (!empty($validation['errors'])) {
+                // Format errors for display
+                $errorCount = count($validation['errors']);
+                $errorList = collect($validation['errors'])
+                    ->take(10) // Show first 10 errors
+                    ->map(fn($error) => "• {$error}")
+                    ->join("\n");
+
+                $moreErrors = $errorCount > 10 ? "\n\n...and " . ($errorCount - 10) . " more errors" : "";
+
                 Notification::make()
                     ->title('Validation Failed')
-                    ->body('The CSV file has '.count($validation['errors']).' validation errors. Please fix them and try again.')
+                    ->body("Found {$errorCount} validation error(s):\n\n{$errorList}{$moreErrors}")
                     ->danger()
-                    ->duration(10000)
+                    ->persistent()
                     ->send();
                 return;
             }
 
             if (!empty($validation['warnings'])) {
+                // Format warnings for display
+                $warningCount = count($validation['warnings']);
+                $warningList = collect($validation['warnings'])
+                    ->take(5) // Show first 5 warnings
+                    ->map(fn($warning) => "• {$warning}")
+                    ->join("\n");
+
+                $moreWarnings = $warningCount > 5 ? "\n\n...and " . ($warningCount - 5) . " more warnings" : "";
+
                 Notification::make()
                     ->title('Validation Warnings')
-                    ->body('The CSV file has '.count($validation['warnings']).' warnings. You can proceed with the import.')
+                    ->body("Found {$warningCount} warning(s):\n\n{$warningList}{$moreWarnings}\n\nYou can proceed with the import.")
                     ->warning()
-                    ->duration(8000)
+                    ->persistent()
                     ->send();
             }
 
@@ -199,19 +217,50 @@ class CsvImport extends Page implements HasForms
             // Perform import
             $result = $importService->importCsv($filePath, $options, auth()->id());
 
-            // Show success notification
-            Notification::make()
-                ->title('Import Completed')
-                ->body("Imported {$result->successful_rows} books successfully. {$result->failed_rows} failed.")
-                ->success()
-                ->duration(10000)
-                ->actions([
-                    \Filament\Notifications\Actions\Action::make('view')
-                        ->label('View Details')
-                        ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
-                        ->button(),
-                ])
-                ->send();
+            // Show appropriate notification based on results
+            if ($result->failed_rows > 0) {
+                // Parse error log to show specific errors
+                $errors = [];
+                if (!empty($result->error_log)) {
+                    $errorLines = is_array($result->error_log)
+                        ? $result->error_log
+                        : json_decode($result->error_log, true) ?? [];
+
+                    $errors = collect($errorLines)
+                        ->take(10) // Show first 10 errors
+                        ->map(fn($error) => "• {$error}")
+                        ->toArray();
+                }
+
+                $errorList = !empty($errors) ? "\n\n" . implode("\n", $errors) : "";
+                $moreErrors = count($errors) < $result->failed_rows ? "\n\n...and " . ($result->failed_rows - count($errors)) . " more errors. View details for complete list." : "";
+
+                Notification::make()
+                    ->title('Import Completed with Errors')
+                    ->body("Successfully imported {$result->successful_rows} books. {$result->failed_rows} failed.{$errorList}{$moreErrors}")
+                    ->warning()
+                    ->persistent()
+                    ->actions([
+                        \Filament\Notifications\Actions\Action::make('view')
+                            ->label('View Full Details')
+                            ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
+                            ->button(),
+                    ])
+                    ->send();
+            } else {
+                Notification::make()
+                    ->title('Import Completed Successfully')
+                    ->body("Imported {$result->successful_rows} books successfully.")
+                    ->success()
+                    ->duration(10000)
+                    ->actions([
+                        \Filament\Notifications\Actions\Action::make('view')
+                            ->label('View Details')
+                            ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
+                            ->button(),
+                    ])
+                    ->send();
+            }
 
             // Reset form
             $this->form->fill();
