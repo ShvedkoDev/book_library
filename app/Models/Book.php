@@ -35,6 +35,8 @@ class Book extends Model
         'view_count',
         'download_count',
         'sort_order',
+        'duplicated_from_book_id',
+        'duplicated_at',
     ];
 
     /**
@@ -91,6 +93,8 @@ class Book extends Model
             'view_count' => 'integer',
             'download_count' => 'integer',
             'sort_order' => 'integer',
+            'duplicated_from_book_id' => 'integer',
+            'duplicated_at' => 'datetime',
         ];
     }
 
@@ -574,5 +578,158 @@ class Book extends Model
         return $this->primaryThumbnail()
             ->whereNotNull('file_path')
             ->exists();
+    }
+
+    // ===============================================================
+    // DUPLICATION METHODS
+    // ===============================================================
+
+    /**
+     * Relationship: Book this was duplicated from
+     */
+    public function duplicatedFrom()
+    {
+        return $this->belongsTo(Book::class, 'duplicated_from_book_id');
+    }
+
+    /**
+     * Relationship: Books that were duplicated from this book
+     */
+    public function duplicates()
+    {
+        return $this->hasMany(Book::class, 'duplicated_from_book_id');
+    }
+
+    /**
+     * Check if this book is a duplicate
+     *
+     * @return bool
+     */
+    public function isDuplicate(): bool
+    {
+        return !is_null($this->duplicated_from_book_id);
+    }
+
+    /**
+     * Check if this book has been duplicated
+     *
+     * @return bool
+     */
+    public function hasBeenDuplicated(): bool
+    {
+        return $this->duplicates()->exists();
+    }
+
+    /**
+     * Get the number of times this book has been duplicated
+     *
+     * @return int
+     */
+    public function getDuplicateCount(): int
+    {
+        return $this->duplicates()->count();
+    }
+
+    /**
+     * Duplicate this book with all relationships
+     *
+     * This is a convenience method that uses the BookDuplicationService
+     * for the actual duplication logic.
+     *
+     * @param array $options Duplication options (see BookDuplicationService)
+     * @return Book The newly created duplicate
+     * @throws \Exception If duplication fails
+     *
+     * @example
+     * // Basic duplication
+     * $duplicate = $book->duplicate();
+     *
+     * @example
+     * // Custom duplication
+     * $duplicate = $book->duplicate([
+     *     'copy_files' => true,
+     *     'clear_title' => false,
+     *     'append_copy_suffix' => true,
+     * ]);
+     */
+    public function duplicate(array $options = []): Book
+    {
+        $duplicationService = app(\App\Services\BookDuplicationService::class);
+        return $duplicationService->duplicate($this, $options);
+    }
+
+    /**
+     * Get duplication statistics for this book
+     *
+     * @return array Statistics including duplicate count, source info, etc.
+     */
+    public function getDuplicationStats(): array
+    {
+        $duplicationService = app(\App\Services\BookDuplicationService::class);
+        return $duplicationService->getDuplicationStats($this);
+    }
+
+    /**
+     * Get the original source book (traverses duplication chain)
+     *
+     * @return Book|null The original source book, or null if not a duplicate
+     */
+    public function getOriginalSource(): ?Book
+    {
+        $duplicationService = app(\App\Services\BookDuplicationService::class);
+        return $duplicationService->getOriginalSource($this);
+    }
+
+    /**
+     * Validate that this book can be safely duplicated
+     *
+     * @return array ['valid' => bool, 'errors' => array]
+     */
+    public function canBeDuplicated(): array
+    {
+        $duplicationService = app(\App\Services\BookDuplicationService::class);
+        return $duplicationService->validateForDuplication($this);
+    }
+
+    /**
+     * Scope: Get only books that are duplicates
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeDuplicates($query)
+    {
+        return $query->whereNotNull('duplicated_from_book_id');
+    }
+
+    /**
+     * Scope: Get only original books (not duplicates)
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOriginals($query)
+    {
+        return $query->whereNull('duplicated_from_book_id');
+    }
+
+    /**
+     * Scope: Get books duplicated within a date range
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $startDate
+     * @param string|null $endDate
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeDuplicatedBetween($query, $startDate, $endDate = null)
+    {
+        $query->whereNotNull('duplicated_at')
+            ->where('duplicated_at', '>=', $startDate);
+
+        if ($endDate) {
+            $query->where('duplicated_at', '<=', $endDate);
+        }
+
+        return $query;
     }
 }
