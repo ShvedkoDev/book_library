@@ -1644,13 +1644,74 @@ The import system is now optimized for large-scale bulk imports with comprehensi
   - [x] Related books ✅
   - [x] Various file types ✅
 - [x] Example CSV stored in `/storage/csv-templates/book-import-example.csv` ✅
+- [x] Create large-scale test data generator (3000+ entries) ✅
 
 **Deliverables**:
 - ✅ `/storage/csv-templates/book-import-template.csv` - Blank template
 - ✅ `/storage/csv-templates/book-import-example.csv` - 3 comprehensive examples
+- ✅ `/app/Console/Commands/GenerateTestCsvData.php` - Test data generator command
 - ✅ Real production CSV with 1000+ books used for testing
 
-**Status**: Example templates include all features and edge cases. Production data has been used for extensive testing.
+**Test Data Generator** (`php artisan csv:generate-test-data`):
+
+Command creates realistic test CSV with 3000+ book entries for comprehensive testing.
+
+```bash
+# Generate 3000 test book entries (default)
+php artisan csv:generate-test-data
+
+# Custom count and output path
+php artisan csv:generate-test-data --count=5000
+php artisan csv:generate-test-data --output=/custom/path/test.csv
+```
+
+**Generated Data Features**:
+- **Realistic Distribution**:
+  - 70% full access, 20% limited, 10% unavailable
+  - 40% multiple authors, 50% have illustrators
+  - 30% have library references, 20% have relationships
+  - 10 languages, 16 locations, 10 publishers in rotation
+
+- **Edge Cases for Testing**:
+  - Special characters & quoted titles (every 50th)
+  - Very long descriptions (every 200th)
+  - Duplicate IDs (every 500th/501st pair)
+  - Missing optional fields (randomized)
+  - Volume numbers and series
+
+- **Complete Field Coverage**:
+  - All 65+ CSV fields populated
+  - 9 relationship types (languages, creators, classifications, etc.)
+  - Pipe-separated multi-value fields
+  - Geographic locations and keywords
+  - File references and library data
+  - Publication years 1990-2024
+
+- **Output Specifications**:
+  - UTF-8 with BOM for Excel compatibility
+  - Two-row headers (readable + database mapping)
+  - ~3-5 MB file size for 3000 records
+  - Ready for immediate import testing
+
+**Testing Workflow**:
+```bash
+# 1. Generate test data
+php artisan csv:generate-test-data
+
+# 2. Validate generated data
+php artisan books:import-csv storage/csv-templates/test-data-3000.csv --validate-only
+
+# 3. Preview changes
+php artisan books:import-csv storage/csv-templates/test-data-3000.csv --preview
+
+# 4. Import test data
+php artisan books:import-csv storage/csv-templates/test-data-3000.csv
+
+# 5. Run quality checks
+php artisan books:verify-quality
+```
+
+**Status**: Complete test data generation system for stress testing, performance validation, and system verification with realistic, varied data sets.
 
 ### 10.4 Manual Testing Checklist ✅ COMPLETED
 **Priority: MEDIUM** | **Complexity: LOW**
