@@ -27,12 +27,14 @@
                     <option value="unavailable">Unavailable</option>
                 </select>
             </div>
-            <div class="flex gap-2 items-end">
-                <button id="apply-filters-btn" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition text-sm">
-                    🔍 Filter
+            <div class="flex gap-3 items-end">
+                <button id="apply-filters-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-custom fi-btn-color-primary fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-custom-600 text-white hover:bg-custom-500 focus-visible:ring-custom-500/50 dark:bg-custom-500 dark:hover:bg-custom-400 dark:focus-visible:ring-custom-400/50 fi-ac-action fi-ac-btn-action" style="--c-400:var(--primary-400);--c-500:var(--primary-500);--c-600:var(--primary-600);">
+                    <x-filament::icon icon="heroicon-o-funnel" class="fi-btn-icon h-5 w-5" />
+                    <span class="fi-btn-label">Apply Filters</span>
                 </button>
-                <button id="clear-filters-btn" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition text-sm">
-                    ✕ Clear
+                <button id="clear-filters-btn" type="button" class="fi-btn relative grid-flow-col items-center justify-center font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-gray fi-btn-color-gray fi-size-md fi-btn-size-md gap-1.5 px-3 py-2 text-sm inline-grid shadow-sm bg-white text-gray-950 hover:bg-gray-50 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 ring-1 ring-gray-950/10 dark:ring-white/20 fi-ac-btn-action">
+                    <x-filament::icon icon="heroicon-o-x-mark" class="fi-btn-icon h-5 w-5" />
+                    <span class="fi-btn-label">Clear Filters</span>
                 </button>
             </div>
         </div>
@@ -442,6 +444,9 @@
                     document.getElementById('status-message').textContent = 'Error loading lookup data';
                 });
 
+                // Store current filters globally
+                let currentFilters = {};
+
                 // Populate filter dropdowns
                 function populateFilterDropdowns() {
                     // Populate publisher dropdown
@@ -556,11 +561,21 @@
                         credentials: "same-origin",
                     },
 
-                    // Map pagination parameters to Laravel format
+                    // Map pagination parameters to Laravel format and preserve filters
                     ajaxURLGenerator: function(url, config, params) {
-                        url += "?page=" + params.page;
-                        url += "&size=" + params.size;
-                        return url;
+                        // Start with base URL
+                        const baseUrl = url.split('?')[0]; // Remove any existing query params
+
+                        // Build params object with pagination
+                        const allParams = {
+                            page: params.page,
+                            size: params.size,
+                            ...currentFilters // Include current filters
+                        };
+
+                        // Build query string
+                        const queryString = new URLSearchParams(allParams).toString();
+                        return `${baseUrl}?${queryString}`;
                     },
 
                     // Handle response from server
@@ -1560,11 +1575,11 @@
 
                         console.log('Applying filters:', filters);
 
-                        // Update Ajax URL with filters
-                        const queryString = new URLSearchParams(filters).toString();
-                        const url = queryString ? `/api/admin/bulk-editing/books?${queryString}` : '/api/admin/bulk-editing/books';
+                        // Update current filters globally
+                        currentFilters = filters;
 
-                        table.setData(url);
+                        // Reload data - the ajaxURLGenerator will include the filters
+                        table.setData();
 
                         document.getElementById('status-message').textContent = 'Filters applied';
                         setTimeout(() => {
@@ -1581,7 +1596,11 @@
 
                         console.log('Clearing filters');
 
-                        table.setData('/api/admin/bulk-editing/books');
+                        // Reset current filters
+                        currentFilters = {};
+
+                        // Reload data without filters
+                        table.setData();
 
                         document.getElementById('status-message').textContent = 'Filters cleared';
                         setTimeout(() => {
