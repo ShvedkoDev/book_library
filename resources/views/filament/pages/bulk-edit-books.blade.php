@@ -1,5 +1,42 @@
 <x-filament-panels::page>
     <div class="space-y-4">
+        {{-- Filters --}}
+        <div class="flex items-center gap-3 flex-wrap p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div class="flex-1 min-w-[200px]">
+                <label for="filter-title" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Search Title</label>
+                <input type="text" id="filter-title" placeholder="Search by title..." class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
+            </div>
+            <div class="flex-1 min-w-[150px]">
+                <label for="filter-publisher" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Publisher</label>
+                <select id="filter-publisher" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                    <option value="">All Publishers</option>
+                </select>
+            </div>
+            <div class="flex-1 min-w-[150px]">
+                <label for="filter-collection" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Collection</label>
+                <select id="filter-collection" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                    <option value="">All Collections</option>
+                </select>
+            </div>
+            <div class="flex-1 min-w-[150px]">
+                <label for="filter-access-level" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Access Level</label>
+                <select id="filter-access-level" class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                    <option value="">All Levels</option>
+                    <option value="full">Full Access</option>
+                    <option value="limited">Limited Access</option>
+                    <option value="unavailable">Unavailable</option>
+                </select>
+            </div>
+            <div class="flex gap-2 items-end">
+                <button id="apply-filters-btn" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition text-sm">
+                    🔍 Filter
+                </button>
+                <button id="clear-filters-btn" type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition text-sm">
+                    ✕ Clear
+                </button>
+            </div>
+        </div>
+
         {{-- Toolbar --}}
         <div class="flex items-center justify-between gap-4 flex-wrap">
             <div class="flex gap-4 flex-wrap items-center">
@@ -367,11 +404,38 @@
                         languages: languages.length,
                         creators: creators.length,
                     });
+
+                    // Populate filter dropdowns
+                    populateFilterDropdowns();
+
                     initializeTable();
                 }).catch(error => {
                     console.error('Error loading lookup data:', error);
                     document.getElementById('status-message').textContent = 'Error loading lookup data';
                 });
+
+                // Populate filter dropdowns
+                function populateFilterDropdowns() {
+                    // Populate publisher dropdown
+                    const publisherSelect = document.getElementById('filter-publisher');
+                    publishers.forEach(pub => {
+                        const option = document.createElement('option');
+                        option.value = pub.value;
+                        option.textContent = pub.label;
+                        publisherSelect.appendChild(option);
+                    });
+
+                    // Populate collection dropdown
+                    const collectionSelect = document.getElementById('filter-collection');
+                    collections.forEach(col => {
+                        const option = document.createElement('option');
+                        option.value = col.value;
+                        option.textContent = col.label;
+                        collectionSelect.appendChild(option);
+                    });
+
+                    console.log('Filter dropdowns populated');
+                }
 
                 // Custom Validators
                 var yearRangeValidator = function(cell, value, parameters) {
@@ -1338,7 +1402,58 @@
                         }, 500);
                     }
 
-                    console.log('Tabulator table initialized with all features: data loading, editors, validation, tracking, bulk operations, save, export, and UI polish');
+                    // ========================================
+                    // PHASE 10.3: FILTERS & SEARCH
+                    // ========================================
+
+                    // 10.3.2: Apply filters
+                    document.getElementById('apply-filters-btn').addEventListener('click', function() {
+                        const filters = {
+                            title: document.getElementById('filter-title').value,
+                            publisher_id: document.getElementById('filter-publisher').value,
+                            collection_id: document.getElementById('filter-collection').value,
+                            access_level: document.getElementById('filter-access-level').value,
+                        };
+
+                        // Remove empty filters
+                        Object.keys(filters).forEach(key => {
+                            if (!filters[key]) {
+                                delete filters[key];
+                            }
+                        });
+
+                        console.log('Applying filters:', filters);
+
+                        // Update Ajax URL with filters
+                        const queryString = new URLSearchParams(filters).toString();
+                        const url = queryString ? `/api/admin/bulk-editing/books?${queryString}` : '/api/admin/bulk-editing/books';
+
+                        table.setData(url);
+
+                        document.getElementById('status-message').textContent = 'Filters applied';
+                        setTimeout(() => {
+                            document.getElementById('status-message').textContent = '';
+                        }, 2000);
+                    });
+
+                    // 10.3.2: Clear filters
+                    document.getElementById('clear-filters-btn').addEventListener('click', function() {
+                        document.getElementById('filter-title').value = '';
+                        document.getElementById('filter-publisher').value = '';
+                        document.getElementById('filter-collection').value = '';
+                        document.getElementById('filter-access-level').value = '';
+
+                        console.log('Clearing filters');
+
+                        table.setData('/api/admin/bulk-editing/books');
+
+                        document.getElementById('status-message').textContent = 'Filters cleared';
+                        setTimeout(() => {
+                            document.getElementById('status-message').textContent = '';
+                        }, 2000);
+                    });
+
+                    console.log('Tabulator table initialized with all features: data loading, editors, validation, tracking, bulk operations, save, export, filters, and UI polish');
                 } // end initializeTable
             });
         </script>
