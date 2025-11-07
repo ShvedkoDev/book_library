@@ -518,5 +518,112 @@ class BookCsvImportService
         return null;
     }
 
-    // Continued in next part...
+    /**
+     * Set import session (for queue jobs)
+     *
+     * @param CsvImport $importSession
+     * @return void
+     */
+    public function setImportSession(CsvImport $importSession): void
+    {
+        $this->importSession = $importSession;
+    }
+
+    /**
+     * Dispatch import to queue
+     *
+     * @param string $filePath
+     * @param array $options
+     * @param int|null $userId
+     * @return CsvImport
+     */
+    public function importCsvAsync(string $filePath, array $options = [], ?int $userId = null): CsvImport
+    {
+        // Create import session
+        $importSession = CsvImport::create([
+            'user_id' => $userId ?? auth()->id() ?? 1,
+            'filename' => basename($filePath),
+            'original_filename' => $options['original_filename'] ?? basename($filePath),
+            'file_path' => $filePath,
+            'file_size' => filesize($filePath),
+            'mode' => $options['mode'] ?? $this->config['default_mode'],
+            'options' => array_merge($this->config['options'], $options),
+            'status' => 'pending',
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
+
+        // Dispatch to queue
+        \App\Jobs\ImportBooksFromCsvJob::dispatch($importSession, $filePath, $options);
+
+        return $importSession;
+    }
+
+    /**
+     * Get import session progress
+     *
+     * @param int $importId
+     * @return array
+     */
+    public function getImportProgress(int $importId): array
+    {
+        $import = CsvImport::find($importId);
+
+        if (!$import) {
+            return [
+                'found' => false,
+                'message' => 'Import session not found',
+            ];
+        }
+
+        return [
+            'found' => true,
+            'import_id' => $import->id,
+            'status' => $import->status,
+            'progress' => [
+                'total' => $import->total_rows,
+                'processed' => $import->processed_rows,
+                'successful' => $import->successful_rows,
+                'failed' => $import->failed_rows,
+                'skipped' => $import->skipped_rows,
+                'created' => $import->created_count,
+                'updated' => $import->updated_count,
+            ],
+            'percentage' => $import->total_rows > 0
+                ? round(($import->processed_rows / $import->total_rows) * 100, 2)
+                : 0,
+            'success_rate' => $import->getSuccessRate(),
+            'timing' => [
+                'started_at' => $import->started_at?->toISOString(),
+                'completed_at' => $import->completed_at?->toISOString(),
+                'duration_seconds' => $import->duration_seconds,
+            ],
+            'is_complete' => $import->isComplete(),
+            'is_failed' => $import->isFailed(),
+            'is_processing' => $import->isProcessing(),
+        ];
+    }
+
+    /**
+     * Cancel an in-progress import
+     *
+     * @param int $importId
+     * @return bool
+     */
+    public function cancelImport(int $importId): bool
+    {
+        $import = CsvImport::find($importId);
+
+        if (!$import || !$import->isProcessing()) {
+            return false;
+        }
+
+        $import->update([
+            'status' => 'cancelled',
+            'completed_at' => now(),
+            'duration_seconds' => $import->started_at ? now()->diffInSeconds($import->started_at) : null,
+        ]);
+
+        return true;
+    }
 }
