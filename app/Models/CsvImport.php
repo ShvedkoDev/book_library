@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -173,13 +174,29 @@ class CsvImport extends Model
         $this->update(['error_log' => json_encode($errors)]);
     }
 
+    /**
+     * Get the success rate as a percentage
+     */
+    protected function successRate(): Attribute
+    {
+        return Attribute::make(
+            get: function (): float {
+                if ($this->total_rows === 0) {
+                    return 0;
+                }
+
+                return round(($this->successful_rows / $this->total_rows) * 100, 2);
+            }
+        );
+    }
+
+    /**
+     * Legacy method for backward compatibility
+     * @deprecated Use $model->success_rate instead
+     */
     public function getSuccessRate(): float
     {
-        if ($this->total_rows === 0) {
-            return 0;
-        }
-
-        return round(($this->successful_rows / $this->total_rows) * 100, 2);
+        return $this->success_rate;
     }
 
     public function isComplete(): bool
