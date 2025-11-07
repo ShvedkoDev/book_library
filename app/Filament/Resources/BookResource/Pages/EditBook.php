@@ -41,8 +41,8 @@ class EditBook extends EditRecord
 
                         // Perform duplication
                         $duplicate = $this->record->duplicate([
-                            'clear_title' => true,
-                            'append_copy_suffix' => false,
+                            'clear_title' => false,
+                            'append_copy_suffix' => true, // Add " (Copy)" to title
                         ]);
 
                         // Success notification with redirect option
