@@ -315,16 +315,6 @@
             <!-- Pagination -->
             @if($books->hasPages())
                 <div class="pagination-container">
-                    <div class="entries-info">
-                        <label for="per-page-select">Show&nbsp;</label>
-                        <select id="per-page-select" onchange="changePerPage(this.value)">
-                            <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                            <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
-                            <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                            <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
-                        </select>
-                        <span>&nbsp;entries</span>
-                    </div>
                     <div class="pagination-controls">
                         @if($books->onFirstPage())
                             <button class="pagination-btn nav-arrow" disabled>←</button>
@@ -332,13 +322,45 @@
                             <a href="{{ $books->previousPageUrl() }}" class="pagination-btn nav-arrow">←</a>
                         @endif
 
-                        @foreach($books->getUrlRange(1, $books->lastPage()) as $page => $url)
-                            @if($page == $books->currentPage())
+                        @php
+                            $currentPage = $books->currentPage();
+                            $lastPage = $books->lastPage();
+                            $onEachSide = 3; // Show 3 pages on each side of current page
+
+                            // Calculate the start and end of the range
+                            $start = max(1, $currentPage - $onEachSide);
+                            $end = min($lastPage, $currentPage + $onEachSide);
+
+                            // Adjust if we're near the beginning or end
+                            if ($currentPage <= $onEachSide) {
+                                $end = min($lastPage, $onEachSide * 2 + 1);
+                            }
+                            if ($currentPage >= $lastPage - $onEachSide) {
+                                $start = max(1, $lastPage - ($onEachSide * 2));
+                            }
+                        @endphp
+
+                        @if($start > 1)
+                            <a href="{{ $books->url(1) }}" class="pagination-btn">1</a>
+                            @if($start > 2)
+                                <span class="pagination-ellipsis">...</span>
+                            @endif
+                        @endif
+
+                        @for($page = $start; $page <= $end; $page++)
+                            @if($page == $currentPage)
                                 <button class="pagination-btn active">{{ $page }}</button>
                             @else
-                                <a href="{{ $url }}" class="pagination-btn">{{ $page }}</a>
+                                <a href="{{ $books->url($page) }}" class="pagination-btn">{{ $page }}</a>
                             @endif
-                        @endforeach
+                        @endfor
+
+                        @if($end < $lastPage)
+                            @if($end < $lastPage - 1)
+                                <span class="pagination-ellipsis">...</span>
+                            @endif
+                            <a href="{{ $books->url($lastPage) }}" class="pagination-btn">{{ $lastPage }}</a>
+                        @endif
 
                         @if($books->hasMorePages())
                             <a href="{{ $books->nextPageUrl() }}" class="pagination-btn nav-arrow">→</a>

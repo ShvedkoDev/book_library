@@ -5,6 +5,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\BookNoteController;
+use App\Http\Controllers\BookReviewController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Api\ShareTrackingController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/library/book/{book}/request-access', [LibraryController::class, 'requestAccess'])->name('library.request-access');
     Route::post('/library/book/{book}/rate', [LibraryController::class, 'submitRating'])->name('library.rate');
     Route::post('/library/book/{book}/review', [LibraryController::class, 'submitReview'])->name('library.review');
+    Route::put('/library/reviews/{review}', [BookReviewController::class, 'update'])->name('library.reviews.update');
+    Route::delete('/library/reviews/{review}', [BookReviewController::class, 'destroy'])->name('library.reviews.destroy');
 
     // Bookmark routes
     Route::post('/library/book/{book}/bookmark', [BookmarkController::class, 'toggle'])->name('library.bookmark');

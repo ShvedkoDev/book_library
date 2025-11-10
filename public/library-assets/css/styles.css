@@ -3057,6 +3057,53 @@ a:where(:not(.wp-element-button)) {
     background: #155a8a;
 }
 
+/* Pagination container */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Pagination ellipsis */
+.pagination-ellipsis {
+    min-width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 16px;
+    line-height: 32px;
+}
+
+/* Override WordPress link styles for pagination arrows */
+.pagination-btn.nav-arrow,
+.main a.pagination-btn.nav-arrow {
+    color: white !important;
+    background: #1e73be !important;
+}
+
+.pagination-btn.nav-arrow:hover,
+.main a.pagination-btn.nav-arrow:hover {
+    color: white !important;
+    background: #155a8a !important;
+}
+
+.pagination-btn.nav-arrow:disabled {
+    color: white !important;
+    background: #1e73be !important;
+    opacity: 0.3;
+}
+
 /* Fix container width issues */
 .library-layout .container.with_sidebar {
     display: flex;
