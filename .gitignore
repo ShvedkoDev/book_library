@@ -110,13 +110,6 @@ dist
 
 # Gatsby files
 .cache/
-public
-!public/library-assets/
-!public/build/
-!public/index.php
-!public/.htaccess
-!public/robots.txt
-!public/favicon.ico
 
 # Storybook build outputs
 .out
@@ -232,9 +225,6 @@ storage/logs/*
 !storage/logs/.gitkeep
 
 # Laravel Mix
-/public/css
-/public/js
-/public/mix-manifest.json
 
 # Laravel Sail
 docker-compose.override.yml
@@ -243,7 +233,7 @@ docker-compose.override.yml
 storage/livewire-tmp/
 
 # FilamentPHP
-public/filament/
+
 
 # Database
 *.sqlite
@@ -369,8 +359,6 @@ clover.xml
 *.prof
 
 # Ignore compiled assets
-public/css/app.css
-public/js/app.js
 
 # Custom project ignores
 /public/storage
