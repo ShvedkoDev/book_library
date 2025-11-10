@@ -113,6 +113,10 @@ dist
 public
 !public/library-assets/
 !public/build/
+!public/index.php
+!public/.htaccess
+!public/robots.txt
+!public/favicon.ico
 
 # Storybook build outputs
 .out
@@ -274,8 +278,10 @@ _ide_helper_models.php
 /public/uploads/*
 !/public/uploads/.gitkeep
 
-# Ignore build artifacts
-/public/build/
+# NOTE: Built assets (public/build) are committed to git for simple deployment
+# This allows copying from app_root to public_html on server without scp/rsync
+# If you prefer local builds without committing, uncomment the line below:
+# /public/build/
 
 # Ignore generated documentation
 /docs/build/

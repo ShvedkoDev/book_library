@@ -23,41 +23,65 @@ This application consists of two main modules:
 - **[PRODUCTION_DEPLOYMENT.md](./PRODUCTION_DEPLOYMENT.md)** - Detailed deployment instructions
 
 ### For Updates
-- **[UPDATE_GUIDE_HOSTINGER.md](./UPDATE_GUIDE_HOSTINGER.md)** - ⭐ **For your Hostinger setup** (app_root + public_html)
-- **[QUICK_UPDATE_HOSTINGER.md](./QUICK_UPDATE_HOSTINGER.md)** - ⚡ Quick reference for your setup (bookmark!)
-- **[update-server.sh](./update-server.sh)** - Server-side update script (run on production)
-- **[deploy-assets.sh](./deploy-assets.sh)** - Local asset deployment script (run locally)
-- **[UPDATE_GUIDE.md](./UPDATE_GUIDE.md)** - Generic update guide (if you have npm on server)
+
+**🌟 Recommended: Simple Git-Only Method**
+- **[SIMPLE_UPDATE.md](./SIMPLE_UPDATE.md)** - ⚡ **Easiest method** - No scp/rsync! (Start here)
+- **[build-and-commit.sh](./build-and-commit.sh)** - Build and commit assets locally
+- **[update-simple.sh](./update-simple.sh)** - Update server (pulls from git, copies files)
+
+**Advanced: Direct Upload Methods**
+- **[UPDATE_GUIDE_HOSTINGER.md](./UPDATE_GUIDE_HOSTINGER.md)** - Upload via rsync/scp (app_root + public_html)
+- **[QUICK_UPDATE_HOSTINGER.md](./QUICK_UPDATE_HOSTINGER.md)** - Quick reference with uploads
+- **[update-server.sh](./update-server.sh)** - Server update (waits for upload)
+- **[deploy-assets.sh](./deploy-assets.sh)** - Local deployment (rsync/scp)
+
+**Generic Guides**
+- **[UPDATE_GUIDE.md](./UPDATE_GUIDE.md)** - For servers with npm installed
 - **[QUICK_UPDATE.md](./QUICK_UPDATE.md)** - Generic quick reference
 
 ## 🔄 Updating Production (Your Hostinger Setup)
 
-### Quick Update (10 minutes)
+### 🌟 Recommended: Simple Git-Only Update (5 minutes)
 
-Your setup has two directories:
-- `app_root` - Laravel code (git updates here)
-- `public_html` - Web root (assets uploaded here)
+**No scp/rsync needed - Everything via git!**
 
-**Two-Part Update Process:**
+**Step 1: Build and Commit Locally**
+```bash
+cd /home/gena/book_library
+./build-and-commit.sh
+```
 
-**Part 1: On Server (updates code)**
+**Step 2: Update Server**
+```bash
+ssh your-username@micronesian.school
+cd ~/app_root
+./update-simple.sh
+```
+
+**Done!** The script pulls from git and copies assets to public_html.
+
+**See:** [SIMPLE_UPDATE.md](./SIMPLE_UPDATE.md) for complete guide
+
+---
+
+### Alternative: Upload Assets Directly (rsync/scp)
+
+If you prefer not to commit built assets to git:
+
+**Part 1: Update Server (waits for upload)**
 ```bash
 ssh your-username@micronesian.school
 cd ~/app_root
 ./update-server.sh
-# Wait at prompt for asset upload...
 ```
 
-**Part 2: On Local Machine (builds and uploads assets)**
+**Part 2: Build and Upload from Local**
 ```bash
 cd /home/gena/book_library
 ./deploy-assets.sh
-# Press ENTER in server terminal when done
 ```
 
-**For detailed instructions:** See [UPDATE_GUIDE_HOSTINGER.md](./UPDATE_GUIDE_HOSTINGER.md)
-
-**For quick reference:** See [QUICK_UPDATE_HOSTINGER.md](./QUICK_UPDATE_HOSTINGER.md)
+**See:** [UPDATE_GUIDE_HOSTINGER.md](./UPDATE_GUIDE_HOSTINGER.md) for this method
 
 ## 🛠️ Technical Stack
 
