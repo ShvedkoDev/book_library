@@ -1,0 +1,52 @@
+/* Font Awesome Light Icons - Placeholder CSS */
+/* In production, replace with actual Font Awesome Light CSS */
+
+.fal {
+  font-family: "Font Awesome 5 Pro";
+  font-weight: 300;
+  font-style: normal;
+  display: inline-block;
+  line-height: 1;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Common icon mappings - placeholder Unicode values */
+.fa-chevron-down::before { content: "▼"; }
+.fa-shield-alt::before { content: "🛡"; }
+.fa-arrow-left::before { content: "←"; }
+.fa-user::before { content: "👤"; }
+.fa-home::before { content: "🏠"; }
+.fa-book::before { content: "📖"; }
+.fa-users::before { content: "👥"; }
+.fa-cog::before { content: "⚙"; }
+.fa-star::before { content: "★"; }
+.fa-download::before { content: "⬇"; }
+.fa-comment::before { content: "💬"; }
+.fa-tag::before { content: "🏷"; }
+.fa-language::before { content: "🌐"; }
+
+/* Accessibility */
+[aria-hidden="true"] {
+  display: inline-block !important;
+}
+
+/* Icon sizing */
+.fal {
+  font-size: inherit;
+}
+
+.fal.fa-lg {
+  font-size: 1.33333em;
+  line-height: 0.75em;
+  vertical-align: -0.0667em;
+}
+
+.fal.fa-sm {
+  font-size: 0.875em;
+}
+
+.fal.fa-xs {
+  font-size: 0.75em;
+}
