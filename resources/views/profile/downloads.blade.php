@@ -169,16 +169,17 @@
 @section('content')
 <div class="container">
     <div class="activity-header">
-        <div class="breadcrumb">
-            <a href="{{ route('profile.activity') }}"><i class="fal fa-chart-line"></i> My Activity</a> / Downloads
-        </div>
         <h1>
             <i class="fas fa-download" style="color: #28a745;"></i> My Downloads
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Your complete download history</p>
     </div>
 
-    @if($downloads->count() > 0)
+    <div class="profile-container">
+        @include('profile.partials.profile-nav')
+
+        <div class="profile-main">
+            @if($downloads->count() > 0)
         <div class="downloads-list">
             @foreach($downloads as $download)
                 <div class="download-item">
@@ -232,6 +233,8 @@
             <p>Your download history will appear here.</p>
             <a href="{{ route('library.index') }}" class="btn">Browse Library</a>
         </div>
-    @endif
+            @endif
+        </div>
+    </div>
 </div>
 @endsection

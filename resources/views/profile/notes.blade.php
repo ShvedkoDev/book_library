@@ -178,17 +178,18 @@
 @section('content')
 <div class="container">
     <div class="activity-header">
-        <div class="breadcrumb">
-            <a href="{{ route('profile.activity') }}"><i class="fal fa-chart-line"></i> My Activity</a> / Notes
-        </div>
         <h1>
             <i class="fas fa-sticky-note" style="color: #fd7e14;"></i> My Notes
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Your personal notes and annotations</p>
     </div>
 
-    @if($notes->count() > 0)
-        <div class="notes-list">
+    <div class="profile-container">
+        @include('profile.partials.profile-nav')
+
+        <div class="profile-main">
+            @if($notes->count() > 0)
+                <div class="notes-list">
             @foreach($notes as $note)
                 <div class="note-card">
                     <div class="note-header">
@@ -216,7 +217,7 @@
                     </div>
 
                     <div class="note-text-box">
-                        {{ $note->note_text }}
+                        {{ $note->note }}
                     </div>
 
                     <div class="note-meta">
@@ -229,20 +230,22 @@
                     </div>
                 </div>
             @endforeach
-        </div>
+                </div>
 
-        @if($notes->hasPages())
-            <div class="pagination-wrapper">
-                {{ $notes->links() }}
-            </div>
-        @endif
-    @else
-        <div class="empty-state">
-            <i class="fal fa-sticky-note"></i>
-            <h2>No notes yet</h2>
-            <p>Create notes while reading to remember important details.</p>
-            <a href="{{ route('library.index') }}" class="btn">Browse Library</a>
+                @if($notes->hasPages())
+                    <div class="pagination-wrapper">
+                        {{ $notes->links() }}
+                    </div>
+                @endif
+            @else
+                <div class="empty-state">
+                    <i class="fal fa-sticky-note"></i>
+                    <h2>No notes yet</h2>
+                    <p>Create notes while reading to remember important details.</p>
+                    <a href="{{ route('library.index') }}" class="btn">Browse Library</a>
+                </div>
+            @endif
         </div>
-    @endif
+    </div>
 </div>
 @endsection

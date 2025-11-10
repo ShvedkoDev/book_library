@@ -313,16 +313,17 @@
 @section('content')
 <div class="container">
     <div class="activity-header">
-        <div class="breadcrumb">
-            <a href="{{ route('profile.activity') }}"><i class="fal fa-chart-line"></i> My Activity</a> / Timeline
-        </div>
         <h1>
             <i class="fas fa-clock" style="color: #6366f1;"></i> Activity Timeline
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Your complete activity history</p>
     </div>
 
-    <div class="timeline-container">
+    <div class="profile-container">
+        @include('profile.partials.profile-nav')
+
+        <div class="profile-main">
+            <div class="timeline-container">
         @if($paginatedItems->count() > 0)
             <ul class="timeline-list">
                 @foreach($paginatedItems as $index => $activity)
@@ -449,7 +450,9 @@
                 <p>Your activity timeline will appear here as you interact with books.</p>
                 <a href="{{ route('library.index') }}" class="btn">Browse Library</a>
             </div>
-        @endif
+            @endif
+            </div>
+        </div>
     </div>
 </div>
 @endsection

@@ -175,7 +175,11 @@
         <p>Track your interactions and engagement with the library</p>
     </div>
 
-    <div class="stats-grid">
+    <div class="profile-container">
+        @include('profile.partials.profile-nav')
+
+        <div class="profile-main">
+            <div class="stats-grid">
         <!-- Ratings Card -->
         <a href="{{ route('profile.ratings') }}" class="stat-card">
             <div class="stat-card-content">
@@ -269,6 +273,8 @@
             <li><i class="fal fa-heart"></i> <strong>{{ $stats['bookmarks_count'] }}</strong> books bookmarked</li>
             <li><i class="fal fa-sticky-note"></i> <strong>{{ $stats['notes_count'] }}</strong> notes created</li>
         </ul>
+    </div>
+        </div>
     </div>
 </div>
 @endsection

@@ -167,16 +167,17 @@
 @section('content')
 <div class="container">
     <div class="activity-header">
-        <div class="breadcrumb">
-            <a href="{{ route('profile.activity') }}"><i class="fal fa-chart-line"></i> My Activity</a> / Ratings
-        </div>
         <h1>
             <i class="fas fa-star" style="color: #f39c12;"></i> My Ratings
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Books you've rated in the library</p>
     </div>
 
-    @if($ratings->count() > 0)
+    <div class="profile-container">
+        @include('profile.partials.profile-nav')
+
+        <div class="profile-main">
+            @if($ratings->count() > 0)
         <div class="ratings-list">
             @foreach($ratings as $rating)
                 <div class="rating-item">
@@ -218,6 +219,8 @@
             <p>Start rating books to see them here.</p>
             <a href="{{ route('library.index') }}" class="btn">Browse Library</a>
         </div>
-    @endif
+            @endif
+        </div>
+    </div>
 </div>
 @endsection

@@ -179,17 +179,18 @@
 @section('content')
 <div class="container">
     <div class="activity-header">
-        <div class="breadcrumb">
-            <a href="{{ route('profile.activity') }}"><i class="fal fa-chart-line"></i> My Activity</a> / Reviews
-        </div>
         <h1>
             <i class="fas fa-comment" style="color: #007cba;"></i> My Reviews
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Your book reviews and feedback</p>
     </div>
 
-    @if($reviews->count() > 0)
-        <div class="reviews-list">
+    <div class="profile-container">
+        @include('profile.partials.profile-nav')
+
+        <div class="profile-main">
+            @if($reviews->count() > 0)
+                <div class="reviews-list">
             @foreach($reviews as $review)
                 <div class="review-card">
                     <div class="review-header">
@@ -212,7 +213,7 @@
                     </div>
 
                     <div class="review-text-box">
-                        {{ $review->review_text }}
+                        {{ $review->review }}
                     </div>
 
                     <div class="review-meta">
@@ -231,20 +232,22 @@
                     </div>
                 </div>
             @endforeach
-        </div>
+                </div>
 
-        @if($reviews->hasPages())
-            <div class="pagination-wrapper">
-                {{ $reviews->links() }}
-            </div>
-        @endif
-    @else
-        <div class="empty-state">
-            <i class="fal fa-comment"></i>
-            <h2>No reviews yet</h2>
-            <p>Share your thoughts about books you've read.</p>
-            <a href="{{ route('library.index') }}" class="btn">Browse Library</a>
+                @if($reviews->hasPages())
+                    <div class="pagination-wrapper">
+                        {{ $reviews->links() }}
+                    </div>
+                @endif
+            @else
+                <div class="empty-state">
+                    <i class="fal fa-comment"></i>
+                    <h2>No reviews yet</h2>
+                    <p>Share your thoughts about books you've read.</p>
+                    <a href="{{ route('library.index') }}" class="btn">Browse Library</a>
+                </div>
+            @endif
         </div>
-    @endif
+    </div>
 </div>
 @endsection

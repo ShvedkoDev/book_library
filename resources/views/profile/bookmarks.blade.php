@@ -164,16 +164,17 @@
 @section('content')
 <div class="container">
     <div class="activity-header">
-        <div class="breadcrumb">
-            <a href="{{ route('profile.activity') }}"><i class="fal fa-chart-line"></i> My Activity</a> / Bookmarks
-        </div>
         <h1>
             <i class="fas fa-heart" style="color: #ff6b6b;"></i> My Bookmarks
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Books you've saved to your collection</p>
     </div>
 
-    @if($bookmarks->count() > 0)
+    <div class="profile-container">
+        @include('profile.partials.profile-nav')
+
+        <div class="profile-main">
+            @if($bookmarks->count() > 0)
         <div class="bookmarks-list">
             @foreach($bookmarks as $bookmark)
                 <div class="bookmark-item">
@@ -220,6 +221,8 @@
             <p>Save books for quick access later.</p>
             <a href="{{ route('library.index') }}" class="btn">Browse Library</a>
         </div>
-    @endif
+            @endif
+        </div>
+    </div>
 </div>
 @endsection
