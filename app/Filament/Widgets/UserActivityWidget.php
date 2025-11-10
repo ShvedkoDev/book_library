@@ -10,33 +10,29 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class UserActivityWidget extends BaseWidget
 {
+    protected static ?int $sort = 5;
+
     protected function getStats(): array
     {
         $totalUsers = User::count();
-        $activeUsers = User::where('email_verified_at', '!=', null)->count();
-        $downloadsToday = BookDownload::whereDate('created_at', today())->count();
-        $pendingReviews = BookReview::where('is_approved', false)->count();
+        $verifiedUsers = User::whereNotNull('email_verified_at')->count();
+        $adminUsers = User::where('role', 'admin')->count();
 
         return [
             Stat::make('Total Users', $totalUsers)
                 ->description('Registered users')
                 ->descriptionIcon('heroicon-o-users')
                 ->color('primary'),
-                
-            Stat::make('Verified Users', $activeUsers)
+
+            Stat::make('Verified Users', $verifiedUsers)
                 ->description('Email verified')
                 ->descriptionIcon('heroicon-o-check-badge')
                 ->color('success'),
-                
-            Stat::make('Downloads Today', $downloadsToday)
-                ->description('Books downloaded today')
-                ->descriptionIcon('heroicon-o-arrow-down-tray')
-                ->color('info'),
-                
-            Stat::make('Pending Reviews', $pendingReviews)
-                ->description('Awaiting approval')
-                ->descriptionIcon('heroicon-o-clock')
-                ->color($pendingReviews > 0 ? 'warning' : 'success'),
+
+            Stat::make('Admin Users', $adminUsers)
+                ->description('Administrator accounts')
+                ->descriptionIcon('heroicon-o-shield-check')
+                ->color('warning'),
         ];
     }
 }

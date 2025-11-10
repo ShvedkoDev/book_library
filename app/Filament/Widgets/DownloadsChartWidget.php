@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class DownloadsChartWidget extends ChartWidget
 {
     protected static ?string $heading = 'Downloads Over Time';
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 8;
 
     protected function getData(): array
     {

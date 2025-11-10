@@ -157,4 +157,120 @@ class AnalyticsService
             'filter_stats' => FilterAnalytic::getFilterStats($days),
         ];
     }
+
+    /**
+     * Get views for today (last 24 hours)
+     */
+    public function getViewsToday(): int
+    {
+        return BookView::where('created_at', '>=', now()->subDay())->count();
+    }
+
+    /**
+     * Get downloads for today (last 24 hours)
+     */
+    public function getDownloadsToday(): int
+    {
+        return BookDownload::where('created_at', '>=', now()->subDay())->count();
+    }
+
+    /**
+     * Get views for specified time period
+     */
+    public function getViews(int $days): int
+    {
+        return BookView::where('created_at', '>=', now()->subDays($days))->count();
+    }
+
+    /**
+     * Get downloads for specified time period
+     */
+    public function getDownloads(int $days): int
+    {
+        return BookDownload::where('created_at', '>=', now()->subDays($days))->count();
+    }
+
+    /**
+     * Get searches for specified time period
+     */
+    public function getSearches(int $days): int
+    {
+        return SearchQuery::where('created_at', '>=', now()->subDays($days))->count();
+    }
+
+    /**
+     * Get unique books viewed for specified time period
+     */
+    public function getUniqueBooksViewed(int $days): int
+    {
+        return BookView::where('created_at', '>=', now()->subDays($days))
+            ->distinct('book_id')
+            ->count('book_id');
+    }
+
+    /**
+     * Get unique users for specified time period (users who viewed, downloaded, or searched)
+     */
+    public function getUniqueUsers(int $days): int
+    {
+        $startDate = now()->subDays($days);
+
+        $viewUserIds = BookView::where('created_at', '>=', $startDate)
+            ->whereNotNull('user_id')
+            ->distinct('user_id')
+            ->pluck('user_id');
+
+        $downloadUserIds = BookDownload::where('created_at', '>=', $startDate)
+            ->whereNotNull('user_id')
+            ->distinct('user_id')
+            ->pluck('user_id');
+
+        $searchUserIds = SearchQuery::where('created_at', '>=', $startDate)
+            ->whereNotNull('user_id')
+            ->distinct('user_id')
+            ->pluck('user_id');
+
+        return $viewUserIds->merge($downloadUserIds)
+            ->merge($searchUserIds)
+            ->unique()
+            ->count();
+    }
+
+    /**
+     * Get daily unique user counts for chart
+     */
+    public function getDailyUniqueUsers(int $days = 30): array
+    {
+        $data = [];
+
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $startOfDay = now()->subDays($i)->startOfDay();
+            $endOfDay = now()->subDays($i)->endOfDay();
+
+            $viewUserIds = BookView::whereBetween('created_at', [$startOfDay, $endOfDay])
+                ->whereNotNull('user_id')
+                ->distinct('user_id')
+                ->pluck('user_id');
+
+            $downloadUserIds = BookDownload::whereBetween('created_at', [$startOfDay, $endOfDay])
+                ->whereNotNull('user_id')
+                ->distinct('user_id')
+                ->pluck('user_id');
+
+            $searchUserIds = SearchQuery::whereBetween('created_at', [$startOfDay, $endOfDay])
+                ->whereNotNull('user_id')
+                ->distinct('user_id')
+                ->pluck('user_id');
+
+            $uniqueCount = $viewUserIds->merge($downloadUserIds)
+                ->merge($searchUserIds)
+                ->unique()
+                ->count();
+
+            $data[$date] = $uniqueCount;
+        }
+
+        return $data;
+    }
 }

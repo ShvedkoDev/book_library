@@ -10,7 +10,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 class PopularBooksWidget extends BaseWidget
 {
     protected static ?string $heading = 'Most Popular Books';
-    protected static ?int $sort = 5;
+    protected static ?int $sort = 11;
     protected int | string | array $columnSpan = 'full';
 
     public function table(Table $table): Table

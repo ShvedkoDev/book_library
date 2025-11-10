@@ -19,6 +19,10 @@ class AuthorResource extends Resource
     protected static ?string $label = 'Author';
     protected static ?string $pluralLabel = 'Authors';
 
+    // DEPRECATED: This resource has been replaced by PeopleResource
+    // Kept for backward compatibility only
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function form(Form $form): Form
     {
         return $form

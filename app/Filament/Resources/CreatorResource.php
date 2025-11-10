@@ -21,6 +21,10 @@ class CreatorResource extends Resource
     protected static ?string $navigationGroup = 'Library';
     protected static ?int $navigationSort = 3;
 
+    // DEPRECATED: This resource has been replaced by PeopleResource
+    // Kept for backward compatibility only
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function form(Form $form): Form
     {
         return $form

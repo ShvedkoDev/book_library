@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\BookNoteController;
@@ -48,9 +49,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    // Basic profile routes (Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // User activity and interaction history routes
+    Route::get('/my-activity', [UserProfileController::class, 'activity'])->name('profile.activity');
+    Route::get('/my-activity/ratings', [UserProfileController::class, 'ratings'])->name('profile.ratings');
+    Route::get('/my-activity/reviews', [UserProfileController::class, 'reviews'])->name('profile.reviews');
+    Route::get('/my-activity/downloads', [UserProfileController::class, 'downloads'])->name('profile.downloads');
+    Route::get('/my-activity/bookmarks', [UserProfileController::class, 'bookmarks'])->name('profile.bookmarks');
+    Route::get('/my-activity/notes', [UserProfileController::class, 'notes'])->name('profile.notes');
+    Route::get('/my-activity/timeline', [UserProfileController::class, 'timeline'])->name('profile.timeline');
+
+    // Admin routes to view other users' activities
+    Route::middleware('can:viewAny,App\Models\User')->group(function () {
+        Route::get('/admin/users/{user}/activity', [UserProfileController::class, 'viewUserActivity'])->name('admin.users.activity');
+        Route::get('/admin/users/{user}/ratings', [UserProfileController::class, 'viewUserRatings'])->name('admin.users.ratings');
+        Route::get('/admin/users/{user}/reviews', [UserProfileController::class, 'viewUserReviews'])->name('admin.users.reviews');
+        Route::get('/admin/users/{user}/downloads', [UserProfileController::class, 'viewUserDownloads'])->name('admin.users.downloads');
+    });
 });
 
 // CMS Page preview route (admin only - authorization checked in controller)
