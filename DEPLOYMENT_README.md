@@ -124,8 +124,16 @@ Upgrade your Hostinger plan to VPS to get root access and use Docker.
 - **[prepare-deployment.sh](./prepare-deployment.sh)** - Script to prepare deployment package
 
 ### Updating Existing Deployment
+
+**For Hostinger with app_root + public_html structure (recommended):**
+- **[UPDATE_GUIDE_HOSTINGER.md](./UPDATE_GUIDE_HOSTINGER.md)** - ⭐ Hostinger-specific update guide
+- **[QUICK_UPDATE_HOSTINGER.md](./QUICK_UPDATE_HOSTINGER.md)** - ⚡ Quick reference for Hostinger setup
+- **[update-server.sh](./update-server.sh)** - Server-side update script
+- **[deploy-assets.sh](./deploy-assets.sh)** - Local asset deployment script
+
+**For standard Laravel setup (npm on server):**
 - **[UPDATE_GUIDE.md](./UPDATE_GUIDE.md)** - Comprehensive update guide with troubleshooting
-- **[QUICK_UPDATE.md](./QUICK_UPDATE.md)** - Quick reference card for routine updates (bookmark this!)
+- **[QUICK_UPDATE.md](./QUICK_UPDATE.md)** - Quick reference card for routine updates
 
 ---
 

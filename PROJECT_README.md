@@ -23,37 +23,41 @@ This application consists of two main modules:
 - **[PRODUCTION_DEPLOYMENT.md](./PRODUCTION_DEPLOYMENT.md)** - Detailed deployment instructions
 
 ### For Updates
-- **[UPDATE_GUIDE.md](./UPDATE_GUIDE.md)** - ⭐ Comprehensive update guide with troubleshooting
-- **[QUICK_UPDATE.md](./QUICK_UPDATE.md)** - ⚡ Quick reference card (bookmark this!)
-- **[update-production.sh](./update-production.sh)** - Automated update script
+- **[UPDATE_GUIDE_HOSTINGER.md](./UPDATE_GUIDE_HOSTINGER.md)** - ⭐ **For your Hostinger setup** (app_root + public_html)
+- **[QUICK_UPDATE_HOSTINGER.md](./QUICK_UPDATE_HOSTINGER.md)** - ⚡ Quick reference for your setup (bookmark!)
+- **[update-server.sh](./update-server.sh)** - Server-side update script (run on production)
+- **[deploy-assets.sh](./deploy-assets.sh)** - Local asset deployment script (run locally)
+- **[UPDATE_GUIDE.md](./UPDATE_GUIDE.md)** - Generic update guide (if you have npm on server)
+- **[QUICK_UPDATE.md](./QUICK_UPDATE.md)** - Generic quick reference
 
-## 🔄 Updating Production
+## 🔄 Updating Production (Your Hostinger Setup)
 
-### Quick Update (5 minutes)
+### Quick Update (10 minutes)
 
-If you already have the site deployed and need to update it with latest changes:
+Your setup has two directories:
+- `app_root` - Laravel code (git updates here)
+- `public_html` - Web root (assets uploaded here)
 
-**Option 1: Use the automated script**
+**Two-Part Update Process:**
+
+**Part 1: On Server (updates code)**
 ```bash
 ssh your-username@micronesian.school
-cd ~/domains/micronesian.school/public_html
-./update-production.sh
+cd ~/app_root
+./update-server.sh
+# Wait at prompt for asset upload...
 ```
 
-**Option 2: Manual update (see QUICK_UPDATE.md)**
+**Part 2: On Local Machine (builds and uploads assets)**
 ```bash
-ssh your-username@micronesian.school
-cd ~/domains/micronesian.school/public_html
-php artisan down
-git pull origin main
-composer install --no-dev --optimize-autoloader
-php artisan migrate --force
-php artisan cache:clear && php artisan config:clear && php artisan view:clear
-php artisan config:cache && php artisan route:cache && php artisan view:cache
-php artisan up
+cd /home/gena/book_library
+./deploy-assets.sh
+# Press ENTER in server terminal when done
 ```
 
-**For detailed instructions:** See [UPDATE_GUIDE.md](./UPDATE_GUIDE.md)
+**For detailed instructions:** See [UPDATE_GUIDE_HOSTINGER.md](./UPDATE_GUIDE_HOSTINGER.md)
+
+**For quick reference:** See [QUICK_UPDATE_HOSTINGER.md](./QUICK_UPDATE_HOSTINGER.md)
 
 ## 🛠️ Technical Stack
 
