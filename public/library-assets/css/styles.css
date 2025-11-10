@@ -751,8 +751,8 @@ a:where(:not(.wp-element-button)) {
 .language-dropdown {
     position: absolute;
     top: 100%;
-    left: 0;
     right: 0;
+    left: auto;
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 6px;

@@ -70,22 +70,28 @@
 <style>
 .share-button-container {
     position: relative;
-    display: inline-block;
+    display: block;
+    width: 100%;
 }
 
 .share-button {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    background: #f8f9fa;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
     color: #555;
     transition: all 0.3s;
-    font-size: 0.95rem;
+    width: 100%;
+    margin: 0!important;
+    font-size: 13px;
+    line-height: 2;
+    background-color: #f0f0f0;
+    color: #333;
 }
 
 .share-button:hover {
