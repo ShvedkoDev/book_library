@@ -3,6 +3,17 @@
 
 ---
 
+## 📖 Which Guide Do I Need?
+
+### 🆕 **First Time Deployment** (Setting up from scratch)
+👉 Follow this guide (DEPLOYMENT_README.md) and DEPLOYMENT_CHECKLIST.md
+
+### 🔄 **Updating Existing Site** (Pulling latest changes)
+👉 See **[UPDATE_GUIDE.md](./UPDATE_GUIDE.md)** for comprehensive update instructions
+👉 See **[QUICK_UPDATE.md](./QUICK_UPDATE.md)** for quick reference card
+
+---
+
 ## 🚨 IMPORTANT: Hostinger Hosting Limitation
 
 **Hostinger has confirmed:** Docker requires root access, which is **NOT available** on Hostinger's shared Web or Cloud hosting plans. Docker can only run on VPS plans.
@@ -105,11 +116,16 @@ Upgrade your Hostinger plan to VPS to get root access and use Docker.
 
 ## Documentation Files
 
+### Initial Deployment
 - **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)** - Quick step-by-step checklist (START HERE)
 - **[PRODUCTION_DEPLOYMENT.md](./PRODUCTION_DEPLOYMENT.md)** - Complete detailed guide
   - Part 1: Manual deployment (no Docker)
   - Part 2: Docker deployment (VPS only)
 - **[prepare-deployment.sh](./prepare-deployment.sh)** - Script to prepare deployment package
+
+### Updating Existing Deployment
+- **[UPDATE_GUIDE.md](./UPDATE_GUIDE.md)** - Comprehensive update guide with troubleshooting
+- **[QUICK_UPDATE.md](./QUICK_UPDATE.md)** - Quick reference card for routine updates (bookmark this!)
 
 ---
 
