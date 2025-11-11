@@ -250,15 +250,11 @@
                 @if($page->resourceContributors->count() > 0)
                 <div class="sidebar_item text-sidebar">
                     <h2>Resource Contributors</h2>
-                    <p style="text-align: left;">
-                        @foreach($page->resourceContributors as $contributor)
-                            @if($contributor->website_url)
-                                <a href="{{ $contributor->website_url }}" target="_blank" rel="noopener">{{ $contributor->name }}</a><br/>
-                            @else
-                                {{ $contributor->name }}<br/>
-                            @endif
-                        @endforeach
-                    </p>
+                    <p style="text-align: left;">@foreach($page->resourceContributors as $contributor)@if($contributor->website_url)<a href="{{ $contributor->website_url }}" target="_blank" rel="noopener">{{ $contributor->name }}<br/>
+                            </a>@else{{ $contributor->name }}<br/>
+@endif
+@endforeach</p>
+
                 </div>
                 @endif
             </aside>
