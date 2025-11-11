@@ -116,4 +116,32 @@
         background: #f0f0f0;
         color: #007cba;
     }
+
+    /* CMS Pages - Ensure sidebar on right (matching test page layout) */
+    .page-content .container.with_sidebar {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-start;
+    }
+
+    .page-content .container.with_sidebar .main_content {
+        flex: 1;
+        order: 1;
+        margin-right: 0;
+        padding-right: 2rem;
+    }
+
+    .page-content .container.with_sidebar .sidebar {
+        flex-basis: 240px;
+        flex-shrink: 0;
+        order: 2;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .page-content .container.with_sidebar .sidebar {
+        flex-basis: 20%;
+    }
 }
