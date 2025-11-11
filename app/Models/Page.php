@@ -33,6 +33,7 @@ class Page extends Model
         'meta_description',
         'meta_keywords',
         'is_published',
+        'show_in_navigation',
         'published_at',
         'order',
         'parent_id',
@@ -46,6 +47,7 @@ class Page extends Model
     protected $casts = [
         'published_at' => 'datetime',
         'is_published' => 'boolean',
+        'show_in_navigation' => 'boolean',
     ];
 
     /**

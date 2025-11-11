@@ -121,6 +121,10 @@ class PageResource extends Resource
                             ->label('Published')
                             ->default(true)
                             ->helperText('Toggle to publish or unpublish this page'),
+                        Forms\Components\Toggle::make('show_in_navigation')
+                            ->label('Show in Navigation')
+                            ->default(true)
+                            ->helperText('Toggle to show or hide this page in navigation menus'),
                         Forms\Components\DateTimePicker::make('published_at')
                             ->label('Publish Date')
                             ->nullable()
@@ -132,7 +136,7 @@ class PageResource extends Resource
                             ->minValue(0)
                             ->helperText('Order in navigation menus (lower numbers appear first)'),
                     ])
-                    ->columns(3),
+                    ->columns(4),
 
                 // Resource Contributors Section
                 Forms\Components\Section::make('Resource Contributors')

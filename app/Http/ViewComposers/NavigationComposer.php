@@ -26,16 +26,18 @@ class NavigationComposer
      */
     protected function getCmsPages()
     {
-        // Get all published pages with no parent (top-level pages)
+        // Get all published pages with no parent (top-level pages) that should be shown in navigation
         $topLevelPages = Page::published()
+            ->where('show_in_navigation', true)
             ->whereNull('parent_id')
             ->orderBy('order')
             ->orderBy('title')
             ->get();
 
-        // For each top-level page, load its children
+        // For each top-level page, load its children that should be shown in navigation
         $topLevelPages->each(function ($page) {
             $page->children = Page::published()
+                ->where('show_in_navigation', true)
                 ->where('parent_id', $page->id)
                 ->orderBy('order')
                 ->orderBy('title')
