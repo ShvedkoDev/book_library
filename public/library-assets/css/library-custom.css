@@ -164,8 +164,6 @@
 
 .sidebar.sidebar-links .sidebar_item.sidebar-menu {
     background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
     padding: 1.5rem;
 }
 
@@ -196,9 +194,6 @@
 }
 
 .sidebar.sidebar-links .sidebar_item.text-sidebar {
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
     padding: 1.5rem;
 }
 
