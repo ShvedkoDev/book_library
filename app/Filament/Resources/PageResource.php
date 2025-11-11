@@ -86,13 +86,14 @@ class PageResource extends Resource
                                 'color',
                                 'highlight',
                                 'hr',
+                                'source', // Enable HTML source code editing
                             ])
                             ->disk('public')
                             ->directory('page-media')
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'])
                             ->maxSize(5120) // 5MB
                             ->columnSpanFull()
-                            ->helperText('Use H2 headings for sections that will appear in the table of contents'),
+                            ->helperText('Use H2 headings for sections that will appear in the table of contents. Click the </> button to edit HTML source.'),
                     ]),
 
                 // SEO & Metadata Section
