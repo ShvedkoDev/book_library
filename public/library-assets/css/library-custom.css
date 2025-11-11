@@ -128,7 +128,7 @@
         flex: 1;
         order: 1;
         margin-right: 0;
-        padding-right: 2rem;
+        padding: 0 2rem;
     }
 
     .page-content .container.with_sidebar .sidebar {
@@ -136,7 +136,7 @@
         flex-shrink: 0;
         order: 2;
         margin-left: 0;
-        margin-right: 0;
+        margin-right: 1rem;
     }
 }
 
@@ -144,4 +144,76 @@
     .page-content .container.with_sidebar .sidebar {
         flex-basis: 20%;
     }
+}
+
+/* Sidebar sections styling (matching test page) */
+.sidebar.sidebar-links .sidebar_item {
+    margin-bottom: 2rem;
+}
+
+.sidebar.sidebar-links .sidebar_item h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #1f2937;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.sidebar.sidebar-links .sidebar_item.sidebar-menu {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.sidebar.sidebar-links .sidebar_item .section-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar.sidebar-links .sidebar_item .section-list li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar.sidebar-links .sidebar_item .section-list a {
+    display: block;
+    color: #4b5563;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.sidebar.sidebar-links .sidebar_item .section-list a:hover {
+    background: #f3f4f6;
+    color: #1f2937;
+    transform: translateX(4px);
+}
+
+.sidebar.sidebar-links .sidebar_item.text-sidebar {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.sidebar.sidebar-links .sidebar_item.text-sidebar p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #4b5563;
+    margin: 0;
+}
+
+.sidebar.sidebar-links .sidebar_item.text-sidebar a {
+    color: #0369a1;
+    text-decoration: none;
+}
+
+.sidebar.sidebar-links .sidebar_item.text-sidebar a:hover {
+    text-decoration: underline;
 }

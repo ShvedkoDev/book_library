@@ -232,7 +232,35 @@
 
             <!-- Right Sidebar with TOC -->
             <aside class="sidebar sidebar-links">
-                <x-page-toc :sections="$tableOfContents" />
+                <!-- Table of Contents -->
+                <div class="sidebar_item sidebar-menu">
+                    @if(count($tableOfContents) > 0)
+                    <h2>Sections</h2>
+                    <ul class="section-list">
+                        @foreach($tableOfContents as $section)
+                        <li>
+                            <a class="section-anchor" href="{{ $section['url'] }}">{{ $section['heading'] }}</a>
+                        </li>
+                        @endforeach
+                    </ul>
+                    @endif
+                </div>
+
+                <!-- Resource Contributors -->
+                @if($page->resourceContributors->count() > 0)
+                <div class="sidebar_item text-sidebar">
+                    <h2>Resource Contributors</h2>
+                    <p style="text-align: left;">
+                        @foreach($page->resourceContributors as $contributor)
+                            @if($contributor->website_url)
+                                <a href="{{ $contributor->website_url }}" target="_blank" rel="noopener">{{ $contributor->name }}</a><br/>
+                            @else
+                                {{ $contributor->name }}<br/>
+                            @endif
+                        @endforeach
+                    </p>
+                </div>
+                @endif
             </aside>
         </div>
     </div>
