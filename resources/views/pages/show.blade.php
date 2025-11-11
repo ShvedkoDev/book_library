@@ -187,11 +187,6 @@
     <!-- Main Content with Sidebar Layout -->
     <div class="page-content">
         <div class="container with_sidebar">
-            <!-- Left Sidebar with TOC -->
-            <aside class="sidebar sidebar-links">
-                <x-page-toc :sections="$tableOfContents" />
-            </aside>
-
             <!-- Main Content Area -->
             <div class="main_content page-content-wrapper">
                 <!-- Preview Banner (if in preview mode) -->
@@ -234,6 +229,11 @@
                 <!-- Resource Contributors Section -->
                 <x-resource-contributors :contributors="$page->resourceContributors" />
             </div>
+
+            <!-- Right Sidebar with TOC -->
+            <aside class="sidebar sidebar-links">
+                <x-page-toc :sections="$tableOfContents" />
+            </aside>
         </div>
     </div>
 </div>
