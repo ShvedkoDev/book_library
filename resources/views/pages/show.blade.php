@@ -225,9 +225,6 @@
                 <article class="page-body">
                     {!! $contentWithAnchors !!}
                 </article>
-
-                <!-- Resource Contributors Section -->
-                <x-resource-contributors :contributors="$page->resourceContributors" />
             </div>
 
             <!-- Right Sidebar with TOC -->
@@ -244,6 +241,13 @@
                         @endforeach
                     </ul>
                     @endif
+                </div>
+
+                <!-- Ready to Explore -->
+                <div class="sidebar_item text-sidebar">
+                    <h2>Ready to Explore?</h2>
+                    <p>Have you reviewed this material and agreed to terms of use?</p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('library.index') }}"><strong>Access the Digital Library</strong></a></p>
                 </div>
 
                 <!-- Resource Contributors -->
