@@ -141,14 +141,15 @@
 
     /* Library Page - Sidebar on left */
     .page-content .container.with_sidebar .sidebar.library-sidebar {
-        order: 0;
-        margin-right: 2rem;
-        margin-left: 0;
+        order: 0 !important;
+        margin-right: 2rem !important;
+        margin-left: 0 !important;
     }
 
-    .page-content .container.with_sidebar:has(.library-sidebar) .main_content {
-        order: 1;
-        margin-left: 0;
+    .page-content .container.with_sidebar .sidebar.library-sidebar ~ .main_content,
+    .page-content .container.with_sidebar .main_content.library-content {
+        order: 1 !important;
+        margin-left: 0 !important;
     }
 }
 
@@ -158,7 +159,8 @@
     }
 
     .page-content .container.with_sidebar .sidebar.library-sidebar {
-        flex-basis: 280px;
+        flex-basis: 280px !important;
+        max-width: 280px;
     }
 }
 
