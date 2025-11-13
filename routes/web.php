@@ -11,6 +11,14 @@ use App\Http\Controllers\Api\ShareTrackingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    // Check if a homepage CMS page exists
+    $homepage = \App\Models\Page::published()->homepage()->first();
+
+    if ($homepage) {
+        return app(\App\Http\Controllers\PageController::class)->show($homepage->slug);
+    }
+
+    // Fall back to welcome view if no homepage is set
     return view('welcome');
 });
 

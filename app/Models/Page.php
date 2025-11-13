@@ -34,6 +34,7 @@ class Page extends Model
         'meta_keywords',
         'is_published',
         'show_in_navigation',
+        'is_homepage',
         'published_at',
         'order',
         'parent_id',
@@ -48,6 +49,7 @@ class Page extends Model
         'published_at' => 'datetime',
         'is_published' => 'boolean',
         'show_in_navigation' => 'boolean',
+        'is_homepage' => 'boolean',
     ];
 
     /**
@@ -61,6 +63,16 @@ class Page extends Model
         static::creating(function ($page) {
             if (empty($page->slug) && !empty($page->title)) {
                 $page->slug = static::generateUniqueSlug($page->title);
+            }
+        });
+
+        // Ensure only one page can be homepage at a time
+        static::saving(function ($page) {
+            if ($page->is_homepage && $page->isDirty('is_homepage')) {
+                // Unset all other pages as homepage
+                static::where('id', '!=', $page->id)
+                    ->where('is_homepage', true)
+                    ->update(['is_homepage' => false]);
             }
         });
     }
@@ -154,6 +166,17 @@ class Page extends Model
     public function scopeOrdered($query)
     {
         return $query->orderBy('order')->orderBy('title');
+    }
+
+    /**
+     * Scope a query to only include the homepage.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeHomepage($query)
+    {
+        return $query->where('is_homepage', true);
     }
 
     /**

@@ -125,6 +125,20 @@ class PageResource extends Resource
                             ->label('Show in Navigation')
                             ->default(true)
                             ->helperText('Toggle to show or hide this page in navigation menus'),
+                        Forms\Components\Toggle::make('is_homepage')
+                            ->label('Set as Homepage')
+                            ->default(false)
+                            ->helperText('This page will be shown at the root URL (/). Only one page can be homepage.')
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                if ($state) {
+                                    Notification::make()
+                                        ->title('Homepage Set')
+                                        ->body('This page will now appear at the root URL (/). Any other homepage will be unset.')
+                                        ->info()
+                                        ->send();
+                                }
+                            }),
                         Forms\Components\DateTimePicker::make('published_at')
                             ->label('Publish Date')
                             ->nullable()
@@ -136,7 +150,7 @@ class PageResource extends Resource
                             ->minValue(0)
                             ->helperText('Order in navigation menus (lower numbers appear first)'),
                     ])
-                    ->columns(4),
+                    ->columns(5),
 
                 // Resource Contributors Section
                 Forms\Components\Section::make('Resource Contributors')
