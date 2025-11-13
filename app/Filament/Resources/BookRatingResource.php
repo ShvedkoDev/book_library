@@ -15,6 +15,8 @@ class BookRatingResource extends Resource
     protected static ?string $model = BookRating::class;
     protected static ?string $navigationIcon = 'heroicon-o-star';
     protected static ?string $navigationGroup = "Library";
+    protected static ?int $navigationSort = 11;
+    protected static ?string $navigationLabel = 'Book ratings';
 
     public static function form(Form $form): Form
     {

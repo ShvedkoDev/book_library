@@ -16,7 +16,7 @@ class LanguageResource extends Resource
     protected static ?string $model = Language::class;
     protected static ?string $navigationIcon = 'heroicon-o-language';
     protected static ?string $navigationGroup = 'Library';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
     public static function form(Form $form): Form
     {
         return $form

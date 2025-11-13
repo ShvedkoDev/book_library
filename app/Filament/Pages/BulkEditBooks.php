@@ -10,9 +10,9 @@ class BulkEditBooks extends Page
 
     protected static ?string $navigationGroup = 'Library';
 
-    protected static ?int $navigationSort = 15;
+    protected static ?int $navigationSort = 10;
 
-    protected static ?string $title = 'Bulk Edit Books';
+    protected static ?string $title = 'Bulk edit books';
 
     protected static string $view = 'filament.pages.bulk-edit-books';
 }

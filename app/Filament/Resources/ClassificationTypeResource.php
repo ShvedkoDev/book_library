@@ -20,8 +20,8 @@ class ClassificationTypeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $navigationGroup = 'Library';
-    protected static ?int $navigationSort = 4;
-    protected static ?string $navigationLabel = 'Classification Types';
+    protected static ?int $navigationSort = 7;
+    protected static ?string $navigationLabel = 'Classification types';
 
     public static function form(Form $form): Form
     {

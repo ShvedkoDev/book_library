@@ -18,9 +18,9 @@ class AccessRequestResource extends Resource
 
     protected static ?string $navigationGroup = 'Library';
 
-    protected static ?string $navigationLabel = 'Access Requests';
+    protected static ?string $navigationLabel = 'Access requests';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 13;
 
     public static function form(Form $form): Form
     {

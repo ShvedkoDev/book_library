@@ -20,6 +20,8 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationGroup = "Library";
 
+    protected static ?int $navigationSort = 6;
+
     protected static ?string $label = 'Category';
     protected static ?string $pluralLabel = 'Categories';
 

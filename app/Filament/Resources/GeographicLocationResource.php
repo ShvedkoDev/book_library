@@ -19,8 +19,8 @@ class GeographicLocationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-map-pin';
     protected static ?string $navigationGroup = 'Library';
-    protected static ?int $navigationSort = 6;
-    protected static ?string $navigationLabel = 'Geographic Locations';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationLabel = 'Places';
 
     public static function form(Form $form): Form
     {
