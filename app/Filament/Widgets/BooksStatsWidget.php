@@ -18,25 +18,37 @@ class BooksStatsWidget extends BaseWidget
                 ->description('Books in library')
                 ->descriptionIcon('heroicon-o-book-open')
                 ->color('primary')
-                ->extraAttributes(['style' => 'background-color: #80a4aa; color: white;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #80a4aa;',
+                    'class' => 'widget-dark-bg'
+                ]),
 
             Stat::make('Active books', Book::where('is_active', true)->count())
                 ->description('Currently available')
                 ->descriptionIcon('heroicon-o-check-circle')
                 ->color('success')
-                ->extraAttributes(['style' => 'background-color: #b4d8d4; color: #1a1a1a;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #b4d8d4;',
+                    'class' => 'widget-light-bg'
+                ]),
 
             Stat::make('Featured books', Book::where('is_featured', true)->count())
                 ->description('Highlighted content')
                 ->descriptionIcon('heroicon-o-star')
                 ->color('warning')
-                ->extraAttributes(['style' => 'background-color: #b4d8d4; color: #1a1a1a;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #b4d8d4;',
+                    'class' => 'widget-light-bg'
+                ]),
 
             Stat::make('Languages', Language::where('is_active', true)->count())
                 ->description('Available languages')
                 ->descriptionIcon('heroicon-o-language')
                 ->color('info')
-                ->extraAttributes(['style' => 'background-color: #dd785b; color: white;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #dd785b;',
+                    'class' => 'widget-dark-bg'
+                ]),
         ];
     }
 }

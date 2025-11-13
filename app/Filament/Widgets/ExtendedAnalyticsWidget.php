@@ -19,25 +19,37 @@ class ExtendedAnalyticsWidget extends BaseWidget
                 ->description('Book views in the last 365 days')
                 ->descriptionIcon('heroicon-o-eye')
                 ->color('success')
-                ->extraAttributes(['style' => 'background-color: #b8caa5; color: #1a1a1a;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #b8caa5;',
+                    'class' => 'widget-light-bg'
+                ]),
 
             Stat::make('Total downloads (1 year)', $analytics->getDownloads(365))
                 ->description('File downloads in the last 365 days')
                 ->descriptionIcon('heroicon-o-arrow-down-tray')
                 ->color('info')
-                ->extraAttributes(['style' => 'background-color: #b8caa5; color: #1a1a1a;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #b8caa5;',
+                    'class' => 'widget-light-bg'
+                ]),
 
             Stat::make('Total searches (1 year)', $analytics->getSearches(365))
                 ->description('Search queries in the last 365 days')
                 ->descriptionIcon('heroicon-o-magnifying-glass')
                 ->color('warning')
-                ->extraAttributes(['style' => 'background-color: #b8caa5; color: #1a1a1a;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #b8caa5;',
+                    'class' => 'widget-light-bg'
+                ]),
 
             Stat::make('Unique book views (1 year)', $analytics->getUniqueBooksViewed(365))
                 ->description('Different books viewed in last 365 days')
                 ->descriptionIcon('heroicon-o-book-open')
                 ->color('primary')
-                ->extraAttributes(['style' => 'background-color: #b8caa5; color: #1a1a1a;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #b8caa5;',
+                    'class' => 'widget-light-bg'
+                ]),
         ];
     }
 }

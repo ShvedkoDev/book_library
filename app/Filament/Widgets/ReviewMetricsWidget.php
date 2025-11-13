@@ -23,19 +23,28 @@ class ReviewMetricsWidget extends BaseWidget
                 ->description('Books with at least one review')
                 ->descriptionIcon('heroicon-o-document-text')
                 ->color('primary')
-                ->extraAttributes(['style' => 'background-color: #a299b8; color: white;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #a299b8;',
+                    'class' => 'widget-dark-bg'
+                ]),
 
             Stat::make('Total reviews', $totalReviews)
                 ->description($approvedReviews . ' approved, ' . $pendingReviews . ' pending')
                 ->descriptionIcon('heroicon-o-chat-bubble-left-right')
                 ->color('info')
-                ->extraAttributes(['style' => 'background-color: #a299b8; color: white;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #a299b8;',
+                    'class' => 'widget-dark-bg'
+                ]),
 
             Stat::make('Pending reviews', $pendingReviews)
                 ->description('Awaiting approval')
                 ->descriptionIcon('heroicon-o-clock')
                 ->color($pendingReviews > 0 ? 'warning' : 'success')
-                ->extraAttributes(['style' => 'background-color: #a299b8; color: white;']),
+                ->extraAttributes([
+                    'style' => 'background-color: #a299b8;',
+                    'class' => 'widget-dark-bg'
+                ]),
         ];
     }
 }

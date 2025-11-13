@@ -95,4 +95,28 @@
     .fi-fo-field-wrp-label.fi-required::after {
         color: #dc2626;
     }
+
+    /* Dashboard Widget Custom Background Colors */
+
+    /* Dark backgrounds - use white text for all elements */
+    .widget-dark-bg .fi-wi-stats-overview-stat-label,
+    .widget-dark-bg .fi-wi-stats-overview-stat-description,
+    .widget-dark-bg .fi-wi-stats-overview-stat-value {
+        color: white !important;
+    }
+
+    .widget-dark-bg .fi-wi-stats-overview-stat-icon {
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+
+    /* Light backgrounds - use dark text for all elements */
+    .widget-light-bg .fi-wi-stats-overview-stat-label,
+    .widget-light-bg .fi-wi-stats-overview-stat-description,
+    .widget-light-bg .fi-wi-stats-overview-stat-value {
+        color: #1a1a1a !important;
+    }
+
+    .widget-light-bg .fi-wi-stats-overview-stat-icon {
+        color: rgba(26, 26, 26, 0.7) !important;
+    }
 }
