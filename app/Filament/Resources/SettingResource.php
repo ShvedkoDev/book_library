@@ -68,6 +68,7 @@ class SettingResource extends Resource
                     ->onColor('success')
                     ->offColor('danger')
                     ->visible(fn (Forms\Get $get): bool => $get('type') === 'boolean')
+                    ->dehydrated(fn (Forms\Get $get): bool => $get('type') === 'boolean')
                     ->dehydrateStateUsing(fn ($state) => $state ? 'true' : 'false')
                     ->afterStateHydrated(function (Forms\Components\Toggle $component, $state) {
                         $component->state($state === 'true' || $state === '1' || $state === 1);
@@ -77,20 +78,23 @@ class SettingResource extends Resource
                 Forms\Components\TextInput::make('value')
                     ->label('Value')
                     ->numeric()
-                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'integer'),
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'integer')
+                    ->dehydrated(fn (Forms\Get $get): bool => $get('type') === 'integer'),
 
                 // String input
                 Forms\Components\TextInput::make('value')
                     ->label('Value')
                     ->maxLength(255)
-                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'string'),
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'string')
+                    ->dehydrated(fn (Forms\Get $get): bool => $get('type') === 'string'),
 
                 // Text (long) input
                 Forms\Components\Textarea::make('value')
                     ->label('Value')
                     ->rows(3)
                     ->columnSpanFull()
-                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'text'),
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'text')
+                    ->dehydrated(fn (Forms\Get $get): bool => $get('type') === 'text'),
 
                 // JSON input
                 Forms\Components\Textarea::make('value')
@@ -98,7 +102,8 @@ class SettingResource extends Resource
                     ->rows(5)
                     ->columnSpanFull()
                     ->helperText('Enter valid JSON format')
-                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'json'),
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'json')
+                    ->dehydrated(fn (Forms\Get $get): bool => $get('type') === 'json'),
 
                 Forms\Components\Textarea::make('description')
                     ->label('Description')
@@ -123,6 +128,13 @@ class SettingResource extends Resource
                     ->limit(50)
                     ->searchable()
                     ->copyable(),
+
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Description')
+                    ->limit(80)
+                    ->searchable()
+                    ->tooltip(fn ($record) => $record->description)
+                    ->wrap(),
 
                 Tables\Columns\TextColumn::make('group')
                     ->label('Group')
