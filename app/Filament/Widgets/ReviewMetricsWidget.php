@@ -19,20 +19,23 @@ class ReviewMetricsWidget extends BaseWidget
         $approvedReviews = BookReview::where('is_approved', true)->count();
 
         return [
-            Stat::make('Reviewed Books', $reviewedBooks)
+            Stat::make('Reviewed books', $reviewedBooks)
                 ->description('Books with at least one review')
                 ->descriptionIcon('heroicon-o-document-text')
-                ->color('primary'),
+                ->color('primary')
+                ->extraAttributes(['style' => 'background-color: #a299b8; color: white;']),
 
-            Stat::make('Total Reviews', $totalReviews)
+            Stat::make('Total reviews', $totalReviews)
                 ->description($approvedReviews . ' approved, ' . $pendingReviews . ' pending')
                 ->descriptionIcon('heroicon-o-chat-bubble-left-right')
-                ->color('info'),
+                ->color('info')
+                ->extraAttributes(['style' => 'background-color: #a299b8; color: white;']),
 
-            Stat::make('Pending Reviews', $pendingReviews)
+            Stat::make('Pending reviews', $pendingReviews)
                 ->description('Awaiting approval')
                 ->descriptionIcon('heroicon-o-clock')
-                ->color($pendingReviews > 0 ? 'warning' : 'success'),
+                ->color($pendingReviews > 0 ? 'warning' : 'success')
+                ->extraAttributes(['style' => 'background-color: #a299b8; color: white;']),
         ];
     }
 }

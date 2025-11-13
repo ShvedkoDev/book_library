@@ -170,7 +170,7 @@
 <div class="container">
     <div class="activity-dashboard-header">
         <h1>
-            <i class="fas fa-chart-line"></i> My Activity
+            <i class="fas fa-chart-line"></i> My activity
         </h1>
         <p>Track your interactions and engagement with the library</p>
     </div>

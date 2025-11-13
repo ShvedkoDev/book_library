@@ -170,7 +170,7 @@
 <div class="container">
     <div class="activity-header">
         <h1>
-            <i class="fas fa-download" style="color: #28a745;"></i> My Downloads
+            <i class="fas fa-download" style="color: #28a745;"></i> My downloads
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Your complete download history</p>
     </div>

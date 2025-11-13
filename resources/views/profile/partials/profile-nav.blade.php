@@ -6,7 +6,7 @@
     <nav class="profile-nav">
         <!-- Profile Settings Section -->
         <div class="profile-nav-section">
-            <div class="profile-nav-header">Profile Settings</div>
+            <div class="profile-nav-header">Profile settings</div>
             <a href="{{ route('profile.edit') }}" class="profile-nav-item {{ $currentRoute === 'profile.edit' ? 'active' : '' }}">
                 <i class="fas fa-user-edit"></i> Edit Profile
             </a>
@@ -14,27 +14,27 @@
 
         <!-- My Activity Section -->
         <div class="profile-nav-section">
-            <div class="profile-nav-header">My Activity</div>
+            <div class="profile-nav-header">My activity</div>
             <a href="{{ route('profile.activity') }}" class="profile-nav-item {{ $currentRoute === 'profile.activity' ? 'active' : '' }}">
-                <i class="fas fa-chart-line"></i> Activity Dashboard
+                <i class="fas fa-chart-line"></i> Activity dashboard
             </a>
             <a href="{{ route('profile.ratings') }}" class="profile-nav-item {{ $currentRoute === 'profile.ratings' ? 'active' : '' }}">
-                <i class="fas fa-star"></i> My Ratings
+                <i class="fas fa-star"></i> My ratings
             </a>
             <a href="{{ route('profile.reviews') }}" class="profile-nav-item {{ $currentRoute === 'profile.reviews' ? 'active' : '' }}">
-                <i class="fas fa-comment"></i> My Reviews
+                <i class="fas fa-comment"></i> My reviews
             </a>
             <a href="{{ route('profile.downloads') }}" class="profile-nav-item {{ $currentRoute === 'profile.downloads' ? 'active' : '' }}">
-                <i class="fas fa-download"></i> My Downloads
+                <i class="fas fa-download"></i> My downloads
             </a>
             <a href="{{ route('profile.bookmarks') }}" class="profile-nav-item {{ $currentRoute === 'profile.bookmarks' ? 'active' : '' }}">
-                <i class="fas fa-heart"></i> My Bookmarks
+                <i class="fas fa-heart"></i> My bookmarks
             </a>
             <a href="{{ route('profile.notes') }}" class="profile-nav-item {{ $currentRoute === 'profile.notes' ? 'active' : '' }}">
-                <i class="fas fa-sticky-note"></i> My Notes
+                <i class="fas fa-sticky-note"></i> My notes
             </a>
             <a href="{{ route('profile.timeline') }}" class="profile-nav-item {{ $currentRoute === 'profile.timeline' ? 'active' : '' }}">
-                <i class="fas fa-clock"></i> Activity Timeline
+                <i class="fas fa-clock"></i> Activity timeline
             </a>
         </div>
     </nav>

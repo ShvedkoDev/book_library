@@ -22,25 +22,29 @@ class RatingAnalyticsWidget extends BaseWidget
             ->value('count') ?? 0;
 
         return [
-            Stat::make('Rated Books', $booksWithRatings)
+            Stat::make('Rated books', $booksWithRatings)
                 ->description('Books with ratings')
                 ->descriptionIcon('heroicon-o-chart-bar')
-                ->color('primary'),
+                ->color('primary')
+                ->extraAttributes(['style' => 'background-color: #d2cbe3; color: #333;']),
 
-            Stat::make('Total Ratings', $totalRatings)
+            Stat::make('Total ratings', $totalRatings)
                 ->description('User ratings submitted')
                 ->descriptionIcon('heroicon-o-heart')
-                ->color('info'),
+                ->color('info')
+                ->extraAttributes(['style' => 'background-color: #d2cbe3; color: #333;']),
 
-            Stat::make('Average Rating', number_format($averageRating, 1) . '/5')
+            Stat::make('Average rating', number_format($averageRating, 1) . '/5')
                 ->description('Overall book quality')
                 ->descriptionIcon('heroicon-o-star')
-                ->color($averageRating >= 4 ? 'success' : ($averageRating >= 3 ? 'warning' : 'danger')),
+                ->color($averageRating >= 4 ? 'success' : ($averageRating >= 3 ? 'warning' : 'danger'))
+                ->extraAttributes(['style' => 'background-color: #d2cbe3; color: #333;']),
 
-            Stat::make('5-Star Books', $topRatedBooks)
+            Stat::make('5-star books', $topRatedBooks)
                 ->description('Excellent rated books')
                 ->descriptionIcon('heroicon-o-trophy')
-                ->color('success'),
+                ->color('success')
+                ->extraAttributes(['style' => 'background-color: #d2cbe3; color: #333;']),
         ];
     }
 }

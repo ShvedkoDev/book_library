@@ -19,20 +19,23 @@ class UserActivityWidget extends BaseWidget
         $adminUsers = User::where('role', 'admin')->count();
 
         return [
-            Stat::make('Total Users', $totalUsers)
+            Stat::make('Total users', $totalUsers)
                 ->description('Registered users')
                 ->descriptionIcon('heroicon-o-users')
-                ->color('primary'),
+                ->color('primary')
+                ->extraAttributes(['style' => 'background-color: #c4b28e; color: #333;']),
 
-            Stat::make('Verified Users', $verifiedUsers)
+            Stat::make('Verified users', $verifiedUsers)
                 ->description('Email verified')
                 ->descriptionIcon('heroicon-o-check-badge')
-                ->color('success'),
+                ->color('success')
+                ->extraAttributes(['style' => 'background-color: #c4b28e; color: #333;']),
 
-            Stat::make('Admin Users', $adminUsers)
+            Stat::make('Admin users', $adminUsers)
                 ->description('Administrator accounts')
                 ->descriptionIcon('heroicon-o-shield-check')
-                ->color('warning'),
+                ->color('warning')
+                ->extraAttributes(['style' => 'background-color: #c4b28e; color: #333;']),
         ];
     }
 }

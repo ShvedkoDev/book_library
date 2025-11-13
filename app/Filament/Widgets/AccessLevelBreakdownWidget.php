@@ -18,20 +18,23 @@ class AccessLevelBreakdownWidget extends BaseWidget
         $totalBooks = Book::count();
 
         return [
-            Stat::make('Full Access Books', $fullAccessCount)
+            Stat::make('Full access books', $fullAccessCount)
                 ->description(number_format(($fullAccessCount / max($totalBooks, 1)) * 100, 1) . '% of total books')
                 ->descriptionIcon('heroicon-o-check-circle')
-                ->color('success'),
+                ->color('success')
+                ->extraAttributes(['style' => 'background-color: #80a4aa; color: white;']),
 
-            Stat::make('Limited Access Books', $limitedAccessCount)
+            Stat::make('Limited access books', $limitedAccessCount)
                 ->description(number_format(($limitedAccessCount / max($totalBooks, 1)) * 100, 1) . '% of total books')
                 ->descriptionIcon('heroicon-o-lock-closed')
-                ->color('warning'),
+                ->color('warning')
+                ->extraAttributes(['style' => 'background-color: #80a4aa; color: white;']),
 
-            Stat::make('Unavailable Books', $unavailableCount)
+            Stat::make('Unavailable books', $unavailableCount)
                 ->description(number_format(($unavailableCount / max($totalBooks, 1)) * 100, 1) . '% of total books')
                 ->descriptionIcon('heroicon-o-x-circle')
-                ->color('danger'),
+                ->color('danger')
+                ->extraAttributes(['style' => 'background-color: #80a4aa; color: white;']),
         ];
     }
 }

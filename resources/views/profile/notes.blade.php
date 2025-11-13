@@ -412,7 +412,7 @@
 <div class="container">
     <div class="activity-header">
         <h1>
-            <i class="fas fa-sticky-note" style="color: #fd7e14;"></i> My Notes
+            <i class="fas fa-sticky-note" style="color: #fd7e14;"></i> My notes
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Your personal notes and annotations</p>
     </div>

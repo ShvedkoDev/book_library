@@ -168,7 +168,7 @@
 <div class="container">
     <div class="activity-header">
         <h1>
-            <i class="fas fa-star" style="color: #f39c12;"></i> My Ratings
+            <i class="fas fa-star" style="color: #f39c12;"></i> My ratings
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Books you've rated in the library</p>
     </div>

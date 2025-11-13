@@ -256,7 +256,7 @@
 <div class="container">
     <div class="profile-header">
         <h1>
-            <i class="fas fa-user-circle"></i> My Account
+            <i class="fas fa-user-circle"></i> My account
         </h1>
         <p>Manage your profile settings and activity</p>
     </div>
@@ -267,7 +267,7 @@
             <nav class="profile-nav">
                 <!-- Profile Settings Section -->
                 <div class="profile-nav-section">
-                    <div class="profile-nav-header">Profile Settings</div>
+                    <div class="profile-nav-header">Profile settings</div>
                     <a href="{{ route('profile.edit') }}" class="profile-nav-item active">
                         <i class="fas fa-user-edit"></i> Edit Profile
                     </a>
@@ -275,27 +275,27 @@
 
                 <!-- My Activity Section -->
                 <div class="profile-nav-section">
-                    <div class="profile-nav-header">My Activity</div>
+                    <div class="profile-nav-header">My activity</div>
                     <a href="{{ route('profile.activity') }}" class="profile-nav-item">
-                        <i class="fas fa-chart-line"></i> Activity Dashboard
+                        <i class="fas fa-chart-line"></i> Activity dashboard
                     </a>
                     <a href="{{ route('profile.ratings') }}" class="profile-nav-item">
-                        <i class="fas fa-star"></i> My Ratings
+                        <i class="fas fa-star"></i> My ratings
                     </a>
                     <a href="{{ route('profile.reviews') }}" class="profile-nav-item">
-                        <i class="fas fa-comment"></i> My Reviews
+                        <i class="fas fa-comment"></i> My reviews
                     </a>
                     <a href="{{ route('profile.downloads') }}" class="profile-nav-item">
-                        <i class="fas fa-download"></i> My Downloads
+                        <i class="fas fa-download"></i> My downloads
                     </a>
                     <a href="{{ route('profile.bookmarks') }}" class="profile-nav-item">
-                        <i class="fas fa-heart"></i> My Bookmarks
+                        <i class="fas fa-heart"></i> My bookmarks
                     </a>
                     <a href="{{ route('profile.notes') }}" class="profile-nav-item">
-                        <i class="fas fa-sticky-note"></i> My Notes
+                        <i class="fas fa-sticky-note"></i> My notes
                     </a>
                     <a href="{{ route('profile.timeline') }}" class="profile-nav-item">
-                        <i class="fas fa-clock"></i> Activity Timeline
+                        <i class="fas fa-clock"></i> Activity timeline
                     </a>
                 </div>
             </nav>
@@ -318,7 +318,7 @@
             <!-- Profile Information Card -->
             <div class="profile-card">
                 <div class="profile-card-header">
-                    <h2>Profile Information</h2>
+                    <h2>Profile information</h2>
                     <p>Update your account's profile information and email address.</p>
                 </div>
 
@@ -366,7 +366,7 @@
                     </div>
 
                     <button type="submit" class="btn">
-                        <i class="fas fa-save"></i> Save Changes
+                        <i class="fas fa-save"></i> Save changes
                     </button>
                 </form>
             </div>
@@ -374,7 +374,7 @@
             <!-- Update Password Card -->
             <div class="profile-card">
                 <div class="profile-card-header">
-                    <h2>Update Password</h2>
+                    <h2>Update password</h2>
                     <p>Ensure your account is using a long, random password to stay secure.</p>
                 </div>
 
@@ -383,7 +383,7 @@
                     @method('put')
 
                     <div class="form-group">
-                        <label for="update_password_current_password" class="form-label">Current Password</label>
+                        <label for="update_password_current_password" class="form-label">Current password</label>
                         <input type="password" id="update_password_current_password" name="current_password" class="form-input" autocomplete="current-password">
                         @error('current_password', 'updatePassword')
                             <div class="form-error">{{ $message }}</div>
@@ -391,7 +391,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="update_password_password" class="form-label">New Password</label>
+                        <label for="update_password_password" class="form-label">New password</label>
                         <input type="password" id="update_password_password" name="password" class="form-input" autocomplete="new-password">
                         @error('password', 'updatePassword')
                             <div class="form-error">{{ $message }}</div>
@@ -399,7 +399,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="update_password_password_confirmation" class="form-label">Confirm Password</label>
+                        <label for="update_password_password_confirmation" class="form-label">Confirm password</label>
                         <input type="password" id="update_password_password_confirmation" name="password_confirmation" class="form-input" autocomplete="new-password">
                         @error('password_confirmation', 'updatePassword')
                             <div class="form-error">{{ $message }}</div>
@@ -407,7 +407,7 @@
                     </div>
 
                     <button type="submit" class="btn">
-                        <i class="fas fa-key"></i> Update Password
+                        <i class="fas fa-key"></i> Update password
                     </button>
                 </form>
             </div>

@@ -15,35 +15,41 @@ class ActivityMetricsWidget extends BaseWidget
         $analytics = app(AnalyticsService::class);
 
         return [
-            Stat::make('Views Today', $analytics->getViewsToday())
+            Stat::make('Views today', $analytics->getViewsToday())
                 ->description('Book views in the last 24 hours')
                 ->descriptionIcon('heroicon-o-eye')
-                ->color('success'),
+                ->color('success')
+                ->extraAttributes(['style' => 'background-color: #efd353; color: #333;']),
 
-            Stat::make('Downloads Today', $analytics->getDownloadsToday())
+            Stat::make('Downloads today', $analytics->getDownloadsToday())
                 ->description('File downloads in the last 24 hours')
                 ->descriptionIcon('heroicon-o-arrow-down-tray')
-                ->color('info'),
+                ->color('info')
+                ->extraAttributes(['style' => 'background-color: #efd353; color: #333;']),
 
-            Stat::make('Total Views (30 days)', $analytics->getViews(30))
+            Stat::make('Total views (30 days)', $analytics->getViews(30))
                 ->description('Book views in the last 30 days')
                 ->descriptionIcon('heroicon-o-eye')
-                ->color('success'),
+                ->color('success')
+                ->extraAttributes(['style' => 'background-color: #efd353; color: #333;']),
 
-            Stat::make('Total Downloads (30 days)', $analytics->getDownloads(30))
+            Stat::make('Total downloads (30 days)', $analytics->getDownloads(30))
                 ->description('File downloads in the last 30 days')
                 ->descriptionIcon('heroicon-o-arrow-down-tray')
-                ->color('info'),
+                ->color('info')
+                ->extraAttributes(['style' => 'background-color: #c4c66a; color: #333;']),
 
-            Stat::make('Total Searches (30 days)', $analytics->getSearches(30))
+            Stat::make('Total searches (30 days)', $analytics->getSearches(30))
                 ->description('Search queries in the last 30 days')
                 ->descriptionIcon('heroicon-o-magnifying-glass')
-                ->color('warning'),
+                ->color('warning')
+                ->extraAttributes(['style' => 'background-color: #c4c66a; color: #333;']),
 
-            Stat::make('Unique Book Views (30 days)', $analytics->getUniqueBooksViewed(30))
+            Stat::make('Unique book views (30 days)', $analytics->getUniqueBooksViewed(30))
                 ->description('Different books viewed in last 30 days')
                 ->descriptionIcon('heroicon-o-book-open')
-                ->color('primary'),
+                ->color('primary')
+                ->extraAttributes(['style' => 'background-color: #c4c66a; color: #333;']),
         ];
     }
 }

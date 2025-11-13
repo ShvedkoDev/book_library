@@ -314,7 +314,7 @@
 <div class="container">
     <div class="activity-header">
         <h1>
-            <i class="fas fa-clock" style="color: #6366f1;"></i> Activity Timeline
+            <i class="fas fa-clock" style="color: #6366f1;"></i> Activity timeline
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Your complete activity history</p>
     </div>

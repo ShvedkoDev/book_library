@@ -165,7 +165,7 @@
 <div class="container">
     <div class="activity-header">
         <h1>
-            <i class="fas fa-heart" style="color: #ff6b6b;"></i> My Bookmarks
+            <i class="fas fa-heart" style="color: #ff6b6b;"></i> My bookmarks
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Books you've saved to your collection</p>
     </div>

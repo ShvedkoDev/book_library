@@ -413,7 +413,7 @@
 <div class="container">
     <div class="activity-header">
         <h1>
-            <i class="fas fa-comment" style="color: #007cba;"></i> My Reviews
+            <i class="fas fa-comment" style="color: #007cba;"></i> My reviews
         </h1>
         <p style="color: #666; margin-top: 0.5rem;">Your book reviews and feedback</p>
     </div>
