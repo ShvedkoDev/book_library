@@ -50,6 +50,14 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->navigationGroups([
+                'Library',
+                'Analytics',
+                'CSV Import/Export',
+                'Media',
+                'CMS',
+                'System',
+            ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 // Analytics Widgets
