@@ -185,6 +185,14 @@ class PageResource extends Resource
                     ->copyable()
                     ->copyMessage('Slug copied!')
                     ->icon('heroicon-m-link'),
+                Tables\Columns\IconColumn::make('is_homepage')
+                    ->label('Homepage')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-home')
+                    ->falseIcon('')
+                    ->trueColor('success')
+                    ->sortable()
+                    ->tooltip(fn (Page $record): string => $record->is_homepage ? 'This page is set as homepage' : ''),
                 Tables\Columns\ToggleColumn::make('is_published')
                     ->label('Published')
                     ->sortable(),
