@@ -75,12 +75,6 @@ class UserResource extends Resource
                             ->label('Active')
                             ->default(true)
                             ->helperText('Active users can log in'),
-
-                        Forms\Components\DateTimePicker::make('email_verified_at')
-                            ->label('Email Verified At')
-                            ->helperText('Mark email as verified manually (for admin-created accounts)')
-                            ->default(now())
-                            ->visibleOn('create'),
                     ])->columns(2),
 
                 Section::make('CMS Access')

@@ -31,6 +31,9 @@ class CreateUser extends CreateRecord
                 ->send();
         }
 
+        // Auto-verify all users (email verification disabled)
+        $data['email_verified_at'] = now();
+
         // Remove the checkbox from data (it's not a model field)
         unset($data['send_credentials_email']);
 

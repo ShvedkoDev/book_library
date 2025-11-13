@@ -212,34 +212,6 @@
         border: 1px solid #bee5eb;
     }
 
-    .verification-notice {
-        background: #fff3cd;
-        border: 1px solid #ffeaa7;
-        padding: 1rem;
-        border-radius: 6px;
-        margin-top: 0.75rem;
-    }
-
-    .verification-notice p {
-        margin: 0;
-        font-size: 0.95rem;
-        color: #856404;
-    }
-
-    .verification-notice button {
-        background: none;
-        border: none;
-        color: #007cba;
-        text-decoration: underline;
-        cursor: pointer;
-        padding: 0;
-        font-size: 0.95rem;
-    }
-
-    .verification-notice button:hover {
-        color: #005a87;
-    }
-
     @media (max-width: 968px) {
         .profile-container {
             flex-direction: column;
@@ -322,10 +294,6 @@
                     <p>Update your account's profile information and email address.</p>
                 </div>
 
-                <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-                    @csrf
-                </form>
-
                 <form method="post" action="{{ route('profile.update') }}">
                     @csrf
                     @method('patch')
@@ -344,25 +312,6 @@
                         @error('email')
                             <div class="form-error">{{ $message }}</div>
                         @enderror
-
-                        @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                            <div class="verification-notice">
-                                <p>
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    Your email address is unverified.
-                                    <button form="send-verification">
-                                        Click here to re-send the verification email.
-                                    </button>
-                                </p>
-
-                                @if (session('status') === 'verification-link-sent')
-                                    <p style="margin-top: 0.5rem; color: #155724;">
-                                        <i class="fas fa-check-circle"></i>
-                                        A new verification link has been sent to your email address.
-                                    </p>
-                                @endif
-                            </div>
-                        @endif
                     </div>
 
                     <button type="submit" class="btn">

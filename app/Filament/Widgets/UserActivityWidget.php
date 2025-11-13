@@ -15,8 +15,8 @@ class UserActivityWidget extends BaseWidget
     protected function getStats(): array
     {
         $totalUsers = User::count();
-        $verifiedUsers = User::whereNotNull('email_verified_at')->count();
         $adminUsers = User::where('role', 'admin')->count();
+        $regularUsers = User::where('role', 'user')->count();
 
         return [
             Stat::make('Total users', $totalUsers)
@@ -25,9 +25,9 @@ class UserActivityWidget extends BaseWidget
                 ->color('primary')
                 ->extraAttributes(['style' => 'background-color: #c4b28e; color: #333;']),
 
-            Stat::make('Verified users', $verifiedUsers)
-                ->description('Email verified')
-                ->descriptionIcon('heroicon-o-check-badge')
+            Stat::make('Regular users', $regularUsers)
+                ->description('Non-admin accounts')
+                ->descriptionIcon('heroicon-o-user')
                 ->color('success')
                 ->extraAttributes(['style' => 'background-color: #c4b28e; color: #333;']),
 
