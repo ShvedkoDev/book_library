@@ -24,13 +24,13 @@ class BooksStatsWidget extends BaseWidget
                 ->description('Currently available')
                 ->descriptionIcon('heroicon-o-check-circle')
                 ->color('success')
-                ->extraAttributes(['style' => 'background-color: #b4d8d4; color: #333;']),
+                ->extraAttributes(['style' => 'background-color: #b4d8d4; color: #1a1a1a;']),
 
             Stat::make('Featured books', Book::where('is_featured', true)->count())
                 ->description('Highlighted content')
                 ->descriptionIcon('heroicon-o-star')
                 ->color('warning')
-                ->extraAttributes(['style' => 'background-color: #b4d8d4; color: #333;']),
+                ->extraAttributes(['style' => 'background-color: #b4d8d4; color: #1a1a1a;']),
 
             Stat::make('Languages', Language::where('is_active', true)->count())
                 ->description('Available languages')

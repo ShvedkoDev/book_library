@@ -23,19 +23,19 @@ class UserActivityWidget extends BaseWidget
                 ->description('Registered users')
                 ->descriptionIcon('heroicon-o-users')
                 ->color('primary')
-                ->extraAttributes(['style' => 'background-color: #c4b28e; color: #333;']),
+                ->extraAttributes(['style' => 'background-color: #c4b28e; color: #1a1a1a;']),
 
             Stat::make('Regular users', $regularUsers)
                 ->description('Non-admin accounts')
                 ->descriptionIcon('heroicon-o-user')
                 ->color('success')
-                ->extraAttributes(['style' => 'background-color: #c4b28e; color: #333;']),
+                ->extraAttributes(['style' => 'background-color: #c4b28e; color: #1a1a1a;']),
 
             Stat::make('Admin users', $adminUsers)
                 ->description('Administrator accounts')
                 ->descriptionIcon('heroicon-o-shield-check')
                 ->color('warning')
-                ->extraAttributes(['style' => 'background-color: #c4b28e; color: #333;']),
+                ->extraAttributes(['style' => 'background-color: #c4b28e; color: #1a1a1a;']),
         ];
     }
 }
