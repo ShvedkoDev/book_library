@@ -59,12 +59,46 @@ class SettingResource extends Resource
                     ])
                     ->required()
                     ->default('string')
-                    ->reactive(),
+                    ->reactive()
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('value', '')),
 
+                // Boolean input
+                Forms\Components\Toggle::make('value')
+                    ->label('Value')
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'boolean')
+                    ->dehydrateStateUsing(fn ($state) => $state ? 'true' : 'false')
+                    ->afterStateHydrated(function (Forms\Components\Toggle $component, $state) {
+                        $component->state($state === 'true' || $state === '1' || $state === 1);
+                    }),
+
+                // Integer input
+                Forms\Components\TextInput::make('value')
+                    ->label('Value')
+                    ->numeric()
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'integer'),
+
+                // String input
+                Forms\Components\TextInput::make('value')
+                    ->label('Value')
+                    ->maxLength(255)
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'string'),
+
+                // Text (long) input
                 Forms\Components\Textarea::make('value')
                     ->label('Value')
                     ->rows(3)
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'text'),
+
+                // JSON input
+                Forms\Components\Textarea::make('value')
+                    ->label('Value (JSON)')
+                    ->rows(5)
+                    ->columnSpanFull()
+                    ->helperText('Enter valid JSON format')
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'json'),
 
                 Forms\Components\Textarea::make('description')
                     ->label('Description')

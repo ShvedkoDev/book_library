@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@yield('title', 'Micronesian Teachers Digital Library')</title>
+        <title>@yield('title', $siteName)</title>
 
         <style>
             /* WordPress custom properties */
@@ -311,14 +311,14 @@
     <body class="login-page">
         <div class="login-container">
             <div class="login-header">
-                <img src="{{ asset('library-assets/images/mtdl-logo.png') }}" alt="Micronesian Teachers Digital Library" class="site-logo">
-                <h1>Micronesian Teachers Digital Library</h1>
+                <img src="{{ asset('library-assets/images/mtdl-logo.png') }}" alt="{{ $siteName }}" class="site-logo">
+                <h1>{{ $siteName }}</h1>
             </div>
 
             {{ $slot }}
 
             <div class="back-to-site">
-                <a href="{{ route('library.index') }}">← Go to Micronesian Teachers Digital Library</a>
+                <a href="{{ route('library.index') }}">← Go to {{ $siteName }}</a>
             </div>
         </div>
     </body>

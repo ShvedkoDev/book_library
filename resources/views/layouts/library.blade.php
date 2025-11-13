@@ -7,19 +7,19 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'/>
 
-    <title>@yield('title', 'Micronesian Teachers Digital Library')</title>
-    <meta name="description" content="@yield('description', 'Access over 2,000 educational resources in local languages for Micronesian educators')">
+    <title>@yield('title', $siteName)</title>
+    <meta name="description" content="@yield('description', $siteDescription)">
 
     <!-- Open Graph / SEO -->
     <meta property="og:locale" content="en_US"/>
     <meta property="og:type" content="@yield('og_type', 'website')"/>
-    <meta property="og:title" content="@yield('title', 'Micronesian Teachers Digital Library')"/>
-    <meta property="og:description" content="@yield('description', 'Access over 2,000 educational resources in local languages for Micronesian educators')"/>
+    <meta property="og:title" content="@yield('title', $siteName)"/>
+    <meta property="og:description" content="@yield('description', $siteDescription)"/>
     <meta property="og:url" content="{{ url()->current() }}"/>
-    <meta property="og:site_name" content="Micronesian Teachers Digital Library"/>
+    <meta property="og:site_name" content="{{ $siteName }}"/>
     @hasSection('og_image')
         <meta property="og:image" content="@yield('og_image')"/>
-        <meta property="og:image:alt" content="@yield('title', 'Micronesian Teachers Digital Library')"/>
+        <meta property="og:image:alt" content="@yield('title', $siteName)"/>
     @endif
 
     <!-- Stylesheets -->
@@ -320,9 +320,9 @@
 <!-- Department Footer -->
 <footer class="department-footer" aria-label="department or special program info">
     <div class="container">
-        <img class="dept-logo" src="https://picsum.photos/200/80?random=3DL" alt="Micronesian Teachers Digital Library logo">
+        <img class="dept-logo" src="https://picsum.photos/200/80?random=3DL" alt="{{ $siteName }} logo">
         <p class="tagline">
-            The Micronesian Teachers Digital Library promotes culturally responsive, place-based education by providing access to over 2,000 educational resources in local languages, fostering cultural preservation and academic excellence across Micronesia.
+            {{ $siteDescription }}
         </p>
     </div>
 </footer>
@@ -332,7 +332,7 @@
     <div class="container">
         <div class="address-contact-link">
             <address>
-                <strong>Micronesian Teachers Digital Library</strong>
+                <strong>{{ $siteName }}</strong>
                 <p>Educational Resource Center<br/>
                     Pacific Islands Region<br/>
                     Micronesia</p>
@@ -341,7 +341,7 @@
             <div class="contact">
                 <i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+1-000-000-0000">(000) 000-0000</a>
                 <br/><i class="fas fa-fax" aria-hidden="true"></i> <a href="tel:+1-000-000-0000">(000) 000-0000</a>
-                <br/><i class="fas fa-envelope" aria-hidden="true"></i> <a href="mailto:info@mtdl.edu">info@mtdl.edu</a>
+                <br/><i class="fas fa-envelope" aria-hidden="true"></i> <a href="mailto:{{ $libraryEmail }}">{{ $libraryEmail }}</a>
             </div>
 
             <ul class="other-links-col other-links-col1">

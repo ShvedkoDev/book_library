@@ -16,13 +16,24 @@ class Setting extends Model
     ];
 
     /**
-     * Get a setting value by key
+     * Get a setting value by key with automatic type casting
      */
     public static function get(string $key, $default = null)
     {
         return Cache::remember("setting.{$key}", 3600, function () use ($key, $default) {
             $setting = static::where('key', $key)->first();
-            return $setting ? $setting->value : $default;
+
+            if (!$setting) {
+                return $default;
+            }
+
+            // Auto-cast based on type
+            return match ($setting->type) {
+                'boolean' => in_array(strtolower($setting->value), ['true', '1', 'yes']),
+                'integer' => (int) $setting->value,
+                'json' => json_decode($setting->value, true),
+                default => $setting->value,
+            };
         });
     }
 
