@@ -39,7 +39,10 @@ class SettingResource extends Resource
                     ->options([
                         'general' => 'General',
                         'library' => 'Library',
+                        'features' => 'Features',
+                        'analytics' => 'Analytics',
                         'email' => 'Email',
+                        'maintenance' => 'Maintenance',
                         'system' => 'System',
                     ])
                     ->required()
@@ -93,7 +96,10 @@ class SettingResource extends Resource
                     ->color(fn (string $state): string => match ($state) {
                         'general' => 'gray',
                         'library' => 'success',
+                        'features' => 'primary',
+                        'analytics' => 'info',
                         'email' => 'info',
+                        'maintenance' => 'danger',
                         'system' => 'warning',
                         default => 'gray',
                     })
@@ -116,7 +122,10 @@ class SettingResource extends Resource
                     ->options([
                         'general' => 'General',
                         'library' => 'Library',
+                        'features' => 'Features',
+                        'analytics' => 'Analytics',
                         'email' => 'Email',
+                        'maintenance' => 'Maintenance',
                         'system' => 'System',
                     ]),
             ])
