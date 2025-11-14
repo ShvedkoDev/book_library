@@ -170,6 +170,10 @@
         justify-content: center;
         gap: 0.5rem;
         font-size: 14px;
+        line-height: 1.2;
+        font-family: var(--wp--preset--font-family--proxima-nova);
+        white-space: nowrap;
+        box-sizing: border-box;
     }
 
     .book-action-btn.btn-primary {
@@ -202,7 +206,8 @@
 
     .book-action-btn i,
     .book-action-btn svg {
-        font-size: 1rem;
+        font-size: 14px;
+        line-height: 1;
     }
 
     /* Action Icons Row */
