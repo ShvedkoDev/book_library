@@ -156,11 +156,11 @@
     }
 
     .book-action-btn {
-        padding: 0.65rem 1rem;
+        padding: 8px 20px;
         border: none;
-        border-radius: 50px;
+        border-radius: 22px;
         cursor: pointer;
-        font-weight: 600;
+        font-weight: 500;
         transition: all 0.3s;
         text-align: center;
         width: 100%;
@@ -169,8 +169,7 @@
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        min-height: 44px;
-        font-size: 0.9rem;
+        font-size: 14px;
     }
 
     .book-action-btn.btn-primary {
@@ -204,6 +203,42 @@
     .book-action-btn i,
     .book-action-btn svg {
         font-size: 1rem;
+    }
+
+    /* Action Icons Row */
+    .action-icons-row {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 1rem 0;
+        gap: 0.5rem;
+    }
+
+    .action-icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        cursor: pointer;
+        text-decoration: none;
+        color: #666;
+        transition: all 0.2s ease;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+
+    .action-icon:hover {
+        color: #007cba;
+        background: #f8f9fa;
+    }
+
+    .action-icon i {
+        font-size: 1.5rem;
+    }
+
+    .action-icon span {
+        font-size: 0.75rem;
+        font-weight: 500;
     }
 
     .book-rating {
@@ -1517,7 +1552,11 @@
         <!-- Book Cover Section -->
         <div class="book-cover-section">
             @php
+                // Try to get primary PDF first, then fall back to any PDF
                 $pdfFile = $book->files->where('file_type', 'pdf')->where('is_primary', true)->first();
+                if (!$pdfFile) {
+                    $pdfFile = $book->files->where('file_type', 'pdf')->first();
+                }
             @endphp
 
             <img src="{{ $book->getThumbnailUrl() }}" alt="{{ $book->title }}" class="book-cover">
@@ -1618,25 +1657,29 @@
                 @endauth
             </div>
 
-            <!-- Share Button (No Auth Required) -->
+            <!-- Action Icons Row -->
             <div class="divider-top">
-                <x-share-button
-                    :url="route('library.show', $book->slug)"
-                    :title="$book->title"
-                    :description="Str::limit($book->description ?? 'Educational resource for Micronesian teachers', 100)"
-                />
-            </div>
-
-            <!-- Quick Action Buttons -->
-            <div class="divider-top">
-                <button onclick="scrollToSection('reader-observations')" class="book-action-btn btn-action">
-                    <i class="fal fa-comment"></i> Review
-                </button>
-                @auth
-                    <button onclick="scrollToSection('notes-section')" class="book-action-btn btn-action" style="margin-top: 0.5rem;">
-                        <i class="fal fa-pen"></i> Notes
+                <div class="action-icons-row">
+                    <button onclick="scrollToSection('reader-observations')" class="action-icon">
+                        <i class="fal fa-comment"></i>
+                        <span>Review</span>
                     </button>
-                @endauth
+                    @auth
+                        <button onclick="scrollToSection('notes-section')" class="action-icon">
+                            <i class="fal fa-pen"></i>
+                            <span>Notes</span>
+                        </button>
+                    @else
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="action-icon" title="Please log in to add notes">
+                            <i class="fal fa-pen"></i>
+                            <span>Notes</span>
+                        </a>
+                    @endauth
+                    <button onclick="openShareModal()" class="action-icon">
+                        <i class="fal fa-share-alt"></i>
+                        <span>Share</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -2470,6 +2513,29 @@
         if (modal) {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Share Modal function
+    function openShareModal() {
+        const url = window.location.href;
+        const title = '{{ $book->title }}';
+        const text = '{{ Str::limit($book->description ?? "Check out this book", 100) }}';
+
+        // Try to use native share API if available (mobile)
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: text,
+                url: url
+            }).catch((error) => console.log('Error sharing', error));
+        } else {
+            // Fallback: copy link to clipboard
+            navigator.clipboard.writeText(url).then(function() {
+                alert('Link copied to clipboard!');
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+            });
         }
     }
 
