@@ -210,15 +210,22 @@
         line-height: 1;
     }
 
+    /* Override divider-top for star rating */
+    .star-rating-wrapper.divider-top {
+        margin-top: 0.5rem;
+        padding-top: 0;
+        border-top: none;
+    }
+
     /* Star Rating Row */
     .star-rating-row {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 0.75rem 0;
+        padding: 0.5rem 0;
         gap: 0.25rem;
         border-bottom: 1px solid #e0e0e0;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.5rem;
     }
 
     .star-rating-row .star-btn {
@@ -242,17 +249,17 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        padding: 0.75rem 0;
+        padding: 0.5rem 0;
         gap: 0.5rem;
         border-bottom: 1px solid #e0e0e0;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.5rem;
     }
 
     .action-icon {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.35rem;
+        gap: 0.25rem;
         cursor: pointer;
         text-decoration: none;
         color: #666;
@@ -267,12 +274,12 @@
     }
 
     .action-icon i {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
         line-height: 1;
     }
 
     .action-icon span {
-        font-size: 0.75rem;
+        font-size: 0.65rem;
         font-weight: 500;
         line-height: 1;
     }
@@ -1680,7 +1687,7 @@
             </div>
 
             <!-- Star Rating Row -->
-            <div class="divider-top">
+            <div class="divider-top star-rating-wrapper">
                 <div class="star-rating-row">
                     @auth
                         <form action="{{ route('library.rate', $book->id) }}" method="POST" id="quick-rating-form">

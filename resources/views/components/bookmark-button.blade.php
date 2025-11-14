@@ -21,41 +21,38 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.75rem 1.25rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 50px;
     cursor: pointer;
     font-weight: 600;
-    color: #555;
     transition: all 0.3s;
     width: 100%;
     margin: 0!important;
-    font-size: 13px;
-    line-height: 2;
-    background-color: #f0f0f0;
-    color: #333;
+    font-size: 14px;
+    line-height: 1.2;
+    background-color: #fff3cd;
+    color: #856404;
 }
 
 .bookmark-button:hover {
-    background: #e9ecef;
-    border-color: #007cba;
-    color: #007cba;
+    background: #ffe69c;
+    color: #856404;
 }
 
 .bookmark-button.bookmarked {
     background: #fff3cd;
-    border-color: #ffc107;
     color: #856404;
 }
 
 .bookmark-button.bookmarked:hover {
     background: #ffe69c;
-    border-color: #e0a800;
 }
 
 .bookmark-button i {
-    font-size: 1rem;
+    font-size: 1.1rem;
     transition: all 0.3s;
+    color: #ff6b6b;
 }
 
 .bookmark-button.bookmarked i {
