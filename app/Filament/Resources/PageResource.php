@@ -29,6 +29,23 @@ class PageResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    // Enable global search
+    protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'slug', 'meta_description'];
+    }
+
+    public static function getGlobalSearchResultDetails($record): array
+    {
+        return [
+            'Slug' => '/' . $record->slug,
+            'Status' => $record->is_published ? 'Published' : 'Draft',
+            'Homepage' => $record->is_homepage ? 'Yes' : 'No',
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form

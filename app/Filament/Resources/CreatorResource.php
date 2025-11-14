@@ -25,6 +25,22 @@ class CreatorResource extends Resource
     // Kept for backward compatibility only
     protected static bool $shouldRegisterNavigation = false;
 
+    // Enable global search
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'biography', 'nationality'];
+    }
+
+    public static function getGlobalSearchResultDetails($record): array
+    {
+        return [
+            'Nationality' => $record->nationality,
+            'Books' => $record->bookCreators()->count(),
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form

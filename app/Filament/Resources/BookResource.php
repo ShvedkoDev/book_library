@@ -21,6 +21,25 @@ class BookResource extends Resource
     protected static ?string $navigationGroup = 'Library';
     protected static ?int $navigationSort = 9;
 
+    // Enable global search
+    protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'subtitle', 'internal_id', 'palm_code', 'description', 'creators.name', 'languages.name'];
+    }
+
+    public static function getGlobalSearchResultDetails($record): array
+    {
+        return [
+            'ID' => $record->internal_id,
+            'PALM' => $record->palm_code,
+            'Authors' => $record->creators->pluck('name')->join(', '),
+            'Languages' => $record->languages->pluck('name')->join(', '),
+            'Year' => $record->publication_year,
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form

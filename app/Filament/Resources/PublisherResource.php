@@ -18,6 +18,22 @@ class PublisherResource extends Resource
     protected static ?string $navigationGroup = 'Library';
     protected static ?int $navigationSort = 4;
 
+    // Enable global search
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'program_name', 'contact_email'];
+    }
+
+    public static function getGlobalSearchResultDetails($record): array
+    {
+        return [
+            'Program' => $record->program_name,
+            'Books' => $record->books()->count(),
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form

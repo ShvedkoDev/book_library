@@ -26,6 +26,23 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
+    // Enable global search
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email'];
+    }
+
+    public static function getGlobalSearchResultDetails($record): array
+    {
+        return [
+            'Email' => $record->email,
+            'Role' => ucfirst($record->role),
+            'Status' => $record->is_active ? 'Active' : 'Inactive',
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form
