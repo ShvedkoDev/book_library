@@ -2507,26 +2507,40 @@ a:where(:not(.wp-element-button)) {
     border-radius: 3px;
     overflow: hidden;
     background: var(--wp--preset--color--white);
+    height: 40px;
 }
 
 /* WordPress input styling */
 .search-input, .input, .entries-dropdown, #sort-select {
     flex: 1;
     padding: 8px 12px;
-    border: 1px solid #8c8f94;
-    border-radius: 3px 0 0 3px;
+    border: none;
+    border-radius: 0;
     font-size: 13px;
     line-height: 1.5;
-    height: 40px;
+    height: 100%;
     font-family: var(--wp--preset--font-family--proxima-nova);
     background: var(--wp--preset--color--white);
     color: #32373c;
     outline: none;
 }
 
-.search-input:focus, .input:focus, .entries-dropdown:focus, #sort-select:focus {
+/* Hide dropdown arrow */
+.entries-dropdown {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none;
+    padding-right: 12px;
+}
+
+.search-box:focus-within, .entries-selector:focus-within {
     border-color: #007cba;
-    outline: 2px solid transparent;
+    box-shadow: 0 0 0 1px #007cba;
+}
+
+.search-input:focus, .input:focus, .entries-dropdown:focus, #sort-select:focus {
+    outline: none;
 }
 
 .filter-section {
@@ -2551,6 +2565,8 @@ a:where(:not(.wp-element-button)) {
     font-size: var(--wp--preset--font-size--small);
     text-transform: uppercase;
     letter-spacing: 0.3px;
+    min-height: 20px;
+    line-height: 1.2;
 }
 
 .checkbox-group {
@@ -2742,7 +2758,7 @@ a:where(:not(.wp-element-button)) {
 .library-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: var(--wp--preset--spacing--20);
     padding-bottom: var(--wp--preset--spacing--15);
     border-bottom: 2px solid var(--wp--preset--color--coe-green);
@@ -2943,27 +2959,30 @@ a:where(:not(.wp-element-button)) {
 .btn-view, .btn-download {
     flex: 1;
     text-align: center;
-    padding: 0 10px;
+    padding: 0 16px;
     border-radius: 3px;
     text-decoration: none;
     font-size: 13px;
-    font-weight: 400;
+    font-weight: 500;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     cursor: pointer;
     border-width: 1px;
     border-style: solid;
     transition: all 0.1s ease-in-out;
-    line-height: 2.15384615;
-    min-height: 30px;
+    line-height: 2;
+    min-height: 32px;
+    height: 32px;
     box-sizing: border-box;
     white-space: nowrap;
-    vertical-align: top;
-    display: inline-block;
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-view {
     background: #007cba;
-    border-color: #007cba;
+    border-color: #0071a1;
     color: #fff;
     text-shadow: none;
 }
