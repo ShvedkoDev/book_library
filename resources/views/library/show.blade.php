@@ -121,25 +121,31 @@
 
     .access-status {
         padding: 0.5rem;
-        border-radius: 4px;
         text-align: center;
         margin-bottom: 1rem;
         font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
     }
 
     .access-status.full-access {
-        background-color: #d4edda;
         color: #155724;
     }
 
     .access-status.limited-access {
-        background-color: #fff3cd;
         color: #856404;
     }
 
     .access-status.unavailable {
-        background-color: #f8d7da;
         color: #721c24;
+    }
+
+    .access-status svg,
+    .access-status i {
+        font-size: 1.1rem;
     }
 
     .book-actions {
@@ -150,16 +156,21 @@
     }
 
     .book-action-btn {
-        padding: 0.5rem;
+        padding: 0.65rem 1rem;
         border: none;
-        border-radius: 4px;
+        border-radius: 50px;
         cursor: pointer;
         font-weight: 600;
         transition: all 0.3s;
         text-align: center;
         width: 100%;
         text-decoration: none;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 44px;
+        font-size: 0.9rem;
     }
 
     .book-action-btn.btn-primary {
@@ -167,9 +178,32 @@
         color: white;
     }
 
+    .book-action-btn.btn-primary:hover {
+        background-color: #005a8a;
+    }
+
     .book-action-btn.btn-secondary {
         background-color: #f0f0f0;
         color: #333;
+    }
+
+    .book-action-btn.btn-secondary:hover {
+        background-color: #e0e0e0;
+    }
+
+    .book-action-btn.btn-action {
+        background-color: #f8f9fa;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+
+    .book-action-btn.btn-action:hover {
+        background-color: #e9ecef;
+    }
+
+    .book-action-btn i,
+    .book-action-btn svg {
+        font-size: 1rem;
     }
 
     .book-rating {
@@ -1489,32 +1523,44 @@
             <img src="{{ $book->getThumbnailUrl() }}" alt="{{ $book->title }}" class="book-cover">
 
             <div class="access-status {{ $book->access_level === 'full' ? 'full-access' : ($book->access_level === 'limited' ? 'limited-access' : 'unavailable') }}">
-                <span>
-                    @if($book->access_level === 'full')
-                        📖 Full Access
-                    @elseif($book->access_level === 'limited')
-                        📄 Limited Access
-                    @else
-                        🔒 Unavailable
-                    @endif
-                </span>
+                @if($book->access_level === 'full')
+                    <i class="fal fa-book-open"></i>
+                    <span>Full access</span>
+                @elseif($book->access_level === 'limited')
+                    <i class="fal fa-lock"></i>
+                    <span>Limited access</span>
+                @else
+                    <i class="fal fa-ban"></i>
+                    <span>Unavailable</span>
+                @endif
             </div>
 
             <div class="book-actions">
                 @if($book->access_level === 'full' && $pdfFile)
                     @auth
-                        <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">View PDF</a>
-                        <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-secondary">Download PDF</a>
+                        <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">
+                            <i class="fal fa-eye"></i> View PDF
+                        </a>
+                        <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-secondary">
+                            <i class="fal fa-download"></i> Download PDF
+                        </a>
                     @else
-                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to view PDF">Login to View PDF</a>
-                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to download">Login to Download</a>
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to view PDF">
+                            <i class="fal fa-eye"></i> View PDF
+                        </a>
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to download">
+                            <i class="fal fa-download"></i> Download PDF
+                        </a>
                     @endauth
                 @elseif($book->access_level === 'limited' && $pdfFile)
                     @auth
-                        <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">Limited Preview</a>
-                        <button class="book-action-btn btn-secondary" disabled>Request Full Access</button>
+                        <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">
+                            <i class="fal fa-eye"></i> View PDF
+                        </a>
                     @else
-                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to preview">Login to Preview</a>
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to preview">
+                            <i class="fal fa-eye"></i> View PDF
+                        </a>
                     @endauth
                 @else
                     <button class="book-action-btn btn-primary" disabled>Not Available</button>
@@ -1579,6 +1625,18 @@
                     :title="$book->title"
                     :description="Str::limit($book->description ?? 'Educational resource for Micronesian teachers', 100)"
                 />
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="divider-top">
+                <button onclick="scrollToSection('reader-observations')" class="book-action-btn btn-action">
+                    <i class="fal fa-comment"></i> Review
+                </button>
+                @auth
+                    <button onclick="scrollToSection('notes-section')" class="book-action-btn btn-action" style="margin-top: 0.5rem;">
+                        <i class="fal fa-pen"></i> Notes
+                    </button>
+                @endauth
             </div>
         </div>
 
@@ -2089,7 +2147,7 @@
 
     <!-- Personal Notes Section -->
     @auth
-    <div class="notes-section">
+    <div id="notes-section" class="notes-section">
         <h2>
             <i class="fal fa-sticky-note"></i> My Notes
             @if($userNotes->isNotEmpty())
@@ -2298,6 +2356,18 @@
             content.style.maxHeight = '120px';
             moreBtn.style.display = 'block';
             lessBtn.style.display = 'none';
+        }
+    }
+
+    // Scroll to section functionality
+    function scrollToSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            const offsetTop = section.offsetTop - 200;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
         }
     }
 
