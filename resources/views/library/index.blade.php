@@ -17,7 +17,7 @@
                 </span>
             </div>
             <div class="handbook-header-menu">
-                <h1>Resource Library</h1>
+                <h1>Resource library</h1>
             </div>
         </div>
         <aside class="sidebar header-image handbook-image">

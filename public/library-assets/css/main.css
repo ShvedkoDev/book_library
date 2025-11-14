@@ -850,3 +850,7 @@ img {
 .block { display: block; }
 .flex { display: flex; }
 .grid { display: grid; }
+
+.main-home{
+    font-weight: bold;
+}
