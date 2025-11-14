@@ -156,7 +156,7 @@
     }
 
     .book-action-btn {
-        padding: 8px 20px;
+        padding: 9px 20px;
         border: none;
         border-radius: 22px;
         cursor: pointer;
@@ -210,40 +210,71 @@
         line-height: 1;
     }
 
+    /* Star Rating Row */
+    .star-rating-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.75rem 0;
+        gap: 0.25rem;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 0.75rem;
+    }
+
+    .star-rating-row .star-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        color: #ddd;
+        font-size: 1.75rem;
+        transition: color 0.2s ease;
+        line-height: 1;
+    }
+
+    .star-rating-row .star-btn:hover,
+    .star-rating-row .star-btn.active {
+        color: #ffc107;
+    }
+
     /* Action Icons Row */
     .action-icons-row {
         display: flex;
         justify-content: space-around;
         align-items: center;
-        padding: 1rem 0;
+        padding: 0.75rem 0;
         gap: 0.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 0.75rem;
     }
 
     .action-icon {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.35rem;
         cursor: pointer;
         text-decoration: none;
         color: #666;
-        transition: all 0.2s ease;
-        padding: 0.5rem;
-        border-radius: 4px;
+        transition: color 0.2s ease;
+        background: none;
+        border: none;
+        padding: 0;
     }
 
     .action-icon:hover {
-        color: #007cba;
-        background: #f8f9fa;
+        color: #333;
     }
 
     .action-icon i {
         font-size: 1.5rem;
+        line-height: 1;
     }
 
     .action-icon span {
         font-size: 0.75rem;
         font-weight: 500;
+        line-height: 1;
     }
 
     .book-rating {
@@ -1648,22 +1679,27 @@
                 @endif
             </div>
 
-            <!-- Bookmark Button (Auth Required) -->
+            <!-- Star Rating Row -->
             <div class="divider-top">
-                @auth
-                    <x-bookmark-button
-                        :book="$book"
-                        :isBookmarked="$book->isBookmarkedBy(Auth::id())"
-                    />
-                @else
-                    <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to save to collection">
-                        Login to Save to Collection
-                    </a>
-                @endauth
+                <div class="star-rating-row">
+                    @auth
+                        <form action="{{ route('library.rate', $book->id) }}" method="POST" id="quick-rating-form">
+                            @csrf
+                            <input type="hidden" name="rating" id="quick-rating-value">
+                            @for($i = 1; $i <= 5; $i++)
+                                <button type="button" class="star-btn {{ $userRating && $i <= $userRating->rating ? 'active' : '' }}" data-rating="{{ $i }}" onclick="submitQuickRating({{ $i }})">★</button>
+                            @endfor
+                        </form>
+                    @else
+                        @for($i = 1; $i <= 5; $i++)
+                            <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="star-btn" title="Please log in to rate">★</a>
+                        @endfor
+                    @endauth
+                </div>
             </div>
 
             <!-- Action Icons Row -->
-            <div class="divider-top">
+            <div>
                 <div class="action-icons-row">
                     <button onclick="scrollToSection('reader-observations')" class="action-icon">
                         <i class="fal fa-comment"></i>
@@ -1685,6 +1721,20 @@
                         <span>Share</span>
                     </button>
                 </div>
+            </div>
+
+            <!-- Bookmark Button (Auth Required) -->
+            <div>
+                @auth
+                    <x-bookmark-button
+                        :book="$book"
+                        :isBookmarked="$book->isBookmarkedBy(Auth::id())"
+                    />
+                @else
+                    <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to save to collection">
+                        Login to Save to Collection
+                    </a>
+                @endauth
             </div>
         </div>
 
@@ -2543,6 +2593,47 @@
             });
         }
     }
+
+    // Quick star rating submission
+    function submitQuickRating(rating) {
+        const form = document.getElementById('quick-rating-form');
+        const ratingInput = document.getElementById('quick-rating-value');
+
+        if (form && ratingInput) {
+            ratingInput.value = rating;
+            form.submit();
+        }
+    }
+
+    // Star rating hover effects for quick rating
+    document.addEventListener('DOMContentLoaded', function() {
+        const starButtons = document.querySelectorAll('.star-rating-row .star-btn');
+
+        starButtons.forEach((star, index) => {
+            star.addEventListener('mouseenter', function() {
+                starButtons.forEach((s, i) => {
+                    if (i <= index) {
+                        s.style.color = '#ffc107';
+                    } else {
+                        s.style.color = '#ddd';
+                    }
+                });
+            });
+        });
+
+        const starRatingRow = document.querySelector('.star-rating-row');
+        if (starRatingRow) {
+            starRatingRow.addEventListener('mouseleave', function() {
+                starButtons.forEach((s) => {
+                    if (s.classList.contains('active')) {
+                        s.style.color = '#ffc107';
+                    } else {
+                        s.style.color = '#ddd';
+                    }
+                });
+            });
+        }
+    });
 
     // Note editing functions
     function editNote(noteId) {
