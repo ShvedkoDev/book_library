@@ -294,9 +294,6 @@ class LibraryController extends Controller
             abort(404, 'PDF file not found');
         }
 
-        // Track the view (this is separate from book page views)
-        $this->analytics->trackBookView($book, request());
-
         // Stream the PDF file for inline viewing
         return \Storage::disk('public')->response(
             $file->file_path,
