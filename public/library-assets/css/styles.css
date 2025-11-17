@@ -2505,7 +2505,7 @@ a:where(:not(.wp-element-button)) {
     letter-spacing: 0.5px;
 }
 
-.search-box, .entries-selector, .sort-options {
+.search-box, .entries-selector {
     display: flex;
     margin-bottom: var(--wp--preset--spacing--30);
     border: 1px solid #8c8f94;
@@ -2531,12 +2531,25 @@ a:where(:not(.wp-element-button)) {
 }
 
 /* Hide dropdown arrow */
-.entries-dropdown {
+.entries-dropdown, #sort-select {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     background-image: none;
     padding-right: 12px;
+}
+
+/* Style sort-select to match entries dropdown */
+#sort-select {
+    border: 1px solid #8c8f94;
+    border-radius: 3px;
+    background: var(--wp--preset--color--white);
+    height: 40px;
+}
+
+#sort-select:focus {
+    border-color: #007cba;
+    box-shadow: 0 0 0 1px #007cba;
 }
 
 .search-box:focus-within, .entries-selector:focus-within {
@@ -2800,10 +2813,6 @@ a:where(:not(.wp-element-button)) {
     display: flex;
     align-items: center;
     gap: var(--wp--preset--spacing--10);
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    border: none;
 }
 
 .sort-options label {
@@ -2871,7 +2880,7 @@ a:where(:not(.wp-element-button)) {
 .books-table td {
     border: none;
     padding: 15px;
-    vertical-align: top;
+    vertical-align: middle;
     background: var(--wp--preset--color--white);
     border-bottom: 1px solid #ddd;
 }
@@ -2960,6 +2969,7 @@ a:where(:not(.wp-element-button)) {
 .book-actions-cell {
     width: 120px;
     text-align: center;
+    vertical-align: middle;
 }
 
 .book-actions {
@@ -2971,19 +2981,15 @@ a:where(:not(.wp-element-button)) {
 .btn-view, .btn-download {
     flex: 1;
     text-align: center;
-    padding: 0 16px;
-    border-radius: 3px;
+    padding: 8px 20px;
+    border-radius: 25px;
     text-decoration: none;
     font-size: 13px;
-    font-weight: 500;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 600;
+    font-family: var(--wp--preset--font-family--proxima-nova);
     cursor: pointer;
-    border-width: 1px;
-    border-style: solid;
-    transition: all 0.1s ease-in-out;
-    line-height: 2;
-    min-height: 32px;
-    height: 32px;
+    border: none;
+    transition: all 0.3s ease;
     box-sizing: border-box;
     white-space: nowrap;
     vertical-align: middle;
@@ -2992,29 +2998,35 @@ a:where(:not(.wp-element-button)) {
     justify-content: center;
 }
 
+/* Override .button styles for library action buttons */
+.button.btn-view,
+.button.btn-download {
+    padding: 9px 20px !important;
+    border-radius: 22px !important;
+    border: none !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    min-height: auto !important;
+    font-size: 14px!important;
+}
+
 .btn-view {
     background: #007cba;
-    border-color: #0071a1;
     color: #fff;
-    text-shadow: none;
 }
 
 .btn-download {
     background: #00a32a;
-    border-color: #00a32a;
     color: #fff;
-    text-shadow: none;
 }
 
 .btn-view:hover {
     background: #005a87;
-    border-color: #005a87;
     color: #fff;
 }
 
 .btn-download:hover {
     background: #008a20;
-    border-color: #008a20;
     color: #fff;
 }
 
