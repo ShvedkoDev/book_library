@@ -348,6 +348,26 @@ class LibraryController extends Controller
             ['rating' => $validated['rating']]
         );
 
+        // Return JSON for AJAX requests
+        if ($request->expectsJson()) {
+            // Recalculate rating statistics
+            $averageRating = $book->ratings()->avg('rating') ?? 0;
+            $totalRatings = $book->ratings()->count();
+            $ratingDistribution = [];
+            for ($i = 1; $i <= 5; $i++) {
+                $ratingDistribution[$i] = $book->ratings()->where('rating', $i)->count();
+            }
+
+            return response()->json([
+                'success' => true,
+                'rating' => $validated['rating'],
+                'averageRating' => round($averageRating, 1),
+                'totalRatings' => $totalRatings,
+                'ratingDistribution' => $ratingDistribution,
+                'message' => 'Your rating has been saved!'
+            ]);
+        }
+
         return back()->with('success', 'Your rating has been saved!');
     }
 

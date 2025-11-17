@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\UserBookmark;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -28,9 +29,17 @@ class BookmarkController extends Controller
     /**
      * Toggle bookmark for a book (add or remove).
      */
-    public function toggle(Book $book): RedirectResponse
+    public function toggle(Request $request, Book $book): RedirectResponse|JsonResponse
     {
         $result = UserBookmark::toggle(Auth::user(), $book);
+
+        // Return JSON for AJAX requests
+        if ($request->expectsJson()) {
+            return response()->json([
+                'bookmarked' => $result['bookmarked'],
+                'message' => $result['message']
+            ]);
+        }
 
         return redirect()->back()->with('success', $result['message']);
     }

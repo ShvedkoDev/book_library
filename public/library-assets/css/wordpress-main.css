@@ -15017,7 +15017,7 @@ table.background-blue caption, table.background-blue td, table.background-blue t
 }
 
 .main blockquote, .main li, .main ol, .main p, .main ul {
-    line-height: 1
+    line-height: 1.5
 }
 
 .main .table-wrap + .accordion, .main .table-wrap + .faq, .main .table-wrap + .table-wrap, .main .table-wrap + blockquote, .main .table-wrap + dl, .main .table-wrap + ol, .main .table-wrap + p, .main .table-wrap + table, .main .table-wrap + ul, .main blockquote + .accordion, .main blockquote + .faq, .main blockquote + .table-wrap, .main blockquote + blockquote, .main blockquote + dl, .main blockquote + ol, .main blockquote + p, .main blockquote + table, .main blockquote + ul, .main ol + .accordion, .main ol + .faq, .main ol + .table-wrap, .main ol + blockquote, .main ol + dl, .main ol + ol, .main ol + p, .main ol + table, .main ol + ul, .main p + .accordion, .main p + .faq, .main p + .table-wrap, .main p + blockquote, .main p + dl, .main p + ol, .main p + p, .main p + table, .main p + ul, .main table + .accordion, .main table + .faq, .main table + .table-wrap, .main table + blockquote, .main table + dl, .main table + ol, .main table + p, .main table + table, .main table + ul, .main ul + .accordion, .main ul + .faq, .main ul + .table-wrap, .main ul + blockquote, .main ul + dl, .main ul + ol, .main ul + p, .main ul + table, .main ul + ul {

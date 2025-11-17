@@ -23,13 +23,11 @@
     /* Page Content Typography */
     .main_content.page-content-wrapper .page-body {
         line-height: 1.8;
-        color: #374151;
     }
 
     .main_content.page-content-wrapper .page-body h2 {
         font-size: 1.75rem;
         font-weight: 700;
-        color: #1f2937;
         margin: 2.5rem 0 1rem 0;
         padding-top: 1rem;
         scroll-margin-top: 2rem;
@@ -38,7 +36,6 @@
     .main_content.page-content-wrapper .page-body h3 {
         font-size: 1.4rem;
         font-weight: 600;
-        color: #1f2937;
         margin: 2rem 0 1rem 0;
     }
 
@@ -46,12 +43,7 @@
     .main_content.page-content-wrapper .page-body h5,
     .main_content.page-content-wrapper .page-body h6 {
         font-weight: 600;
-        color: #1f2937;
         margin: 1.5rem 0 0.75rem 0;
-    }
-
-    .main_content.page-content-wrapper .page-body p {
-        margin: 1rem 0;
     }
 
     .main_content.page-content-wrapper .page-body ul,

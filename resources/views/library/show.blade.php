@@ -152,7 +152,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-        margin-bottom: 1rem;
     }
 
     .book-action-btn {
@@ -222,10 +221,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 0.5rem 0;
         gap: 0.25rem;
-        border-bottom: 1px solid #e0e0e0;
-        margin-bottom: 0.5rem;
+        margin: 0.5rem;
     }
 
     .star-rating-row .star-btn {
@@ -251,7 +248,6 @@
         align-items: center;
         padding: 0.5rem 0;
         gap: 0.5rem;
-        border-bottom: 1px solid #e0e0e0;
         margin-bottom: 0.5rem;
     }
 
@@ -2170,23 +2166,22 @@
         @auth
             <div class="user-rating-form">
                 <h3 class="section-title text-left">Rate this book</h3>
-                <form action="{{ route('library.rate', $book->id) }}" method="POST" class="star-rating-form">
+                <form action="{{ route('library.rate', $book->id) }}" method="POST" class="star-rating-form" id="detailed-rating-form">
                     @csrf
                     <div class="star-rating">
                         @for($i = 1; $i <= 5; $i++)
                             <label>
                                 <input type="radio" name="rating" value="{{ $i }}" style="display: none;"
-                                    {{ $userRating && $userRating->rating == $i ? 'checked' : '' }}
-                                    onchange="this.form.submit()">
+                                    {{ $userRating && $userRating->rating == $i ? 'checked' : '' }}>
                                 <span class="rating-star" data-rating="{{ $i }}"
                                     style="color: {{ $userRating && $i <= $userRating->rating ? '#ffc107' : '#ddd' }}; transition: color 0.2s;">★</span>
                             </label>
                         @endfor
                     </div>
                     @if($userRating)
-                        <span class="rating-text">Your rating: {{ $userRating->rating }}/5</span>
+                        <span class="rating-text" id="rating-text">Your rating: {{ $userRating->rating }}/5</span>
                     @else
-                        <span class="rating-text">Click to rate</span>
+                        <span class="rating-text" id="rating-text">Click to rate</span>
                     @endif
                 </form>
             </div>
@@ -2208,7 +2203,7 @@
                     <div class="review-form-footer">
                         <span class="review-form-note">Reviews are moderated and will appear after approval.</span>
                         <button type="submit" class="btn-submit">
-                            Submit Review
+                            Submit review
                         </button>
                     </div>
                 </form>
@@ -2262,7 +2257,7 @@
 
         <!-- Add New Note Form -->
         <div class="add-note-form">
-            <h3 class="section-title text-left">Add a New Note</h3>
+            <h3 class="section-title text-left">Add a new note</h3>
             <form action="{{ route('library.notes.store', $book->id) }}" method="POST">
                 @csrf
                 <div class="note-field-margin">
@@ -2280,7 +2275,7 @@
                 </div>
 
                 <div class="note-field-margin">
-                    <label for="page_number" class="note-field-label">Page Number (optional)</label>
+                    <label for="page_number" class="note-field-label">Page number (optional)</label>
                     <input
                         type="number"
                         name="page_number"
@@ -2291,7 +2286,7 @@
                 </div>
 
                 <button type="submit" class="btn-add-note">
-                    <i class="fal fa-plus"></i> Add Note
+                    <i class="fal fa-plus"></i> Add note
                 </button>
             </form>
         </div>
@@ -2299,7 +2294,7 @@
         <!-- Existing Notes -->
         <div class="existing-notes">
             <h3 class="section-title text-left">
-                Your Notes
+                Your notes
                 @if($userNotes->isEmpty())
                     <span>(None yet)</span>
                 @endif
@@ -2377,7 +2372,7 @@
     @else
         <div class="notes-guest-section">
             <h2>
-                <i class="fal fa-sticky-note"></i> Personal Notes
+                <i class="fal fa-sticky-note"></i> Personal notes
             </h2>
             <p>Please <a href="{{ route('login') }}">log in</a> to add personal notes to this book.</p>
         </div>
@@ -2388,7 +2383,7 @@
     <div id="accessRequestModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Request Access</h2>
+                <h2>Request access</h2>
                 <button onclick="closeAccessRequestModal()" class="modal-close">&times;</button>
             </div>
 
@@ -2419,7 +2414,7 @@
                 </div>
 
                 <div class="note-field-margin">
-                    <label for="access_request_message" class="note-field-label">Message (Optional)</label>
+                    <label for="access_request_message" class="note-field-label">Message (optional)</label>
                     <textarea id="access_request_message"
                               name="message"
                               rows="4"
@@ -2435,7 +2430,7 @@
                     </button>
                     <button type="submit"
                             class="btn-modal-submit">
-                        Submit Request
+                        Submit request
                     </button>
                 </div>
             </form>
@@ -2532,13 +2527,14 @@
         });
     });
 
-    // Star rating hover effect
+    // Star rating hover effect and submission
     document.addEventListener('DOMContentLoaded', function() {
         const starRating = document.querySelector('.star-rating');
         if (starRating) {
             const stars = starRating.querySelectorAll('.rating-star');
             let currentRating = {{ $userRating ? $userRating->rating : 0 }};
 
+            // Hover effects
             stars.forEach((star, index) => {
                 star.addEventListener('mouseenter', function() {
                     highlightStars(index + 1);
@@ -2556,6 +2552,61 @@
                     } else {
                         star.style.color = '#ddd';
                     }
+                });
+            }
+
+            // Handle detailed rating form submission via AJAX
+            const detailedRatingForm = document.getElementById('detailed-rating-form');
+            if (detailedRatingForm) {
+                const radioButtons = detailedRatingForm.querySelectorAll('input[type="radio"]');
+                const ratingText = document.getElementById('rating-text');
+
+                radioButtons.forEach((radio, index) => {
+                    radio.addEventListener('change', function() {
+                        const rating = parseInt(this.value);
+
+                        // Submit via AJAX
+                        fetch(detailedRatingForm.action, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ rating: rating })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Update current rating for hover effects
+                            currentRating = rating;
+
+                            // Update star visual state in detailed form
+                            highlightStars(rating);
+
+                            // Update rating text
+                            if (ratingText) {
+                                ratingText.textContent = `Your rating: ${rating}/5`;
+                            }
+
+                            // Update quick rating stars at the top
+                            const starButtons = document.querySelectorAll('.star-rating-row .star-btn');
+                            starButtons.forEach((star, starIndex) => {
+                                if (starIndex < rating) {
+                                    star.classList.add('active');
+                                    star.style.color = '#ffc107';
+                                } else {
+                                    star.classList.remove('active');
+                                    star.style.color = '#ddd';
+                                }
+                            });
+
+                            // Update Reviews & Ratings section
+                            updateRatingStatistics(data);
+                        })
+                        .catch(error => {
+                            console.error('Error submitting rating:', error);
+                        });
+                    });
                 });
             }
         }
@@ -2604,11 +2655,115 @@
     // Quick star rating submission
     function submitQuickRating(rating) {
         const form = document.getElementById('quick-rating-form');
-        const ratingInput = document.getElementById('quick-rating-value');
 
-        if (form && ratingInput) {
-            ratingInput.value = rating;
-            form.submit();
+        if (form) {
+            // Submit via AJAX to prevent page reload
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ rating: rating })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update quick star visual state
+                const starButtons = document.querySelectorAll('.star-rating-row .star-btn');
+                starButtons.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.add('active');
+                        star.style.color = '#ffc107';
+                    } else {
+                        star.classList.remove('active');
+                        star.style.color = '#ddd';
+                    }
+                });
+
+                // Update detailed rating form
+                const detailedForm = document.getElementById('detailed-rating-form');
+                if (detailedForm) {
+                    // Update radio buttons
+                    const radioButtons = detailedForm.querySelectorAll('input[type="radio"]');
+                    radioButtons.forEach((radio, index) => {
+                        radio.checked = (index + 1 === rating);
+                    });
+
+                    // Update detailed form stars
+                    const detailedStars = detailedForm.querySelectorAll('.rating-star');
+                    detailedStars.forEach((star, index) => {
+                        if (index < rating) {
+                            star.style.color = '#ffc107';
+                        } else {
+                            star.style.color = '#ddd';
+                        }
+                    });
+
+                    // Update rating text
+                    const ratingText = document.getElementById('rating-text');
+                    if (ratingText) {
+                        ratingText.textContent = `Your rating: ${rating}/5`;
+                    }
+                }
+
+                // Update Reviews & Ratings section
+                updateRatingStatistics(data);
+            })
+            .catch(error => {
+                console.error('Error submitting rating:', error);
+            });
+        }
+    }
+
+    function updateRatingStatistics(data) {
+        // Update average rating number
+        const ratingScoreNumber = document.querySelector('.rating-score-number');
+        if (ratingScoreNumber) {
+            ratingScoreNumber.textContent = data.averageRating.toFixed(1);
+        }
+
+        // Update star display
+        const ratingScoreStars = document.querySelector('.rating-score-stars');
+        if (ratingScoreStars) {
+            const stars = ratingScoreStars.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < Math.round(data.averageRating)) {
+                    star.classList.remove('empty');
+                } else {
+                    star.classList.add('empty');
+                }
+            });
+        }
+
+        // Update total rating count
+        const ratingScoreCount = document.querySelector('.rating-score-count');
+        if (ratingScoreCount) {
+            const plural = data.totalRatings === 1 ? 'rating' : 'ratings';
+            ratingScoreCount.textContent = `${data.totalRatings} ${plural}`;
+        }
+
+        // Update rating distribution bars
+        for (let i = 1; i <= 5; i++) {
+            const count = data.ratingDistribution[i];
+            const percentage = data.totalRatings > 0 ? (count / data.totalRatings) * 100 : 0;
+
+            const barRow = document.querySelector(`.rating-bar-row:nth-child(${6 - i})`);
+            if (barRow) {
+                const barFill = barRow.querySelector('.rating-bar-fill');
+                const barCount = barRow.querySelector('.rating-bar-count');
+
+                if (barFill) barFill.style.width = `${percentage}%`;
+                if (barCount) barCount.textContent = count;
+            }
+        }
+
+        // Show rating section if it was hidden
+        const ratingCenter = document.querySelector('.rating-center');
+        const emptyState = document.querySelector('.rating-empty-state');
+        if (ratingCenter && emptyState && data.totalRatings > 0) {
+            ratingCenter.style.display = 'flex';
+            emptyState.style.display = 'none';
         }
     }
 

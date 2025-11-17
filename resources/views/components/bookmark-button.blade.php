@@ -94,11 +94,52 @@
 </style>
 
 <script>
-// Add loading state to bookmark forms
+// AJAX bookmark form submission without page reload
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.bookmark-form').forEach(form => {
-        form.addEventListener('submit', function() {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent page reload
+
+            const button = this.querySelector('.bookmark-button');
+            const icon = button.querySelector('i');
+            const span = button.querySelector('span');
+            const isCurrentlyBookmarked = button.classList.contains('bookmarked');
+
+            // Add loading state
             this.classList.add('loading');
+
+            // Submit via AJAX
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove loading state
+                this.classList.remove('loading');
+
+                // Toggle bookmark state based on response
+                if (data.bookmarked) {
+                    button.classList.add('bookmarked');
+                    icon.classList.remove('fal');
+                    icon.classList.add('fas');
+                    span.textContent = 'Saved';
+                } else {
+                    button.classList.remove('bookmarked');
+                    icon.classList.remove('fas');
+                    icon.classList.add('fal');
+                    span.textContent = 'Save to Collection';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                this.classList.remove('loading');
+            });
         });
     });
 });
