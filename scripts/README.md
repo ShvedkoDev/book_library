@@ -1,237 +1,303 @@
 # Deployment Scripts
 
-This directory contains production-ready deployment and maintenance scripts for the Micronesian Teachers Digital Library project.
+This directory contains all deployment and maintenance scripts for the Micronesian Teachers Digital Library.
+
+## Important: Build Workflow
+
+**The production server does NOT have Node.js/npm installed.** Assets must be built locally and committed to Git.
+
+**Quick Workflow (using helper script):**
+```bash
+# On local machine
+./scripts/build-and-commit.sh "Your commit message"
+git push origin main
+
+# On production server
+./scripts/deploy-production.sh
+```
+
+**Manual Workflow:**
+1. Make changes locally
+2. Build assets: `npm run build`
+3. Commit build files: `git add . && git commit -m "message"`
+4. Push to GitHub: `git push origin main`
+5. Deploy on server: `./scripts/deploy-production.sh`
 
 ## Available Scripts
 
-### `deploy-csv-system.sh`
+### 🔨 build-and-commit.sh
+**Local helper - Build and commit assets** (LOCAL MACHINE ONLY)
 
-Automates the deployment checklist for the CSV Import/Export system (CSV_IMPORT_TODO.md section 12.3).
+```bash
+./scripts/build-and-commit.sh "Your commit message"
+```
+
+**When to use:**
+- On your local development machine
+- Before pushing changes to Git
+- Automates build and commit process
 
 **What it does:**
-1. ✅ Checks prerequisites (Laravel project, PHP/Docker availability)
-2. ✅ Runs database migrations
-3. ✅ Creates required storage directories
-4. ✅ Sets proper permissions (775) on CSV directories
-5. ✅ Verifies CSV templates exist
+1. Checks for uncommitted changes
+2. Runs `npm install` if needed
+3. Builds production assets
+4. Adds all files including build directory
+5. Creates commit with your message
+6. Shows next steps (push and deploy)
 
-**Usage:**
+**Duration:** ~30-60 seconds
 
-```bash
-# Basic usage (auto-detects Docker environment)
-./scripts/deploy-csv-system.sh
+---
 
-# Dry-run mode (see what would be done without making changes)
-./scripts/deploy-csv-system.sh --dry-run
-
-# Verbose mode (show detailed output)
-./scripts/deploy-csv-system.sh --verbose
-
-# Dry-run with verbose output
-./scripts/deploy-csv-system.sh --dry-run --verbose
-
-# Force Docker environment
-./scripts/deploy-csv-system.sh --docker
-
-# Force local PHP (no Docker)
-./scripts/deploy-csv-system.sh --no-docker
-
-# Skip permission changes (useful for restrictive environments)
-./scripts/deploy-csv-system.sh --skip-perms
-
-# Show help
-./scripts/deploy-csv-system.sh --help
-```
-
-**Exit Codes:**
-- `0` - Success
-- `1` - General error
-- `2` - Prerequisites not met
-- `3` - Migration failed
-- `4` - Directory creation failed
-- `5` - Permission change failed
-
-**Logging:**
-
-All operations are logged to `storage/logs/csv-deploy-TIMESTAMP.log` for auditing and troubleshooting.
-
-**Example Output:**
-
-```
-============================================
-  CSV System Deployment Script
-============================================
-
-➜ Checking prerequisites...
-✓ Prerequisites check passed
-
-➜ Running database migrations...
-✓ Database migrations
-
-➜ Creating storage directories...
-✓ All storage directories verified
-
-➜ Setting directory permissions...
-✓ Directory permissions configured
-
-➜ Verifying CSV templates...
-✓ All required CSV templates verified
-
-============================================
-  CSV System Deployment Summary
-============================================
-
-Total tasks:      8
-Completed:        8
-Skipped:          0
-Failed:           0
-
-Environment:      Docker
-Log file:         storage/logs/csv-deploy-20251107-222437.log
-
-✓ Deployment completed successfully!
-
-Next steps:
-  1. Review the log file for details
-  2. Test CSV import/export in admin panel
-  3. Check /admin/csv-import to verify system is ready
-```
-
-## Environment Detection
-
-The scripts automatically detect whether you're running in a Docker environment or using local PHP:
-
-- **Docker mode**: Detected if `docker-compose.yml` exists and containers are running
-- **Local PHP mode**: Used if no Docker environment is detected
-
-You can override auto-detection using `--docker` or `--no-docker` flags.
-
-## Best Practices
-
-### Before Running Scripts
-
-1. **Backup your database** (for production deployments):
-   ```bash
-   php artisan db:backup --reason=pre-deployment
-   ```
-
-2. **Test in staging first**:
-   ```bash
-   ./scripts/deploy-csv-system.sh --dry-run --verbose
-   ```
-
-3. **Review what will be done**:
-   - Check the dry-run output
-   - Verify environment detection is correct
-   - Ensure you have necessary permissions
-
-### Production Deployment
+### 🚀 deploy-production.sh
+**Full production deployment script**
 
 ```bash
-# Step 1: Dry-run to verify
-./scripts/deploy-csv-system.sh --dry-run --verbose
-
-# Step 2: If everything looks good, run for real
-./scripts/deploy-csv-system.sh --verbose
-
-# Step 3: Verify in admin panel
-# Navigate to: http://your-domain/admin/csv-import
+./scripts/deploy-production.sh
 ```
 
-### CI/CD Integration
+**When to use:**
+- Major updates
+- Database migrations
+- New composer dependencies
+- First-time deployment
 
-For automated deployments, you can use exit codes to handle errors:
+**What it does:**
+1. Enables maintenance mode
+2. Pulls latest code from GitHub (includes pre-built assets)
+3. Installs composer dependencies (production)
+4. Runs database migrations
+5. Verifies pre-built assets exist
+6. Copies all files to public_html
+7. Clears and rebuilds caches
+8. Optimizes Laravel
+9. Disables maintenance mode
+10. Creates deployment log
+
+**Duration:** ~1-3 minutes
+
+---
+
+### ⚡ deploy-quick.sh
+**Quick deployment for minor updates**
 
 ```bash
-#!/bin/bash
-# Example CI/CD deploy script
-
-if ./scripts/deploy-csv-system.sh; then
-    echo "CSV system deployed successfully"
-else
-    echo "CSV system deployment failed"
-    exit 1
-fi
+./scripts/deploy-quick.sh
 ```
 
-## Troubleshooting
+**When to use:**
+- Code changes only (no new dependencies)
+- Template/view updates
+- Minor bug fixes
+- Pre-built asset updates
 
-### Script won't execute
+**What it does:**
+1. Pulls latest code (with pre-built assets)
+2. Copies build files to public_html
+3. Clears view cache
+
+**Duration:** ~10-20 seconds
+
+**Do NOT use for:**
+- Database migrations
+- New composer packages
+- Major updates
+
+---
+
+### ✅ check-deployment-readiness.sh
+**Pre-deployment environment checker**
 
 ```bash
-# Fix line endings (if you get "required file not found" error)
-sed -i 's/\r$//' scripts/deploy-csv-system.sh
-
-# Make executable
-chmod +x scripts/deploy-csv-system.sh
+./scripts/check-deployment-readiness.sh
 ```
 
-### Permission denied errors
+**When to use:**
+- Before first deployment
+- After server configuration changes
+- Troubleshooting deployment issues
+- Verifying server environment
+
+**What it checks:**
+- Directory structure
+- Git repository status
+- PHP installation and extensions
+- Composer installation
+- Pre-built assets exist
+- Laravel configuration (.env)
+- File permissions
+- Database connection
+- public_html setup
+
+**Exit codes:**
+- `0` = All checks passed or only warnings
+- `1` = Errors found, fix before deploying
+
+---
+
+### ↩️ rollback.sh
+**Rollback to previous commit**
 
 ```bash
-# Run with sudo (not recommended for Docker environments)
-sudo ./scripts/deploy-csv-system.sh
-
-# Or skip permission changes
-./scripts/deploy-csv-system.sh --skip-perms
+./scripts/rollback.sh [number_of_commits]
 ```
 
-### Docker containers not running
-
+**Examples:**
 ```bash
-# Start Docker containers first
-docker-compose up -d
-
-# Then run deployment
-./scripts/deploy-csv-system.sh
+./scripts/rollback.sh     # Rollback 1 commit
+./scripts/rollback.sh 2   # Rollback 2 commits
 ```
 
-### Check logs for details
+**When to use:**
+- Deployment introduced bugs
+- Need to revert to previous version
+- Emergency rollback
 
+**What it does:**
+1. Shows current and target commit
+2. Asks for confirmation
+3. Enables maintenance mode
+4. Resets Git to previous commit
+5. Runs full deployment script
+
+**⚠️ Warning:** This permanently removes commits from your branch. Only use if you haven't pushed to GitHub or coordinate with team.
+
+---
+
+## Quick Reference
+
+### First-Time Setup
 ```bash
-# View latest deployment log
-tail -f storage/logs/csv-deploy-*.log
+# 1. Check server is ready
+./scripts/check-deployment-readiness.sh
 
-# Or use the path shown in script output
-cat /path/to/log/file
+# 2. Run full deployment
+./scripts/deploy-production.sh
 ```
 
-## Development
+### Regular Updates
+```bash
+# For major updates (migrations, dependencies)
+./scripts/deploy-production.sh
+
+# For minor updates (code only)
+./scripts/deploy-quick.sh
+```
+
+### Emergency Rollback
+```bash
+./scripts/rollback.sh
+```
+
+### Verify Server
+```bash
+./scripts/check-deployment-readiness.sh
+```
+
+## Deployment Workflow
+
+### Option 1: Safe Deployment (Recommended)
+```bash
+# 1. Check environment
+./scripts/check-deployment-readiness.sh
+
+# 2. If checks pass, deploy
+./scripts/deploy-production.sh
+
+# 3. Verify site is working
+# If issues found, rollback:
+./scripts/rollback.sh
+```
+
+### Option 2: Quick Update
+```bash
+# For small changes only
+./scripts/deploy-quick.sh
+```
+
+## Common Issues
+
+### "Permission denied" error
+```bash
+chmod +x ./scripts/*.sh
+```
+
+### "artisan not found" error
+Make sure you're in the `app_root` directory:
+```bash
+cd ~/domains/micronesian.school/app_root
+```
+
+### Git pull fails
+Check Git credentials:
+```bash
+git config --list
+git pull origin main
+```
+
+### Build fails
+Check npm dependencies:
+```bash
+npm install
+npm run build
+```
+
+### Database migration fails
+Check database connection:
+```bash
+php artisan db:show
+php artisan migrate --pretend  # Preview migrations
+```
+
+## Script Maintenance
+
+### Testing Scripts Locally
+Before running on production, test in development:
+```bash
+# In local environment
+./scripts/deploy-production.sh
+```
+
+### Customizing Scripts
+Edit scripts for your specific needs:
+- Deployment log location
+- Cache clearing strategy
+- Additional post-deployment tasks
+- Custom file copying logic
 
 ### Adding New Scripts
+1. Create in `/scripts/` directory
+2. Make executable: `chmod +x scripts/your-script.sh`
+3. Add to this README
+4. Test thoroughly before using in production
 
-When adding new deployment scripts:
+## Security Notes
 
-1. Follow the same structure (help, logging, error handling)
-2. Use color-coded output for readability
-3. Include `--dry-run` mode
-4. Document in this README
-5. Make executable: `chmod +x scripts/your-script.sh`
-6. Fix line endings: `sed -i 's/\r$//' scripts/your-script.sh`
-
-### Script Template
-
-See `deploy-csv-system.sh` as a reference template for creating new deployment scripts.
-
-## Related Documentation
-
-- **CSV Import/Export System**: See `/docs/CSV_FIELD_MAPPING.md`
-- **Bulk Upload Guide**: See `/docs/BULK_UPLOAD_GUIDE.md`
-- **Deployment Checklist**: See `CSV_IMPORT_TODO.md` section 12.3
-- **Quick Reference**: See `/docs/CSV_QUICK_REFERENCE.md`
+- ✅ Scripts use `set -e` (exit on error)
+- ✅ Maintenance mode during deployment
+- ✅ Production-only composer dependencies
+- ✅ Confirmation prompts for destructive operations
+- ✅ Deployment logs created
+- ⚠️ Never commit `.env` file
+- ⚠️ Review deployment logs after each deployment
 
 ## Support
 
-For issues or questions about deployment scripts:
-1. Check the log files in `storage/logs/`
-2. Review the related documentation above
-3. Run with `--verbose` flag for detailed output
-4. Use `--dry-run` to test without making changes
+For issues or questions:
+1. Check `DEPLOYMENT.md` in project root
+2. Review deployment logs in app_root
+3. Check Laravel logs: `storage/logs/laravel.log`
+4. Review this README
 
-## Version History
+## File Locations
 
-- **v1.0** (2025-11-07) - Initial release of `deploy-csv-system.sh`
-  - Auto-detect Docker/PHP environment
-  - Comprehensive error handling and logging
-  - Dry-run mode for safe testing
-  - Color-coded output with progress tracking
+```
+book_library/
+├── scripts/
+│   ├── deploy-production.sh          # Full deployment
+│   ├── deploy-quick.sh                # Quick updates
+│   ├── check-deployment-readiness.sh  # Environment check
+│   ├── rollback.sh                    # Emergency rollback
+│   └── README.md                      # This file
+└── DEPLOYMENT.md                      # Detailed deployment guide
+```
