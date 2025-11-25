@@ -32,9 +32,9 @@ Route::post('/api/track-share', [ShareTrackingController::class, 'trackShare'])-
 
 // Library routes - PUBLIC ACCESS (browsing and viewing books)
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
-Route::get('/library/book/{slug}', [LibraryController::class, 'show'])->name('library.show');
 
 // Library routes - REQUIRES AUTHENTICATION (interactive features)
+// IMPORTANT: These specific routes must come BEFORE the {slug} route to avoid matching conflicts
 Route::middleware(['auth', 'verified'])->group(function () {
     // PDF viewing and downloading
     Route::get('/library/book/{book}/viewer/{file}', [LibraryController::class, 'viewPdfViewer'])->name('library.view-pdf');
@@ -59,6 +59,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/notes/{note}', [BookNoteController::class, 'update'])->name('library.notes.update');
     Route::delete('/notes/{note}', [BookNoteController::class, 'destroy'])->name('library.notes.destroy');
 });
+
+// Book detail page - PUBLIC ACCESS (must come AFTER specific routes to avoid conflicts)
+Route::get('/library/book/{slug}', [LibraryController::class, 'show'])->name('library.show');
 
 Route::middleware('auth')->group(function () {
     // Basic profile routes (Breeze)
