@@ -211,7 +211,7 @@ const canvas = document.getElementById('pdf-canvas');
 const ctx = canvas.getContext('2d');
 
 // Load PDF from route
-const pdfUrl = '{{ route('library.view-pdf', ['book' => $book->id, 'file' => $file->id]) }}';
+const pdfUrl = '{{ route('library.view-pdf-direct', ['book' => $book->id, 'file' => $file->id]) }}';
 
 // Disable right-click on canvas (prevent context menu)
 canvas.addEventListener('contextmenu', (e) => {
