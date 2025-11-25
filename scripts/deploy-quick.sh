@@ -48,8 +48,18 @@ log "Copying build files..."
 cp -rf public/build "$PUBLIC_HTML/"
 cp -rf public/css "$PUBLIC_HTML/" 2>/dev/null || true
 cp -rf public/js "$PUBLIC_HTML/" 2>/dev/null || true
-cp -rf public/library-assets "$PUBLIC_HTML/library-assets"
-cp -rf public/admin-assets "$PUBLIC_HTML/admin-assets"
+# Copy library-assets directory
+if [ -d "public/library-assets" ]; then
+    rm -rf "$PUBLIC_HTML/library-assets"
+    cp -rf public/library-assets "$PUBLIC_HTML/library-assets" || warning "Failed to copy library-assets directory"
+    log "✓ Copied library-assets directory"
+fi
+# Copy admin-assets if it exists
+if [ -d "public/admin-assets" ]; then
+    rm -rf "$PUBLIC_HTML/admin-assets"
+    cp -rf public/admin-assets "$PUBLIC_HTML/admin-assets" || warning "Failed to copy admin-assets directory"
+    log "✓ Copied admin-assets directory"
+fi
 
 # Clear caches
 log "Clearing caches..."
