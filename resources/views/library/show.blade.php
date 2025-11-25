@@ -1627,46 +1627,30 @@
         margin-bottom: 0.5rem;
     }
 
-    .share-url-container {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .share-url-input {
-        flex: 1;
-        padding: 0.625rem 0.875rem;
-        border: 1px solid var(--color-border);
-        border-radius: 6px;
-        font-size: 0.9375rem;
-        color: var(--color-text-primary);
-        background: #f8f9fa;
-        font-family: monospace;
-    }
-
-    .share-url-input:focus {
-        outline: 2px solid #005a70;
-        outline-offset: -1px;
-    }
-
-    .btn-copy-url {
-        padding: 0.625rem 1.25rem;
+    .btn-copy-link {
+        width: 100%;
+        padding: 0.875rem 1.5rem;
         background: #005a70;
         color: white;
         border: none;
         border-radius: 6px;
         cursor: pointer;
         font-weight: 600;
-        font-size: 0.9375rem;
+        font-size: 1rem;
         transition: background 0.2s;
-        white-space: nowrap;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        justify-content: center;
+        gap: 0.625rem;
+        margin-bottom: 0.5rem;
     }
 
-    .btn-copy-url:hover {
+    .btn-copy-link:hover {
         background: #004556;
+    }
+
+    .btn-copy-link i {
+        font-size: 1.125rem;
     }
 
     .copy-feedback {
@@ -2721,17 +2705,9 @@
 
                 <!-- Copy URL Section -->
                 <div class="share-section">
-                    <label class="share-label">Book URL</label>
-                    <div class="share-url-container">
-                        <input type="text"
-                               id="shareUrl"
-                               value="{{ url()->current() }}"
-                               readonly
-                               class="share-url-input">
-                        <button onclick="copyShareUrl()" class="btn-copy-url">
-                            <i class="fal fa-copy"></i> Copy
-                        </button>
-                    </div>
+                    <button onclick="copyShareUrl()" class="btn-copy-link">
+                        <i class="fal fa-copy"></i> Copy link
+                    </button>
                     <div id="copyFeedback" class="copy-feedback"></div>
                 </div>
 
@@ -3000,19 +2976,17 @@
     }
 
     function copyShareUrl() {
-        const urlInput = document.getElementById('shareUrl');
         const feedback = document.getElementById('copyFeedback');
+        const url = window.location.href;
 
-        urlInput.select();
-        urlInput.setSelectionRange(0, 99999); // For mobile devices
-
-        navigator.clipboard.writeText(urlInput.value).then(function() {
-            feedback.textContent = '✓ URL copied to clipboard!';
+        navigator.clipboard.writeText(url).then(function() {
+            feedback.textContent = '✓ Link copied to clipboard!';
+            feedback.style.color = '#28a745';
             setTimeout(() => {
                 feedback.textContent = '';
             }, 3000);
         }, function(err) {
-            feedback.textContent = '✗ Failed to copy';
+            feedback.textContent = '✗ Failed to copy link';
             feedback.style.color = '#dc3545';
             console.error('Could not copy text: ', err);
         });
