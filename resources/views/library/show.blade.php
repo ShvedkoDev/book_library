@@ -1530,23 +1530,23 @@
         justify-content: space-between;
         align-items: center;
         padding: 1.25rem 1.5rem;
-        background: #005a70;
+        background: #005a70 !important;
         border-bottom: 3px solid #004556;
     }
 
     .modal-header h2 {
         margin: 0;
-        color: white;
+        color: white !important;
         font-size: 1.25rem;
         font-weight: 600;
     }
 
     .modal-close {
-        background: rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.1) !important;
         border: none;
         font-size: 1.75rem;
         cursor: pointer;
-        color: white;
+        color: white !important;
         width: 32px;
         height: 32px;
         border-radius: 4px;
@@ -1559,7 +1559,7 @@
     }
 
     .modal-close:hover {
-        background: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.2) !important;
     }
 
     .modal-description {
