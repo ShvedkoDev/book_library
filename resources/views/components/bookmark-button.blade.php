@@ -4,8 +4,8 @@
     <form action="{{ route('library.bookmark', $book) }}" method="POST" class="bookmark-form">
         @csrf
         <button type="submit" class="bookmark-button {{ $isBookmarked ? 'bookmarked' : '' }}">
-            <i class="{{ $isBookmarked ? 'fas' : 'fal' }} fa-heart"></i>
-            <span>{{ $isBookmarked ? 'Saved' : 'Save to Collection' }}</span>
+            <i class="{{ $isBookmarked ? 'fas' : 'fal' }} fa-bookmark"></i>
+            <span>{{ $isBookmarked ? 'Bookmarked' : 'Bookmark' }}</span>
         </button>
     </form>
 </div>
@@ -21,7 +21,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
+    padding: 0.5rem 1.25rem;
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -31,32 +31,33 @@
     margin: 0!important;
     font-size: 14px;
     line-height: 1.2;
-    background-color: #fff3cd;
-    color: #856404;
+    background-color: #fdf4d1;
+    color: #333;
 }
 
 .bookmark-button:hover {
-    background: #ffe69c;
-    color: #856404;
+    background: #e6ddb8;
+    color: #333;
 }
 
 .bookmark-button.bookmarked {
-    background: #fff3cd;
-    color: #856404;
+    background: #fdf4d1;
+    color: #333;
 }
 
 .bookmark-button.bookmarked:hover {
-    background: #ffe69c;
+    background: #e6ddb8;
 }
 
 .bookmark-button i {
     font-size: 1.1rem;
     transition: all 0.3s;
-    color: #ff6b6b;
+    background-color: #f0f0f0;
+    border-color: #f0f0f0;
 }
 
 .bookmark-button.bookmarked i {
-    color: #ff6b6b;
+    color: #c9d3e0;
 }
 
 /* Loading state during form submission */
@@ -128,12 +129,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     button.classList.add('bookmarked');
                     icon.classList.remove('fal');
                     icon.classList.add('fas');
-                    span.textContent = 'Saved';
+                    span.textContent = 'Bookmarked';
                 } else {
                     button.classList.remove('bookmarked');
                     icon.classList.remove('fas');
                     icon.classList.add('fal');
-                    span.textContent = 'Save to Collection';
+                    span.textContent = 'Bookmark';
                 }
             })
             .catch(error => {

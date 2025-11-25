@@ -15163,7 +15163,7 @@ table.background-blue caption, table.background-blue td, table.background-blue t
 }
 
 .main a:not(.button):not(.btn-primary) {
-    color: #005a70
+    color: #1d496a
 }
 
 .main pre {
@@ -18407,10 +18407,10 @@ body:not(.home) header.banner {
 }
 
 header .coe-banner {
-    background: #003b49;
-    background: -moz-linear-gradient(15deg, #003b49 0, #007c5f 100%);
-    background: -webkit-linear-gradient(15deg, #003b49, #007c5f);
-    background: linear-gradient(15deg, #003b49, #007c5f);
+    background: #1d496a;
+    background: -moz-linear-gradient(15deg, #1d496a 0, #8198b2 100%);
+    background: -webkit-linear-gradient(15deg, #1d496a, #8198b2);
+    background: linear-gradient(15deg, #1d496a, #8198b2);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$dark-blue", endColorstr="$green-shade", GradientType=1)
 }
 
@@ -19113,7 +19113,7 @@ fieldset legend {
 
 .announcements_sidebar h3, .archive_sidebar h3, .event_sidebar h3, .main .main_content .curriculum_archive_filters h3, .main .main_content .stems2_profile_filters h3, .main_content + aside.sidebar h3, .news_sidebar h3, .sidebar h3 {
     font-size: 1.2rem;
-    margin: 0 0 .75rem
+    margin: 0 0 .375rem
 }
 
 .announcements_sidebar h3 + p, .archive_sidebar h3 + p, .event_sidebar h3 + p, .main .main_content .curriculum_archive_filters h3 + p, .main .main_content .stems2_profile_filters h3 + p, .main_content + aside.sidebar h3 + p, .news_sidebar h3 + p, .sidebar h3 + p {
@@ -46868,7 +46868,7 @@ body.osas .island + .island {
 }
 
 .stems2.template-stems2-ulu-guide .title_banner {
-    background: #f6f4e4;
+    background: #c9d3e0;
     color: #333
 }
 
@@ -47128,13 +47128,13 @@ body.osas .island + .island {
 
 .stems2.template-stems2-ulu-guide .sidebar_item.sidebar-menu ul a {
     display: inline-block;
-    border-left: 5px solid #f6f4e4;
+    border-left: 5px solid #c9d3e0;
     padding: .25rem 1rem;
     text-decoration: none
 }
 
 .stems2.template-stems2-ulu-guide .sidebar_item.sidebar-menu ul a:active, .stems2.template-stems2-ulu-guide .sidebar_item.sidebar-menu ul a:focus, .stems2.template-stems2-ulu-guide .sidebar_item.sidebar-menu ul a:hover {
-    background: #f6f4e4;
+    background: #c9d3e0;
     color: #333
 }
 
@@ -47143,12 +47143,12 @@ body.osas .island + .island {
 }
 
 .stems2.template-stems2-ulu-guide .sidebar_item.links-sidebar ul a {
-    border-bottom: 4px solid #f6f4e4;
+    border-bottom: 4px solid #c9d3e0;
     text-decoration: none
 }
 
 .stems2.template-stems2-ulu-guide .sidebar_item.links-sidebar ul a:active, .stems2.template-stems2-ulu-guide .sidebar_item.links-sidebar ul a:focus, .stems2.template-stems2-ulu-guide .sidebar_item.links-sidebar ul a:hover {
-    border-bottom: 4px solid #daf9ff;
+    border-bottom: 4px solid #c9d3e0;
     text-decoration: none
 }
 
@@ -47157,11 +47157,11 @@ body.osas .island + .island {
 }
 
 .post-type-archive-ike_ai_resource .tooltip {
-    border-bottom-color: hsla(43, 93%, 89%, .5)
+    border-bottom-color: #c9d3e0
 }
 
 .post-type-archive-ike_ai_resource .tooltip:active, .post-type-archive-ike_ai_resource .tooltip:focus, .post-type-archive-ike_ai_resource .tooltip:hover {
-    border-bottom-color: #fdefcb
+    border-bottom-color: #c9d3e0
 }
 
 .post-type-archive-ike_ai_resource .swal2-container .swal2-icon .swal2-icon-content {

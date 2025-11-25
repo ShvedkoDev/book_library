@@ -58,7 +58,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #007cba;
+    background: #1d496a;
     color: white;
     border: none;
     cursor: pointer;

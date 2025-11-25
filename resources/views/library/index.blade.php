@@ -240,7 +240,7 @@
             <!-- Library Header -->
             <div class="library-header">
                 <div class="results-info">
-                    <h3>Available resources</h3>
+                    <h3>Current resources</h3>
                     <p id="results-count">Showing {{ $books->count() }} of {{ $books->total() }} books and other resources</p>
                 </div>
                 <div class="sort-options">
@@ -283,16 +283,28 @@
                                     @endif
                                 </div>
                                 <div class="book-description">
-                                    @if($book->purposeClassifications->isNotEmpty())
-                                        {{ $book->purposeClassifications->pluck('value')->join(', ') }},
+                                    @php
+                                        $descriptionParts = [];
+                                        if($book->purposeClassifications->isNotEmpty()) {
+                                            $descriptionParts[] = $book->purposeClassifications->pluck('value')->join(', ');
+                                        }
+                                        if($book->learnerLevelClassifications->isNotEmpty()) {
+                                            $descriptionParts[] = $book->learnerLevelClassifications->pluck('value')->join(', ');
+                                        }
+                                        if($book->languages->isNotEmpty()) {
+                                            $descriptionParts[] = $book->languages->pluck('name')->join(', ');
+                                        }
+                                    @endphp
+                                    {{ implode(', ', $descriptionParts) }}
+                                </div>
+                                <div class="book-description">
+                                    @if($book->access_level === 'full')
+                                        Full access
+                                    @elseif($book->access_level === 'limited')
+                                        Limited access
+                                    @else
+                                        Unavailable
                                     @endif
-                                    @if($book->learnerLevelClassifications->isNotEmpty())
-                                        {{ $book->learnerLevelClassifications->pluck('value')->join(', ') }},
-                                    @endif
-                                    @if($book->languages->isNotEmpty())
-                                        {{ $book->languages->pluck('name')->join(', ') }},
-                                    @endif
-                                    {{ ucfirst($book->access_level) }} Access
                                 </div>
                             </td>
                             <td class="book-actions-cell">

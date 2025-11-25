@@ -96,8 +96,8 @@
 
 .share-button:hover {
     background: #e9ecef;
-    border-color: #007cba;
-    color: #007cba;
+    border-color: #1d496a;
+    color: #1d496a;
 }
 
 .share-button i {
@@ -175,7 +175,7 @@
     font-size: 1.2rem;
     width: 24px;
     text-align: center;
-    color: #007cba;
+    color: #1d496a;
     display: inline-block;
 }
 

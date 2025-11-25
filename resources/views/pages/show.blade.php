@@ -151,7 +151,7 @@
             <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
                 <span property="itemListElement" typeof="ListItem">
                     <a property="item" typeof="WebPage" title="Go to Micronesian Teachers Digital Library." href="{{ url('/') }}" class="main-home">
-                        <span property="name">Micronesian Teachers Digital Library</span>
+                        <span property="name">National Vernacular Language Arts (VLA) curriculum</span>
                     </a>
                     <meta property="position" content="1">
                 </span>

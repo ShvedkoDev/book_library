@@ -213,7 +213,7 @@
                         @auth
                             <button class="toggle-option {{ request()->is('library*') ? 'active' : '' }}" onclick="window.location.href='{{ route('library.index') }}'" data-module="library">Resource library</button>
                         @else
-                            <button class="toggle-option {{ request()->is('library*') ? 'active' : '' }}" onclick="window.location.href='{{ route('library.index') }}'" data-module="library" title="Login required to access library">
+                            <button class="toggle-option {{ request()->is('library*') ? 'active' : '' }}" onclick="window.location.href='{{ route('library.index') }}'" data-module="library" title="Login required for full access">
                                 Resource library <i class="fal fa-lock" style="font-size: 0.8em; margin-left: 0.25em;"></i>
                             </button>
                         @endauth

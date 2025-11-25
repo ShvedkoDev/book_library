@@ -10,7 +10,7 @@
     /* CSS Variables for colors and common values */
     :root {
         /* Primary colors */
-        --color-primary: #007cba;
+        --color-primary: #1d496a;
         --color-primary-dark: #005a8a;
 
         /* Status colors */
@@ -107,7 +107,6 @@
     }
 
     .book-cover-section {
-        position: sticky;
         top: 2rem;
         height: fit-content;
     }
@@ -116,14 +115,21 @@
         width: 100%;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        margin-bottom: 1rem;
+        margin-bottom: 0.25rem;
+        cursor: pointer;
+        transition: transform 0.1s ease, box-shadow 0.3s ease;
+        transform-style: preserve-3d;
+    }
+
+    .book-cover-section .book-cover:hover {
+        box-shadow: 0 12px 32px rgba(0,0,0,0.3);
     }
 
     .access-status {
         padding: 0.5rem;
         text-align: center;
         margin-bottom: 1rem;
-        font-weight: 600;
+        font-weight: normal;
         font-size: 0.9rem;
         display: flex;
         align-items: center;
@@ -140,7 +146,7 @@
     }
 
     .access-status.unavailable {
-        color: #721c24;
+        color: #8198b2;
     }
 
     .access-status svg,
@@ -176,17 +182,17 @@
     }
 
     .book-action-btn.btn-primary {
-        background-color: #007cba;
+        background-color: #1d496a;
         color: white;
     }
 
     .book-action-btn.btn-primary:hover {
-        background-color: #005a8a;
+        background-color: #1d496a;
     }
 
     .book-action-btn.btn-secondary {
         background-color: #f0f0f0;
-        color: #333;
+        color: #666;
     }
 
     .book-action-btn.btn-secondary:hover {
@@ -194,7 +200,7 @@
     }
 
     .book-action-btn.btn-action {
-        background-color: #f8f9fa;
+        background-color: #fdf4d1;
         color: #333;
         border: 1px solid #ddd;
     }
@@ -269,6 +275,15 @@
         color: #333;
     }
 
+    /* Authenticated user styling */
+    .action-icons-row.authenticated .action-icon {
+        color: #333;
+    }
+
+    .action-icons-row.authenticated .action-icon:hover {
+        color: #333;
+    }
+
     .action-icon i {
         font-size: 1.1rem;
         line-height: 1;
@@ -287,7 +302,7 @@
 
     .stars {
         color: #ffc107;
-        font-size: 1.2rem;
+        font-size: 1.75rem;
     }
 
     .stars .empty {
@@ -320,7 +335,7 @@
     }
 
     .collection-link {
-        color: #007cba;
+        color: #1d496a;
         text-decoration: none;
         font-size: 0.875rem;
     }
@@ -341,6 +356,31 @@
         font-size: 1.1rem;
         color: #444;
         margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .book-author .author-label {
+        margin-right: 0.25rem;
+    }
+
+    .book-author .author-pill {
+        display: inline-block;
+        padding: 0.1rem 0.5rem;
+        background-color: #f0f0f0;
+        color: #333;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: background-color 0.2s ease;
+        cursor: pointer;
+    }
+
+    .book-author .author-pill:hover {
+        background-color: #e0e0e0;
+        color: #000;
     }
 
     .book-meta {
@@ -403,7 +443,7 @@
     }
 
     .editor-link {
-        color: #007cba;
+        color: #1d496a;
         text-decoration: none;
         font-weight: 600;
     }
@@ -419,7 +459,7 @@
     }
 
     .history-link {
-        color: #007cba;
+        color: #1d496a;
         text-decoration: none;
     }
 
@@ -488,8 +528,8 @@
     }
 
     .nav-bar li.selected a {
-        background: #007cba;
-        background-color: #007cba;
+        background: #1d496a;
+        background-color: #1d496a;
         color: #ffffff !important;
     }
 
@@ -528,8 +568,8 @@
     }
 
     .book-nav-tab.active {
-        color: #007cba;
-        border-bottom-color: #007cba;
+        color: #1d496a;
+        border-bottom-color: #1d496a;
     }
 
     .book-content-section {
@@ -643,7 +683,7 @@
     .book-card-btn {
         width: 100%;
         padding: 0.5rem;
-        background-color: #007cba;
+        background-color: #1d496a;
         color: white!important;
         border: none;
         border-radius: 4px;
@@ -672,7 +712,7 @@
     }
 
     .link-box a {
-        color: #007cba;
+        color: #1d496a;
         text-decoration: none;
         margin-right: 0.5rem;
         transition: color 0.2s;
@@ -722,7 +762,7 @@
     }
 
     .edition-omniline-item a {
-        color: #007cba;
+        color: #1d496a;
         text-decoration: none;
     }
 
@@ -739,7 +779,7 @@
     .read-more__toggle {
         background: none;
         border: none;
-        color: #007cba;
+        color: #1d496a;
         cursor: pointer;
         font-weight: 600;
         padding: 0.5rem 0;
@@ -1559,6 +1599,79 @@
             margin: 2rem 0 0 0;
         }
     }
+
+    /* Lightbox Modal for Book Cover */
+    .cover-lightbox {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .cover-lightbox.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lightbox-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+        animation: zoomIn 0.3s ease;
+    }
+
+    .lightbox-content img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: 8px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox-close {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        color: #fff;
+        font-size: 36px;
+        font-weight: bold;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        transition: transform 0.2s ease;
+    }
+
+    .lightbox-close:hover {
+        transform: scale(1.2);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 </style>
 @endpush
 
@@ -1598,7 +1711,7 @@
                 }
             @endphp
 
-            <img src="{{ $book->getThumbnailUrl() }}" alt="{{ $book->title }}" class="book-cover">
+            <img src="{{ $book->getThumbnailUrl() }}" alt="{{ $book->title }}" class="book-cover" onclick="openCoverLightbox()" title="Click to view larger image">
 
             <div class="access-status {{ $book->access_level === 'full' ? 'full-access' : ($book->access_level === 'limited' ? 'limited-access' : 'unavailable') }}">
                 @if($book->access_level === 'full')
@@ -1703,7 +1816,7 @@
 
             <!-- Action Icons Row -->
             <div>
-                <div class="action-icons-row">
+                <div class="action-icons-row @auth authenticated @endauth">
                     <button onclick="scrollToSection('reader-observations')" class="action-icon">
                         <i class="fal fa-comment"></i>
                         <span>Review</span>
@@ -1734,8 +1847,8 @@
                         :isBookmarked="$book->isBookmarkedBy(Auth::id())"
                     />
                 @else
-                    <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to save to collection">
-                        Login to Save to Collection
+                    <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to bookmark">
+                        Login to Bookmark
                     </a>
                 @endauth
             </div>
@@ -1753,7 +1866,7 @@
                         <a href="#details">Details</a>
                     </li>
                     <li>
-                        <a href="#reader-observations">Reviews ({{ $book->reviews->count() }})</a>
+                        <a href="#reader-observations">User feedback{{ $book->reviews->count() > 0 ? ' (' . $book->reviews->count() . ')' : '' }}</a>
                     </li>
                     <li>
                         <a href="#library">Library Locations</a>
@@ -1819,32 +1932,36 @@
                 @endif
                 <div class="book-author">
                     @if($book->creators->isNotEmpty())
-                        by {{ $book->creators->pluck('name')->join(', ') }}
+                        <span class="author-label">by</span>
+                        @foreach($book->creators as $creator)
+                            <a href="{{ route('library.index', ['search' => $creator->name]) }}" class="author-pill">{{ $creator->name }}</a>
+                        @endforeach
                     @endif
                 </div>
 
                 <!-- Reader Stats -->
                 <div class="reader-stats-flex">
-                    <div class="reader-stat-item">
-                        <div class="stars">
-                            @php $roundedRating = round($averageRating); @endphp
-                            @for($i = 1; $i <= 5; $i++)
-                                <span class="star {{ $i <= $roundedRating ? '' : 'empty' }}">★</span>
-                            @endfor
-                        </div>
-                        <span class="stat-text">
-                            @if($totalRatings > 0)
-                                {{ number_format($averageRating, 1) }} ({{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }})
-                            @else
-                                No ratings yet
-                            @endif
-                        </span>
-                    </div>
                     <div class="stat-text">
                         <i class="fal fa-eye"></i> <strong>{{ number_format($book->view_count) }}</strong> {{ Str::plural('view', $book->view_count) }}
                     </div>
                     <div class="stat-text">
                         <i class="fal fa-download"></i> <strong>{{ number_format($book->download_count) }}</strong> {{ Str::plural('download', $book->download_count) }}
+                    </div>
+                    <div class="stat-text">
+                        <i class="fal fa-star"></i>
+                        @if($totalRatings > 0)
+                            <strong>{{ number_format($averageRating, 1) }}</strong> ({{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }})
+                        @else
+                            No ratings yet
+                        @endif
+                    </div>
+                    <div class="stat-text">
+                        <i class="fal fa-check-circle"></i>
+                        @if($book->reviews->count() > 0)
+                            <strong>{{ $book->reviews->count() }}</strong> {{ Str::plural('review', $book->reviews->count()) }}
+                        @else
+                            No reviews yet
+                        @endif
                     </div>
                 </div>
             </div>
@@ -2437,6 +2554,14 @@
         </div>
     </div>
     @endauth
+
+    <!-- Cover Lightbox Modal -->
+    <div id="coverLightbox" class="cover-lightbox" onclick="closeCoverLightbox(event)">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeCoverLightbox(event)">&times;</button>
+            <img src="{{ $book->getThumbnailUrl() }}" alt="{{ $book->title }}">
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -2765,6 +2890,21 @@
             ratingCenter.style.display = 'flex';
             emptyState.style.display = 'none';
         }
+
+        // Update reader-stats-flex section (rating text only, no stars)
+        const readerStatsTexts = document.querySelectorAll('.reader-stats-flex .stat-text');
+        if (readerStatsTexts.length >= 3) {
+            // The third stat-text is the rating
+            const ratingStatText = readerStatsTexts[2];
+            if (ratingStatText) {
+                if (data.totalRatings > 0) {
+                    const plural = data.totalRatings === 1 ? 'rating' : 'ratings';
+                    ratingStatText.innerHTML = `<i class="fal fa-star"></i> <strong>${data.averageRating.toFixed(1)}</strong> (${data.totalRatings} ${plural})`;
+                } else {
+                    ratingStatText.innerHTML = '<i class="fal fa-star"></i> No ratings yet';
+                }
+            }
+        }
     }
 
     // Star rating hover effects for quick rating
@@ -2821,6 +2961,60 @@
                     closeAccessRequestModal();
                 }
             });
+        }
+    });
+
+    // Book Cover 3D Tilt Effect
+    document.addEventListener('DOMContentLoaded', function() {
+        const bookCover = document.querySelector('.book-cover-section .book-cover');
+
+        if (bookCover) {
+            bookCover.addEventListener('mousemove', function(e) {
+                const rect = bookCover.getBoundingClientRect();
+                const x = e.clientX - rect.left; // X position within the element
+                const y = e.clientY - rect.top;  // Y position within the element
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Calculate rotation based on mouse position
+                const rotateX = ((y - centerY) / centerY) * -10; // Max 10 degrees
+                const rotateY = ((x - centerX) / centerX) * 10;  // Max 10 degrees
+
+                bookCover.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            });
+
+            bookCover.addEventListener('mouseleave', function() {
+                bookCover.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        }
+    });
+
+    // Book Cover Lightbox Functions
+    function openCoverLightbox() {
+        const lightbox = document.getElementById('coverLightbox');
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeCoverLightbox(event) {
+        // Only close if clicking on the background or close button
+        if (event && event.target.tagName === 'IMG') {
+            return; // Don't close when clicking the image itself
+        }
+
+        const lightbox = document.getElementById('coverLightbox');
+        lightbox.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+
+    // Close lightbox with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const lightbox = document.getElementById('coverLightbox');
+            if (lightbox.classList.contains('active')) {
+                closeCoverLightbox(event);
+            }
         }
     });
 </script>
