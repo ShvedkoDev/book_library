@@ -294,15 +294,19 @@ class LibraryController extends Controller
             abort(404, 'PDF file not found');
         }
 
-        // Stream the PDF file for inline viewing
-        return \Storage::disk('public')->response(
-            $file->file_path,
-            $file->filename ?? basename($file->file_path),
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($file->file_path)) . '"'
-            ]
-        );
+        // Track PDF view (same as download for analytics)
+        $this->analytics->trackBookDownload($book, request());
+
+        // Get file path
+        $filePath = storage_path('app/public/' . $file->file_path);
+
+        // Stream the PDF file for inline viewing with proper headers
+        return response()->file($filePath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($file->file_path)) . '"',
+            'Cache-Control' => 'public, max-age=3600',
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 
     /**
