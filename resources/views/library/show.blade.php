@@ -1838,6 +1838,13 @@
                         <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-secondary">
                             <i class="fal fa-download"></i> Download PDF
                         </a>
+                    @else
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to view PDF">
+                            <i class="fal fa-eye"></i> View PDF
+                        </a>
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to download">
+                            <i class="fal fa-download"></i> Download PDF
+                        </a>
                     @endauth
                 @elseif($book->access_level === 'limited' && $pdfFile)
                     @auth
@@ -1874,6 +1881,9 @@
                             </button>
                         @endif
                     @else
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to preview">
+                            <i class="fal fa-eye"></i> View PDF
+                        </a>
                         <a href="{{ route('login', ['redirect' => url()->current()]) }}"
                            class="book-action-btn btn-secondary text-link"
                            title="Please log in to request access">
