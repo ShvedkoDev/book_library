@@ -277,7 +277,34 @@ class LibraryController extends Controller
     }
 
     /**
-     * View a PDF file in the browser
+     * Show PDF viewer page (for limited access books)
+     */
+    public function viewPdfViewer(Book $book, $fileId)
+    {
+        // Find the file
+        $file = $book->files()->where('file_type', 'pdf')->findOrFail($fileId);
+
+        // Check access level
+        if ($book->access_level === 'unavailable') {
+            abort(403, 'This book is not available for viewing. Please request access.');
+        }
+
+        // Check if file exists in storage
+        if (!$file->file_path || !\Storage::disk('public')->exists($file->file_path)) {
+            abort(404, 'PDF file not found');
+        }
+
+        // For full access, redirect to direct PDF view
+        if ($book->access_level === 'full') {
+            return redirect()->route('library.view-pdf-direct', ['book' => $book->id, 'file' => $fileId]);
+        }
+
+        // For limited access, show canvas-based viewer
+        return view('library.pdf-viewer', compact('book', 'file'));
+    }
+
+    /**
+     * Stream PDF file directly (used by PDF.js viewer and full access)
      */
     public function viewPdf(Book $book, $fileId)
     {

@@ -37,7 +37,8 @@ Route::get('/library/book/{slug}', [LibraryController::class, 'show'])->name('li
 // Library routes - REQUIRES AUTHENTICATION (interactive features)
 Route::middleware(['auth', 'verified'])->group(function () {
     // PDF viewing and downloading
-    Route::get('/library/book/{book}/view-pdf/{file}', [LibraryController::class, 'viewPdf'])->name('library.view-pdf');
+    Route::get('/library/book/{book}/viewer/{file}', [LibraryController::class, 'viewPdfViewer'])->name('library.view-pdf');
+    Route::get('/library/book/{book}/view-pdf/{file}', [LibraryController::class, 'viewPdf'])->name('library.view-pdf-direct');
     Route::get('/library/book/{book}/download/{file}', [LibraryController::class, 'download'])->name('library.download');
 
     // Book interactions (rating, review, access request)
