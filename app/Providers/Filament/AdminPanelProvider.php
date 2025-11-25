@@ -43,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
                 'info' => Color::Blue,
             ])
             ->font('"proxima-nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif')           // Start with system font
-            ->viteTheme('resources/css/filament/admin/theme.css')
+            // ->viteTheme('resources/css/filament/admin/theme.css')  // Temporarily disabled to test button visibility
             ->darkMode(true)  // Enable dark mode toggle
             ->login()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
