@@ -1854,12 +1854,12 @@
                         @if($userAccessRequest)
                             @if($userAccessRequest->status === 'pending')
                                 <div class="status-box status-pending">
-                                    <strong>Request Pending</strong>
+                                    <strong>Request pending</strong>
                                     <p>Your access request is being reviewed.</p>
                                 </div>
                             @elseif($userAccessRequest->status === 'approved')
                                 <div class="status-box status-approved">
-                                    <strong>Access Approved</strong>
+                                    <strong>Access approved</strong>
                                     <p>Your request has been approved. Check your email for instructions.</p>
                                 </div>
                             @elseif($userAccessRequest->status === 'rejected')
@@ -1868,16 +1868,16 @@
                                     <p>Your previous request was not approved.</p>
                                 </div>
                                 <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
-                                    Request Again
+                                    Request again
                                 </button>
                             @else
                                 <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
-                                    Request Access
+                                    Request access
                                 </button>
                             @endif
                         @else
                             <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
-                                Request Access
+                                Request access
                             </button>
                         @endif
                     @else
@@ -1887,7 +1887,7 @@
                         <a href="{{ route('login', ['redirect' => url()->current()]) }}"
                            class="book-action-btn btn-secondary text-link"
                            title="Please log in to request access">
-                            Login to Request Access
+                            Login to request access
                         </a>
                     @endauth
                 @else
@@ -1895,21 +1895,21 @@
                         @if($userAccessRequest)
                             @if($userAccessRequest->status === 'pending')
                                 <div class="status-box status-pending">
-                                    <strong>⏳ Request Pending</strong>
+                                    <strong>Request pending</strong>
                                     <p>Your information request is being reviewed.</p>
                                 </div>
                             @elseif($userAccessRequest->status === 'approved')
                                 <div class="status-box status-approved">
-                                    <strong>✓ Request Approved</strong>
+                                    <strong>Request approved</strong>
                                     <p>Your request has been approved. Check your email for information.</p>
                                 </div>
                             @elseif($userAccessRequest->status === 'rejected')
                                 <div class="status-box status-rejected">
-                                    <strong>✗ Request Rejected</strong>
+                                    <strong>Request rejected</strong>
                                     <p>Your previous request was not approved.</p>
                                 </div>
                                 <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
-                                    Request Again
+                                    Request again
                                 </button>
                             @else
                                 <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
@@ -1925,7 +1925,7 @@
                         <a href="{{ route('login', ['redirect' => url()->current()]) }}"
                            class="book-action-btn btn-secondary text-link"
                            title="Please log in to request information">
-                            Login to Request Information
+                            Login to request information
                         </a>
                     @endauth
                 @endif
