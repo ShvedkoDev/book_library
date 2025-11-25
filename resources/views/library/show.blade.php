@@ -1748,14 +1748,6 @@
                         <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">
                             <i class="fal fa-eye"></i> View PDF
                         </a>
-                    @else
-                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to preview">
-                            <i class="fal fa-eye"></i> View PDF
-                        </a>
-                    @endauth
-                @else
-                    <button class="book-action-btn btn-primary" disabled>Not Available</button>
-                    @auth
                         @if($userAccessRequest)
                             @if($userAccessRequest->status === 'pending')
                                 <div class="status-box status-pending">
@@ -1786,10 +1778,51 @@
                             </button>
                         @endif
                     @else
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to preview">
+                            <i class="fal fa-eye"></i> View PDF
+                        </a>
                         <a href="{{ route('login', ['redirect' => url()->current()]) }}"
                            class="book-action-btn btn-secondary text-link"
                            title="Please log in to request access">
                             Login to Request Access
+                        </a>
+                    @endauth
+                @else
+                    @auth
+                        @if($userAccessRequest)
+                            @if($userAccessRequest->status === 'pending')
+                                <div class="status-box status-pending">
+                                    <strong>⏳ Request Pending</strong>
+                                    <p>Your information request is being reviewed.</p>
+                                </div>
+                            @elseif($userAccessRequest->status === 'approved')
+                                <div class="status-box status-approved">
+                                    <strong>✓ Request Approved</strong>
+                                    <p>Your request has been approved. Check your email for information.</p>
+                                </div>
+                            @elseif($userAccessRequest->status === 'rejected')
+                                <div class="status-box status-rejected">
+                                    <strong>✗ Request Rejected</strong>
+                                    <p>Your previous request was not approved.</p>
+                                </div>
+                                <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
+                                    Request Again
+                                </button>
+                            @else
+                                <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
+                                    Request information
+                                </button>
+                            @endif
+                        @else
+                            <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
+                                Request information
+                            </button>
+                        @endif
+                    @else
+                        <a href="{{ route('login', ['redirect' => url()->current()]) }}"
+                           class="book-action-btn btn-secondary text-link"
+                           title="Please log in to request information">
+                            Login to Request Information
                         </a>
                     @endauth
                 @endif
