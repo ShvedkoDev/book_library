@@ -1614,6 +1614,91 @@
         background: #004556;
     }
 
+    /* Share Modal Specific Styles */
+    .share-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .share-label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        color: var(--color-text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .share-url-container {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .share-url-input {
+        flex: 1;
+        padding: 0.625rem 0.875rem;
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        font-size: 0.9375rem;
+        color: var(--color-text-primary);
+        background: #f8f9fa;
+        font-family: monospace;
+    }
+
+    .share-url-input:focus {
+        outline: 2px solid #005a70;
+        outline-offset: -1px;
+    }
+
+    .btn-copy-url {
+        padding: 0.625rem 1.25rem;
+        background: #005a70;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        transition: background 0.2s;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-copy-url:hover {
+        background: #004556;
+    }
+
+    .copy-feedback {
+        font-size: 0.875rem;
+        color: #28a745;
+        font-weight: 600;
+        min-height: 1.25rem;
+        padding-left: 0.25rem;
+    }
+
+    .qr-code-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1.5rem;
+        background: white;
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+    }
+
+    .qr-code-container canvas {
+        display: block;
+    }
+
+    .qr-help-text {
+        text-align: center;
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+    }
+
     @media (max-width: 768px) {
         .book-page-container {
             grid-template-columns: 1fr;
@@ -2621,6 +2706,55 @@
     </div>
     @endauth
 
+    <!-- Share Modal -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h2>Share this book</h2>
+                <button onclick="closeShareModal()" class="modal-close">&times;</button>
+            </div>
+
+            <div style="padding: 1.5rem;">
+                <p class="modal-description">
+                    Share <strong>{{ $book->title }}</strong> with others
+                </p>
+
+                <!-- Copy URL Section -->
+                <div class="share-section">
+                    <label class="share-label">Book URL</label>
+                    <div class="share-url-container">
+                        <input type="text"
+                               id="shareUrl"
+                               value="{{ url()->current() }}"
+                               readonly
+                               class="share-url-input">
+                        <button onclick="copyShareUrl()" class="btn-copy-url">
+                            <i class="fal fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div id="copyFeedback" class="copy-feedback"></div>
+                </div>
+
+                <!-- QR Code Section -->
+                <div class="share-section">
+                    <label class="share-label">QR Code</label>
+                    <div class="qr-code-container">
+                        <div id="qrcode"></div>
+                    </div>
+                    <p class="qr-help-text">Scan this QR code to open the book page</p>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button"
+                            onclick="closeShareModal()"
+                            class="btn-modal-cancel">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Cover Lightbox Modal -->
     <div id="coverLightbox" class="cover-lightbox" onclick="closeCoverLightbox(event)">
         <div class="lightbox-content">
@@ -2632,6 +2766,9 @@
 @endsection
 
 @push('scripts')
+<!-- QRCode.js Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script>
     // Read More/Less functionality
     function toggleReadMore() {
@@ -2820,27 +2957,65 @@
         }
     }
 
-    // Share Modal function
-    function openShareModal() {
-        const url = window.location.href;
-        const title = '{{ $book->title }}';
-        const text = '{{ Str::limit($book->description ?? "Check out this book", 100) }}';
+    // Share Modal functions
+    let qrcodeInstance = null;
 
-        // Try to use native share API if available (mobile)
-        if (navigator.share) {
-            navigator.share({
-                title: title,
-                text: text,
-                url: url
-            }).catch((error) => console.log('Error sharing', error));
-        } else {
-            // Fallback: copy link to clipboard
-            navigator.clipboard.writeText(url).then(function() {
-                alert('Link copied to clipboard!');
-            }, function(err) {
-                console.error('Could not copy text: ', err);
-            });
+    function openShareModal() {
+        const modal = document.getElementById('shareModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Generate QR Code
+            const qrcodeContainer = document.getElementById('qrcode');
+            qrcodeContainer.innerHTML = ''; // Clear previous QR code
+
+            if (typeof QRCode !== 'undefined') {
+                qrcodeInstance = new QRCode(qrcodeContainer, {
+                    text: window.location.href,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } else {
+                qrcodeContainer.innerHTML = '<p style="color: #dc3545;">QR Code library not loaded</p>';
+            }
         }
+    }
+
+    function closeShareModal() {
+        const modal = document.getElementById('shareModal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+
+            // Clear feedback message
+            const feedback = document.getElementById('copyFeedback');
+            if (feedback) {
+                feedback.textContent = '';
+            }
+        }
+    }
+
+    function copyShareUrl() {
+        const urlInput = document.getElementById('shareUrl');
+        const feedback = document.getElementById('copyFeedback');
+
+        urlInput.select();
+        urlInput.setSelectionRange(0, 99999); // For mobile devices
+
+        navigator.clipboard.writeText(urlInput.value).then(function() {
+            feedback.textContent = '✓ URL copied to clipboard!';
+            setTimeout(() => {
+                feedback.textContent = '';
+            }, 3000);
+        }, function(err) {
+            feedback.textContent = '✗ Failed to copy';
+            feedback.style.color = '#dc3545';
+            console.error('Could not copy text: ', err);
+        });
     }
 
     // Quick star rating submission
