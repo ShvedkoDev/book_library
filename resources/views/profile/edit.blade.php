@@ -80,14 +80,14 @@
 
     .profile-nav-item:hover {
         background: #f9f9f9;
-        color: #007cba;
+        color: #1d496a;
     }
 
     .profile-nav-item.active {
         background: #e6f3f9;
-        color: #007cba;
+        color: #1d496a;
         font-weight: 600;
-        border-left: 3px solid #007cba;
+        border-left: 3px solid #1d496a;
     }
 
     .profile-nav-item i {
@@ -144,7 +144,7 @@
 
     .form-input:focus {
         outline: none;
-        border-color: #007cba;
+        border-color: #1d496a;
         box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
     }
 
@@ -163,12 +163,12 @@
     .btn {
         display: inline-block;
         padding: 0.75rem 1.5rem;
-        background: #007cba;
+        background: #1d496a;
         color: white;
         text-decoration: none;
         border: none;
         border-radius: 6px;
-        font-weight: 600;
+        font-weight: normal;
         cursor: pointer;
         transition: background 0.3s;
         font-size: 1rem;

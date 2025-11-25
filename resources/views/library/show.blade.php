@@ -2699,7 +2699,7 @@
             </div>
 
             <div style="padding: 1.5rem;">
-                <p class="modal-description">
+                <p class="modal-description" style="margin-bottom: 1rem;">
                     Share <strong>{{ $book->title }}</strong> with others
                 </p>
 
