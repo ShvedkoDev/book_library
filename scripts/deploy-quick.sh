@@ -45,10 +45,11 @@ git pull origin $(git rev-parse --abbrev-ref HEAD)
 
 # Copy pre-built assets to public_html
 log "Copying build files..."
-cp -f public/index.php "$PUBLIC_HTML/"
 cp -rf public/build "$PUBLIC_HTML/"
 cp -rf public/css "$PUBLIC_HTML/" 2>/dev/null || true
 cp -rf public/js "$PUBLIC_HTML/" 2>/dev/null || true
+cp -rf public/library-assets "$PUBLIC_HTML/library-assets"
+cp -rf public/admin-assets "$PUBLIC_HTML/admin-assets"
 
 # Clear caches
 log "Clearing caches..."
