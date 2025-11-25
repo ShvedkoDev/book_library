@@ -277,7 +277,7 @@ class LibraryController extends Controller
     }
 
     /**
-     * Show PDF viewer page (for limited access books)
+     * Show PDF viewer page (canvas-based viewer for all access levels)
      */
     public function viewPdfViewer(Book $book, $fileId)
     {
@@ -294,12 +294,7 @@ class LibraryController extends Controller
             abort(404, 'PDF file not found');
         }
 
-        // For full access, redirect to direct PDF view
-        if ($book->access_level === 'full') {
-            return redirect()->route('library.view-pdf-direct', ['book' => $book->id, 'file' => $fileId]);
-        }
-
-        // For limited access, show canvas-based viewer
+        // Always show canvas-based viewer (for both full and limited access)
         return view('library.pdf-viewer', compact('book', 'file'));
     }
 
