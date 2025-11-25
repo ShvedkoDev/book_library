@@ -1785,17 +1785,17 @@
                         @if($userAccessRequest)
                             @if($userAccessRequest->status === 'pending')
                                 <div class="status-box status-pending">
-                                    <strong>⏳ Request Pending</strong>
+                                    <strong>Request Pending</strong>
                                     <p>Your access request is being reviewed.</p>
                                 </div>
                             @elseif($userAccessRequest->status === 'approved')
                                 <div class="status-box status-approved">
-                                    <strong>✓ Access Approved</strong>
+                                    <strong>Access Approved</strong>
                                     <p>Your request has been approved. Check your email for instructions.</p>
                                 </div>
                             @elseif($userAccessRequest->status === 'rejected')
                                 <div class="status-box status-rejected">
-                                    <strong>✗ Request Rejected</strong>
+                                    <strong>Request Rejected</strong>
                                     <p>Your previous request was not approved.</p>
                                 </div>
                                 <button onclick="openAccessRequestModal()" class="book-action-btn btn-secondary">
@@ -2571,11 +2571,10 @@
                 <button onclick="closeAccessRequestModal()" class="modal-close">&times;</button>
             </div>
 
-            <p class="modal-description">
-                Fill out the form below to request access to <strong>{{ $book->title }}</strong>. We will review your request and contact you via email.
-            </p>
-
             <form action="{{ route('library.request-access', $book->id) }}" method="POST">
+                <p class="modal-description">
+                    Fill out the form below to request access to <strong>{{ $book->title }}</strong>. We will review your request and contact you via email.
+                </p>
                 @csrf
                 <div class="note-field-margin">
                     <label for="access_request_name" class="note-field-label">Name *</label>
