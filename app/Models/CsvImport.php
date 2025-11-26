@@ -42,8 +42,10 @@ class CsvImport extends Model
     {
         return [
             'options' => 'array',
+            'error_log' => 'array',
             'error_summary' => 'array',
             'performance_metrics' => 'array',
+            'validation_errors' => 'array',
             'total_rows' => 'integer',
             'processed_rows' => 'integer',
             'successful_rows' => 'integer',
@@ -164,14 +166,22 @@ class CsvImport extends Model
 
     public function addError(int $row, string $column, string $message)
     {
-        $errors = json_decode($this->error_log ?? '[]', true);
+        $errors = $this->error_log ?? [];
+        if (!is_array($errors)) {
+            $errors = [];
+        }
+
+        // Clean message to ensure valid UTF-8
+        $cleanMessage = mb_convert_encoding($message, 'UTF-8', 'UTF-8');
+
         $errors[] = [
             'row' => $row,
             'column' => $column,
-            'message' => $message,
+            'message' => $cleanMessage,
             'timestamp' => now()->toISOString(),
         ];
-        $this->update(['error_log' => json_encode($errors)]);
+
+        $this->update(['error_log' => $errors]);
     }
 
     /**

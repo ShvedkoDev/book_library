@@ -23,6 +23,24 @@ class CollectionSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'PALM final',
+                'description' => 'Pacific Area Language Materials final version booklets - published literacy materials for Micronesian languages',
+                'is_series' => true,
+                'sort_order' => 2,
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'PALM CD',
+                'description' => 'Pacific Area Language Materials CD-ROM collection - digitized educational materials from the 1999 PALM CD-ROM compilation',
+                'is_series' => true,
+                'sort_order' => 3,
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         DB::table('collections')->insert($collections);

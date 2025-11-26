@@ -499,6 +499,9 @@ class BookCsvImportService
         // Library References
         $this->attachLibraryReferences($book, $data, $options, $isUpdate);
 
+        // Book Identifiers (NEW: OCLC, ISBN, Other)
+        $this->attachBookIdentifiers($book, $data, $isUpdate);
+
         // Book Relationships
         $this->attachBookRelationships($book, $data, $isUpdate);
     }
@@ -523,9 +526,11 @@ class BookCsvImportService
             'physical_type',
             'publication_year',
             'pages',
-            'description',
+            'description',          // NEW: Now separate from abstract
+            'abstract',             // NEW: Separate abstract field
             'toc',
             'notes_issue',
+            'notes_version',        // NEW: Notes related to version
             'notes_content',
             'contact',
             'vla_standard',
@@ -534,7 +539,15 @@ class BookCsvImportService
 
         foreach ($directFields as $field) {
             if (isset($data[$field]) && $data[$field] !== '') {
-                $bookData[$field] = $data[$field];
+                // Clean and convert character encoding from Windows-1252 to UTF-8
+                $value = $this->cleanTextEncoding($data[$field]);
+
+                // Special handling for palm_code: convert "unavailable" to null to avoid duplicates
+                if ($field === 'palm_code' && strtolower($value) === 'unavailable') {
+                    $bookData[$field] = null;
+                } else {
+                    $bookData[$field] = $value;
+                }
             }
         }
 
@@ -553,6 +566,11 @@ class BookCsvImportService
         // Clean year (remove question marks)
         if (isset($bookData['publication_year'])) {
             $bookData['publication_year'] = (int) str_replace('?', '', $bookData['publication_year']);
+        }
+
+        // Clean pages field (handle n/a, unknown, etc.)
+        if (isset($bookData['pages'])) {
+            $bookData['pages'] = $this->cleanIntegerField($bookData['pages']);
         }
 
         // Set defaults
@@ -1001,5 +1019,86 @@ class BookCsvImportService
                 'exception' => $e->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Clean text encoding from Windows-1252 to UTF-8
+     * Handles common problematic characters like en-dash, em-dash, smart quotes
+     *
+     * @param string $text
+     * @return string
+     */
+    protected function cleanTextEncoding(string $text): string
+    {
+        // Map of Windows-1252 characters to UTF-8 equivalents
+        $replacements = [
+            "\x96" => "\xE2\x80\x93",  // en-dash (–)
+            "\x97" => "\xE2\x80\x94",  // em-dash (—)
+            "\x91" => "\xE2\x80\x98",  // left single quote (')
+            "\x92" => "\xE2\x80\x99",  // right single quote (')
+            "\x93" => "\xE2\x80\x9C",  // left double quote (")
+            "\x94" => "\xE2\x80\x9D",  // right double quote (")
+            "\x85" => "\xE2\x80\xA6",  // ellipsis (…)
+            "\x80" => "\xE2\x82\xAC",  // euro (€)
+            "\x82" => "\xE2\x80\x9A",  // single low-9 quote (‚)
+            "\x83" => "\xC6\x92",      // f with hook (ƒ)
+            "\x84" => "\xE2\x80\x9E",  // double low-9 quote („)
+            "\x86" => "\xE2\x80\xA0",  // dagger (†)
+            "\x87" => "\xE2\x80\xA1",  // double dagger (‡)
+            "\x88" => "\xCB\x86",      // circumflex (ˆ)
+            "\x89" => "\xE2\x80\xB0",  // per mille (‰)
+            "\x8A" => "\xC5\xA0",      // S with caron (Š)
+            "\x8B" => "\xE2\x80\xB9",  // left single angle quote (‹)
+            "\x8C" => "\xC5\x92",      // OE ligature (Œ)
+            "\x8E" => "\xC5\xBD",      // Z with caron (Ž)
+            "\x95" => "\xE2\x80\xA2",  // bullet (•)
+            "\x98" => "\xCB\x9C",      // small tilde (˜)
+            "\x99" => "\xE2\x84\xA2",  // trademark (™)
+            "\x9A" => "\xC5\xA1",      // s with caron (š)
+            "\x9B" => "\xE2\x80\xBA",  // right single angle quote (›)
+            "\x9C" => "\xC5\x93",      // oe ligature (œ)
+            "\x9E" => "\xC5\xBE",      // z with caron (ž)
+            "\x9F" => "\xC5\xB8",      // Y with diaeresis (Ÿ)
+        ];
+
+        // Replace Windows-1252 characters
+        $text = str_replace(array_keys($replacements), array_values($replacements), $text);
+
+        // Convert any remaining non-UTF-8 characters
+        if (!mb_check_encoding($text, 'UTF-8')) {
+            $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8');
+        }
+
+        return $text;
+    }
+
+    /**
+     * Clean integer field, converting non-numeric values to null
+     *
+     * @param mixed $value
+     * @return int|null
+     */
+    protected function cleanIntegerField($value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        // Convert to string for checking
+        $value = trim((string) $value);
+
+        // Check for common non-numeric values
+        $nonNumericValues = ['n/a', 'na', 'unknown', 'unavailable', '/', '-', 'none'];
+        if (in_array(strtolower($value), $nonNumericValues)) {
+            return null;
+        }
+
+        // Try to extract numbers from the string
+        if (preg_match('/(\d+)/', $value, $matches)) {
+            return (int) $matches[1];
+        }
+
+        // If all else fails, return null
+        return null;
     }
 }

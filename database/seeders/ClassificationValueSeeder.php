@@ -13,41 +13,66 @@ class ClassificationValueSeeder extends Seeder
      */
     public function run(): void
     {
+        // Look up classification type IDs dynamically by slug
+        $typeIds = [
+            'purpose' => DB::table('classification_types')->where('slug', 'purpose')->value('id'),
+            'genre' => DB::table('classification_types')->where('slug', 'genre')->value('id'),
+            'subgenre' => DB::table('classification_types')->where('slug', 'sub-genre')->value('id'), // Uses 'sub-genre' slug
+            'type' => DB::table('classification_types')->where('slug', 'type')->value('id'),
+            'themes' => DB::table('classification_types')->where('slug', 'themes-uses')->value('id'), // Uses 'themes-uses' slug
+            'learner-level' => DB::table('classification_types')->where('slug', 'learner-level')->value('id'),
+        ];
+
         $values = [
-            // Purpose values
-            ['classification_type_id' => 1, 'value' => 'Core Curriculum', 'parent_id' => null, 'description' => 'Essential curriculum materials', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 1, 'value' => 'Supplemental', 'parent_id' => null, 'description' => 'Additional support materials', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 1, 'value' => 'Reference', 'parent_id' => null, 'description' => 'Reference and research materials', 'sort_order' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 1, 'value' => 'Professional Development', 'parent_id' => null, 'description' => 'Teacher training resources', 'sort_order' => 4, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            // ============================================================
+            // PURPOSE VALUES
+            // ============================================================
+            ['classification_type_id' => $typeIds['purpose'], 'value' => 'Concept materials', 'parent_id' => null, 'description' => 'Basic concepts and foundational learning', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['purpose'], 'value' => 'Core instructional', 'parent_id' => null, 'description' => 'Core curriculum and textbook materials', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['purpose'], 'value' => 'Knowledge expansion', 'parent_id' => null, 'description' => 'Supplemental content readers and expanded learning', 'sort_order' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['purpose'], 'value' => 'Literacy development', 'parent_id' => null, 'description' => 'Reading and writing skill development', 'sort_order' => 4, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
 
-            // Genre values
-            ['classification_type_id' => 2, 'value' => 'Fiction', 'parent_id' => null, 'description' => 'Fictional narratives', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 2, 'value' => 'Non-Fiction', 'parent_id' => null, 'description' => 'Factual and informational content', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 2, 'value' => 'Poetry', 'parent_id' => null, 'description' => 'Poetic works', 'sort_order' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 2, 'value' => 'Traditional Stories', 'parent_id' => null, 'description' => 'Folklore and oral traditions', 'sort_order' => 4, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            // ============================================================
+            // GENRE VALUES
+            // ============================================================
+            ['classification_type_id' => $typeIds['genre'], 'value' => 'Basic numeracy', 'parent_id' => null, 'description' => 'Early mathematics and counting', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['genre'], 'value' => 'Content readers', 'parent_id' => null, 'description' => 'Subject-specific informational texts', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['genre'], 'value' => 'Narrative readers', 'parent_id' => null, 'description' => 'Story-based reading materials', 'sort_order' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['genre'], 'value' => 'Textbook readers', 'parent_id' => null, 'description' => 'Structured educational textbooks', 'sort_order' => 4, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
 
-            // Type values
-            ['classification_type_id' => 3, 'value' => 'Textbook', 'parent_id' => null, 'description' => 'Structured educational textbook', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 3, 'value' => 'Workbook', 'parent_id' => null, 'description' => 'Student activity workbook', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 3, 'value' => 'Readers', 'parent_id' => null, 'description' => 'Reading materials', 'sort_order' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 3, 'value' => 'Teacher Guide', 'parent_id' => null, 'description' => 'Instructional guide for educators', 'sort_order' => 4, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 3, 'value' => 'Assessment Materials', 'parent_id' => null, 'description' => 'Testing and evaluation resources', 'sort_order' => 5, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            // ============================================================
+            // SUB-GENRE VALUES
+            // ============================================================
+            ['classification_type_id' => $typeIds['subgenre'], 'value' => 'Developing and fluent readers', 'parent_id' => null, 'description' => 'Intermediate reading level', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['subgenre'], 'value' => 'Emerging and early readers', 'parent_id' => null, 'description' => 'Beginning reading level', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['subgenre'], 'value' => 'Language arts', 'parent_id' => null, 'description' => 'Language instruction materials', 'sort_order' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['subgenre'], 'value' => 'Number recognition', 'parent_id' => null, 'description' => 'Early mathematics - numbers and counting', 'sort_order' => 4, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['subgenre'], 'value' => 'Proficient and critical readers', 'parent_id' => null, 'description' => 'Advanced reading level', 'sort_order' => 5, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['subgenre'], 'value' => 'Science', 'parent_id' => null, 'description' => 'Science content materials', 'sort_order' => 6, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
 
-            // Themes/Uses values
-            ['classification_type_id' => 4, 'value' => 'Language Arts', 'parent_id' => null, 'description' => 'Reading, writing, language skills', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 4, 'value' => 'Mathematics', 'parent_id' => null, 'description' => 'Mathematical concepts and skills', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 4, 'value' => 'Science', 'parent_id' => null, 'description' => 'Scientific concepts and inquiry', 'sort_order' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 4, 'value' => 'Social Studies', 'parent_id' => null, 'description' => 'History, geography, culture', 'sort_order' => 4, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 4, 'value' => 'Cultural Studies', 'parent_id' => null, 'description' => 'Traditional culture and practices', 'sort_order' => 5, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 4, 'value' => 'Language Preservation', 'parent_id' => null, 'description' => 'Indigenous language materials', 'sort_order' => 6, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            // ============================================================
+            // TYPE VALUES
+            // ============================================================
+            ['classification_type_id' => $typeIds['type'], 'value' => 'Animal story', 'parent_id' => null, 'description' => 'Stories featuring animals', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['type'], 'value' => 'Counting', 'parent_id' => null, 'description' => 'Counting and number activities', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['type'], 'value' => 'Cultural story', 'parent_id' => null, 'description' => 'Stories about local culture and traditions', 'sort_order' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['type'], 'value' => 'Everyday story', 'parent_id' => null, 'description' => 'Stories about daily life and experiences', 'sort_order' => 4, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['type'], 'value' => 'Fictional story', 'parent_id' => null, 'description' => 'Imaginative fiction narratives', 'sort_order' => 5, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['type'], 'value' => 'Folk tale', 'parent_id' => null, 'description' => 'Traditional folklore and legends', 'sort_order' => 6, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['type'], 'value' => 'Life sciences and environment', 'parent_id' => null, 'description' => 'Biology, ecology, and environmental science', 'sort_order' => 7, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['type'], 'value' => 'Reading program', 'parent_id' => null, 'description' => 'Structured reading curriculum materials', 'sort_order' => 8, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['type'], 'value' => 'Science', 'parent_id' => null, 'description' => 'General science content', 'sort_order' => 9, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
 
-            // Learner Level values
-            ['classification_type_id' => 5, 'value' => 'Preschool', 'parent_id' => null, 'description' => 'Ages 3-5', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 5, 'value' => 'Elementary (K-5)', 'parent_id' => null, 'description' => 'Kindergarten through 5th grade', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 5, 'value' => 'Middle School (6-8)', 'parent_id' => null, 'description' => '6th through 8th grade', 'sort_order' => 3, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 5, 'value' => 'High School (9-12)', 'parent_id' => null, 'description' => '9th through 12th grade', 'sort_order' => 4, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 5, 'value' => 'Adult Education', 'parent_id' => null, 'description' => 'Adult learners', 'sort_order' => 5, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['classification_type_id' => 5, 'value' => 'Higher Education', 'parent_id' => null, 'description' => 'College and university level', 'sort_order' => 6, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            // ============================================================
+            // THEMES/USES VALUES
+            // ============================================================
+            // Note: No themes/uses values found in the CSV data
+
+            // ============================================================
+            // LEARNER LEVEL VALUES
+            // ============================================================
+            ['classification_type_id' => $typeIds['learner-level'], 'value' => 'Grade 2', 'parent_id' => null, 'description' => '2nd grade level', 'sort_order' => 1, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['classification_type_id' => $typeIds['learner-level'], 'value' => 'Grade 7', 'parent_id' => null, 'description' => '7th grade level', 'sort_order' => 2, 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('classification_values')->insert($values);

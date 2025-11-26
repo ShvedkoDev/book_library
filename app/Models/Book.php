@@ -23,8 +23,10 @@ class Book extends Model
         'publication_year',
         'pages',
         'description',
+        'abstract',          // NEW: Separate abstract field
         'toc',
         'notes_issue',
+        'notes_version',     // NEW: Notes related to version
         'notes_content',
         'contact',
         'access_level',
@@ -320,6 +322,23 @@ class Book extends Model
         return $this->hasMany(LibraryReference::class);
     }
 
+    // Relationships - Book Identifiers
+
+    public function bookIdentifiers()
+    {
+        return $this->hasMany(BookIdentifier::class);
+    }
+
+    public function getIdentifier($type)
+    {
+        return $this->bookIdentifiers()->where('identifier_type', $type)->first();
+    }
+
+    public function hasIdentifier($type): bool
+    {
+        return $this->bookIdentifiers()->where('identifier_type', $type)->exists();
+    }
+
     // Relationships - Book Relationships
 
     public function bookRelationships()
@@ -358,6 +377,11 @@ class Book extends Model
     public function otherLanguageBooks()
     {
         return $this->relatedBooks('other_language');
+    }
+
+    public function translatedBooks()
+    {
+        return $this->relatedBooks('translated');
     }
 
     // Relationships - User Engagement

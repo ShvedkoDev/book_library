@@ -209,8 +209,8 @@ class CsvImport extends Page implements HasForms
 
             $options = [
                 'mode' => $data['mode'] ?? 'upsert',
-                'create_missing_relations' => $data['create_missing_relations'] ?? false,
-                'skip_invalid_rows' => $data['skip_invalid_rows'] ?? false,
+                'create_missing_relations' => $data['create_missing_relations'] ?? true,
+                'skip_invalid_rows' => $data['skip_invalid_rows'] ?? true,
                 'original_filename' => basename($csvFile),
             ];
 

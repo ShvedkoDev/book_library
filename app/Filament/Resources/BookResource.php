@@ -149,11 +149,18 @@ class BookResource extends Resource
 
                 Forms\Components\Section::make('Content & Description')
                     ->schema([
-                        Forms\Components\Textarea::make('description')
-                            ->label('Abstract / Description')
+                        Forms\Components\Textarea::make('abstract')
+                            ->label('Abstract')
                             ->rows(4)
-                            ->placeholder('Brief description of the book')
-                            ->helperText('CSV: ABSTRACT/DESCRIPTION')
+                            ->placeholder('Single paragraph summary of the book')
+                            ->helperText('CSV: ABSTRACT - Book summary')
+                            ->columnSpanFull(),
+
+                        Forms\Components\Textarea::make('description')
+                            ->label('Description')
+                            ->rows(4)
+                            ->placeholder('Single paragraph about the book')
+                            ->helperText('CSV: DESCRIPTION - About the book')
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('toc')
@@ -168,6 +175,12 @@ class BookResource extends Resource
                             ->rows(3)
                             ->placeholder('Notes related to the issue/edition')
                             ->helperText('CSV: Notes related to the issue'),
+
+                        Forms\Components\Textarea::make('notes_version')
+                            ->label('Notes - Version')
+                            ->rows(3)
+                            ->placeholder('Notes related to the version')
+                            ->helperText('CSV: Notes related to version'),
 
                         Forms\Components\Textarea::make('notes_content')
                             ->label('Notes - Content')

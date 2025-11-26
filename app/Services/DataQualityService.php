@@ -38,7 +38,7 @@ class DataQualityService
             if ($books === null) {
                 $books = Book::with([
                     'languages',
-                    'classifications',
+                    'bookClassifications.classificationValue',
                     'creators',
                     'files',
                     'publisher',

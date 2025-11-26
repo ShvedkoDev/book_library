@@ -154,8 +154,11 @@ return [
         'Pages' => 'pages',
         'TOC' => 'toc',
         'Notes related to the issue.' => 'notes_issue',
+        'Notes related to version.' => 'notes_version',  // NEW
         'Notes related to content.' => 'notes_content',
-        'ABSTRACT/DESCRIPTION' => 'description',
+        'DESCRIPTION' => 'description',                  // NEW: Separate from abstract
+        'ABSTRACT' => 'abstract',                        // NEW: Separate field
+        'ABSTRACT/DESCRIPTION' => 'description',         // OLD: For backward compatibility
         'VLA standard' => 'vla_standard',
         'VLA benchmark' => 'vla_benchmark',
         'CONTACT' => 'contact',
@@ -215,7 +218,8 @@ return [
         'Related (same)' => 'related_same_version',
         'Related (omnibus)' => 'related_omnibus',
         'Related (support)' => 'related_supporting',
-        'Related (same title, different language, or similar)' => 'related_other_language',
+        'Related (translated)' => 'related_translated',  // NEW: Updated column name
+        'Related (same title, different language, or similar)' => 'related_other_language',  // OLD: For backward compatibility
 
         // ==========================================
         // FILE REFERENCES
@@ -239,6 +243,25 @@ return [
         'COM hard copy ref' => 'com_reference_number',
         'COM hard copy call number' => 'com_call_number',
         'COM hard copy ref NOTE' => 'com_notes',
+
+        // NEW: Library Links (5 libraries × 2 links each = 10 fields)
+        'Library link UH' => 'library_link_uh',                    // Column BH
+        'Library link UH alt.' => 'library_link_uh_alt',           // Column BI
+        'Library link COM-FSM' => 'library_link_com_fsm',          // Column BJ
+        'Library link COM-FSM alt.' => 'library_link_com_fsm_alt', // Column BK
+        'Library link MARC' => 'library_link_marc',                // Column BL
+        'Library link MARC alt.' => 'library_link_marc_alt',       // Column BM
+        'Library link MICSEM' => 'library_link_micsem',            // Column BN
+        'Library link MICSEM alt.' => 'library_link_micsem_alt',   // Column BO
+        'Library link 5' => 'library_link_5',                      // Column BP
+        'Library link 5 alt.' => 'library_link_5_alt',             // Column BQ
+
+        // ==========================================
+        // BOOK IDENTIFIERS (NEW)
+        // ==========================================
+        'OLLC number' => 'oclc_number',      // Column BR
+        'ISBN number' => 'isbn_number',      // Column BS
+        'Other number' => 'other_number',    // Column BT
 
         // ==========================================
         // IGNORED/METADATA FIELDS
@@ -300,6 +323,11 @@ return [
         'poster' => 'poster',
         'Poster' => 'poster',
         'POSTER' => 'poster',
+        'CD-ROM' => 'other',        // NEW: Map CD-ROM to 'other'
+        'cd-rom' => 'other',
+        'CDROM' => 'other',
+        'CD' => 'other',
+        'DVD' => 'other',
         'other' => 'other',
         'Other' => 'other',
         'OTHER' => 'other',
@@ -331,7 +359,8 @@ return [
         'related_same_version' => 'same_version',
         'related_omnibus' => 'omnibus',
         'related_supporting' => 'supporting',
-        'related_other_language' => 'other_language',
+        'related_translated' => 'translated',        // NEW
+        'related_other_language' => 'other_language', // Keep for backward compatibility
     ],
 
     /*

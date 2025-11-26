@@ -13,6 +13,8 @@ use App\Models\GeographicLocation;
 use App\Models\BookKeyword;
 use App\Models\BookFile;
 use App\Models\LibraryReference;
+use App\Models\BookIdentifier;
+use App\Models\BookRelationship;
 use Illuminate\Support\Facades\Log;
 
 trait BookCsvImportRelationships
@@ -103,7 +105,21 @@ trait BookCsvImportRelationships
         }
 
         // Try by name
-        return Language::where('name', $nameOrCode)->first();
+        $language = Language::where('name', $nameOrCode)->first();
+
+        // Create if not found and auto-create is enabled
+        if (!$language) {
+            $language = Language::create([
+                'name' => $nameOrCode,
+                'code' => $isoCode ?? strtolower(substr($nameOrCode, 0, 3)),
+                'native_name' => $nameOrCode,
+                'is_active' => true,
+            ]);
+
+            \Illuminate\Support\Facades\Log::info("Created new language: {$nameOrCode} ({$isoCode})");
+        }
+
+        return $language;
     }
 
     /**
@@ -169,6 +185,7 @@ trait BookCsvImportRelationships
 
     /**
      * Determine creator type from role description
+     * Valid ENUM values: author, illustrator, editor, translator, contributor
      */
     protected function determineCreatorType(?string $role): string
     {
@@ -187,11 +204,12 @@ trait BookCsvImportRelationships
         if (str_contains($role, 'illustrat')) {
             return 'illustrator';
         }
-        if (str_contains($role, 'compil')) {
-            return 'compiler';
+        if (str_contains($role, 'author') || str_contains($role, 'writ')) {
+            return 'author';
         }
-        if (str_contains($role, 'adapt')) {
-            return 'adapter';
+        // Map adapt, compile, retold, and other roles to contributor
+        if (str_contains($role, 'compil') || str_contains($role, 'adapt') || str_contains($role, 'retold')) {
+            return 'contributor';
         }
 
         return 'contributor';
@@ -213,10 +231,24 @@ trait BookCsvImportRelationships
                 continue;
             }
 
-            // Get classification type
+            // Get or create classification type
             $classificationType = ClassificationType::where('slug', $typeSlug)->first();
+
             if (!$classificationType) {
-                continue;
+                // Auto-create classification type from slug
+                $name = ucwords(str_replace(['-', '_'], ' ', $typeSlug));
+
+                $classificationType = ClassificationType::create([
+                    'name' => $name,
+                    'slug' => $typeSlug,
+                    'description' => "Auto-created from CSV import",
+                    'allow_multiple' => true,
+                    'use_for_filtering' => true,
+                    'sort_order' => 999,
+                    'is_active' => true,
+                ]);
+
+                \Illuminate\Support\Facades\Log::info("Created new classification type: {$name} ({$typeSlug})");
             }
 
             // Parse multiple values (pipe-separated)
@@ -226,6 +258,20 @@ trait BookCsvImportRelationships
                 $classificationValue = ClassificationValue::where('classification_type_id', $classificationType->id)
                     ->where('value', $value)
                     ->first();
+
+                // Create classification value if it doesn't exist
+                if (!$classificationValue) {
+                    $classificationValue = ClassificationValue::create([
+                        'classification_type_id' => $classificationType->id,
+                        'value' => $value,
+                        'slug' => \Illuminate\Support\Str::slug($value),
+                        'description' => null,
+                        'sort_order' => 999,
+                        'is_active' => true,
+                    ]);
+
+                    \Illuminate\Support\Facades\Log::info("Created new classification value: {$value} for type {$typeSlug}");
+                }
 
                 if ($classificationValue) {
                     $book->bookClassifications()->create([
@@ -252,6 +298,19 @@ trait BookCsvImportRelationships
             $islandNames = $this->splitMultiValue($data['geographic_island']);
             foreach ($islandNames as $name) {
                 $location = GeographicLocation::where('name', $name)->first();
+
+                // Create location if it doesn't exist
+                if (!$location) {
+                    $location = GeographicLocation::create([
+                        'name' => $name,
+                        'slug' => \Illuminate\Support\Str::slug($name),
+                        'type' => 'island',
+                        'is_active' => true,
+                    ]);
+
+                    \Illuminate\Support\Facades\Log::info("Created new geographic location (island): {$name}");
+                }
+
                 if ($location) {
                     $locations[] = $location->id;
                 }
@@ -263,6 +322,19 @@ trait BookCsvImportRelationships
             $stateNames = $this->splitMultiValue($data['geographic_state']);
             foreach ($stateNames as $name) {
                 $location = GeographicLocation::where('name', $name)->first();
+
+                // Create location if it doesn't exist
+                if (!$location) {
+                    $location = GeographicLocation::create([
+                        'name' => $name,
+                        'slug' => \Illuminate\Support\Str::slug($name),
+                        'type' => 'state',
+                        'is_active' => true,
+                    ]);
+
+                    \Illuminate\Support\Facades\Log::info("Created new geographic location (state): {$name}");
+                }
+
                 if ($location) {
                     $locations[] = $location->id;
                 }
@@ -347,6 +419,11 @@ trait BookCsvImportRelationships
         // Clean filename (remove extension if in data, we'll determine path)
         $filename = trim($filename);
 
+        // Clean digital source for UTF-8 encoding
+        if ($digitalSource) {
+            $digitalSource = $this->cleanTextEncoding($digitalSource);
+        }
+
         // Build file path based on type
         $extension = $type === 'pdf' ? '.pdf' : ($type === 'audio' ? '.mp3' : '.png');
         if (!str_ends_with(strtolower($filename), $extension)) {
@@ -355,11 +432,15 @@ trait BookCsvImportRelationships
 
         $filePath = $this->config['file_paths'][$type] . '/' . basename($filename);
 
+        // Clean file path for UTF-8
+        $filePath = $this->cleanTextEncoding($filePath);
+        $cleanFilename = $this->cleanTextEncoding(basename($filename));
+
         BookFile::create([
             'book_id' => $book->id,
             'file_type' => $type,
             'file_path' => $filePath,
-            'filename' => basename($filename),
+            'filename' => $cleanFilename,
             'mime_type' => $this->getMimeType($type),
             'is_primary' => $isPrimary,
             'digital_source' => $digitalSource,
@@ -406,28 +487,113 @@ trait BookCsvImportRelationships
             $book->libraryReferences()->delete();
         }
 
-        // University of Hawaii
-        if (!empty($data['uh_call_number']) || !empty($data['uh_reference_number'])) {
-            LibraryReference::create([
+        // Define library mappings (5 libraries with main_link and alt_link)
+        $libraryMappings = [
+            [
+                'code' => 'UH',
+                'name' => 'University of Hawaii',
+                'reference' => 'uh_reference_number',
+                'call_number' => 'uh_call_number',
+                'catalog_link' => 'uh_catalog_link',
+                'main_link' => 'library_link_uh',           // NEW: Column BH
+                'alt_link' => 'library_link_uh_alt',        // NEW: Column BI
+                'notes' => 'uh_notes',
+            ],
+            [
+                'code' => 'COM-FSM',
+                'name' => 'College of Micronesia - FSM',
+                'reference' => 'com_reference_number',
+                'call_number' => 'com_call_number',
+                'main_link' => 'library_link_com_fsm',      // NEW: Column BJ
+                'alt_link' => 'library_link_com_fsm_alt',   // NEW: Column BK
+                'notes' => 'com_notes',
+            ],
+            [
+                'code' => 'MARC',
+                'name' => 'University of Guam (MARC)',
+                'main_link' => 'library_link_marc',         // NEW: Column BL
+                'alt_link' => 'library_link_marc_alt',      // NEW: Column BM
+            ],
+            [
+                'code' => 'MICSEM',
+                'name' => 'Micronesian Seminar',
+                'main_link' => 'library_link_micsem',       // NEW: Column BN
+                'alt_link' => 'library_link_micsem_alt',    // NEW: Column BO
+            ],
+            [
+                'code' => 'LIB5',
+                'name' => 'Library #5 (Reserved)',
+                'main_link' => 'library_link_5',            // NEW: Column BP
+                'alt_link' => 'library_link_5_alt',         // NEW: Column BQ
+            ],
+        ];
+
+        // Process each library
+        foreach ($libraryMappings as $library) {
+            // Check if library has any data
+            $hasData = false;
+            foreach (['reference', 'call_number', 'catalog_link', 'main_link', 'alt_link', 'notes'] as $field) {
+                if (isset($library[$field]) && !empty($data[$library[$field]])) {
+                    $hasData = true;
+                    break;
+                }
+            }
+
+            if ($hasData) {
+                LibraryReference::create([
+                    'book_id' => $book->id,
+                    'library_code' => $library['code'],
+                    'library_name' => $library['name'],
+                    'reference_number' => isset($library['reference']) ? ($data[$library['reference']] ?? null) : null,
+                    'call_number' => isset($library['call_number']) ? ($data[$library['call_number']] ?? null) : null,
+                    'catalog_link' => isset($library['catalog_link']) ? ($data[$library['catalog_link']] ?? null) : null,
+                    'main_link' => isset($library['main_link']) ? ($data[$library['main_link']] ?? null) : null,     // NEW
+                    'alt_link' => isset($library['alt_link']) ? ($data[$library['alt_link']] ?? null) : null,        // NEW
+                    'notes' => isset($library['notes']) ? ($data[$library['notes']] ?? null) : null,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Attach book identifiers (OCLC, ISBN, Other)
+     */
+    protected function attachBookIdentifiers(Book $book, array $data, bool $isUpdate): void
+    {
+        if ($isUpdate) {
+            $book->bookIdentifiers()->delete();
+        }
+
+        // OCLC Number (Column BR)
+        if (!empty($data['oclc_number'])) {
+            BookIdentifier::create([
                 'book_id' => $book->id,
-                'library_code' => 'UH',
-                'library_name' => 'University of Hawaii Library',
-                'reference_number' => $data['uh_reference_number'] ?? null,
-                'call_number' => $data['uh_call_number'] ?? null,
-                'catalog_link' => $data['uh_catalog_link'] ?? null,
-                'notes' => $data['uh_notes'] ?? null,
+                'identifier_type' => BookIdentifier::TYPE_OCLC,
+                'identifier_value' => trim($data['oclc_number']),
             ]);
         }
 
-        // College of Micronesia
-        if (!empty($data['com_call_number']) || !empty($data['com_reference_number'])) {
-            LibraryReference::create([
+        // ISBN Number (Column BS)
+        if (!empty($data['isbn_number'])) {
+            $isbn = trim($data['isbn_number']);
+
+            // Determine if it's ISBN-10 or ISBN-13
+            $cleanIsbn = preg_replace('/[^0-9X]/i', '', $isbn);
+            $type = strlen($cleanIsbn) === 13 ? BookIdentifier::TYPE_ISBN13 : BookIdentifier::TYPE_ISBN;
+
+            BookIdentifier::create([
                 'book_id' => $book->id,
-                'library_code' => 'COM',
-                'library_name' => 'College of Micronesia Library',
-                'reference_number' => $data['com_reference_number'] ?? null,
-                'call_number' => $data['com_call_number'] ?? null,
-                'notes' => $data['com_notes'] ?? null,
+                'identifier_type' => $type,
+                'identifier_value' => $isbn,
+            ]);
+        }
+
+        // Other Number (Column BT)
+        if (!empty($data['other_number'])) {
+            BookIdentifier::create([
+                'book_id' => $book->id,
+                'identifier_type' => BookIdentifier::TYPE_OTHER,
+                'identifier_value' => trim($data['other_number']),
             ]);
         }
     }
