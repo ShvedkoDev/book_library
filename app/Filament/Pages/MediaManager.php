@@ -185,8 +185,12 @@ class MediaManager extends Page implements HasForms, HasTable
     {
         return $table
             ->query($this->getTableQuery())
+            ->heading('Uploaded Files')
+            ->description('Manage all uploaded PDF and thumbnail files')
             ->paginated([10, 25, 50, 100])
             ->defaultPaginationPageOption(25)
+            ->paginatedWhileReordering()
+            ->striped()
             ->columns([
                 TextColumn::make('filename')
                     ->label('File Name')
@@ -293,7 +297,89 @@ class MediaManager extends Page implements HasForms, HasTable
                     }),
             ])
             ->bulkActions([
-                // You can add bulk actions here if needed
+                \Filament\Tables\Actions\BulkAction::make('delete')
+                    ->label('Delete Selected')
+                    ->icon('heroicon-o-trash')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('Delete Selected Files')
+                    ->modalDescription('Are you sure you want to delete the selected files? This action cannot be undone.')
+                    ->modalSubmitActionLabel('Yes, delete them')
+                    ->action(function ($records) {
+                        $count = 0;
+                        $inUseCount = 0;
+
+                        foreach ($records as $record) {
+                            if (Storage::disk('public')->exists($record->path)) {
+                                if ($record->books_count > 0) {
+                                    $inUseCount++;
+                                }
+                                Storage::disk('public')->delete($record->path);
+                                $count++;
+                            }
+                        }
+
+                        $this->cachedFiles = null;
+
+                        if ($inUseCount > 0) {
+                            Notification::make()
+                                ->warning()
+                                ->title('Files deleted with warnings')
+                                ->body("Deleted {$count} file(s). Warning: {$inUseCount} file(s) were in use by books.")
+                                ->persistent()
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->success()
+                                ->title('Files deleted')
+                                ->body("Successfully deleted {$count} file(s).")
+                                ->send();
+                        }
+                    }),
+                \Filament\Tables\Actions\BulkAction::make('download')
+                    ->label('Download Selected')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('primary')
+                    ->action(function ($records) {
+                        if ($records->count() === 1) {
+                            $record = $records->first();
+                            return Storage::disk('public')->download($record->path, $record->filename);
+                        }
+
+                        // For multiple files, create a zip
+                        $zip = new \ZipArchive();
+                        $zipFileName = 'files_' . now()->format('Y-m-d_His') . '.zip';
+                        $zipPath = storage_path('app/temp/' . $zipFileName);
+
+                        // Create temp directory if it doesn't exist
+                        if (!file_exists(storage_path('app/temp'))) {
+                            mkdir(storage_path('app/temp'), 0755, true);
+                        }
+
+                        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+                            foreach ($records as $record) {
+                                $filePath = Storage::disk('public')->path($record->path);
+                                if (file_exists($filePath)) {
+                                    $zip->addFile($filePath, $record->filename);
+                                }
+                            }
+                            $zip->close();
+
+                            Notification::make()
+                                ->success()
+                                ->title('Archive created')
+                                ->body("Created archive with {$records->count()} file(s).")
+                                ->send();
+
+                            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+                        }
+
+                        Notification::make()
+                            ->danger()
+                            ->title('Error')
+                            ->body('Failed to create archive.')
+                            ->send();
+                    }),
             ])
             ->emptyStateHeading('No files found')
             ->emptyStateDescription('Upload PDF and thumbnail files using the forms above')

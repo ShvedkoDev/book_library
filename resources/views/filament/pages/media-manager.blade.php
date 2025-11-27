@@ -42,7 +42,6 @@
 
         {{-- Files Table --}}
         <div class="filament-tables-component-wrapper">
-            <h2 class="text-xl font-bold mb-4">Uploaded Files</h2>
             {{ $this->table }}
         </div>
     </div>
