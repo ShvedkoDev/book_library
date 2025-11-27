@@ -72,4 +72,31 @@ class FileRecord extends Model
     {
         return 'file_records'; // Dummy table name
     }
+
+    /**
+     * Create a new Eloquent query builder for the model that won't hit the database.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new \Illuminate\Database\Eloquent\Builder($query);
+    }
+
+    /**
+     * Get a new query builder instance for the connection.
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    protected function newBaseQueryBuilder()
+    {
+        $connection = $this->getConnection();
+
+        return new \Illuminate\Database\Query\Builder(
+            $connection,
+            $connection->getQueryGrammar(),
+            $connection->getPostProcessor()
+        );
+    }
 }

@@ -184,6 +184,7 @@ class MediaManager extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
+            ->query($this->getTableQuery())
             ->heading('Uploaded Files')
             ->description('Manage all uploaded PDF and thumbnail files')
             ->paginated([10, 25, 50, 100])
@@ -302,6 +303,13 @@ class MediaManager extends Page implements HasForms, HasTable
             ->emptyStateHeading('No files found')
             ->emptyStateDescription('Upload PDF and thumbnail files using the forms above')
             ->emptyStateIcon('heroicon-o-document-text');
+    }
+
+    protected function getTableQuery()
+    {
+        // Return a basic query builder that won't actually query the database
+        // We override getTableRecords() to provide the actual data
+        return FileRecord::query();
     }
 
     public function getTableRecords(): \Illuminate\Database\Eloquent\Collection
