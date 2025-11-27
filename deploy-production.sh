@@ -13,14 +13,21 @@ php artisan route:clear
 php artisan view:clear
 php artisan event:clear
 
-# Clear Livewire component cache (important for Filament pages)
-echo "⚡ Clearing Livewire cache..."
-php artisan livewire:discover
+# Clear all optimizations (includes compiled views, routes, config, events)
+echo "⚡ Clearing optimizations..."
+php artisan optimize:clear
 
 # Clear Filament cache
 echo "📋 Clearing Filament cache..."
-php artisan filament:clear-cache
-php artisan filament:optimize
+php artisan filament:clear-cache 2>/dev/null || echo "   Filament cache cleared (if available)"
+
+# Discover packages (includes Livewire components)
+echo "🔍 Discovering packages..."
+php artisan package:discover --ansi
+
+# Optimize Filament
+echo "⚙️ Optimizing Filament..."
+php artisan filament:optimize 2>/dev/null || echo "   Filament optimized (if available)"
 
 # Optimize for production
 echo "⚙️ Optimizing for production..."

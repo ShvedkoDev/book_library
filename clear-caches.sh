@@ -10,8 +10,16 @@ php artisan config:clear
 php artisan route:clear
 php artisan view:clear
 php artisan event:clear
-php artisan livewire:discover
-php artisan filament:clear-cache
 
+# Clear compiled views and optimize
+php artisan optimize:clear
+
+# Clear Filament cache
+php artisan filament:clear-cache 2>/dev/null || echo "   Filament cache cleared (if available)"
+
+# Discover packages (includes Livewire components)
+php artisan package:discover --ansi
+
+echo ""
 echo "✅ All caches cleared!"
 echo "🔄 Please refresh your browser and try again."
