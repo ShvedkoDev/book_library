@@ -369,10 +369,10 @@ return [
     |--------------------------------------------------------------------------
     */
     'file_paths' => [
-        'pdf' => 'books/pdfs',
-        'thumbnail' => 'books/thumbnails',
-        'audio' => 'books/audio',
-        'video' => 'books/video',
+        'pdf' => 'books',
+        'thumbnail' => 'books',
+        'audio' => 'books',
+        'video' => 'books',
     ],
 
     /*
