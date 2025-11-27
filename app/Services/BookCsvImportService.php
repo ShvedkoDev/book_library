@@ -1022,54 +1022,58 @@ class BookCsvImportService
     }
 
     /**
-     * Clean text encoding from Windows-1252 to UTF-8
-     * Handles common problematic characters like en-dash, em-dash, smart quotes
+     * Clean text encoding - handle both Windows-1252 and UTF-8 CSV files
      *
      * @param string $text
      * @return string
      */
     protected function cleanTextEncoding(string $text): string
     {
+        // First, check if the text is already valid UTF-8
+        if (mb_check_encoding($text, 'UTF-8')) {
+            // Text is already UTF-8, just return it
+            return $text;
+        }
+
+        // Text is not UTF-8, likely Windows-1252 - convert it
         // Map of Windows-1252 characters to UTF-8 equivalents
         $replacements = [
-            "\x96" => "\xE2\x80\x93",  // en-dash (–)
-            "\x97" => "\xE2\x80\x94",  // em-dash (—)
-            "\x91" => "\xE2\x80\x98",  // left single quote (')
-            "\x92" => "\xE2\x80\x99",  // right single quote (')
-            "\x93" => "\xE2\x80\x9C",  // left double quote (")
-            "\x94" => "\xE2\x80\x9D",  // right double quote (")
-            "\x85" => "\xE2\x80\xA6",  // ellipsis (…)
-            "\x80" => "\xE2\x82\xAC",  // euro (€)
-            "\x82" => "\xE2\x80\x9A",  // single low-9 quote (‚)
-            "\x83" => "\xC6\x92",      // f with hook (ƒ)
-            "\x84" => "\xE2\x80\x9E",  // double low-9 quote („)
-            "\x86" => "\xE2\x80\xA0",  // dagger (†)
-            "\x87" => "\xE2\x80\xA1",  // double dagger (‡)
-            "\x88" => "\xCB\x86",      // circumflex (ˆ)
-            "\x89" => "\xE2\x80\xB0",  // per mille (‰)
-            "\x8A" => "\xC5\xA0",      // S with caron (Š)
-            "\x8B" => "\xE2\x80\xB9",  // left single angle quote (‹)
-            "\x8C" => "\xC5\x92",      // OE ligature (Œ)
-            "\x8E" => "\xC5\xBD",      // Z with caron (Ž)
-            "\x95" => "\xE2\x80\xA2",  // bullet (•)
-            "\x98" => "\xCB\x9C",      // small tilde (˜)
-            "\x99" => "\xE2\x84\xA2",  // trademark (™)
-            "\x9A" => "\xC5\xA1",      // s with caron (š)
-            "\x9B" => "\xE2\x80\xBA",  // right single angle quote (›)
-            "\x9C" => "\xC5\x93",      // oe ligature (œ)
-            "\x9E" => "\xC5\xBE",      // z with caron (ž)
-            "\x9F" => "\xC5\xB8",      // Y with diaeresis (Ÿ)
+            "\x96" => "\xE2\x80\x93",  // en-dash
+            "\x97" => "\xE2\x80\x94",  // em-dash
+            "\x91" => "\xE2\x80\x98",  // left single quote
+            "\x92" => "\xE2\x80\x99",  // right single quote
+            "\x93" => "\xE2\x80\x9C",  // left double quote
+            "\x94" => "\xE2\x80\x9D",  // right double quote
+            "\x85" => "\xE2\x80\xA6",  // ellipsis
+            "\x80" => "\xE2\x82\xAC",  // euro
+            "\x82" => "\xE2\x80\x9A",  // single low-9 quote
+            "\x83" => "\xC6\x92",      // f with hook
+            "\x84" => "\xE2\x80\x9E",  // double low-9 quote
+            "\x86" => "\xE2\x80\xA0",  // dagger
+            "\x87" => "\xE2\x80\xA1",  // double dagger
+            "\x88" => "\xCB\x86",      // circumflex
+            "\x89" => "\xE2\x80\xB0",  // per mille
+            "\x8A" => "\xC5\xA0",      // S with caron
+            "\x8B" => "\xE2\x80\xB9",  // left single angle quote
+            "\x8C" => "\xC5\x92",      // OE ligature
+            "\x8E" => "\xC5\xBD",      // Z with caron
+            "\x95" => "\xE2\x80\xA2",  // bullet
+            "\x98" => "\xCB\x9C",      // small tilde
+            "\x99" => "\xE2\x84\xA2",  // trademark
+            "\x9A" => "\xC5\xA1",      // s with caron
+            "\x9B" => "\xE2\x80\xBA",  // right single angle quote
+            "\x9C" => "\xC5\x93",      // oe ligature
+            "\x9E" => "\xC5\xBE",      // z with caron
+            "\x9F" => "\xC5\xB8",      // Y with diaeresis
         ];
 
         // Replace Windows-1252 characters
         $text = str_replace(array_keys($replacements), array_values($replacements), $text);
 
-        // Convert any remaining non-UTF-8 characters
-        if (!mb_check_encoding($text, 'UTF-8')) {
-            $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8');
-        }
+        // Try to convert from Windows-1252 to UTF-8
+        $converted = @iconv('Windows-1252', 'UTF-8//IGNORE', $text);
 
-        return $text;
+        return $converted !== false ? $converted : $text;
     }
 
     /**
