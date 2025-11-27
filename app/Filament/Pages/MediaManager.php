@@ -248,7 +248,8 @@ class MediaManager extends Page implements HasForms, HasTable
                 Action::make('download')
                     ->label('Download')
                     ->icon('heroicon-m-arrow-down-tray')
-                    ->action(fn ($record) => Storage::disk('public')->download($record->path, $record->filename)),
+                    ->url(fn ($record) => Storage::disk('public')->url($record->path))
+                    ->download(),
                 DeleteAction::make()
                     ->label('Delete')
                     ->modalHeading('Delete File')
