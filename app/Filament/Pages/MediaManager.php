@@ -298,8 +298,129 @@ class MediaManager extends Page implements HasForms, HasTable
                     }),
             ])
             ->bulkActions([
-                // Bulk actions disabled for virtual FileRecord models to prevent database query errors
-                // Use individual row actions instead
+                \Filament\Tables\Actions\BulkActionGroup::make([
+                    \Filament\Tables\Actions\BulkAction::make('delete')
+                        ->label('Delete Selected')
+                        ->icon('heroicon-m-trash')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->modalHeading('Delete Selected Files')
+                        ->modalDescription('Are you sure you want to delete the selected files? This action cannot be undone.')
+                        ->modalSubmitActionLabel('Delete')
+                        ->deselectRecordsAfterCompletion()
+                        ->action(function (array $records) {
+                            $deletedCount = 0;
+                            $filesInUse = [];
+
+                            foreach ($records as $record) {
+                                if ($record->books_count > 0) {
+                                    $filesInUse[] = $record->filename;
+                                }
+
+                                if (Storage::disk('public')->exists($record->path)) {
+                                    Storage::disk('public')->delete($record->path);
+                                    $deletedCount++;
+                                }
+                            }
+
+                            $this->cachedFiles = null;
+
+                            if (!empty($filesInUse)) {
+                                Notification::make()
+                                    ->warning()
+                                    ->title('Files deleted with warnings')
+                                    ->body("Deleted {$deletedCount} file(s). " . count($filesInUse) . " file(s) were in use by books: " . implode(', ', $filesInUse))
+                                    ->persistent()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->success()
+                                    ->title('Files deleted')
+                                    ->body("Successfully deleted {$deletedCount} file(s).")
+                                    ->send();
+                            }
+                        }),
+
+                    \Filament\Tables\Actions\BulkAction::make('deleteAll')
+                        ->label('Delete All')
+                        ->icon('heroicon-m-trash')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->modalHeading('Delete All Files')
+                        ->modalDescription('⚠️ WARNING: This will delete ALL files in the books directory. This action cannot be undone!')
+                        ->modalSubmitActionLabel('Yes, Delete All')
+                        ->deselectRecordsAfterCompletion()
+                        ->action(function () {
+                            $files = Storage::disk('public')->files('books');
+                            $deletedCount = 0;
+                            $filesInUseCount = 0;
+
+                            foreach ($files as $file) {
+                                $booksCount = $this->getBooksUsingFileCount($file);
+                                if ($booksCount > 0) {
+                                    $filesInUseCount++;
+                                }
+
+                                Storage::disk('public')->delete($file);
+                                $deletedCount++;
+                            }
+
+                            $this->cachedFiles = null;
+
+                            if ($filesInUseCount > 0) {
+                                Notification::make()
+                                    ->warning()
+                                    ->title('All files deleted')
+                                    ->body("Deleted {$deletedCount} file(s). {$filesInUseCount} file(s) were in use by books.")
+                                    ->persistent()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->success()
+                                    ->title('All files deleted')
+                                    ->body("Successfully deleted {$deletedCount} file(s).")
+                                    ->send();
+                            }
+                        }),
+
+                    \Filament\Tables\Actions\BulkAction::make('downloadSelected')
+                        ->label('Download as ZIP')
+                        ->icon('heroicon-m-arrow-down-tray')
+                        ->color('primary')
+                        ->requiresConfirmation()
+                        ->modalHeading('Download Selected Files')
+                        ->modalDescription('This will create a ZIP archive of the selected files and download it.')
+                        ->modalSubmitActionLabel('Download ZIP')
+                        ->action(function (array $records) {
+                            $zip = new \ZipArchive();
+                            $zipFileName = 'books_export_' . date('Y-m-d_His') . '.zip';
+                            $zipPath = storage_path('app/public/' . $zipFileName);
+
+                            if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+                                foreach ($records as $record) {
+                                    $filePath = Storage::disk('public')->path($record->path);
+                                    if (file_exists($filePath)) {
+                                        $zip->addFile($filePath, $record->filename);
+                                    }
+                                }
+                                $zip->close();
+
+                                Notification::make()
+                                    ->success()
+                                    ->title('ZIP created')
+                                    ->body('Your ZIP file has been created. Download will start shortly.')
+                                    ->send();
+
+                                return response()->download($zipPath)->deleteFileAfterSend(true);
+                            } else {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Error creating ZIP')
+                                    ->body('Failed to create ZIP archive.')
+                                    ->send();
+                            }
+                        }),
+                ]),
             ])
             ->emptyStateHeading('No files found')
             ->emptyStateDescription('Upload PDF and thumbnail files using the forms above')
