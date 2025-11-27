@@ -184,7 +184,7 @@ class MediaManager extends Page implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query($this->getTableQuery())
+            ->query(FileRecord::query())
             ->heading('Uploaded Files')
             ->description('Manage all uploaded PDF and thumbnail files')
             ->paginated([10, 25, 50, 100])
@@ -303,65 +303,6 @@ class MediaManager extends Page implements HasForms, HasTable
             ->emptyStateHeading('No files found')
             ->emptyStateDescription('Upload PDF and thumbnail files using the forms above')
             ->emptyStateIcon('heroicon-o-document-text');
-    }
-
-    protected function getTableQuery()
-    {
-        // Build collection of FileRecord models from filesystem
-        $files = collect(Storage::disk('public')->files('books'))
-            ->map(function ($file) {
-                $fullPath = Storage::disk('public')->path($file);
-                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-                return FileRecord::make([
-                    'path' => $file,
-                    'filename' => basename($file),
-                    'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
-                    'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
-                    'type' => $this->getFileType($extension),
-                    'books_count' => $this->getBooksUsingFileCount($file),
-                ]);
-            })
-            ->sortByDesc('modified')
-            ->values();
-
-        // Create a fake query builder that returns our collection
-        // This allows Filament to handle pagination
-        return new class($files) {
-            private $collection;
-
-            public function __construct($collection) {
-                $this->collection = $collection;
-            }
-
-            public function get() {
-                return $this->collection;
-            }
-
-            public function paginate($perPage = 25, $columns = ['*'], $pageName = 'page', $page = null) {
-                $page = $page ?: \Illuminate\Pagination\Paginator::resolveCurrentPage($pageName);
-                $items = $this->collection->forPage($page, $perPage);
-
-                return new \Illuminate\Pagination\LengthAwarePaginator(
-                    $items,
-                    $this->collection->count(),
-                    $perPage,
-                    $page,
-                    [
-                        'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
-                        'pageName' => $pageName,
-                    ]
-                );
-            }
-
-            public function count() {
-                return $this->collection->count();
-            }
-
-            public function __call($method, $parameters) {
-                return $this;
-            }
-        };
     }
 
     protected function getFileType(string $extension): string

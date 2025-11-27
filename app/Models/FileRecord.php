@@ -76,14 +76,14 @@ class FileRecord extends Model
     }
 
     /**
-     * Create a new Eloquent query builder for the model that won't hit the database.
+     * Create a new Eloquent query builder for the model.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \App\Database\FileRecordBuilder
      */
     public function newEloquentBuilder($query)
     {
-        return new \Illuminate\Database\Eloquent\Builder($query);
+        return new \App\Database\FileRecordBuilder($query);
     }
 
     /**
