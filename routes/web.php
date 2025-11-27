@@ -9,6 +9,7 @@ use App\Http\Controllers\BookReviewController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Api\ShareTrackingController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     // Check if a homepage CMS page exists
