@@ -608,4 +608,21 @@ class MediaManager extends Page implements HasForms, HasTable
 
         return null;
     }
+
+    /**
+     * Override to handle bulk actions with virtual FileRecord models.
+     * This prevents errors when checking selected records count.
+     */
+    public function getSelectedTableRecords(bool $shouldFetchSelectedRecords = true): \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+    {
+        $keys = $this->selectedTableRecords ?? [];
+
+        if (empty($keys)) {
+            return collect();
+        }
+
+        return collect($keys)->map(function ($key) {
+            return $this->getTableRecord($key);
+        })->filter();
+    }
 }
