@@ -307,35 +307,61 @@ class MediaManager extends Page implements HasForms, HasTable
 
     protected function getTableQuery()
     {
-        // Return a basic query builder that won't actually query the database
-        // We override getTableRecords() to provide the actual data
-        return FileRecord::query();
-    }
+        // Build collection of FileRecord models from filesystem
+        $files = collect(Storage::disk('public')->files('books'))
+            ->map(function ($file) {
+                $fullPath = Storage::disk('public')->path($file);
+                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-    public function getTableRecords(): \Illuminate\Database\Eloquent\Collection
-    {
-        if ($this->cachedFiles === null) {
-            $files = collect(Storage::disk('public')->files('books'))
-                ->map(function ($file) {
-                    $fullPath = Storage::disk('public')->path($file);
-                    $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                return FileRecord::make([
+                    'path' => $file,
+                    'filename' => basename($file),
+                    'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
+                    'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
+                    'type' => $this->getFileType($extension),
+                    'books_count' => $this->getBooksUsingFileCount($file),
+                ]);
+            })
+            ->sortByDesc('modified')
+            ->values();
 
-                    return FileRecord::make([
-                        'path' => $file,
-                        'filename' => basename($file),
-                        'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
-                        'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
-                        'type' => $this->getFileType($extension),
-                        'books_count' => $this->getBooksUsingFileCount($file),
-                    ]);
-                })
-                ->sortByDesc('modified')
-                ->values();
+        // Create a fake query builder that returns our collection
+        // This allows Filament to handle pagination
+        return new class($files) {
+            private $collection;
 
-            $this->cachedFiles = new \Illuminate\Database\Eloquent\Collection($files->all());
-        }
+            public function __construct($collection) {
+                $this->collection = $collection;
+            }
 
-        return $this->cachedFiles;
+            public function get() {
+                return $this->collection;
+            }
+
+            public function paginate($perPage = 25, $columns = ['*'], $pageName = 'page', $page = null) {
+                $page = $page ?: \Illuminate\Pagination\Paginator::resolveCurrentPage($pageName);
+                $items = $this->collection->forPage($page, $perPage);
+
+                return new \Illuminate\Pagination\LengthAwarePaginator(
+                    $items,
+                    $this->collection->count(),
+                    $perPage,
+                    $page,
+                    [
+                        'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+                        'pageName' => $pageName,
+                    ]
+                );
+            }
+
+            public function count() {
+                return $this->collection->count();
+            }
+
+            public function __call($method, $parameters) {
+                return $this;
+            }
+        };
     }
 
     protected function getFileType(string $extension): string
@@ -497,21 +523,30 @@ class MediaManager extends Page implements HasForms, HasTable
         $this->currentBatch = 0;
         $this->totalUploaded = 0;
 
-        // Clear cache and refresh table
-        $this->cachedFiles = null;
+        // Refresh table
         $this->dispatch('$refresh');
     }
 
     /**
-     * Override to prevent Filament from querying the database for file records.
+     * Override to get a specific file record by its MD5 hash key.
      */
     public function getTableRecord($key): ?FileRecord
     {
-        $records = $this->getTableRecords();
+        $files = Storage::disk('public')->files('books');
 
-        foreach ($records as $record) {
-            if ($record->getKey() === $key) {
-                return $record;
+        foreach ($files as $file) {
+            if (md5($file) === $key) {
+                $fullPath = Storage::disk('public')->path($file);
+                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+                return FileRecord::make([
+                    'path' => $file,
+                    'filename' => basename($file),
+                    'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
+                    'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
+                    'type' => $this->getFileType($extension),
+                    'books_count' => $this->getBooksUsingFileCount($file),
+                ]);
             }
         }
 
