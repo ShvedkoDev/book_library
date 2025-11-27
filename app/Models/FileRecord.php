@@ -57,7 +57,9 @@ class FileRecord extends Model
     {
         $instance = new static();
         $instance->fill($attributes);
-        $instance->setAttribute($instance->getKeyName(), $attributes['path'] ?? md5(json_encode($attributes)));
+        // Use MD5 hash of path as key to avoid special characters in JavaScript
+        $key = isset($attributes['path']) ? md5($attributes['path']) : md5(json_encode($attributes));
+        $instance->setAttribute($instance->getKeyName(), $key);
         $instance->exists = true;
 
         return $instance;
