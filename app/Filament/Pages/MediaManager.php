@@ -185,6 +185,7 @@ class MediaManager extends Page implements HasForms, HasTable
     {
         return $table
             ->query(FileRecord::query())
+            ->modifyQueryUsing(fn ($query) => $query) // No-op, we handle data in getTableRecords
             ->heading('Uploaded Files')
             ->description('Manage all uploaded PDF and thumbnail files')
             ->paginated([10, 25, 50, 100])
@@ -492,5 +493,46 @@ class MediaManager extends Page implements HasForms, HasTable
         }
 
         return null;
+    }
+
+    /**
+     * Override to provide custom pagination for filesystem-based records.
+     */
+    protected function paginateTableQuery(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Contracts\Pagination\Paginator
+    {
+        $perPage = $this->getTableRecordsPerPage();
+        $page = \Illuminate\Pagination\Paginator::resolveCurrentPage('page');
+
+        // Get all file records
+        $items = collect(Storage::disk('public')->files('books'))
+            ->map(function ($file) {
+                $fullPath = Storage::disk('public')->path($file);
+                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+                return FileRecord::make([
+                    'path' => $file,
+                    'filename' => basename($file),
+                    'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
+                    'modified' => file_exists($fullPath) ? filemtime($fullPath) : time(),
+                    'type' => $this->getFileType($extension),
+                    'books_count' => $this->getBooksUsingFileCount($file),
+                ]);
+            })
+            ->sortByDesc('modified')
+            ->values();
+
+        $totalCount = $items->count();
+        $paginatedItems = $items->forPage($page, $perPage);
+
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $paginatedItems,
+            $totalCount,
+            $perPage,
+            $page,
+            [
+                'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+                'pageName' => 'page',
+            ]
+        );
     }
 }

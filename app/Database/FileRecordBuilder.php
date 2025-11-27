@@ -9,6 +9,47 @@ use App\Models\BookFile;
 
 class FileRecordBuilder extends Builder
 {
+    /**
+     * Store custom ordering for filesystem records.
+     */
+    protected array $customOrders = [];
+
+    /**
+     * The properties that should be passed through to the query builder.
+     * Adding 'orders' allows Filament to access $builder->orders
+     */
+    protected $propertyPassthru = [
+        'from',
+        'orders',
+    ];
+
+    /**
+     * Override to prevent database queries.
+     * This builder works with filesystem data, not database tables.
+     */
+    protected function runSelect()
+    {
+        return $this->getFileRecords();
+    }
+
+    /**
+     * Add an "order by" clause to the query.
+     */
+    public function orderBy($column, $direction = 'asc')
+    {
+        $this->customOrders[] = ['column' => $column, 'direction' => strtolower($direction)];
+
+        // Also update the underlying query builder's orders property
+        // so Filament can access it via propertyPassthru
+        $this->getQuery()->orders = $this->getQuery()->orders ?? [];
+        $this->getQuery()->orders[] = [
+            'column' => $column,
+            'direction' => strtolower($direction),
+        ];
+
+        return $this;
+    }
+
     protected function getFileType(string $extension): string
     {
         return match(strtolower($extension)) {
@@ -30,7 +71,7 @@ class FileRecordBuilder extends Builder
 
     protected function getFileRecords()
     {
-        return collect(Storage::disk('public')->files('books'))
+        $items = collect(Storage::disk('public')->files('books'))
             ->map(function ($file) {
                 $fullPath = Storage::disk('public')->path($file);
                 $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
@@ -43,9 +84,26 @@ class FileRecordBuilder extends Builder
                     'type' => $this->getFileType($extension),
                     'books_count' => $this->getBooksUsingFileCount($file),
                 ]);
-            })
-            ->sortByDesc('modified')
-            ->values();
+            });
+
+        // Apply custom ordering if specified
+        if (!empty($this->customOrders)) {
+            foreach ($this->customOrders as $order) {
+                $column = $order['column'];
+                $direction = $order['direction'];
+
+                if ($direction === 'desc') {
+                    $items = $items->sortByDesc($column);
+                } else {
+                    $items = $items->sortBy($column);
+                }
+            }
+        } else {
+            // Default sort by modified date descending
+            $items = $items->sortByDesc('modified');
+        }
+
+        return $items->values();
     }
 
     public function get($columns = ['*'])
@@ -53,15 +111,19 @@ class FileRecordBuilder extends Builder
         return $this->getFileRecords();
     }
 
-    public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
     {
+        $perPage = $perPage ?: 15;
         $page = $page ?: \Illuminate\Pagination\Paginator::resolveCurrentPage($pageName);
         $items = $this->getFileRecords();
+
+        // Use provided total or calculate from items
+        $totalCount = $total ?? $items->count();
         $paginatedItems = $items->forPage($page, $perPage);
 
         return new \Illuminate\Pagination\LengthAwarePaginator(
             $paginatedItems,
-            $items->count(),
+            $totalCount,
             $perPage,
             $page,
             [
@@ -71,8 +133,43 @@ class FileRecordBuilder extends Builder
         );
     }
 
-    public function count()
+    public function count($columns = '*')
     {
         return $this->getFileRecords()->count();
+    }
+
+    /**
+     * Get the underlying query builder instance.
+     * This is needed for propertyPassthru to work correctly.
+     */
+    public function toBase()
+    {
+        // Return the actual query builder so properties like 'orders' can be accessed
+        return $this->getQuery();
+    }
+
+    /**
+     * Override aggregate to prevent database queries.
+     */
+    public function aggregate($function, $columns = ['*'])
+    {
+        if ($function === 'count') {
+            return $this->count();
+        }
+        return 0;
+    }
+
+    /**
+     * Override the newBaseQueryBuilder to prevent database queries.
+     * We need to ensure the query builder doesn't try to execute queries.
+     */
+    protected function newBaseQueryBuilder()
+    {
+        $query = parent::newBaseQueryBuilder();
+
+        // Initialize orders as empty array to prevent undefined property errors
+        $query->orders = [];
+
+        return $query;
     }
 }
