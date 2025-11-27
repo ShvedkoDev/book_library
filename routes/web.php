@@ -118,6 +118,17 @@ Route::middleware(['auth'])->group(function () {
 
         return response()->download($filePath, $filename)->deleteFileAfterSend(false);
     })->name('csv.download-export');
+
+    // Admin media download route
+    Route::get('/admin/media/download/{file}', function ($file) {
+        $path = base64_decode($file);
+
+        if (!Storage::disk('public')->exists($path)) {
+            abort(404, 'File not found');
+        }
+
+        return Storage::disk('public')->download($path, basename($path));
+    })->name('admin.media.download');
 });
 
 require __DIR__.'/auth.php';
