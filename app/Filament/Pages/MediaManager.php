@@ -296,7 +296,10 @@ class MediaManager extends Page implements HasForms, HasTable
                         }
                     }),
             ])
+            ->selectCurrentPageOnly()
             ->bulkActions([
+                // Note: Bulk actions work with FileRecord virtual models by using selectCurrentPageOnly()
+                // This prevents Filament from querying the non-existent database table
                 \Filament\Tables\Actions\BulkAction::make('delete')
                     ->label('Delete Selected')
                     ->icon('heroicon-o-trash')
