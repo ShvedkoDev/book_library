@@ -296,93 +296,9 @@ class MediaManager extends Page implements HasForms, HasTable
                         }
                     }),
             ])
-            ->selectCurrentPageOnly()
             ->bulkActions([
-                // Note: Bulk actions work with FileRecord virtual models by using selectCurrentPageOnly()
-                // This prevents Filament from querying the non-existent database table
-                \Filament\Tables\Actions\BulkAction::make('delete')
-                    ->label('Delete Selected')
-                    ->icon('heroicon-o-trash')
-                    ->color('danger')
-                    ->requiresConfirmation()
-                    ->modalHeading('Delete Selected Files')
-                    ->modalDescription('Are you sure you want to delete the selected files? This action cannot be undone.')
-                    ->modalSubmitActionLabel('Yes, delete them')
-                    ->action(function ($records) {
-                        $count = 0;
-                        $inUseCount = 0;
-
-                        foreach ($records as $record) {
-                            if (Storage::disk('public')->exists($record->path)) {
-                                if ($record->books_count > 0) {
-                                    $inUseCount++;
-                                }
-                                Storage::disk('public')->delete($record->path);
-                                $count++;
-                            }
-                        }
-
-                        $this->cachedFiles = null;
-
-                        if ($inUseCount > 0) {
-                            Notification::make()
-                                ->warning()
-                                ->title('Files deleted with warnings')
-                                ->body("Deleted {$count} file(s). Warning: {$inUseCount} file(s) were in use by books.")
-                                ->persistent()
-                                ->send();
-                        } else {
-                            Notification::make()
-                                ->success()
-                                ->title('Files deleted')
-                                ->body("Successfully deleted {$count} file(s).")
-                                ->send();
-                        }
-                    }),
-                \Filament\Tables\Actions\BulkAction::make('download')
-                    ->label('Download Selected')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->color('primary')
-                    ->action(function ($records) {
-                        if ($records->count() === 1) {
-                            $record = $records->first();
-                            return Storage::disk('public')->download($record->path, $record->filename);
-                        }
-
-                        // For multiple files, create a zip
-                        $zip = new \ZipArchive();
-                        $zipFileName = 'files_' . now()->format('Y-m-d_His') . '.zip';
-                        $zipPath = storage_path('app/temp/' . $zipFileName);
-
-                        // Create temp directory if it doesn't exist
-                        if (!file_exists(storage_path('app/temp'))) {
-                            mkdir(storage_path('app/temp'), 0755, true);
-                        }
-
-                        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
-                            foreach ($records as $record) {
-                                $filePath = Storage::disk('public')->path($record->path);
-                                if (file_exists($filePath)) {
-                                    $zip->addFile($filePath, $record->filename);
-                                }
-                            }
-                            $zip->close();
-
-                            Notification::make()
-                                ->success()
-                                ->title('Archive created')
-                                ->body("Created archive with {$records->count()} file(s).")
-                                ->send();
-
-                            return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
-                        }
-
-                        Notification::make()
-                            ->danger()
-                            ->title('Error')
-                            ->body('Failed to create archive.')
-                            ->send();
-                    }),
+                // Bulk actions disabled for virtual FileRecord models to prevent database query errors
+                // Use individual row actions instead
             ])
             ->emptyStateHeading('No files found')
             ->emptyStateDescription('Upload PDF and thumbnail files using the forms above')
@@ -607,22 +523,5 @@ class MediaManager extends Page implements HasForms, HasTable
         }
 
         return null;
-    }
-
-    /**
-     * Override to handle bulk actions with virtual FileRecord models.
-     * This prevents errors when checking selected records count.
-     */
-    public function getSelectedTableRecords(bool $shouldFetchSelectedRecords = true): \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
-    {
-        $keys = $this->selectedTableRecords ?? [];
-
-        if (empty($keys)) {
-            return collect();
-        }
-
-        return collect($keys)->map(function ($key) {
-            return $this->getTableRecord($key);
-        })->filter();
     }
 }
