@@ -45,7 +45,7 @@ class GeographicLocationResource extends Resource
                             ->placeholder('e.g., Chuuk State, Pohnpei'),
 
                         Forms\Components\Select::make('parent_id')
-                            ->label('Parent Location (Optional)')
+                            ->label('Parent location (optional)')
                             ->relationship('parent', 'name', function (Builder $query, Forms\Get $get) {
                                 $query->whereIn('location_type', ['state', 'region']);
                             })
@@ -145,7 +145,7 @@ class GeographicLocationResource extends Resource
             ->defaultSort('location_type')
             ->groups([
                 Tables\Grouping\Group::make('location_type')
-                    ->label('Location Type')
+                    ->label('Location type')
                     ->collapsible(),
             ]);
     }

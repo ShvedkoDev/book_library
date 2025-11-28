@@ -26,10 +26,10 @@ class ViewCsvImport extends ViewRecord
                 Infolists\Components\Section::make('Import Summary')
                     ->schema([
                         Infolists\Components\TextEntry::make('filename')
-                            ->label('File Name')
+                            ->label('File name')
                             ->weight('bold'),
                         Infolists\Components\TextEntry::make('user.name')
-                            ->label('Imported By'),
+                            ->label('Imported by'),
                         Infolists\Components\TextEntry::make('mode')
                             ->badge()
                             ->formatStateUsing(fn (string $state): string => match ($state) {
@@ -57,7 +57,7 @@ class ViewCsvImport extends ViewRecord
                         Infolists\Components\Grid::make(3)
                             ->schema([
                                 Infolists\Components\TextEntry::make('total_rows')
-                                    ->label('Total Rows'),
+                                    ->label('Total rows'),
                                 Infolists\Components\TextEntry::make('processed_rows')
                                     ->label('Processed'),
                                 Infolists\Components\TextEntry::make('successful_rows')
@@ -79,7 +79,7 @@ class ViewCsvImport extends ViewRecord
                         Infolists\Components\Grid::make(2)
                             ->schema([
                                 Infolists\Components\TextEntry::make('success_rate')
-                                    ->label('Success Rate')
+                                    ->label('Success rate')
                                     ->formatStateUsing(fn ($state) => $state . '%')
                                     ->color(fn ($state) => $state >= 90 ? 'success' : ($state >= 70 ? 'warning' : 'danger')),
                             ]),
@@ -89,10 +89,10 @@ class ViewCsvImport extends ViewRecord
                     ->schema([
                         Infolists\Components\TextEntry::make('started_at')
                             ->dateTime()
-                            ->label('Started At'),
+                            ->label('Started at'),
                         Infolists\Components\TextEntry::make('completed_at')
                             ->dateTime()
-                            ->label('Completed At'),
+                            ->label('Completed at'),
                         Infolists\Components\TextEntry::make('duration_seconds')
                             ->label('Duration')
                             ->formatStateUsing(fn ($state) => $state ? round($state, 1) . ' seconds' : 'N/A'),

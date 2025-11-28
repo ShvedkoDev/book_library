@@ -14,16 +14,16 @@ class EditPage extends EditRecord
     {
         return [
             Actions\Action::make('viewLive')
-                ->label('View Live Page')
+                ->label('View live page')
                 ->icon('heroicon-m-eye')
                 ->url(fn () => $this->getRecord()->getUrl())
                 ->openUrlInNewTab()
                 ->color('success')
                 ->visible(fn () => $this->getRecord()->isPublished() && $this->getRecord()->getUrl() !== null),
             Actions\Action::make('previewSections')
-                ->label('Preview Sections')
+                ->label('Preview sections')
                 ->icon('heroicon-m-list-bullet')
-                ->modalHeading('Page Sections (H2 Anchors)')
+                ->modalHeading('Page sections (h2 anchors)')
                 ->modalDescription(fn () => "Sections found in: {$this->getRecord()->title}")
                 ->modalContent(function () {
                     $sections = $this->getRecord()->extractSections();

@@ -20,7 +20,7 @@ class DataQualityIssueResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-exclamation';
 
-    protected static ?string $navigationLabel = 'Data Quality Issues';
+    protected static ?string $navigationLabel = 'Data quality issues';
 
     protected static ?string $navigationGroup = 'CSV Import/Export';
 
@@ -50,12 +50,12 @@ class DataQualityIssueResource extends Resource
                             ->disabled(),
 
                         Forms\Components\TextInput::make('book.title')
-                            ->label('Book Title')
+                            ->label('Book title')
                             ->disabled(),
 
                         Forms\Components\Select::make('issue_type')
                             ->disabled()
-                            ->label('Issue Type'),
+                            ->label('Issue type'),
 
                         Forms\Components\Select::make('severity')
                             ->disabled()
@@ -67,7 +67,7 @@ class DataQualityIssueResource extends Resource
 
                         Forms\Components\TextInput::make('field_name')
                             ->disabled()
-                            ->label('Field Name'),
+                            ->label('Field name'),
 
                         Forms\Components\Textarea::make('message')
                             ->disabled()
@@ -88,16 +88,16 @@ class DataQualityIssueResource extends Resource
 
                         Forms\Components\DateTimePicker::make('resolved_at')
                             ->disabled()
-                            ->label('Resolved At')
+                            ->label('Resolved at')
                             ->visible(fn ($get) => $get('is_resolved')),
 
                         Forms\Components\TextInput::make('resolvedBy.name')
                             ->disabled()
-                            ->label('Resolved By')
+                            ->label('Resolved by')
                             ->visible(fn ($get) => $get('is_resolved')),
 
                         Forms\Components\Textarea::make('resolution_notes')
-                            ->label('Resolution Notes')
+                            ->label('Resolution notes')
                             ->rows(3)
                             ->visible(fn ($get) => $get('is_resolved')),
                     ])->columns(2),
@@ -106,12 +106,12 @@ class DataQualityIssueResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('csvImport.filename')
                             ->disabled()
-                            ->label('From CSV Import')
+                            ->label('From CSV import')
                             ->visible(fn ($record) => $record->csv_import_id),
 
                         Forms\Components\DateTimePicker::make('created_at')
                             ->disabled()
-                            ->label('Detected At'),
+                            ->label('Detected at'),
                     ])->columns(2),
             ]);
     }
@@ -234,7 +234,7 @@ class DataQualityIssueResource extends Resource
                     ->searchable(),
 
                 Tables\Filters\TernaryFilter::make('is_resolved')
-                    ->label('Resolution Status')
+                    ->label('Resolution status')
                     ->placeholder('All issues')
                     ->trueLabel('Resolved')
                     ->falseLabel('Unresolved')
@@ -243,9 +243,9 @@ class DataQualityIssueResource extends Resource
                 Tables\Filters\Filter::make('created_at')
                     ->form([
                         Forms\Components\DatePicker::make('from')
-                            ->label('Detected From'),
+                            ->label('Detected from'),
                         Forms\Components\DatePicker::make('until')
-                            ->label('Detected Until'),
+                            ->label('Detected until'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -260,7 +260,7 @@ class DataQualityIssueResource extends Resource
                     }),
 
                 Tables\Filters\SelectFilter::make('csv_import_id')
-                    ->label('CSV Import')
+                    ->label('CSV import')
                     ->relationship('csvImport', 'filename')
                     ->searchable()
                     ->preload(),
@@ -269,7 +269,7 @@ class DataQualityIssueResource extends Resource
                 Tables\Actions\ViewAction::make(),
 
                 Tables\Actions\Action::make('view_book')
-                    ->label('View Book')
+                    ->label('View book')
                     ->icon('heroicon-o-book-open')
                     ->url(fn (DataQualityIssue $record): string => $record->book
                         ? route('filament.admin.resources.books.edit', ['record' => $record->book_id])
@@ -284,7 +284,7 @@ class DataQualityIssueResource extends Resource
                     ->requiresConfirmation()
                     ->form([
                         Forms\Components\Textarea::make('resolution_notes')
-                            ->label('Resolution Notes')
+                            ->label('Resolution notes')
                             ->rows(3)
                             ->placeholder('Optionally add notes about how this issue was resolved...'),
                     ])
@@ -299,7 +299,7 @@ class DataQualityIssueResource extends Resource
                     ->visible(fn (DataQualityIssue $record) => !$record->is_resolved),
 
                 Tables\Actions\Action::make('unresolve')
-                    ->label('Mark as Unresolved')
+                    ->label('Mark as unresolved')
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
                     ->requiresConfirmation()
@@ -323,13 +323,13 @@ class DataQualityIssueResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\BulkAction::make('resolve_selected')
-                        ->label('Resolve Selected')
+                        ->label('Resolve selected')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->requiresConfirmation()
                         ->form([
                             Forms\Components\Textarea::make('resolution_notes')
-                                ->label('Resolution Notes')
+                                ->label('Resolution notes')
                                 ->rows(3)
                                 ->placeholder('Optionally add notes about how these issues were resolved...'),
                         ])

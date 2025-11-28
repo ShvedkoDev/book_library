@@ -18,7 +18,7 @@ class CsvImportResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
 
-    protected static ?string $navigationLabel = 'Import History';
+    protected static ?string $navigationLabel = 'Import history';
 
     protected static ?string $navigationGroup = 'CSV Import/Export';
 
@@ -32,10 +32,10 @@ class CsvImportResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('filename')
                             ->disabled()
-                            ->label('File Name'),
+                            ->label('File name'),
                         Forms\Components\TextInput::make('user.name')
                             ->disabled()
-                            ->label('Imported By'),
+                            ->label('Imported by'),
                         Forms\Components\Select::make('mode')
                             ->disabled()
                             ->options([
@@ -59,7 +59,7 @@ class CsvImportResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('total_rows')
                             ->disabled()
-                            ->label('Total Rows')
+                            ->label('Total rows')
                             ->numeric(),
                         Forms\Components\TextInput::make('processed_rows')
                             ->disabled()
@@ -124,13 +124,13 @@ class CsvImportResource extends Resource
                 Tables\Columns\TextColumn::make('filename')
                     ->searchable()
                     ->sortable()
-                    ->label('File Name')
+                    ->label('File name')
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
                     ->sortable()
-                    ->label('Imported By'),
+                    ->label('Imported by'),
 
                 Tables\Columns\TextColumn::make('mode')
                     ->badge()
@@ -223,11 +223,11 @@ class CsvImportResource extends Resource
                     ]),
 
                 Tables\Filters\Filter::make('with_errors')
-                    ->label('Has Errors')
+                    ->label('Has errors')
                     ->query(fn (Builder $query): Builder => $query->where('failed_rows', '>', 0)),
 
                 Tables\Filters\Filter::make('recent')
-                    ->label('Last 7 Days')
+                    ->label('Last 7 days')
                     ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subDays(7))),
             ])
             ->actions([

@@ -30,7 +30,7 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('classification_type_id')
-                    ->label('Classification Type')
+                    ->label('Classification type')
                     ->relationship('classificationType', 'name')
                     ->required()
                     ->searchable()
@@ -45,7 +45,7 @@ class CategoryResource extends Resource
                     ->rows(3),
 
                 Forms\Components\Select::make('parent_id')
-                    ->label('Parent Category')
+                    ->label('Parent category')
                     ->relationship('parent', 'value')
                     ->searchable()
                     ->preload(),
@@ -75,7 +75,7 @@ class CategoryResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('parent.value')
-                    ->label('Parent Category')
+                    ->label('Parent category')
                     ->sortable()
                     ->placeholder('-'),
 

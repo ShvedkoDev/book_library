@@ -22,7 +22,7 @@ class EditUser extends EditRecord
         return [
             // Save and Continue Editing
             Actions\Action::make('save')
-                ->label('Save and Continue Editing')
+                ->label('Save and continue editing')
                 ->action(function () {
                     $this->save(shouldRedirect: false);
                 })
@@ -32,7 +32,7 @@ class EditUser extends EditRecord
 
             // Save and Go to List
             Actions\Action::make('saveAndGoToList')
-                ->label('Save and Go to List')
+                ->label('Save and go to list')
                 ->action(function () {
                     $this->save(shouldRedirect: false);
                     $this->redirect($this->getResource()::getUrl('index'));

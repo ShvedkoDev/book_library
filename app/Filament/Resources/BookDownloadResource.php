@@ -21,7 +21,7 @@ class BookDownloadResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
 
-    protected static ?string $navigationLabel = 'Book Downloads';
+    protected static ?string $navigationLabel = 'Book downloads';
 
     protected static ?string $navigationGroup = 'Analytics';
 
@@ -76,39 +76,39 @@ class BookDownloadResource extends Resource
                 Tables\Columns\TextColumn::make('book.title')
                     ->searchable()
                     ->sortable()
-                    ->label('Book Title')
+                    ->label('Book title')
                     ->weight('bold')
                     ->url(fn ($record) => BookDownloadResource::getUrl('details', ['bookId' => $record->book_id])),
                 Tables\Columns\TextColumn::make('download_count')
-                    ->label('Total Downloads')
+                    ->label('Total downloads')
                     ->sortable()
                     ->badge()
                     ->color('info'),
                 Tables\Columns\TextColumn::make('latest_download')
                     ->dateTime()
                     ->sortable()
-                    ->label('Latest Download')
+                    ->label('Latest download')
                     ->since(),
                 Tables\Columns\TextColumn::make('first_download')
                     ->dateTime()
                     ->sortable()
-                    ->label('First Download')
+                    ->label('First download')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\Filter::make('last_24_hours')
                     ->query(fn (Builder $query): Builder => $query->having(DB::raw('MAX(book_downloads.created_at)'), '>=', now()->subHours(24)))
-                    ->label('Last 24 Hours'),
+                    ->label('Last 24 hours'),
                 Tables\Filters\Filter::make('last_7_days')
                     ->query(fn (Builder $query): Builder => $query->having(DB::raw('MAX(book_downloads.created_at)'), '>=', now()->subDays(7)))
-                    ->label('Last 7 Days'),
+                    ->label('Last 7 days'),
                 Tables\Filters\Filter::make('last_30_days')
                     ->query(fn (Builder $query): Builder => $query->having(DB::raw('MAX(book_downloads.created_at)'), '>=', now()->subDays(30)))
-                    ->label('Last 30 Days'),
+                    ->label('Last 30 days'),
             ])
             ->actions([
                 Tables\Actions\Action::make('view_details')
-                    ->label('View Details')
+                    ->label('View details')
                     ->icon('heroicon-o-eye')
                     ->url(fn ($record) => BookDownloadResource::getUrl('details', ['bookId' => $record->book_id])),
             ])

@@ -15,7 +15,7 @@ class ViewDataQualityIssue extends ViewRecord
     {
         return [
             Actions\Action::make('view_book')
-                ->label('View Book')
+                ->label('View book')
                 ->icon('heroicon-o-book-open')
                 ->color('gray')
                 ->url(fn () => $this->record->book
@@ -25,13 +25,13 @@ class ViewDataQualityIssue extends ViewRecord
                 ->visible(fn () => $this->record->book_id),
 
             Actions\Action::make('resolve')
-                ->label('Mark as Resolved')
+                ->label('Mark as resolved')
                 ->icon('heroicon-o-check-circle')
                 ->color('success')
                 ->requiresConfirmation()
                 ->form([
                     \Filament\Forms\Components\Textarea::make('resolution_notes')
-                        ->label('Resolution Notes')
+                        ->label('Resolution notes')
                         ->rows(3)
                         ->placeholder('Optionally add notes about how this issue was resolved...'),
                 ])
@@ -48,7 +48,7 @@ class ViewDataQualityIssue extends ViewRecord
                 ->visible(fn () => !$this->record->is_resolved),
 
             Actions\Action::make('unresolve')
-                ->label('Mark as Unresolved')
+                ->label('Mark as unresolved')
                 ->icon('heroicon-o-arrow-path')
                 ->color('warning')
                 ->requiresConfirmation()

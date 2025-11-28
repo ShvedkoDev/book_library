@@ -32,7 +32,7 @@ class MediaManager extends Page implements HasForms, HasTable
 
     protected static ?string $navigationGroup = 'Media';
 
-    protected static ?string $navigationLabel = 'Bulk Media Upload';
+    protected static ?string $navigationLabel = 'Bulk media upload';
 
     protected static ?int $navigationSort = 1;
 
@@ -76,7 +76,7 @@ class MediaManager extends Page implements HasForms, HasTable
                     ->collapsible()
                     ->headerActions([
                         \Filament\Forms\Components\Actions\Action::make('clearPdfs')
-                            ->label('Clear Selected Files')
+                            ->label('Clear selected files')
                             ->icon('heroicon-o-x-circle')
                             ->color('danger')
                             ->visible(fn () => $this->pdfFileCount > 0)
@@ -100,7 +100,7 @@ class MediaManager extends Page implements HasForms, HasTable
                             ->visible(fn () => $this->pdfFileCount > 0),
 
                         FileUpload::make('pdfs')
-                            ->label('PDF Files')
+                            ->label('PDF files')
                             ->disk('public')
                             ->directory('books')
                             ->acceptedFileTypes(['application/pdf'])
@@ -125,7 +125,7 @@ class MediaManager extends Page implements HasForms, HasTable
                     ->collapsible()
                     ->headerActions([
                         \Filament\Forms\Components\Actions\Action::make('clearThumbnails')
-                            ->label('Clear Selected Files')
+                            ->label('Clear selected files')
                             ->icon('heroicon-o-x-circle')
                             ->color('danger')
                             ->visible(fn () => $this->thumbnailFileCount > 0)
@@ -149,7 +149,7 @@ class MediaManager extends Page implements HasForms, HasTable
                             ->visible(fn () => $this->thumbnailFileCount > 0),
 
                         FileUpload::make('thumbnails')
-                            ->label('Thumbnail Files')
+                            ->label('Thumbnail files')
                             ->disk('public')
                             ->directory('books')
                             ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/jpg'])
@@ -193,7 +193,7 @@ class MediaManager extends Page implements HasForms, HasTable
             ->striped()
             ->columns([
                 TextColumn::make('filename')
-                    ->label('File Name')
+                    ->label('File name')
                     ->searchable()
                     ->sortable()
                     ->description(fn ($record) => $record->path)
@@ -217,11 +217,11 @@ class MediaManager extends Page implements HasForms, HasTable
                     ->formatStateUsing(fn ($state) => $this->formatBytes($state))
                     ->sortable(),
                 TextColumn::make('modified')
-                    ->label('Last Modified')
+                    ->label('Last modified')
                     ->dateTime('M j, Y g:i A')
                     ->sortable(),
                 TextColumn::make('books_count')
-                    ->label('Used By')
+                    ->label('Used by')
                     ->badge()
                     ->color(fn ($state) => $state > 0 ? 'success' : 'gray')
                     ->formatStateUsing(fn ($state) => $state . ' book(s)'),
@@ -236,9 +236,9 @@ class MediaManager extends Page implements HasForms, HasTable
                     ->url(fn ($record) => Storage::disk('public')->url($record->path))
                     ->openUrlInNewTab(),
                 Action::make('books')
-                    ->label('Show Books')
+                    ->label('Show books')
                     ->icon('heroicon-m-book-open')
-                    ->modalHeading('Books Using This File')
+                    ->modalHeading('Books using this file')
                     ->modalDescription(fn ($record) => $record->filename)
                     ->modalContent(fn ($record) => view('filament.pages.media-usage', [
                         'items' => $this->getBooksUsingFile($record->path),
@@ -254,7 +254,7 @@ class MediaManager extends Page implements HasForms, HasTable
                     ->openUrlInNewTab(false),
                 DeleteAction::make()
                     ->label('Delete')
-                    ->modalHeading('Delete File')
+                    ->modalHeading('Delete file')
                     ->modalDescription(function ($record) {
                         if ($record->books_count > 0) {
                             return "⚠️ WARNING: This file is currently used by {$record->books_count} book(s).\n\nDeleting this file will break the book references.\n\nAre you absolutely sure you want to continue?";
@@ -300,11 +300,11 @@ class MediaManager extends Page implements HasForms, HasTable
             ->bulkActions([
                 \Filament\Tables\Actions\BulkActionGroup::make([
                     \Filament\Tables\Actions\BulkAction::make('delete')
-                        ->label('Delete Selected')
+                        ->label('Delete selected')
                         ->icon('heroicon-m-trash')
                         ->color('danger')
                         ->requiresConfirmation()
-                        ->modalHeading('Delete Selected Files')
+                        ->modalHeading('Delete selected files')
                         ->modalDescription('Are you sure you want to delete the selected files? This action cannot be undone.')
                         ->modalSubmitActionLabel('Delete')
                         ->deselectRecordsAfterCompletion()
@@ -342,13 +342,13 @@ class MediaManager extends Page implements HasForms, HasTable
                         }),
 
                     \Filament\Tables\Actions\BulkAction::make('deleteAll')
-                        ->label('Delete All')
+                        ->label('Delete all')
                         ->icon('heroicon-m-trash')
                         ->color('danger')
                         ->requiresConfirmation()
-                        ->modalHeading('Delete All Files')
+                        ->modalHeading('Delete all files')
                         ->modalDescription('⚠️ WARNING: This will delete ALL files in the books directory. This action cannot be undone!')
-                        ->modalSubmitActionLabel('Yes, Delete All')
+                        ->modalSubmitActionLabel('Yes, delete all')
                         ->deselectRecordsAfterCompletion()
                         ->action(function () {
                             $files = Storage::disk('public')->files('books');
@@ -384,13 +384,13 @@ class MediaManager extends Page implements HasForms, HasTable
                         }),
 
                     \Filament\Tables\Actions\BulkAction::make('downloadSelected')
-                        ->label('Download as ZIP')
+                        ->label('Download as zip')
                         ->icon('heroicon-m-arrow-down-tray')
                         ->color('primary')
                         ->requiresConfirmation()
-                        ->modalHeading('Download Selected Files')
+                        ->modalHeading('Download selected files')
                         ->modalDescription('This will create a ZIP archive of the selected files and download it.')
-                        ->modalSubmitActionLabel('Download ZIP')
+                        ->modalSubmitActionLabel('Download zip')
                         ->action(function (array $records) {
                             $zip = new \ZipArchive();
                             $zipFileName = 'books_export_' . date('Y-m-d_His') . '.zip';

@@ -42,7 +42,7 @@ class CsvExport extends Page implements HasForms
                     ->description('Configure the export format and options')
                     ->schema([
                         Forms\Components\Radio::make('format')
-                            ->label('Export Format')
+                            ->label('Export format')
                             ->options([
                                 'csv' => 'CSV (Comma-Separated Values)',
                                 'tsv' => 'TSV (Tab-Separated Values)',
@@ -58,13 +58,13 @@ class CsvExport extends Page implements HasForms
                         Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\Checkbox::make('include_bom')
-                                    ->label('Include BOM (CSV only)')
+                                    ->label('Include bom (csv only)')
                                     ->helperText('Adds UTF-8 BOM for Excel compatibility')
                                     ->default(true)
                                     ->visible(fn (Forms\Get $get) => $get('format') === 'csv'),
 
                                 Forms\Components\Checkbox::make('include_mapping_row')
-                                    ->label('Include Database Mapping Row')
+                                    ->label('Include database mapping row')
                                     ->helperText('Adds second header row with database field names')
                                     ->default(true),
                             ]),
@@ -91,7 +91,7 @@ class CsvExport extends Page implements HasForms
                         Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\Select::make('access_level')
-                                    ->label('Access Level')
+                                    ->label('Access level')
                                     ->options([
                                         'full' => 'Full Access',
                                         'limited' => 'Limited Access',
@@ -111,24 +111,24 @@ class CsvExport extends Page implements HasForms
                         Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\DatePicker::make('created_from')
-                                    ->label('Created From')
+                                    ->label('Created from')
                                     ->native(false),
 
                                 Forms\Components\DatePicker::make('created_to')
-                                    ->label('Created To')
+                                    ->label('Created to')
                                     ->native(false),
                             ]),
 
                         Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\TextInput::make('year_from')
-                                    ->label('Publication Year From')
+                                    ->label('Publication year from')
                                     ->numeric()
                                     ->minValue(1900)
                                     ->maxValue(date('Y') + 5),
 
                                 Forms\Components\TextInput::make('year_to')
-                                    ->label('Publication Year To')
+                                    ->label('Publication year to')
                                     ->numeric()
                                     ->minValue(1900)
                                     ->maxValue(date('Y') + 5),
@@ -137,11 +137,11 @@ class CsvExport extends Page implements HasForms
                         Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\Checkbox::make('is_featured')
-                                    ->label('Featured Only')
+                                    ->label('Featured only')
                                     ->helperText('Only export featured books'),
 
                                 Forms\Components\TextInput::make('chunk_size')
-                                    ->label('Chunk Size')
+                                    ->label('Chunk size')
                                     ->helperText('Number of records to process per batch')
                                     ->numeric()
                                     ->minValue(10)
@@ -219,7 +219,7 @@ class CsvExport extends Page implements HasForms
                 ->persistent()
                 ->actions([
                     \Filament\Notifications\Actions\Action::make('download')
-                        ->label('Download File')
+                        ->label('Download file')
                         ->url(route('csv.download-export', ['filename' => basename($filePath)]))
                         ->button()
                         ->color('success'),

@@ -9,7 +9,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class PopularBooksWidget extends BaseWidget
 {
-    protected static ?string $heading = 'Most Popular Books';
+    protected static ?string $heading = 'Most popular books';
     protected static ?int $sort = 11;
     protected int | string | array $columnSpan = 'full';
 
@@ -27,7 +27,7 @@ class PopularBooksWidget extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Book Title')
+                    ->label('Book title')
                     ->limit(40)
                     ->searchable()
                     ->sortable(),
@@ -44,12 +44,12 @@ class PopularBooksWidget extends BaseWidget
                     ->color('success'),
                     
                 Tables\Columns\TextColumn::make('ratings_avg_rating')
-                    ->label('Avg Rating')
+                    ->label('Avg rating')
                     ->formatStateUsing(fn ($state) => $state ? number_format($state, 1) . '/5' : 'No ratings')
                     ->sortable(),
                     
                 Tables\Columns\TextColumn::make('ratings_count')
-                    ->label('Total Ratings')
+                    ->label('Total ratings')
                     ->sortable(),
                     
                 Tables\Columns\SelectColumn::make('access_level')

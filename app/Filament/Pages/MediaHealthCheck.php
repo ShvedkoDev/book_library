@@ -16,7 +16,7 @@ class MediaHealthCheck extends Page
 
     protected static ?string $navigationGroup = 'Media';
 
-    protected static ?string $navigationLabel = 'Media Health Check';
+    protected static ?string $navigationLabel = 'Media health check';
 
     protected static ?int $navigationSort = 2;
 

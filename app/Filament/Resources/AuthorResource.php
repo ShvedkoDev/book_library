@@ -63,7 +63,7 @@ class AuthorResource extends Resource
                 Tables\Columns\TextColumn::make('death_year')->sortable(),
                 Tables\Columns\TextColumn::make('books_count')
                     ->counts('books')
-                    ->label('Books Count'),
+                    ->label('Books count'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('nationality')

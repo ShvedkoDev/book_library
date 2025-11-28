@@ -21,7 +21,7 @@ class BookViewResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-eye';
 
-    protected static ?string $navigationLabel = 'Book Views';
+    protected static ?string $navigationLabel = 'Book views';
 
     protected static ?string $navigationGroup = 'Analytics';
 
@@ -76,39 +76,39 @@ class BookViewResource extends Resource
                 Tables\Columns\TextColumn::make('book.title')
                     ->searchable()
                     ->sortable()
-                    ->label('Book Title')
+                    ->label('Book title')
                     ->weight('bold')
                     ->url(fn ($record) => BookViewResource::getUrl('details', ['bookId' => $record->book_id])),
                 Tables\Columns\TextColumn::make('view_count')
-                    ->label('Total Views')
+                    ->label('Total views')
                     ->sortable()
                     ->badge()
                     ->color('success'),
                 Tables\Columns\TextColumn::make('latest_view')
                     ->dateTime()
                     ->sortable()
-                    ->label('Latest View')
+                    ->label('Latest view')
                     ->since(),
                 Tables\Columns\TextColumn::make('first_view')
                     ->dateTime()
                     ->sortable()
-                    ->label('First View')
+                    ->label('First view')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\Filter::make('last_24_hours')
                     ->query(fn (Builder $query): Builder => $query->having(DB::raw('MAX(book_views.created_at)'), '>=', now()->subHours(24)))
-                    ->label('Last 24 Hours'),
+                    ->label('Last 24 hours'),
                 Tables\Filters\Filter::make('last_7_days')
                     ->query(fn (Builder $query): Builder => $query->having(DB::raw('MAX(book_views.created_at)'), '>=', now()->subDays(7)))
-                    ->label('Last 7 Days'),
+                    ->label('Last 7 days'),
                 Tables\Filters\Filter::make('last_30_days')
                     ->query(fn (Builder $query): Builder => $query->having(DB::raw('MAX(book_views.created_at)'), '>=', now()->subDays(30)))
-                    ->label('Last 30 Days'),
+                    ->label('Last 30 days'),
             ])
             ->actions([
                 Tables\Actions\Action::make('view_details')
-                    ->label('View Details')
+                    ->label('View details')
                     ->icon('heroicon-o-eye')
                     ->url(fn ($record) => BookViewResource::getUrl('details', ['bookId' => $record->book_id])),
             ])

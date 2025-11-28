@@ -30,7 +30,7 @@ class ClassificationValueResource extends Resource
                 Forms\Components\Section::make('Classification Details')
                     ->schema([
                         Forms\Components\Select::make('classification_type_id')
-                            ->label('Classification Type')
+                            ->label('Classification type')
                             ->relationship('classificationType', 'name')
                             ->required()
                             ->searchable()
@@ -39,7 +39,7 @@ class ClassificationValueResource extends Resource
                             ->placeholder('Select a classification type'),
 
                         Forms\Components\Select::make('parent_id')
-                            ->label('Parent Value (Optional)')
+                            ->label('Parent value (optional)')
                             ->relationship('parent', 'value', function (Builder $query, Forms\Get $get) {
                                 $typeId = $get('classification_type_id');
                                 if ($typeId) {
@@ -151,7 +151,7 @@ class ClassificationValueResource extends Resource
             ->defaultSort('classificationType.name')
             ->groups([
                 Tables\Grouping\Group::make('classificationType.name')
-                    ->label('Classification Type')
+                    ->label('Classification type')
                     ->collapsible(),
             ]);
     }

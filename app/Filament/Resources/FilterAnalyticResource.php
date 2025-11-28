@@ -19,13 +19,13 @@ class FilterAnalyticResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-funnel';
 
-    protected static ?string $navigationLabel = 'Filter Analytics';
+    protected static ?string $navigationLabel = 'Filter analytics';
 
     protected static ?string $navigationGroup = 'Analytics';
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $pluralLabel = 'Filter Analytics';
+    protected static ?string $pluralLabel = 'Filter analytics';
 
     public static function form(Form $form): Form
     {
@@ -72,12 +72,12 @@ class FilterAnalyticResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->badge()
-                    ->label('Filter Type')
+                    ->label('Filter type')
                     ->formatStateUsing(fn ($state) => ucwords(str_replace('_', ' ', $state))),
                 Tables\Columns\TextColumn::make('filter_value')
                     ->searchable()
                     ->sortable()
-                    ->label('Filter Value')
+                    ->label('Filter value')
                     ->weight('bold'),
                 Tables\Columns\TextColumn::make('user.name')
                     ->sortable()
@@ -90,12 +90,12 @@ class FilterAnalyticResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->label('Used At')
+                    ->label('Used at')
                     ->since(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('filter_type')
-                    ->label('Filter Type')
+                    ->label('Filter type')
                     ->options([
                         'subjects' => 'Subjects',
                         'grades' => 'Grade Levels',
@@ -105,10 +105,10 @@ class FilterAnalyticResource extends Resource
                     ]),
                 Tables\Filters\Filter::make('last_7_days')
                     ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subDays(7)))
-                    ->label('Last 7 Days'),
+                    ->label('Last 7 days'),
                 Tables\Filters\Filter::make('last_30_days')
                     ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subDays(30)))
-                    ->label('Last 30 Days'),
+                    ->label('Last 30 days'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

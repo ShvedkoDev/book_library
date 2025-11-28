@@ -139,11 +139,11 @@ class PageResource extends Resource
                             ->default(true)
                             ->helperText('Toggle to publish or unpublish this page'),
                         Forms\Components\Toggle::make('show_in_navigation')
-                            ->label('Show in Navigation')
+                            ->label('Show in navigation')
                             ->default(true)
                             ->helperText('Toggle to show or hide this page in navigation menus'),
                         Forms\Components\Toggle::make('is_homepage')
-                            ->label('Set as Homepage')
+                            ->label('Set as homepage')
                             ->default(false)
                             ->helperText('This page will be shown at the root URL (/). Only one page can be homepage.')
                             ->reactive()
@@ -157,11 +157,11 @@ class PageResource extends Resource
                                 }
                             }),
                         Forms\Components\DateTimePicker::make('published_at')
-                            ->label('Publish Date')
+                            ->label('Publish date')
                             ->nullable()
                             ->helperText('Leave empty to publish immediately'),
                         Forms\Components\TextInput::make('order')
-                            ->label('Sort Order')
+                            ->label('Sort order')
                             ->numeric()
                             ->default(0)
                             ->minValue(0)
@@ -214,12 +214,12 @@ class PageResource extends Resource
                     ->label('Published')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('published_at')
-                    ->label('Publish Date')
+                    ->label('Publish date')
                     ->dateTime('M j, Y')
                     ->sortable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('parent.title')
-                    ->label('Parent Page')
+                    ->label('Parent page')
                     ->badge()
                     ->color('info')
                     ->sortable()
@@ -237,12 +237,12 @@ class PageResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_published')
-                    ->label('Publication Status')
+                    ->label('Publication status')
                     ->placeholder('All pages')
                     ->trueLabel('Published only')
                     ->falseLabel('Drafts only'),
                 Tables\Filters\SelectFilter::make('parent_id')
-                    ->label('Parent Page')
+                    ->label('Parent page')
                     ->relationship('parent', 'title')
                     ->searchable()
                     ->preload(),
@@ -256,9 +256,9 @@ class PageResource extends Resource
                     ->openUrlInNewTab()
                     ->visible(fn (Page $record): bool => $record->isPublished() && $record->getUrl() !== null),
                 Tables\Actions\Action::make('previewSections')
-                    ->label('Preview Sections')
+                    ->label('Preview sections')
                     ->icon('heroicon-m-list-bullet')
-                    ->modalHeading('Page Sections (H2 Anchors)')
+                    ->modalHeading('Page sections (h2 anchors)')
                     ->modalDescription(fn (Page $record) => "Sections found in: {$record->title}")
                     ->modalContent(function (Page $record) {
                         $sections = $record->extractSections();

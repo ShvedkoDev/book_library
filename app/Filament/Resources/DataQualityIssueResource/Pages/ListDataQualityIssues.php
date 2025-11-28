@@ -16,13 +16,13 @@ class ListDataQualityIssues extends ListRecords
     {
         return [
             Actions\Action::make('run_quality_checks')
-                ->label('Run Quality Checks')
+                ->label('Run quality checks')
                 ->icon('heroicon-o-play')
                 ->color('primary')
                 ->requiresConfirmation()
-                ->modalHeading('Run Data Quality Checks')
+                ->modalHeading('Run data quality checks')
                 ->modalDescription('This will check all books for data quality issues. This may take a few moments.')
-                ->modalSubmitActionLabel('Run Checks')
+                ->modalSubmitActionLabel('Run checks')
                 ->action(function (DataQualityService $qualityService): void {
                     try {
                         // Run quality checks on all books
@@ -52,7 +52,7 @@ class ListDataQualityIssues extends ListRecords
                 }),
 
             Actions\Action::make('view_summary')
-                ->label('View Summary')
+                ->label('View summary')
                 ->icon('heroicon-o-chart-bar')
                 ->color('gray')
                 ->action(function (DataQualityService $qualityService): void {

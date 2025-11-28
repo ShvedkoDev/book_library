@@ -37,13 +37,13 @@ class CollectionResource extends Resource
                 Forms\Components\Section::make('Settings')
                     ->schema([
                         Forms\Components\Toggle::make('is_series')
-                            ->label('Is Series')
+                            ->label('Is series')
                             ->default(false)
                             ->inline(false)
                             ->helperText('Check if this is a numbered series'),
 
                         Forms\Components\TextInput::make('sort_order')
-                            ->label('Sort Order')
+                            ->label('Sort order')
                             ->numeric()
                             ->default(0)
                             ->minValue(0)
@@ -94,7 +94,7 @@ class CollectionResource extends Resource
             ->defaultSort('sort_order')
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_series')
-                    ->label('Series Only'),
+                    ->label('Series only'),
 
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Active'),

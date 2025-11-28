@@ -40,7 +40,7 @@ class CsvImport extends Page implements HasForms
                     ->description('Select a CSV file to import books. The file must match the required format.')
                     ->schema([
                         Forms\Components\FileUpload::make('csv_file')
-                            ->label('CSV File')
+                            ->label('CSV file')
                             ->acceptedFileTypes(['text/csv', 'text/plain', 'application/csv'])
                             ->maxSize(51200) // 50MB
                             ->disk('local')
@@ -54,7 +54,7 @@ class CsvImport extends Page implements HasForms
                     ->description('Configure how the import should be processed')
                     ->schema([
                         Forms\Components\Radio::make('mode')
-                            ->label('Import Mode')
+                            ->label('Import mode')
                             ->options([
                                 'upsert' => 'Upsert (Create new or update existing)',
                                 'create_only' => 'Create Only (Skip existing books)',
@@ -74,12 +74,12 @@ class CsvImport extends Page implements HasForms
                         Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\Checkbox::make('create_missing_relations')
-                                    ->label('Create Missing Relations')
+                                    ->label('Create missing relations')
                                     ->helperText('Auto-create collections, publishers, and creators if they don\'t exist')
                                     ->default(true),
 
                                 Forms\Components\Checkbox::make('skip_invalid_rows')
-                                    ->label('Skip Invalid Rows')
+                                    ->label('Skip invalid rows')
                                     ->helperText('Continue import even if some rows have errors')
                                     ->default(true),
                             ]),
@@ -119,7 +119,7 @@ class CsvImport extends Page implements HasForms
 
         if (empty($data['csv_file'])) {
             Notification::make()
-                ->title('Validation Error')
+                ->title('Validation error')
                 ->body('Please select a CSV file to import.')
                 ->danger()
                 ->send();
@@ -180,7 +180,7 @@ class CsvImport extends Page implements HasForms
 
         } catch (\Exception $e) {
             Notification::make()
-                ->title('Validation Error')
+                ->title('Validation error')
                 ->body('Failed to validate CSV file: ' . $e->getMessage())
                 ->danger()
                 ->send();
@@ -242,7 +242,7 @@ class CsvImport extends Page implements HasForms
                     ->persistent()
                     ->actions([
                         \Filament\Notifications\Actions\Action::make('view')
-                            ->label('View Full Details')
+                            ->label('View full details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
                             ->button(),
                     ])
@@ -255,7 +255,7 @@ class CsvImport extends Page implements HasForms
                     ->duration(10000)
                     ->actions([
                         \Filament\Notifications\Actions\Action::make('view')
-                            ->label('View Details')
+                            ->label('View details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
                             ->button(),
                     ])
@@ -279,7 +279,7 @@ class CsvImport extends Page implements HasForms
     {
         return [
             Forms\Components\Actions\Action::make('validateCsv')
-                ->label('Validate Only')
+                ->label('Validate only')
                 ->icon('heroicon-o-check-circle')
                 ->color('info')
                 ->action('validateCsv'),
@@ -290,9 +290,9 @@ class CsvImport extends Page implements HasForms
                 ->color('success')
                 ->action('import')
                 ->requiresConfirmation()
-                ->modalHeading('Confirm Import')
+                ->modalHeading('Confirm import')
                 ->modalDescription('Are you sure you want to import this CSV file? This action cannot be undone.')
-                ->modalSubmitActionLabel('Yes, Import'),
+                ->modalSubmitActionLabel('Yes, import'),
         ];
     }
 }

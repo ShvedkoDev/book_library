@@ -32,7 +32,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
 
     protected static ?string $navigationGroup = 'Media';
 
-    protected static ?string $navigationLabel = 'Page Assets';
+    protected static ?string $navigationLabel = 'Page assets';
 
     protected static ?int $navigationSort = 2;
 
@@ -53,7 +53,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
                     ->description('Upload images and documents for use in pages')
                     ->schema([
                         FileUpload::make('media')
-                            ->label('Images & Documents')
+                            ->label('Images & documents')
                             ->disk('public')
                             ->directory('page-media')
                             ->acceptedFileTypes([
@@ -90,7 +90,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
                     ->size(60)
                     ->checkFileExistence(false),
                 TextColumn::make('filename')
-                    ->label('File Name')
+                    ->label('File name')
                     ->searchable()
                     ->sortable()
                     ->description(fn ($record) => $record->path)
@@ -110,11 +110,11 @@ class PageMediaManager extends Page implements HasForms, HasTable
                     ->formatStateUsing(fn ($state) => $this->formatBytes($state))
                     ->sortable(),
                 TextColumn::make('modified')
-                    ->label('Last Modified')
+                    ->label('Last modified')
                     ->dateTime('M j, Y g:i A')
                     ->sortable(),
                 TextColumn::make('pages_count')
-                    ->label('Used By')
+                    ->label('Used by')
                     ->badge()
                     ->color(fn ($state) => $state > 0 ? 'success' : 'gray')
                     ->formatStateUsing(fn ($state) => $state . ' page(s)'),
@@ -141,9 +141,9 @@ class PageMediaManager extends Page implements HasForms, HasTable
                             ->send();
                     }),
                 Action::make('pages')
-                    ->label('Show Pages')
+                    ->label('Show pages')
                     ->icon('heroicon-m-document-text')
-                    ->modalHeading('Pages Using This File')
+                    ->modalHeading('Pages using this file')
                     ->modalDescription(fn ($record) => $record->filename)
                     ->modalContent(fn ($record) => view('filament.pages.media-usage', [
                         'items' => $this->getPagesUsingFile($record->path),
@@ -158,7 +158,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
                     ->action(fn ($record) => Storage::disk('public')->download($record->path, $record->filename)),
                 DeleteAction::make()
                     ->label('Delete')
-                    ->modalHeading('Delete Media File')
+                    ->modalHeading('Delete media file')
                     ->modalDescription(function ($record) {
                         if ($record->pages_count > 0) {
                             return "⚠️ WARNING: This file is currently used by {$record->pages_count} page(s).\n\nDeleting this file will break the images/links on those pages and the content will no longer display correctly.\n\nAre you absolutely sure you want to continue?";

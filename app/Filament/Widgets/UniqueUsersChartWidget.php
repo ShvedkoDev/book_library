@@ -7,7 +7,7 @@ use Filament\Widgets\ChartWidget;
 
 class UniqueUsersChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Unique Users Over Time';
+    protected static ?string $heading = 'Unique users over time';
     protected static ?int $sort = 9;
 
     protected function getData(): array

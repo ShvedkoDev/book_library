@@ -11,7 +11,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class RecentActivityWidget extends BaseWidget
 {
-    protected static ?string $heading = 'Recent Activity';
+    protected static ?string $heading = 'Recent activity';
     protected static ?int $sort = 10;
     protected int | string | array $columnSpan = 'full';
 

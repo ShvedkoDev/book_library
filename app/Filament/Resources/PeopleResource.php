@@ -160,7 +160,7 @@ class PeopleResource extends Resource
             ->filters([
                 Tables\Filters\Filter::make('has_books')
                     ->query(fn (Builder $query): Builder => $query->has('bookCreators'))
-                    ->label('Has Books')
+                    ->label('Has books')
                     ->toggle(),
 
                 Tables\Filters\SelectFilter::make('role')
@@ -193,7 +193,7 @@ class PeopleResource extends Resource
                     ->searchable(),
 
                 Tables\Filters\Filter::make('micronesian')
-                    ->label('Micronesian Contributors')
+                    ->label('Micronesian contributors')
                     ->query(fn (Builder $query): Builder =>
                         $query->where(function ($q) {
                             $q->where('nationality', 'like', '%Micronesian%')
@@ -222,7 +222,7 @@ class PeopleResource extends Resource
             ->emptyStateDescription('Start by adding authors, illustrators, editors, and other contributors.')
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make()
-                    ->label('Add Person'),
+                    ->label('Add person'),
             ]);
     }
 

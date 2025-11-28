@@ -43,7 +43,7 @@ class PublisherResource extends Resource
                     ->maxLength(255),
 
                 Forms\Components\TextInput::make('program_name')
-                    ->label('Program/Project Name')
+                    ->label('Program/project name')
                     ->maxLength(255)
                     ->placeholder('e.g., Teacher Development Program')
                     ->helperText('Department, series, or specific program'),

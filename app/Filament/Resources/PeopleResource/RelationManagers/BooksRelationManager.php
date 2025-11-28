@@ -45,7 +45,7 @@ class BooksRelationManager extends RelationManager
                     }),
 
                 Tables\Columns\TextColumn::make('pivot.role_description')
-                    ->label('Role Description')
+                    ->label('Role description')
                     ->placeholder('-')
                     ->toggleable(),
 

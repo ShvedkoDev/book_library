@@ -79,7 +79,7 @@ class UserResource extends Resource
                 Section::make('Library Access')
                     ->schema([
                         Select::make('role')
-                            ->label('User Role')
+                            ->label('User role')
                             ->options([
                                 'user' => 'Regular User',
                                 'admin' => 'Administrator',
@@ -97,7 +97,7 @@ class UserResource extends Resource
                 Section::make('CMS Access')
                     ->schema([
                         Forms\Components\Toggle::make('is_cms_user')
-                            ->label('CMS User')
+                            ->label('Cms user')
                             ->helperText('Allow this user to access the CMS'),
                     ])->columns(2)
                     ->collapsible()
@@ -151,12 +151,12 @@ class UserResource extends Resource
                     ->toggleable(),
 
                 Tables\Columns\IconColumn::make('is_cms_user')
-                    ->label('CMS User')
+                    ->label('Cms user')
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('cmsRoles.display_name')
-                    ->label('CMS Roles')
+                    ->label('Cms roles')
                     ->badge()
                     ->separator(',')
                     ->color('info'),
@@ -166,7 +166,7 @@ class UserResource extends Resource
                     ->boolean(),
 
                 Tables\Columns\TextColumn::make('last_cms_access')
-                    ->label('Last CMS Access')
+                    ->label('Last cms access')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(),
@@ -178,7 +178,7 @@ class UserResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('role')
-                    ->label('User Role')
+                    ->label('User role')
                     ->options([
                         'user' => 'Regular User',
                         'admin' => 'Administrator',
@@ -192,24 +192,24 @@ class UserResource extends Resource
                     ]),
 
                 SelectFilter::make('is_cms_user')
-                    ->label('CMS Users')
+                    ->label('Cms users')
                     ->options([
                         1 => 'CMS Users Only',
                         0 => 'Non-CMS Users Only',
                     ]),
 
                 SelectFilter::make('cms_roles')
-                    ->label('CMS Role')
+                    ->label('Cms role')
                     ->relationship('cmsRoles', 'display_name')
                     ->multiple(),
             ])
             ->actions([
                 Tables\Actions\Action::make('assign_role')
-                    ->label('Assign Role')
+                    ->label('Assign role')
                     ->icon('heroicon-o-user-plus')
                     ->form([
                         Forms\Components\DatePicker::make('expires_at')
-                            ->label('Expires At')
+                            ->label('Expires at')
                             ->helperText('Leave empty for permanent assignment'),
                     ]),
 

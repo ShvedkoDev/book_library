@@ -28,7 +28,7 @@ class SettingResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('key')
-                    ->label('Setting Key')
+                    ->label('Setting key')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255)
@@ -49,7 +49,7 @@ class SettingResource extends Resource
                     ->default('general'),
 
                 Forms\Components\Select::make('type')
-                    ->label('Value Type')
+                    ->label('Value type')
                     ->options([
                         'string' => 'String',
                         'text' => 'Text (Long)',
@@ -98,7 +98,7 @@ class SettingResource extends Resource
 
                 // JSON input
                 Forms\Components\Textarea::make('value')
-                    ->label('Value (JSON)')
+                    ->label('Value (json)')
                     ->rows(5)
                     ->columnSpanFull()
                     ->helperText('Enter valid JSON format')
@@ -158,7 +158,7 @@ class SettingResource extends Resource
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Last Updated')
+                    ->label('Last updated')
                     ->dateTime()
                     ->sortable()
                     ->since(),

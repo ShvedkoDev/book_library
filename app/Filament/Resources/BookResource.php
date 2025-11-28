@@ -45,7 +45,7 @@ class BookResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Placeholder::make('duplication_info')
-                    ->label('Duplication Information')
+                    ->label('Duplication information')
                     ->content(fn ($record) => $record && $record->isDuplicate()
                         ? view('filament.components.duplication-info', [
                             'record' => $record,
@@ -67,7 +67,7 @@ class BookResource extends Resource
                             ->helperText('CSV: ID - Internal unique identifier'),
 
                         Forms\Components\TextInput::make('palm_code')
-                            ->label('PALM Code')
+                            ->label('PALM code')
                             ->unique(ignoreRecord: true)
                             ->maxLength(100)
                             ->placeholder('PALM catalog code')
@@ -76,7 +76,7 @@ class BookResource extends Resource
                     ->columns(2)
                     ->collapsible(),
 
-                Forms\Components\Section::make('Basic Information')
+                Forms\Components\Section::make('Basic information')
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->required()
@@ -90,14 +90,14 @@ class BookResource extends Resource
                             ->columnSpanFull(),
 
                         Forms\Components\TextInput::make('translated_title')
-                            ->label('Translated Title')
+                            ->label('Translated title')
                             ->maxLength(500)
                             ->placeholder('Title in another language')
                             ->helperText('CSV: Translated-title')
                             ->columnSpanFull(),
 
                         Forms\Components\Select::make('physical_type')
-                            ->label('Physical Type')
+                            ->label('Physical type')
                             ->options([
                                 'book' => 'Book',
                                 'journal' => 'Journal',
@@ -112,7 +112,7 @@ class BookResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Publishing Details')
+                Forms\Components\Section::make('Publishing details')
                     ->schema([
                         Forms\Components\Select::make('publisher_id')
                             ->label('Publisher')
@@ -147,7 +147,7 @@ class BookResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Content & Description')
+                Forms\Components\Section::make('Content & description')
                     ->schema([
                         Forms\Components\Textarea::make('abstract')
                             ->label('Abstract')
@@ -164,32 +164,32 @@ class BookResource extends Resource
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('toc')
-                            ->label('Table of Contents')
+                            ->label('Table of contents')
                             ->rows(4)
                             ->placeholder('List of chapters or sections')
                             ->helperText('CSV: TOC')
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('notes_issue')
-                            ->label('Notes - Issue')
+                            ->label('Notes - issue')
                             ->rows(3)
                             ->placeholder('Notes related to the issue/edition')
                             ->helperText('CSV: Notes related to the issue'),
 
                         Forms\Components\Textarea::make('notes_version')
-                            ->label('Notes - Version')
+                            ->label('Notes - version')
                             ->rows(3)
                             ->placeholder('Notes related to the version')
                             ->helperText('CSV: Notes related to version'),
 
                         Forms\Components\Textarea::make('notes_content')
-                            ->label('Notes - Content')
+                            ->label('Notes - content')
                             ->rows(3)
                             ->placeholder('Notes about the content')
                             ->helperText('CSV: Notes related to content'),
 
                         Forms\Components\Textarea::make('contact')
-                            ->label('Contact / Ordering Info')
+                            ->label('Contact / ordering info')
                             ->rows(2)
                             ->placeholder('Hard copy ordering information')
                             ->helperText('CSV: CONTACT - Hard copy ordering info')
@@ -198,16 +198,16 @@ class BookResource extends Resource
                     ->columns(2)
                     ->collapsible(),
 
-                Forms\Components\Section::make('Educational Standards')
+                Forms\Components\Section::make('Educational standards')
                     ->schema([
                         Forms\Components\TextInput::make('vla_standard')
-                            ->label('VLA Standard')
+                            ->label('VLA standard')
                             ->maxLength(255)
                             ->placeholder('Vernacular Literacy Assessment standard')
                             ->helperText('CSV: VLA standard'),
 
                         Forms\Components\TextInput::make('vla_benchmark')
-                            ->label('VLA Benchmark')
+                            ->label('VLA benchmark')
                             ->maxLength(255)
                             ->placeholder('Vernacular Literacy Assessment benchmark')
                             ->helperText('CSV: VLA benchmark'),
@@ -215,13 +215,13 @@ class BookResource extends Resource
                     ->columns(2)
                     ->collapsible(),
 
-                Forms\Components\Section::make('Access & Settings')
+                Forms\Components\Section::make('Access & settings')
                     ->schema([
                         Forms\Components\Select::make('access_level')
-                            ->label('Access Level')
+                            ->label('Access level')
                             ->options([
-                                'full' => 'Full Access',
-                                'limited' => 'Limited Access',
+                                'full' => 'Full access',
+                                'limited' => 'Limited access',
                                 'unavailable' => 'Unavailable',
                             ])
                             ->default('unavailable')
@@ -242,7 +242,7 @@ class BookResource extends Resource
                             ->helperText('Visible in library'),
 
                         Forms\Components\TextInput::make('sort_order')
-                            ->label('Sort Order')
+                            ->label('Sort order')
                             ->numeric()
                             ->default(0)
                             ->helperText('Lower numbers appear first'),
@@ -270,7 +270,7 @@ class BookResource extends Resource
                             ->helperText('Authors, illustrators, translators'),
 
                         Forms\Components\Select::make('geographicLocations')
-                            ->label('Geographic Locations')
+                            ->label('Geographic locations')
                             ->relationship('geographicLocations', 'name')
                             ->multiple()
                             ->searchable()
@@ -338,7 +338,7 @@ class BookResource extends Resource
                             ->helperText('CSV: Type'),
 
                         Forms\Components\Select::make('themesClassifications')
-                            ->label('Themes/Uses')
+                            ->label('Themes/uses')
                             ->relationship(
                                 'themesClassifications',
                                 'value',
@@ -352,7 +352,7 @@ class BookResource extends Resource
                             ->helperText('CSV: Themes/Uses'),
 
                         Forms\Components\Select::make('learnerLevelClassifications')
-                            ->label('Learner Level')
+                            ->label('Learner level')
                             ->relationship(
                                 'learnerLevelClassifications',
                                 'value',
@@ -373,23 +373,23 @@ class BookResource extends Resource
                         Forms\Components\TagsInput::make('keyword_list')
                             ->label('Keywords')
                             ->placeholder('Add keywords')
-                            ->helperText('CSV: Keywords - Press Enter after each keyword')
+                            ->helperText('CSV: Keywords - Press enter after each keyword')
                             ->columnSpanFull(),
                     ])
                     ->collapsible(),
 
-                Forms\Components\Section::make('Book Files')
+                Forms\Components\Section::make('Book files')
                     ->schema([
                         Forms\Components\Repeater::make('files')
                             ->relationship('files')
                             ->schema([
                                 Forms\Components\Select::make('file_type')
-                                    ->label('File Type')
+                                    ->label('File type')
                                     ->options([
-                                        'pdf' => 'PDF Document',
-                                        'thumbnail' => 'Thumbnail Image',
-                                        'audio' => 'Audio File',
-                                        'video' => 'Video (External URL)',
+                                        'pdf' => 'PDF document',
+                                        'thumbnail' => 'Thumbnail image',
+                                        'audio' => 'Audio file',
+                                        'video' => 'Video (external URL)',
                                     ])
                                     ->required()
                                     ->reactive()
@@ -424,14 +424,14 @@ class BookResource extends Resource
                                     ->columnSpan(2),
 
                                 Forms\Components\TextInput::make('digital_source')
-                                    ->label('Digital Source')
+                                    ->label('Digital source')
                                     ->maxLength(255)
                                     ->placeholder('Where the file came from')
                                     ->helperText('CSV: DIGITAL SOURCE / ALTERNATIVE DIGITAL SOURCE')
                                     ->columnSpan(2),
 
                                 Forms\Components\TextInput::make('filename')
-                                    ->label('Original Filename')
+                                    ->label('Original filename')
                                     ->maxLength(255)
                                     ->disabled()
                                     ->dehydrated(false)
@@ -445,32 +445,32 @@ class BookResource extends Resource
                             ])
                             ->columns(2)
                             ->defaultItems(0)
-                            ->addActionLabel('Add File')
+                            ->addActionLabel('Add file')
                             ->reorderable()
                             ->collapsible()
                             ->columnSpanFull(),
                     ])
                     ->collapsible(),
 
-                Forms\Components\Section::make('Book Relationships')
+                Forms\Components\Section::make('Book relationships')
                     ->schema([
                         Forms\Components\Repeater::make('bookRelationships')
                             ->relationship('bookRelationships')
                             ->schema([
                                 Forms\Components\Select::make('relationship_type')
-                                    ->label('Relationship Type')
+                                    ->label('Relationship type')
                                     ->options([
-                                        'same_version' => 'Same Version (Related same)',
-                                        'same_language' => 'Same Language (Omnibus)',
-                                        'supporting' => 'Supporting Material',
-                                        'other_language' => 'Other Language Version',
+                                        'same_version' => 'Same version (related same)',
+                                        'same_language' => 'Same language (omnibus)',
+                                        'supporting' => 'Supporting material',
+                                        'other_language' => 'Other language version',
                                     ])
                                     ->required()
                                     ->helperText('CSV: Related (same), Related (omnibus), Related (support), Related (same title, different language)')
                                     ->columnSpan(1),
 
                                 Forms\Components\Select::make('related_book_id')
-                                    ->label('Related Book')
+                                    ->label('Related book')
                                     ->relationship('relatedBook', 'title')
                                     ->searchable()
                                     ->preload()
@@ -479,7 +479,7 @@ class BookResource extends Resource
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('relationship_code')
-                                    ->label('Relationship Code')
+                                    ->label('Relationship code')
                                     ->maxLength(100)
                                     ->placeholder('Group code for related books')
                                     ->helperText('Used to group related books together')
@@ -493,14 +493,14 @@ class BookResource extends Resource
                             ])
                             ->columns(2)
                             ->defaultItems(0)
-                            ->addActionLabel('Add Related Book')
+                            ->addActionLabel('Add related book')
                             ->reorderable()
                             ->collapsible()
                             ->columnSpanFull(),
                     ])
                     ->collapsible(),
 
-                Forms\Components\Section::make('Library References')
+                Forms\Components\Section::make('Library references')
                     ->schema([
                         Forms\Components\Repeater::make('libraryReferences')
                             ->relationship('libraryReferences')
@@ -516,27 +516,27 @@ class BookResource extends Resource
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('library_name')
-                                    ->label('Library Name')
+                                    ->label('Library name')
                                     ->maxLength(255)
                                     ->placeholder('Full library name')
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('reference_number')
-                                    ->label('Reference Number')
+                                    ->label('Reference number')
                                     ->maxLength(100)
                                     ->placeholder('Library reference number')
                                     ->helperText('CSV: UH hard copy ref / COM hard copy ref')
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('call_number')
-                                    ->label('Call Number')
+                                    ->label('Call number')
                                     ->maxLength(100)
                                     ->placeholder('Library call number')
                                     ->helperText('CSV: UH hard copy call number / COM hard copy call number')
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('catalog_link')
-                                    ->label('Catalog Link')
+                                    ->label('Catalog link')
                                     ->url()
                                     ->maxLength(500)
                                     ->placeholder('https://...')
@@ -552,7 +552,7 @@ class BookResource extends Resource
                             ])
                             ->columns(2)
                             ->defaultItems(0)
-                            ->addActionLabel('Add Library Reference')
+                            ->addActionLabel('Add library reference')
                             ->collapsible()
                             ->columnSpanFull(),
                     ])
@@ -671,8 +671,8 @@ class BookResource extends Resource
 
                 Tables\Filters\SelectFilter::make('access_level')
                     ->options([
-                        'full' => 'Full Access',
-                        'limited' => 'Limited Access',
+                        'full' => 'Full access',
+                        'limited' => 'Limited access',
                         'unavailable' => 'Unavailable'
                     ])
                     ->multiple(),
@@ -691,7 +691,7 @@ class BookResource extends Resource
                     ->icon('heroicon-o-document-duplicate')
                     ->color('info')
                     ->requiresConfirmation()
-                    ->modalHeading('Duplicate Book')
+                    ->modalHeading('Duplicate book')
                     ->modalDescription(fn ($record) => "Create a copy of \"{$record->title}\" with all relationships and classifications.")
                     ->modalSubmitActionLabel('Duplicate')
                     ->action(function ($record) {
@@ -702,7 +702,7 @@ class BookResource extends Resource
                             if (!$validation['valid']) {
                                 \Filament\Notifications\Notification::make()
                                     ->danger()
-                                    ->title('Cannot Duplicate Book')
+                                    ->title('Cannot duplicate book')
                                     ->body(implode("\n", $validation['errors']))
                                     ->persistent()
                                     ->send();
@@ -718,15 +718,15 @@ class BookResource extends Resource
                             // Success notification with link to edit the duplicate
                             \Filament\Notifications\Notification::make()
                                 ->success()
-                                ->title('Book Duplicated Successfully!')
+                                ->title('Book duplicated successfully!')
                                 ->body("Created duplicate of \"{$record->title}\". Click to edit the new book.")
                                 ->actions([
                                     \Filament\Notifications\Actions\Action::make('edit')
-                                        ->label('Edit New Book')
+                                        ->label('Edit new book')
                                         ->url(static::getUrl('edit', ['record' => $duplicate->id]))
                                         ->button(),
                                     \Filament\Notifications\Actions\Action::make('view')
-                                        ->label('View List')
+                                        ->label('View list')
                                         ->url(static::getUrl('index'))
                                         ->button(),
                                 ])
@@ -736,7 +736,7 @@ class BookResource extends Resource
                         } catch (\Exception $e) {
                             \Filament\Notifications\Notification::make()
                                 ->danger()
-                                ->title('Duplication Failed')
+                                ->title('Duplication failed')
                                 ->body($e->getMessage())
                                 ->persistent()
                                 ->send();
@@ -749,13 +749,13 @@ class BookResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\BulkAction::make('duplicate')
-                        ->label('Duplicate Selected')
+                        ->label('Duplicate selected')
                         ->icon('heroicon-o-document-duplicate')
                         ->color('info')
                         ->requiresConfirmation()
-                        ->modalHeading('Duplicate Multiple Books')
+                        ->modalHeading('Duplicate multiple books')
                         ->modalDescription(fn ($records) => "You are about to duplicate " . count($records) . " book(s). Each book will be copied with all its relationships and classifications.")
-                        ->modalSubmitActionLabel('Duplicate All')
+                        ->modalSubmitActionLabel('Duplicate all')
                         ->action(function ($records) {
                             $duplicationService = app(\App\Services\BookDuplicationService::class);
                             $bookIds = $records->pluck('id')->toArray();
@@ -772,7 +772,7 @@ class BookResource extends Resource
                                 if ($successCount > 0) {
                                     \Filament\Notifications\Notification::make()
                                         ->success()
-                                        ->title("Duplicated {$successCount} Book(s)")
+                                        ->title("Duplicated {$successCount} book(s)")
                                         ->body($failedCount > 0 ? "{$failedCount} book(s) failed to duplicate." : "All books duplicated successfully!")
                                         ->persistent()
                                         ->send();
@@ -785,7 +785,7 @@ class BookResource extends Resource
 
                                     \Filament\Notifications\Notification::make()
                                         ->danger()
-                                        ->title('Some Duplications Failed')
+                                        ->title('Some duplications failed')
                                         ->body($errorMessages)
                                         ->persistent()
                                         ->send();
@@ -794,7 +794,7 @@ class BookResource extends Resource
                             } catch (\Exception $e) {
                                 \Filament\Notifications\Notification::make()
                                     ->danger()
-                                    ->title('Bulk Duplication Failed')
+                                    ->title('Bulk duplication failed')
                                     ->body($e->getMessage())
                                     ->persistent()
                                     ->send();

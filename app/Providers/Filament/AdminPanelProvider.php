@@ -32,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandLogo(fn () => view('filament.admin.brand-logo'))
             ->brandName('Micronesian Teachers Digital Library')
             ->colors([
                 'primary' => Color::hex('#009877'),    // COE green

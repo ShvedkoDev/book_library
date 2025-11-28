@@ -63,7 +63,7 @@ class ResourceContributorResource extends Resource
                             ->default(true)
                             ->helperText('Toggle to show/hide contributor on pages'),
                         Forms\Components\TextInput::make('order')
-                            ->label('Sort Order')
+                            ->label('Sort order')
                             ->numeric()
                             ->default(0)
                             ->minValue(0)
@@ -112,7 +112,7 @@ class ResourceContributorResource extends Resource
             ])
             ->actions([
                 Tables\Actions\Action::make('viewPages')
-                    ->label('View Pages')
+                    ->label('View pages')
                     ->icon('heroicon-m-document-text')
                     ->modalHeading(fn (ResourceContributor $record) => "Pages using: {$record->name}")
                     ->modalContent(function (ResourceContributor $record) {

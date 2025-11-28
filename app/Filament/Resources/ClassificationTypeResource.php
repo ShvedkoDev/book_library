@@ -54,13 +54,13 @@ class ClassificationTypeResource extends Resource
                 Forms\Components\Section::make('Configuration')
                     ->schema([
                         Forms\Components\Toggle::make('allow_multiple')
-                            ->label('Allow Multiple Values')
+                            ->label('Allow multiple values')
                             ->helperText('Can a book have multiple values for this type?')
                             ->default(true)
                             ->inline(false),
 
                         Forms\Components\Toggle::make('use_for_filtering')
-                            ->label('Use in Search Filters')
+                            ->label('Use in search filters')
                             ->helperText('Show this classification in library filters?')
                             ->default(true)
                             ->inline(false),
@@ -130,7 +130,7 @@ class ClassificationTypeResource extends Resource
                     ->falseLabel('Inactive only'),
 
                 Tables\Filters\TernaryFilter::make('use_for_filtering')
-                    ->label('Used in Filters'),
+                    ->label('Used in filters'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

@@ -32,7 +32,7 @@ class BooksMediaManager extends Page implements HasForms, HasTable
 
     protected static ?string $navigationGroup = 'Media';
 
-    protected static ?string $navigationLabel = 'Books (PDFs)';
+    protected static ?string $navigationLabel = 'Books (pdfs)';
 
     protected static ?int $navigationSort = 1;
 
@@ -53,7 +53,7 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                     ->description('Upload PDF files for your book library')
                     ->schema([
                         FileUpload::make('books')
-                            ->label('PDF Files')
+                            ->label('PDF files')
                             ->disk('public')
                             ->directory('books')
                             ->acceptedFileTypes(['application/pdf'])
@@ -75,7 +75,7 @@ class BooksMediaManager extends Page implements HasForms, HasTable
             ->paginated(false) // Disable pagination since we're loading all files
             ->columns([
                 TextColumn::make('filename')
-                    ->label('File Name')
+                    ->label('File name')
                     ->searchable()
                     ->sortable()
                     ->description(fn ($record) => $record->path)
@@ -98,11 +98,11 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                     ->formatStateUsing(fn ($state) => $this->formatBytes($state))
                     ->sortable(),
                 TextColumn::make('modified')
-                    ->label('Last Modified')
+                    ->label('Last modified')
                     ->dateTime('M j, Y g:i A')
                     ->sortable(),
                 TextColumn::make('books_count')
-                    ->label('Used By')
+                    ->label('Used by')
                     ->badge()
                     ->color(fn ($state) => $state > 0 ? 'success' : 'gray')
                     ->formatStateUsing(fn ($state) => $state . ' book(s)'),
@@ -114,9 +114,9 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                     ->url(fn ($record) => Storage::disk('public')->url($record->path))
                     ->openUrlInNewTab(),
                 Action::make('books')
-                    ->label('Show Books')
+                    ->label('Show books')
                     ->icon('heroicon-m-book-open')
-                    ->modalHeading('Books Using This PDF')
+                    ->modalHeading('Books using this PDF')
                     ->modalDescription(fn ($record) => $record->filename)
                     ->modalContent(fn ($record) => view('filament.pages.media-usage', [
                         'items' => $this->getBooksUsingFile($record->path),
@@ -131,7 +131,7 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                     ->action(fn ($record) => Storage::disk('public')->download($record->path, $record->filename)),
                 DeleteAction::make()
                     ->label('Delete')
-                    ->modalHeading('Delete File')
+                    ->modalHeading('Delete file')
                     ->modalDescription(function ($record) {
                         if ($record->books_count > 0) {
                             return "⚠️ WARNING: This file is currently used by {$record->books_count} book(s).\n\nDeleting this file will break the book references and the PDF will no longer be accessible from those books.\n\nAre you absolutely sure you want to continue?";

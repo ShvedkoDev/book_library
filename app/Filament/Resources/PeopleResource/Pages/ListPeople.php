@@ -14,7 +14,7 @@ class ListPeople extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Add Person'),
+                ->label('Add person'),
         ];
     }
 }

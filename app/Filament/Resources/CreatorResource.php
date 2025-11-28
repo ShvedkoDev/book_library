@@ -131,7 +131,7 @@ class CreatorResource extends Resource
             ->filters([
                 Tables\Filters\Filter::make('has_books')
                     ->query(fn (Builder $query): Builder => $query->has('bookCreators'))
-                    ->label('Has Books'),
+                    ->label('Has books'),
 
                 Tables\Filters\SelectFilter::make('nationality')
                     ->options(fn (): array =>

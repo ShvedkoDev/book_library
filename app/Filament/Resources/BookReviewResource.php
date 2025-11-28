@@ -84,9 +84,9 @@ class BookReviewResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_approved')
-                    ->label('Approval Status'),
+                    ->label('Approval status'),
                 Tables\Filters\TernaryFilter::make('is_active')
-                    ->label('Active Status'),
+                    ->label('Active status'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

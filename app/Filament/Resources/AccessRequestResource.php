@@ -42,20 +42,20 @@ class AccessRequestResource extends Resource
                     ->disabled(fn ($record) => $record !== null),
 
                 Forms\Components\TextInput::make('name')
-                    ->label('Requester Name')
+                    ->label('Requester name')
                     ->required()
                     ->maxLength(255)
                     ->disabled(fn ($record) => $record !== null),
 
                 Forms\Components\TextInput::make('email')
-                    ->label('Requester Email')
+                    ->label('Requester email')
                     ->email()
                     ->required()
                     ->maxLength(255)
                     ->disabled(fn ($record) => $record !== null),
 
                 Forms\Components\Textarea::make('message')
-                    ->label('Request Message')
+                    ->label('Request message')
                     ->rows(3)
                     ->columnSpanFull()
                     ->disabled(fn ($record) => $record !== null),
@@ -73,7 +73,7 @@ class AccessRequestResource extends Resource
                     ->reactive(),
 
                 Forms\Components\Textarea::make('admin_notes')
-                    ->label('Admin Notes')
+                    ->label('Admin notes')
                     ->rows(3)
                     ->columnSpanFull()
                     ->helperText('Internal notes about this request'),
@@ -132,7 +132,7 @@ class AccessRequestResource extends Resource
                     ->description(fn ($record) => $record->created_at->format('Y-m-d H:i')),
 
                 Tables\Columns\TextColumn::make('reviewer.name')
-                    ->label('Reviewed By')
+                    ->label('Reviewed by')
                     ->placeholder('Not reviewed')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -149,9 +149,9 @@ class AccessRequestResource extends Resource
                 Tables\Filters\Filter::make('created_at')
                     ->form([
                         Forms\Components\DatePicker::make('created_from')
-                            ->label('From Date'),
+                            ->label('From date'),
                         Forms\Components\DatePicker::make('created_until')
-                            ->label('Until Date'),
+                            ->label('Until date'),
                     ])
                     ->query(function ($query, array $data) {
                         return $query

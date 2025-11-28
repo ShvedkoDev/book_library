@@ -19,7 +19,7 @@ class SearchQueryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-magnifying-glass';
 
-    protected static ?string $navigationLabel = 'Search Analytics';
+    protected static ?string $navigationLabel = 'Search analytics';
 
     protected static ?string $navigationGroup = 'Analytics';
 
@@ -66,7 +66,7 @@ class SearchQueryResource extends Resource
                 Tables\Columns\TextColumn::make('query')
                     ->searchable()
                     ->sortable()
-                    ->label('Search Query')
+                    ->label('Search query')
                     ->weight('bold'),
                 Tables\Columns\TextColumn::make('results_count')
                     ->numeric()
@@ -85,19 +85,19 @@ class SearchQueryResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->label('Searched At')
+                    ->label('Searched at')
                     ->since(),
             ])
             ->filters([
                 Tables\Filters\Filter::make('zero_results')
                     ->query(fn (Builder $query): Builder => $query->where('results_count', 0))
-                    ->label('Zero Results'),
+                    ->label('Zero results'),
                 Tables\Filters\Filter::make('last_7_days')
                     ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subDays(7)))
-                    ->label('Last 7 Days'),
+                    ->label('Last 7 days'),
                 Tables\Filters\Filter::make('last_30_days')
                     ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subDays(30)))
-                    ->label('Last 30 Days'),
+                    ->label('Last 30 days'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
