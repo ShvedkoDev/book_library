@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Book interactions (rating, review, access request)
     Route::post('/library/book/{book}/request-access', [LibraryController::class, 'requestAccess'])->name('library.request-access');
     Route::post('/library/book/{book}/rate', [LibraryController::class, 'submitRating'])->name('library.rate');
+    Route::delete('/library/book/{book}/rate', [LibraryController::class, 'deleteRating'])->name('library.rate.delete');
     Route::post('/library/book/{book}/review', [LibraryController::class, 'submitReview'])->name('library.review');
     Route::put('/library/reviews/{review}', [BookReviewController::class, 'update'])->name('library.reviews.update');
     Route::delete('/library/reviews/{review}', [BookReviewController::class, 'destroy'])->name('library.reviews.destroy');

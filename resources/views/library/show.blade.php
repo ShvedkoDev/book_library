@@ -161,7 +161,7 @@
     }
 
     .book-action-btn {
-        padding: 9px 20px;
+        padding: 0 20px;
         border: none;
         border-radius: 22px;
         cursor: pointer;
@@ -179,6 +179,8 @@
         font-family: var(--wp--preset--font-family--proxima-nova);
         white-space: nowrap;
         box-sizing: border-box;
+        height: 44px;
+        min-height: 44px;
     }
 
     .book-action-btn.btn-primary {
@@ -227,7 +229,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.15rem;
         margin: 0.5rem;
     }
 
@@ -237,14 +239,25 @@
         padding: 0;
         cursor: pointer;
         color: #ddd;
-        font-size: 1.75rem;
+        font-size: 1.4rem;
         transition: color 0.2s ease;
         line-height: 1;
+        text-decoration: none;
     }
 
     .star-rating-row .star-btn:hover,
     .star-rating-row .star-btn.active {
         color: #ffc107;
+    }
+
+    /* Ensure anchor tag stars don't show default blue link color */
+    .star-rating-row a.star-btn {
+        color: #ddd;
+        text-decoration: none;
+    }
+
+    .star-rating-row a.star-btn:visited {
+        color: #ddd;
     }
 
     /* Action Icons Row */
@@ -264,7 +277,7 @@
         gap: 0.25rem;
         cursor: pointer;
         text-decoration: none;
-        color: #666;
+        color: #999;
         transition: color 0.2s ease;
         background: none;
         border: none;
@@ -272,16 +285,25 @@
     }
 
     .action-icon:hover {
-        color: #333;
+        color: #666;
     }
 
-    /* Authenticated user styling */
+    /* Authenticated user styling - blue for Review and Notes */
     .action-icons-row.authenticated .action-icon {
-        color: #333;
+        color: #1d496a;
     }
 
     .action-icons-row.authenticated .action-icon:hover {
-        color: #333;
+        color: #005a8a;
+    }
+
+    /* Share button is always blue */
+    .action-icon.share-icon {
+        color: #1d496a !important;
+    }
+
+    .action-icon.share-icon:hover {
+        color: #005a8a !important;
     }
 
     .action-icon i {
@@ -341,7 +363,7 @@
     }
 
     .book-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
         margin: 0.5rem 0;
         color: #333;
     }
@@ -368,7 +390,7 @@
 
     .book-author .author-pill {
         display: inline-block;
-        padding: 0.1rem 0.5rem;
+        padding: 0.05rem 0.5rem;
         background-color: #f0f0f0;
         color: #333;
         border-radius: 10px;
@@ -394,7 +416,7 @@
 
     .book-description p{
         line-height: 1.6;
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     /* Sticky Navigation Bar (OpenLibrary style) */
@@ -515,8 +537,9 @@
     }
 
     .nav-bar a {
-        display: block;
-        padding: 0.5rem 1.25rem;
+        display: flex;
+        align-items: center;
+        padding: 0 1.25rem;
         color: #666;
         text-decoration: none;
         font-weight: 500;
@@ -525,6 +548,8 @@
         transition: all 0.2s ease;
         white-space: nowrap;
         background: transparent;
+        height: 44px;
+        min-height: 44px;
     }
 
     .nav-bar li.selected a {
@@ -891,6 +916,7 @@
         font-size: var(--font-md);
         color: var(--color-text-secondary);
         margin-bottom: var(--spacing-sm);
+        font-style: italic;
     }
 
     /* Reader statistics */
@@ -1082,9 +1108,9 @@
     }
 
     .reviews-section h2 {
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
         color: var(--color-text-primary);
-        font-size: var(--font-xl);
+        font-size: 1.25rem;
     }
 
     .rating-histogram,
@@ -1092,7 +1118,7 @@
     .user-review-form,
     .review-item,
     .review-guest-message {
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
         padding: var(--spacing-md);
         background: var(--color-bg-white);
         border-radius: var(--radius-md);
@@ -1100,10 +1126,12 @@
 
     .rating-histogram h3,
     .user-rating-form h3,
-    .user-review-form h3 {
-        font-size: var(--font-lg);
-        margin-bottom: var(--spacing-sm);
-        color: var(--color-text-light);
+    .user-review-form h3,
+    .existing-reviews h3 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 0.375rem;
+        color: var(--color-text-primary);
     }
 
     .rating-center {
@@ -1293,9 +1321,9 @@
     }
 
     .notes-section h2 {
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
         color: var(--color-text-primary);
-        font-size: var(--font-xl);
+        font-size: 1.25rem;
     }
 
     .notes-section h2 span {
@@ -1314,9 +1342,10 @@
 
     .add-note-form h3,
     .existing-notes h3 {
-        font-size: var(--font-lg);
-        margin-bottom: var(--spacing-sm);
-        color: var(--color-text-light);
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 0.375rem;
+        color: var(--color-text-primary);
     }
 
     .note-field-label {
@@ -1831,26 +1860,26 @@
 
             <div class="book-actions">
                 @if($book->access_level === 'full' && $pdfFile)
+                    <!-- View PDF - Always accessible, always blue -->
+                    <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">
+                        <i class="fal fa-eye"></i> View PDF
+                    </a>
+                    <!-- Download PDF - Blue when logged in, grey when not -->
                     @auth
-                        <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">
-                            <i class="fal fa-eye"></i> View PDF
-                        </a>
-                        <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-secondary">
+                        <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-primary">
                             <i class="fal fa-download"></i> Download PDF
                         </a>
                     @else
-                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to view PDF">
-                            <i class="fal fa-eye"></i> View PDF
-                        </a>
                         <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to download">
                             <i class="fal fa-download"></i> Download PDF
                         </a>
                     @endauth
                 @elseif($book->access_level === 'limited' && $pdfFile)
+                    <!-- View PDF - Always accessible, always blue -->
+                    <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">
+                        <i class="fal fa-eye"></i> View PDF
+                    </a>
                     @auth
-                        <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">
-                            <i class="fal fa-eye"></i> View PDF
-                        </a>
                         @if($userAccessRequest)
                             @if($userAccessRequest->status === 'pending')
                                 <div class="status-box status-pending">
@@ -1881,9 +1910,6 @@
                             </button>
                         @endif
                     @else
-                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-primary" title="Please log in to preview">
-                            <i class="fal fa-eye"></i> View PDF
-                        </a>
                         <a href="{{ route('login', ['redirect' => url()->current()]) }}"
                            class="book-action-btn btn-secondary text-link"
                            title="Please log in to request access">
@@ -1968,7 +1994,7 @@
                             <span>Notes</span>
                         </a>
                     @endauth
-                    <button onclick="openShareModal()" class="action-icon">
+                    <button onclick="openShareModal()" class="action-icon share-icon">
                         <i class="fal fa-share-alt"></i>
                         <span>Share</span>
                     </button>
@@ -1984,7 +2010,7 @@
                     />
                 @else
                     <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to bookmark">
-                        Login to Bookmark
+                        <i class="fal fa-bookmark"></i> Bookmark
                     </a>
                 @endauth
             </div>
@@ -2062,7 +2088,12 @@
                         First published in {{ $book->publication_year }}
                     </div>
                 @endif
-                <h1 class="book-title">{{ $book->title }}</h1>
+                <h1 class="book-title">
+                    {{ $book->title }}
+                    @if($book->physical_type)
+                        <span class="edition-info" style="font-size: 1rem; font-weight: normal;">({{ $book->physical_type }})</span>
+                    @endif
+                </h1>
                 @if($book->subtitle)
                     <h2 class="book-subtitle">{{ $book->subtitle }}</h2>
                 @endif
@@ -2118,8 +2149,8 @@
             <!-- Info Cards (OpenLibrary style) -->
             <div class="book-info-cards">
                 <div class="info-card">
-                    <span class="info-card-label">Publish Date</span>
-                    <span class="info-card-value">{{ $book->publication_year ?? 'N/A' }}</span>
+                    <span class="info-card-label">Physical type</span>
+                    <span class="info-card-value">{{ $book->physical_type ?? 'N/A' }}</span>
                 </div>
                 <div class="info-card">
                     <span class="info-card-label">Publisher</span>
@@ -2149,31 +2180,17 @@
                     <div class="subjects-content">
                         <!-- People Section -->
                         @if($book->authors->isNotEmpty() || $book->illustrators->isNotEmpty())
-                            @if($book->authors->isNotEmpty())
-                                <div class="link-box">
-                                    <h3 class="details-subsection-title">Authors</h3>
-                                    @foreach($book->authors as $author)
-                                        <p class="details-value">{{ $author->name }}</p>
-                                    @endforeach
-                                </div>
-                            @endif
-
-                            @if($book->illustrators->isNotEmpty())
-                                <div class="link-box">
-                                    <h3 class="details-subsection-title">Illustrators</h3>
-                                    @foreach($book->illustrators as $illustrator)
-                                        <p class="details-value">{{ $illustrator->name }}</p>
-                                    @endforeach
-                                </div>
-                            @endif
-                        @endif
-
-                        @if($book->purposeClassifications->isNotEmpty())
                             <div class="link-box">
-                                <h3 class="details-subsection-title">Subjects</h3>
-                                @foreach($book->purposeClassifications as $classification)
-                                    <p class="details-value">{{ $classification->value }}</p>
-                                @endforeach
+                                @if($book->authors->isNotEmpty())
+                                    <p class="details-value">
+                                        <strong>Author(s):</strong> {{ $book->authors->pluck('name')->join('; ') }}
+                                    </p>
+                                @endif
+                                @if($book->illustrators->isNotEmpty())
+                                    <p class="details-value">
+                                        <strong>Illustrator(s):</strong> {{ $book->illustrators->pluck('name')->join('; ') }}
+                                    </p>
+                                @endif
                             </div>
                         @endif
 
@@ -2186,16 +2203,18 @@
                             </div>
                         @endif
 
-                        @if($book->keywords && $book->keywords->isNotEmpty())
-                            <div class="link-box">
-                                <h3 class="details-subsection-title">Keywords</h3>
+                        <div class="link-box">
+                            <h3 class="details-subsection-title">Keywords</h3>
+                            @if($book->keywords && $book->keywords->isNotEmpty())
                                 @foreach($book->keywords as $keywordObj)
                                     <span class="details-value">
                                         {{ $keywordObj->keyword }}
                                     </span>
                                 @endforeach
-                            </div>
-                        @endif
+                            @else
+                                <p class="details-value">/</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             @endif
@@ -2231,51 +2250,54 @@
                         <h3 class="details-subsection-title">Edition Notes</h3>
                         @if($book->publisher)
                             <div class="details-row">
-                                <span class="details-label">Publisher</span>
-                                <span class="details-value">{{ $book->publisher->name }}</span>
-                            </div>
-                        @endif
-                        @if($book->publication_year)
-                            <div class="details-row">
-                                <span class="details-label">Copyright Date</span>
-                                <span class="details-value">{{ $book->publication_year }}</span>
+                                <span class="details-label">Project/partner</span>
+                                @php
+                                    // Extract program name from publisher name (e.g., "PALM" from "UH Social Science Research Institute (SSRI), University of Hawaii at Manoa")
+                                    $publisherName = $book->publisher->name;
+                                    // Try to extract acronym in parentheses or use first word
+                                    if (preg_match('/\(([A-Z]+)\)/', $publisherName, $matches)) {
+                                        $programName = $matches[1];
+                                    } else {
+                                        $programName = explode(',', $publisherName)[0];
+                                    }
+                                @endphp
+                                <span class="details-value">{{ $programName }}</span>
                             </div>
                         @endif
                     </div>
 
                     <!-- Classifications -->
-                    @if($book->purposeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty())
+                    @if($book->purposeClassifications->isNotEmpty() || $book->genreClassifications->isNotEmpty() || $book->subgenreClassifications->isNotEmpty() || $book->typeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty())
                         <div class="details-subsection">
                             <h3 class="details-subsection-title">Classifications</h3>
                             @if($book->purposeClassifications->isNotEmpty())
                                 <div class="details-row">
-                                    <span class="details-label">Subject</span>
+                                    <span class="details-label">Purpose</span>
                                     <span class="details-value">{{ $book->purposeClassifications->pluck('value')->join(', ') }}</span>
+                                </div>
+                            @endif
+                            @if($book->genreClassifications->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Genre</span>
+                                    <span class="details-value">{{ $book->genreClassifications->pluck('value')->join(', ') }}</span>
+                                </div>
+                            @endif
+                            @if($book->subgenreClassifications->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Sub-genre</span>
+                                    <span class="details-value">{{ $book->subgenreClassifications->pluck('value')->join(', ') }}</span>
+                                </div>
+                            @endif
+                            @if($book->typeClassifications->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Type</span>
+                                    <span class="details-value">{{ $book->typeClassifications->pluck('value')->join(', ') }}</span>
                                 </div>
                             @endif
                             @if($book->learnerLevelClassifications->isNotEmpty())
                                 <div class="details-row">
                                     <span class="details-label">Grade Level</span>
                                     <span class="details-value">{{ $book->learnerLevelClassifications->pluck('value')->join(', ') }}</span>
-                                </div>
-                            @endif
-                        </div>
-                    @endif
-
-                    <!-- The Physical Object -->
-                    @if($book->pages || $book->physical_type)
-                        <div class="details-subsection">
-                            <h3 class="details-subsection-title">The Physical Object</h3>
-                            @if($book->pages)
-                                <div class="details-row">
-                                    <span class="details-label">Number of pages</span>
-                                    <span class="details-value">{{ $book->pages }}</span>
-                                </div>
-                            @endif
-                            @if($book->physical_type)
-                                <div class="details-row">
-                                    <span class="details-label">Format</span>
-                                    <span class="details-value">{{ $book->physical_type }}</span>
                                 </div>
                             @endif
                         </div>
@@ -2312,16 +2334,6 @@
                         </div>
                     @endif
 
-                    <!-- Work Identifiers -->
-                    @if($book->id)
-                        <div class="details-subsection">
-                            <h3 class="details-subsection-title">Work Identifiers</h3>
-                            <div class="details-row">
-                                <span class="details-label">Work ID</span>
-                                <span class="details-value">{{ $book->id }}</span>
-                            </div>
-                        </div>
-                    @endif
                 </div>
             </div>
 
@@ -2350,7 +2362,16 @@
                                 <div class="detail-item">
                                     <span class="detail-label">Catalog:</span>
                                     <span class="detail-value">
-                                        <a href="{{ $reference->catalog_link }}" target="_blank">View in Library Catalog</a>
+                                        <a href="{{ $reference->catalog_link }}" target="_blank">
+                                            View in Library Catalog <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                    </span>
+                                </div>
+                            @else
+                                <div class="detail-item">
+                                    <span class="detail-label">Catalog:</span>
+                                    <span class="detail-value">
+                                        Not available <i class="fas fa-times"></i>
                                     </span>
                                 </div>
                             @endif
@@ -2767,7 +2788,8 @@
     function scrollToSection(sectionId) {
         const section = document.getElementById(sectionId);
         if (section) {
-            const offsetTop = section.offsetTop - 200;
+            // Reduced offset from 200 to 80 so section appears at the top
+            const offsetTop = section.offsetTop - 80;
             window.scrollTo({
                 top: offsetTop,
                 behavior: 'smooth'
@@ -2821,7 +2843,8 @@
                 const targetId = this.getAttribute('href').substring(1);
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
-                    const offsetTop = targetSection.offsetTop - 200;
+                    // Reduced offset from 200 to 80 so section appears at the top
+                    const offsetTop = targetSection.offsetTop - 80;
                     window.scrollTo({
                         top: offsetTop,
                         behavior: 'smooth'
@@ -2846,6 +2869,15 @@
 
                 star.addEventListener('mouseleave', function() {
                     highlightStars(currentRating);
+                });
+
+                // Click handler for clearing rating
+                star.addEventListener('click', function() {
+                    const clickedRating = index + 1;
+                    // If clicking the same rating, delete it
+                    if (currentRating === clickedRating) {
+                        deleteRating();
+                    }
                 });
             });
 
@@ -2883,6 +2915,7 @@
                         .then(data => {
                             // Update current rating for hover effects
                             currentRating = rating;
+                            currentQuickRating = rating;
 
                             // Update star visual state in detailed form
                             highlightStars(rating);
@@ -2992,11 +3025,20 @@
         });
     }
 
+    // Track current quick rating
+    let currentQuickRating = {{ $userRating ? $userRating->rating : 0 }};
+
     // Quick star rating submission
     function submitQuickRating(rating) {
         const form = document.getElementById('quick-rating-form');
 
         if (form) {
+            // If clicking the same star that's already selected, delete the rating
+            if (currentQuickRating === rating) {
+                deleteRating();
+                return;
+            }
+
             // Submit via AJAX to prevent page reload
             fetch(form.action, {
                 method: 'POST',
@@ -3009,6 +3051,9 @@
             })
             .then(response => response.json())
             .then(data => {
+                // Update current rating tracker
+                currentQuickRating = rating;
+
                 // Update quick star visual state
                 const starButtons = document.querySelectorAll('.star-rating-row .star-btn');
                 starButtons.forEach((star, index) => {
@@ -3054,6 +3099,64 @@
                 console.error('Error submitting rating:', error);
             });
         }
+    }
+
+    // Delete rating function
+    function deleteRating() {
+        const deleteUrl = '{{ route("library.rate.delete", $book->id) }}';
+
+        fetch(deleteUrl, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Reset current rating trackers (both quick and detailed)
+            currentQuickRating = 0;
+            // Update the detailed form's currentRating if it exists
+            if (typeof currentRating !== 'undefined') {
+                currentRating = 0;
+            }
+
+            // Clear all quick star visual state
+            const starButtons = document.querySelectorAll('.star-rating-row .star-btn');
+            starButtons.forEach((star) => {
+                star.classList.remove('active');
+                star.style.color = '#ddd';
+            });
+
+            // Update detailed rating form
+            const detailedForm = document.getElementById('detailed-rating-form');
+            if (detailedForm) {
+                // Uncheck all radio buttons
+                const radioButtons = detailedForm.querySelectorAll('input[type="radio"]');
+                radioButtons.forEach((radio) => {
+                    radio.checked = false;
+                });
+
+                // Clear detailed form stars
+                const detailedStars = detailedForm.querySelectorAll('.rating-star');
+                detailedStars.forEach((star) => {
+                    star.style.color = '#ddd';
+                });
+
+                // Update rating text
+                const ratingText = document.getElementById('rating-text');
+                if (ratingText) {
+                    ratingText.textContent = 'Click to rate';
+                }
+            }
+
+            // Update Reviews & Ratings section
+            updateRatingStatistics(data);
+        })
+        .catch(error => {
+            console.error('Error deleting rating:', error);
+        });
     }
 
     function updateRatingStatistics(data) {

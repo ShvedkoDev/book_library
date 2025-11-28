@@ -21,7 +21,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem 1.25rem;
+    padding: 0 1.25rem;
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -33,6 +33,8 @@
     line-height: 1.2;
     background-color: #fdf4d1;
     color: #333;
+    height: 44px;
+    min-height: 44px;
 }
 
 .bookmark-button:hover {
@@ -52,8 +54,6 @@
 .bookmark-button i {
     font-size: 1.1rem;
     transition: all 0.3s;
-    background-color: #f0f0f0;
-    border-color: #f0f0f0;
 }
 
 .bookmark-button.bookmarked i {

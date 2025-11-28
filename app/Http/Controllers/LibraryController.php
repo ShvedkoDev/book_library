@@ -438,6 +438,40 @@ class LibraryController extends Controller
     }
 
     /**
+     * Delete a user's rating for a book
+     */
+    public function deleteRating(Book $book)
+    {
+        // Find and delete the user's rating
+        $rating = $book->ratings()->where('user_id', auth()->id())->first();
+
+        if ($rating) {
+            $rating->delete();
+
+            // Recalculate rating statistics
+            $averageRating = $book->ratings()->avg('rating') ?? 0;
+            $totalRatings = $book->ratings()->count();
+            $ratingDistribution = [];
+            for ($i = 1; $i <= 5; $i++) {
+                $ratingDistribution[$i] = $book->ratings()->where('rating', $i)->count();
+            }
+
+            return response()->json([
+                'success' => true,
+                'averageRating' => round($averageRating, 1),
+                'totalRatings' => $totalRatings,
+                'ratingDistribution' => $ratingDistribution,
+                'message' => 'Your rating has been removed!'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'No rating found to delete'
+        ], 404);
+    }
+
+    /**
      * Submit a review for a book
      */
     public function submitReview(Request $request, Book $book)
