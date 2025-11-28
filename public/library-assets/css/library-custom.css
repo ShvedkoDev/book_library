@@ -230,3 +230,23 @@
 .sidebar.sidebar-links .sidebar_item.text-sidebar a:hover {
     text-decoration: underline;
 }
+
+/* Active Filter Badge Styling */
+.active-filter-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: #6b7280;
+    background: transparent;
+}
+
+/* Filter disabled state */
+.filter-group.filter-disabled {
+    cursor: not-allowed;
+}
+
+.filter-group.filter-disabled h4 {
+    color: #9ca3af;
+}

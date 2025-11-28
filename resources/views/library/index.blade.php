@@ -87,7 +87,7 @@
                         <input type="hidden" name="sort_by" value="{{ $sortBy }}">
                         <input type="hidden" name="sort_direction" value="{{ $sortDirection }}">
 
-                        <!-- Subject Filter -->
+                        <!-- Purpose Filter -->
                         @if($availableSubjects->isNotEmpty())
                             @foreach($availableSubjects as $subjectType)
                                 @if($subjectType->classificationValues->isNotEmpty())
@@ -103,7 +103,7 @@
                                             <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
                                             {{ $subjectType->name }}
                                             @if($activeSubjectsCount > 0)
-                                                <span class="active-filter-badge">{{ $activeSubjectsCount }}</span>
+                                                <span class="active-filter-badge">{{ $activeSubjectsCount }} selected</span>
                                             @endif
                                         </h4>
                                         <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
@@ -114,7 +114,7 @@
                                                         name="subjects[]"
                                                         value="{{ $classification->id }}"
                                                         {{ in_array($classification->id, $filters['subjects'] ?? []) ? 'checked' : '' }}
-                                                        onchange="document.getElementById('filters-form').submit()"
+                                                        onchange="this.form.submit()"
                                                     >
                                                     &nbsp;{{ $classification->value }}
                                                 </label>
@@ -125,34 +125,34 @@
                             @endforeach
                         @endif
 
-                        <!-- Grade Level Filter -->
-                        @if($availableGrades->isNotEmpty())
-                            @foreach($availableGrades as $gradeType)
-                                @if($gradeType->classificationValues->isNotEmpty())
+                        <!-- Genre Filter (only shown if Purpose is selected) -->
+                        @if(!empty($filters['subjects']) && $availableGenres->isNotEmpty())
+                            @foreach($availableGenres as $genreType)
+                                @if($genreType->classificationValues->isNotEmpty())
                                     @php
-                                        $activeGradesCount = count(array_intersect(
-                                            $gradeType->classificationValues->pluck('id')->toArray(),
-                                            $filters['grades'] ?? []
+                                        $activeGenresCount = count(array_intersect(
+                                            $genreType->classificationValues->pluck('id')->toArray(),
+                                            $filters['genres'] ?? []
                                         ));
-                                        $isExpanded = $activeGradesCount > 0;
+                                        $isExpanded = $activeGenresCount > 0;
                                     @endphp
-                                    <div class="filter-group {{ $activeGradesCount > 0 ? 'has-active-filters' : '' }}">
+                                    <div class="filter-group {{ $activeGenresCount > 0 ? 'has-active-filters' : '' }}">
                                         <h4 class="filter-toggle" onclick="toggleFilterGroup(this)">
                                             <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
-                                            {{ $gradeType->name }}
-                                            @if($activeGradesCount > 0)
-                                                <span class="active-filter-badge">{{ $activeGradesCount }}</span>
+                                            {{ $genreType->name }}
+                                            @if($activeGenresCount > 0)
+                                                <span class="active-filter-badge">{{ $activeGenresCount }} selected</span>
                                             @endif
                                         </h4>
                                         <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
-                                            @foreach($gradeType->classificationValues as $classification)
+                                            @foreach($genreType->classificationValues as $classification)
                                                 <label>
                                                     <input
                                                         type="checkbox"
-                                                        name="grades[]"
+                                                        name="genres[]"
                                                         value="{{ $classification->id }}"
-                                                        {{ in_array($classification->id, $filters['grades'] ?? []) ? 'checked' : '' }}
-                                                        onchange="document.getElementById('filters-form').submit()"
+                                                        {{ in_array($classification->id, $filters['genres'] ?? []) ? 'checked' : '' }}
+                                                        onchange="this.form.submit()"
                                                     >
                                                     &nbsp;{{ $classification->value }}
                                                 </label>
@@ -163,7 +163,45 @@
                             @endforeach
                         @endif
 
-                        <!-- Resource Type Filter -->
+                        <!-- Subgenre Filter (only shown if Genre is selected) -->
+                        @if(!empty($filters['genres']) && $availableSubgenres->isNotEmpty())
+                            @foreach($availableSubgenres as $subgenreType)
+                                @if($subgenreType->classificationValues->isNotEmpty())
+                                    @php
+                                        $activeSubgenresCount = count(array_intersect(
+                                            $subgenreType->classificationValues->pluck('id')->toArray(),
+                                            $filters['subgenres'] ?? []
+                                        ));
+                                        $isExpanded = $activeSubgenresCount > 0;
+                                    @endphp
+                                    <div class="filter-group {{ $activeSubgenresCount > 0 ? 'has-active-filters' : '' }}">
+                                        <h4 class="filter-toggle" onclick="toggleFilterGroup(this)">
+                                            <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
+                                            {{ $subgenreType->name }}
+                                            @if($activeSubgenresCount > 0)
+                                                <span class="active-filter-badge">{{ $activeSubgenresCount }} selected</span>
+                                            @endif
+                                        </h4>
+                                        <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
+                                            @foreach($subgenreType->classificationValues as $classification)
+                                                <label>
+                                                    <input
+                                                        type="checkbox"
+                                                        name="subgenres[]"
+                                                        value="{{ $classification->id }}"
+                                                        {{ in_array($classification->id, $filters['subgenres'] ?? []) ? 'checked' : '' }}
+                                                        onchange="this.form.submit()"
+                                                    >
+                                                    &nbsp;{{ $classification->value }}
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        @endif
+
+                        <!-- Theme Filter (renamed from Type) -->
                         @if($availableTypes->isNotEmpty())
                             @foreach($availableTypes as $typeGroup)
                                 @if($typeGroup->classificationValues->isNotEmpty())
@@ -179,7 +217,7 @@
                                             <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
                                             {{ $typeGroup->name }}
                                             @if($activeTypesCount > 0)
-                                                <span class="active-filter-badge">{{ $activeTypesCount }}</span>
+                                                <span class="active-filter-badge">{{ $activeTypesCount }} selected</span>
                                             @endif
                                         </h4>
                                         <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
@@ -190,7 +228,7 @@
                                                         name="types[]"
                                                         value="{{ $classification->id }}"
                                                         {{ in_array($classification->id, $filters['types'] ?? []) ? 'checked' : '' }}
-                                                        onchange="document.getElementById('filters-form').submit()"
+                                                        onchange="this.form.submit()"
                                                     >
                                                     &nbsp;{{ $classification->value }}
                                                 </label>
@@ -212,7 +250,7 @@
                                     <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
                                     Language
                                     @if($activeLanguagesCount > 0)
-                                        <span class="active-filter-badge">{{ $activeLanguagesCount }}</span>
+                                        <span class="active-filter-badge">{{ $activeLanguagesCount }} selected</span>
                                     @endif
                                 </h4>
                                 <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
@@ -223,13 +261,41 @@
                                                 name="languages[]"
                                                 value="{{ $language->code }}"
                                                 {{ in_array($language->code, $filters['languages'] ?? []) ? 'checked' : '' }}
-                                                onchange="document.getElementById('filters-form').submit()"
+                                                onchange="this.form.submit()"
                                             >
                                             &nbsp;{{ $language->name }}
                                         </label>
                                     @endforeach
                                 </div>
                             </div>
+                        @endif
+
+                        <!-- Learner Level Filter (Disabled - for future use) -->
+                        @if($availableGrades->isNotEmpty())
+                            @foreach($availableGrades as $gradeType)
+                                @if($gradeType->classificationValues->isNotEmpty())
+                                    <div class="filter-group filter-disabled" style="opacity: 0.5; pointer-events: none;">
+                                        <h4 class="filter-toggle">
+                                            <i class="fal fa-chevron-right toggle-icon"></i>
+                                            Learner level
+                                            <span style="font-size: 0.75rem; color: #999; font-weight: normal; margin-left: 0.5rem;">(Coming soon)</span>
+                                        </h4>
+                                        <div class="checkbox-group collapsed">
+                                            @foreach($gradeType->classificationValues as $classification)
+                                                <label>
+                                                    <input
+                                                        type="checkbox"
+                                                        name="grades[]"
+                                                        value="{{ $classification->id }}"
+                                                        disabled
+                                                    >
+                                                    &nbsp;{{ $classification->value }}
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
                         @endif
                     </form>
                 </div>
@@ -391,6 +457,25 @@
 
 @push('scripts')
 <script>
+    // Save and restore scroll position for filter changes
+    document.addEventListener('DOMContentLoaded', function() {
+        const filtersForm = document.getElementById('filters-form');
+
+        // Restore scroll position if coming back from a filter submission
+        const savedScrollPos = sessionStorage.getItem('libraryScrollPosition');
+        if (savedScrollPos !== null) {
+            window.scrollTo(0, parseInt(savedScrollPos));
+            sessionStorage.removeItem('libraryScrollPosition');
+        }
+
+        // Save scroll position before filter form submission
+        if (filtersForm) {
+            filtersForm.addEventListener('submit', function() {
+                sessionStorage.setItem('libraryScrollPosition', window.scrollY);
+            });
+        }
+    });
+
     function submitSearch() {
         const searchInput = document.getElementById('searchInput');
         const searchForm = document.getElementById('library-search-form');

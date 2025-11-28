@@ -31,6 +31,8 @@ class LibraryController extends Controller
 
         $filters = [
             'subjects' => $request->input('subjects', []),
+            'genres' => $request->input('genres', []),
+            'subgenres' => $request->input('subgenres', []),
             'grades' => $request->input('grades', []),
             'types' => $request->input('types', []),
             'languages' => $request->input('languages', []),
@@ -79,7 +81,21 @@ class LibraryController extends Controller
             );
         }
 
-        // Grade level filter (Learner level classifications)
+        // Genre filter
+        if (!empty($filters['genres'])) {
+            $query->whereHas('genreClassifications', fn($q) =>
+                $q->whereIn('classification_values.id', $filters['genres'])
+            );
+        }
+
+        // Subgenre filter
+        if (!empty($filters['subgenres'])) {
+            $query->whereHas('subgenreClassifications', fn($q) =>
+                $q->whereIn('classification_values.id', $filters['subgenres'])
+            );
+        }
+
+        // Grade level filter (Learner level classifications) - currently disabled
         if (!empty($filters['grades'])) {
             $query->whereHas('learnerLevelClassifications', fn($q) =>
                 $q->whereIn('classification_values.id', $filters['grades'])
@@ -149,6 +165,28 @@ class LibraryController extends Controller
             }])
             ->get();
 
+        // Get Genre values (children of selected Purpose values)
+        $availableGenres = ClassificationType::where('slug', 'genre')
+            ->with(['classificationValues' => function($q) use ($filters) {
+                $q->whereHas('books', fn($bookQuery) => $bookQuery->where('is_active', true));
+                // If subjects are selected, only show genres that are children of those subjects
+                if (!empty($filters['subjects'])) {
+                    $q->whereIn('parent_id', $filters['subjects']);
+                }
+            }])
+            ->get();
+
+        // Get Subgenre values (children of selected Genre values)
+        $availableSubgenres = ClassificationType::where('slug', 'sub-genre')
+            ->with(['classificationValues' => function($q) use ($filters) {
+                $q->whereHas('books', fn($bookQuery) => $bookQuery->where('is_active', true));
+                // If genres are selected, only show subgenres that are children of those genres
+                if (!empty($filters['genres'])) {
+                    $q->whereIn('parent_id', $filters['genres']);
+                }
+            }])
+            ->get();
+
         return view('library.index', compact(
             'books',
             'search',
@@ -158,6 +196,8 @@ class LibraryController extends Controller
             'sortDirection',
             'availableLanguages',
             'availableSubjects',
+            'availableGenres',
+            'availableSubgenres',
             'availableGrades',
             'availableTypes'
         ));
