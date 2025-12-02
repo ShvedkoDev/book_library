@@ -1200,6 +1200,7 @@
         color: var(--color-text-secondary);
         text-align: center;
         padding: var(--spacing-md);
+        font-size: 0.875rem;
     }
 
     /* Rating Form */
@@ -1221,7 +1222,7 @@
 
     .rating-text {
         color: var(--color-text-secondary);
-        font-size: var(--font-sm);
+        font-size: var(--font-base);
     }
 
     /* Review Form */
@@ -1248,7 +1249,7 @@
     }
 
     .btn-submit {
-        padding: var(--spacing-sm) var(--spacing-lg);
+        padding: 0.4rem var(--spacing-lg);
         background: var(--color-primary);
         color: white;
         border: none;
@@ -1316,14 +1317,14 @@
     .notes-section {
         margin-top: var(--spacing-xl);
         padding: var(--spacing-lg);
-        background: var(--color-bg-light);
+        background: var(--color-bg-gray);
         border-radius: var(--radius-md);
     }
 
-    .notes-section h2 {
+    .notes-section h3 {
         margin-bottom: var(--spacing-sm);
         color: var(--color-text-primary);
-        font-size: 1.25rem;
+        font-size: 0.825rem;
     }
 
     .notes-section h2 span {
@@ -1385,7 +1386,7 @@
     }
 
     .btn-add-note {
-        padding: var(--spacing-sm) var(--spacing-lg);
+        padding: 0.4rem var(--spacing-lg);
         background: var(--color-primary);
         color: white;
         border: none;
@@ -1434,7 +1435,7 @@
     .btn-note-edit,
     .btn-note-delete {
         background: none;
-        padding: var(--spacing-xs) var(--spacing-sm);
+        padding: 0.4rem var(--spacing-sm);
         border-radius: var(--radius-sm);
         cursor: pointer;
         font-size: var(--font-xs);
@@ -1479,7 +1480,7 @@
     }
 
     .btn-note-save {
-        padding: var(--spacing-xs) var(--spacing-md);
+        padding: 0.4rem var(--spacing-md);
         background: var(--color-approved);
         color: white;
         border: none;
@@ -1489,7 +1490,7 @@
     }
 
     .btn-note-cancel {
-        padding: var(--spacing-xs) var(--spacing-md);
+        padding: 0.4rem var(--spacing-md);
         background: #6c757d;
         color: white;
         border: none;
@@ -2399,11 +2400,11 @@
     <!-- Reviews and Ratings Section -->
     <a id="reader-observations" name="reader-observations" class="section-anchor"></a>
     <div class="reviews-section">
-        <h2>Reviews & Ratings</h2>
+        <h2>User feedback</h2>
 
         <!-- Rating Histogram -->
         <div class="rating-histogram">
-            <h3 class="section-title text-left">Rating Distribution</h3>
+            <h3 class="section-title text-left">Rating distribution</h3>
             @if($totalRatings > 0)
                 <div class="rating-center">
                     <div class="rating-score-display">
@@ -2490,7 +2491,7 @@
 
         <!-- Existing Reviews -->
         <div class="existing-reviews">
-            <h3 class="section-title text-left">User Reviews ({{ $book->reviews->count() }})</h3>
+            <h3 class="section-title text-left">User reviews ({{ $book->reviews->count() }})</h3>
             @forelse($book->reviews as $review)
                 <div class="review-item">
                     <div class="review-header">
@@ -2522,12 +2523,11 @@
     <!-- Personal Notes Section -->
     @auth
     <div id="notes-section" class="notes-section">
-        <h2>
-            <i class="fal fa-sticky-note"></i> My Notes
+        <h3 class="section-title text-left">My notes
             @if($userNotes->isNotEmpty())
                 <span>({{ $userNotes->count() }})</span>
             @endif
-        </h2>
+        </h3>
 
         <!-- Add New Note Form -->
         <div class="add-note-form">
@@ -2570,7 +2570,7 @@
             <h3 class="section-title text-left">
                 Your notes
                 @if($userNotes->isEmpty())
-                    <span>(None yet)</span>
+                    <span>(none yet)</span>
                 @endif
             </h3>
             @forelse($userNotes as $note)
