@@ -33,8 +33,8 @@
     line-height: 1.2;
     background-color: #fdf4d1;
     color: #333;
-    height: 44px;
-    min-height: 44px;
+    height: 34px;
+    min-height: 34px;
 }
 
 .bookmark-button:hover {
