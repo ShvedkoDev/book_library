@@ -809,6 +809,7 @@
         font-weight: 600;
         padding: 0.5rem 0;
         font-size: 0.95rem;
+        float: right;
     }
 
     .read-more__toggle--less {
@@ -2150,18 +2151,12 @@
             <!-- Info Cards (OpenLibrary style) -->
             <div class="book-info-cards">
                 <div class="info-card">
-                    <span class="info-card-label">Physical type</span>
-                    <span class="info-card-value">{{ $book->physical_type ?? 'N/A' }}</span>
+                    <span class="info-card-label">Publication date</span>
+                    <span class="info-card-value">{{ $book->publication_year ?? 'N/A' }}</span>
                 </div>
                 <div class="info-card">
-                    <span class="info-card-label">Publisher</span>
-                    <span class="info-card-value publisher">
-                        @if($book->publisher)
-                            {{ $book->publisher->name }}
-                        @else
-                            N/A
-                        @endif
-                    </span>
+                    <span class="info-card-label">Physical type</span>
+                    <span class="info-card-value">{{ $book->physical_type ?? 'N/A' }}</span>
                 </div>
                 <div class="info-card">
                     <span class="info-card-label">Language</span>
