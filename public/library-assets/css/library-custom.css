@@ -22,15 +22,15 @@
 }
 
 /* Specific sizing for each logo */
-.sidebar.header-image.handbook-image .ndoe-logo {
+.ndoe-logo {
     max-height: 70px;
 }
 
-.sidebar.header-image.handbook-image .irei-logo {
+.irei-logo {
     max-height: 75px;
 }
 
-.sidebar.header-image.handbook-image .c4gts-logo {
+.c4gts-logo {
     max-height: 65px;
 }
 

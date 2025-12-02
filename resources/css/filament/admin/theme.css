@@ -194,4 +194,21 @@
         max-height: 3.5rem !important;
         overflow: visible !important;
     }
+
+    /* Enable sidebar navigation scrolling */
+    aside.fi-sidebar,
+    .fi-sidebar {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+    }
+
+    aside.fi-sidebar nav,
+    .fi-sidebar nav,
+    .fi-sidebar-nav {
+        flex-grow: 1 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        max-height: calc(100vh - 4.5rem) !important;
+    }
 }

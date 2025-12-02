@@ -20060,16 +20060,27 @@ footer.site-footer .links {
 }
 
 footer.site-footer .links a {
-    color: #fff;
-    padding: .5rem 1rem .55rem;
+    flex: 1;
     text-align: center;
-    text-decoration: none
+    padding: 8px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--wp--preset--font-family--proxima-nova);
+    cursor: pointer;
+    border: 1px solid white !important;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    white-space: nowrap;
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    background-color: transparent!important;
 }
 
-footer.site-footer .links a:active, footer.site-footer .links a:focus, footer.site-footer .links a:hover {
-    background: #fff;
-    color: #003b49
-}
 
 @media screen and (max-width: 767px) {
     footer.site-footer .links a {
@@ -20136,54 +20147,9 @@ footer.site-footer .links a i {
     }
 }
 
-footer.site-footer .logos-address .logos, footer.site-footer .logos-coe-links .logos {
-    align-items: center;
-    display: flex;
-    justify-content: space-around;
-    padding-bottom: .5rem
-}
 
-@media screen and (min-width: 600px) {
-    footer.site-footer .logos-address .logos, footer.site-footer .logos-coe-links .logos {
-        justify-content: center
-    }
-}
-
-footer.site-footer .logos-coe-links .logos a {
-    align-self: center
-}
-
-footer.site-footer .logos-coe-links .logos a:active, footer.site-footer .logos-coe-links .logos a:focus, footer.site-footer .logos-coe-links .logos a:hover {
-    opacity: .7
-}
-
-footer.site-footer .logos-coe-links .logos a.coe {
-    flex-basis: 200px
-}
-
-@media screen and (min-width: 768px) {
-    footer.site-footer .logos-coe-links .logos a.coe img {
-        width: 100%
-    }
-}
-
-footer.site-footer .logos-coe-links .logos a.manoa {
-    flex-basis: 160px;
-    margin-left: 1.5rem
-}
-
-@media screen and (min-width: 768px) {
-    footer.site-footer .logos-coe-links .logos a.manoa {
-        margin-right: 1.5rem
-    }
-
-    footer.site-footer .logos-coe-links .logos a.manoa img {
-        width: 100%
-    }
-}
-
-footer.site-footer .logos-coe-links .logos a img {
-    height: auto
+footer .logos-coe-links .logos *{
+    color:white!important;
 }
 
 footer.site-footer .links-row + .logos-address {
@@ -28410,10 +28376,9 @@ body.archive .main_content article .entry-summary a:last-child:active, body.arch
 
 .stems2 footer.site-footer {
     background: #007da1;
-    background: -moz-linear-gradient(-15deg, #007da1 0, #00b3e6 100%);
-    background: -webkit-linear-gradient(-15deg, #007da1, #00b3e6);
-    background: linear-gradient(165deg, #007da1, #00b3e6);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="$darker-color", endColorstr="$lighter-color", GradientType=1)
+    background: -moz-linear-gradient(5deg, #1d496a, #8198b2);
+    background: -webkit-linear-gradient(5deg, #1d496a, #8198b2);
+    background: linear-gradient(15deg, #1d496a, #8198b2);
 }
 
 .stems2.template-network-map .page-header {

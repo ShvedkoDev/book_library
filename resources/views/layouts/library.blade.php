@@ -320,9 +320,8 @@
 <!-- Department Footer -->
 <footer class="department-footer" aria-label="department or special program info">
     <div class="container">
-        <img class="dept-logo" src="https://picsum.photos/200/80?random=3DL" alt="{{ $siteName }} logo">
         <p class="tagline">
-            {{ $siteDescription }}
+            Strengthening teaching and learning through the voices and languages of Micronesia.
         </p>
     </div>
 </footer>
@@ -332,45 +331,55 @@
     <div class="container">
         <div class="address-contact-link">
             <address>
-                <strong>{{ $siteName }}</strong>
-                <p>Educational Resource Center<br/>
-                    Pacific Islands Region<br/>
-                    Micronesia</p>
+                <p class="mb-1"><img class="ndoe-logo" src="{{ asset('library-assets/images/NDOE.png') }}" alt=""></p>
+                <p>FSM Department of Education<br>
+                    PO Box PS 87<br>
+                    Palikir, Pohnpei, FM 96941<br>
+                    <a href="www.national.doe.fm" style="color: white" target="_blank">www.national.doe.fm</a>
+                </p>
 
             </address>
-            <div class="contact">
-                <i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+1-000-000-0000">(000) 000-0000</a>
-                <br/><i class="fas fa-fax" aria-hidden="true"></i> <a href="tel:+1-000-000-0000">(000) 000-0000</a>
-                <br/><i class="fas fa-envelope" aria-hidden="true"></i> <a href="mailto:{{ $libraryEmail }}">{{ $libraryEmail }}</a>
-            </div>
+            <address>
+                <p class="mb-1">
+                    <img class="irei-logo" src="{{ asset('library-assets/images/iREi.png') }}" alt=""></p>
+                <p>Island Research & Education Initiative<br>
+                    PO Box PS 303<br>
+                    Palikir, Pohnpei, FM 96941<br>
+                    <a href="www.islandresearch.org" style="color: white" target="_blank">www.islandresearch.org</a>
+                </p>
 
-            <ul class="other-links-col other-links-col1">
-                <li><a href="#" target="_self">Accessibility Info</a></li>
-                <li><a href="#" target="_self">Suggest Educational Content</a></li>
-            </ul>
+            </address>
+            <address>
+                <p class="mb-1">
+                    <img class="c4gts-logo" src="{{ asset('library-assets/images/C4GTS.png') }}" alt=""></p>
+                <p>Center for Getting Things Started<br>
+                    472 Inia Lane<br>
+                    Hilo, HI 96720<br>
+                    <a href="www.c4gts.org" style="color: white" target="_blank">www.c4gts.org</a>
+                </p>
+
+            </address>
             <ul class="other-links-col other-links-col2">
-                <li><a href="#" target="_self">Contributor Form</a></li>
-                <li><a href="#" target="_self">Submit Resources</a></li>
+                <li><a href="#" target="_self">Accessibility info</a></li>
+                <li><a href="#" target="_self">Suggest educational content</a></li>
+                <li><a href="#" target="_self">Contributor form</a></li>
+                <li><a href="#" target="_self">Submit resources</a></li>
             </ul>
         </div>
         <div class="logos-coe-links">
             <div class="logos">
-                <a class="coe" href="{{ url('/') }}">
-                    <img src="{{ asset('library-assets/images/mtdl-logo.png') }}" alt="MTDL logo">
-                </a>
-                <a class="manoa" href="{{ url('/') }}">
-                    <img src="{{ asset('library-assets/images/education-initiative-logo.png') }}" alt="Education Initiative logo">
-                </a>
+                <h3>National Vernacular Language Arts (VLA) curriculum</h3>
+                <p><a href="https://micronesian.school/" target="_blank">Resource guide</a></p>
+                <p><a href="https://micronesian.school/library" target="_blank">Resource library</a></p>
             </div>
             <div class="links">
-                <a class="sitemap" href="{{ url('/sitemap') }}" title="sitemap"><i aria-hidden="true" class="fal fa-sitemap"></i> <span>Sitemap</span></a>
+                <a class="button button-primary btn-view" stt href="{{ url('/sitemap') }}" title="sitemap"><i aria-hidden="true" class="fal fa-sitemap"></i> <span>Sitemap</span></a>
                 @guest
-                    <a href="{{ route('login') }}" title="user login"><i aria-hidden="true" class="fal fa-sign-in"></i> <span>Log In</span></a>
+                    <a class="button button-primary btn-view" href="{{ route('login') }}" title="user login"><i aria-hidden="true" class="fal fa-sign-in"></i> <span>Log In</span></a>
                 @else
-                    <a href="{{ route('profile.edit') }}" title="user profile"><i aria-hidden="true" class="fal fa-user"></i> <span>{{ Auth::user()->name }}</span></a>
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                         @csrf
-                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" title="logout"><i aria-hidden="true" class="fal fa-sign-out"></i> <span>Log Out</span></a>
+                        <a class="button button-primary btn-view" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" title="logout"><i aria-hidden="true" class="fal fa-sign-out"></i> <span>Log Out</span></a>
                     </form>
                 @endguest
             </div>

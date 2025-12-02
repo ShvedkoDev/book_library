@@ -947,6 +947,17 @@ header .nav-primary .language-selector:hover {
 .department-footer {
     border-top: 3px solid var(--wp--preset--color--coe-green);
     background-color: var(--wp--preset--color--white);
+    font-family: "Marck Script", cursive;
+    font-size: 3rem!important;
+}
+
+footer.department-footer .container {
+    text-align: center;
+}
+
+footer.department-footer .container p.tagline {
+    font-size: 2rem!important;
+    border-left: none!important;
 }
 
 /* Responsive Styles */
