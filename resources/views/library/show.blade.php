@@ -2032,10 +2032,10 @@
                         <a href="#reader-observations">User feedback{{ $book->reviews->count() > 0 ? ' (' . $book->reviews->count() . ')' : '' }}</a>
                     </li>
                     <li>
-                        <a href="#library">Library locations</a>
+                        <a href="#library">Library Locations</a>
                     </li>
                     <li>
-                        <a href="#related-books">Related books</a>
+                        <a href="#related-books">Related Books</a>
                     </li>
                 </ul>
             </div>
