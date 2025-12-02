@@ -179,8 +179,8 @@
         font-family: var(--wp--preset--font-family--proxima-nova);
         white-space: nowrap;
         box-sizing: border-box;
-        height: 44px;
-        min-height: 44px;
+        height: 34px;
+        min-height: 34px;
     }
 
     .book-action-btn.btn-primary {
@@ -395,7 +395,7 @@
         color: #333;
         border-radius: 10px;
         text-decoration: none;
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         transition: background-color 0.2s ease;
         cursor: pointer;
     }
@@ -548,8 +548,8 @@
         transition: all 0.2s ease;
         white-space: nowrap;
         background: transparent;
-        height: 44px;
-        min-height: 44px;
+        height: 34px;
+        min-height: 34px;
     }
 
     .nav-bar li.selected a {
@@ -2785,11 +2785,10 @@
     function scrollToSection(sectionId) {
         const section = document.getElementById(sectionId);
         if (section) {
-            // Reduced offset from 200 to 80 so section appears at the top
-            const offsetTop = section.offsetTop - 80;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
+            // Scroll to top of section with no offset
+            section.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
             });
         }
     }
