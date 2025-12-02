@@ -1006,6 +1006,8 @@
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 0.75rem;
         margin-bottom: var(--spacing-lg);
+        clear: both;
+        margin-top: 1rem;
     }
 
     .info-card {
