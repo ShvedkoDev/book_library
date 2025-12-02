@@ -2100,7 +2100,7 @@
                 <div class="book-author">
                     @if($book->creators->isNotEmpty())
                         <span class="author-label">by</span>
-                        @foreach($book->creators as $creator)
+                        @foreach($book->creators->unique('id') as $creator)
                             <a href="{{ route('library.index', ['search' => $creator->name]) }}" class="author-pill">{{ $creator->name }}</a>
                         @endforeach
                     @endif
