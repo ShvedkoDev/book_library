@@ -567,8 +567,8 @@
     .section-anchor {
         display: block;
         position: relative;
-        top: -200px;
         visibility: hidden;
+        scroll-margin-top: 170px; /* Account for sticky nav at 118px + nav bar height */
     }
 
     .section-anchor--no-height {
