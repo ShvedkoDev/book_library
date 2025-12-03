@@ -425,7 +425,7 @@ class BookResource extends Resource
 
                                 Forms\Components\TextInput::make('digital_source')
                                     ->label('Digital source')
-                                    ->maxLength(255)
+                                    ->maxLength(500)
                                     ->placeholder('Where the file came from')
                                     ->helperText('CSV: DIGITAL SOURCE / ALTERNATIVE DIGITAL SOURCE')
                                     ->columnSpan(2),
