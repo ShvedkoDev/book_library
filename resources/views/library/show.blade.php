@@ -2267,18 +2267,16 @@
                             </div>
                         @endif
 
-                        <div class="link-box">
-                            <h3 class="details-subsection-title">Keywords</h3>
-                            @if($book->keywords && $book->keywords->isNotEmpty())
-                                @foreach($book->keywords as $keywordObj)
-                                    <span class="details-value">
-                                        {{ $keywordObj->keyword }}
-                                    </span>
-                                @endforeach
-                            @else
-                                <p class="details-value">/</p>
-                            @endif
-                        </div>
+                        @if($book->keywords && $book->keywords->isNotEmpty())
+                            <div class="link-box">
+                                <h3 class="details-subsection-title">Keywords</h3>
+                                <p class="details-value">
+                                    @foreach($book->keywords as $keywordObj)
+                                        <a href="{{ route('library.index', ['search' => $keywordObj->keyword]) }}" class="author-pill">{{ $keywordObj->keyword }}</a>@if(!$loop->last), @endif
+                                    @endforeach
+                                </p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endif
