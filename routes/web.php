@@ -34,12 +34,14 @@ Route::post('/api/track-share', [ShareTrackingController::class, 'trackShare'])-
 // Library routes - PUBLIC ACCESS (browsing and viewing books)
 Route::get('/library', [LibraryController::class, 'index'])->name('library.index');
 
+// PDF viewing - PUBLIC ACCESS (no login required, views are still tracked)
+Route::get('/library/book/{book}/viewer/{file}', [LibraryController::class, 'viewPdfViewer'])->name('library.view-pdf');
+Route::get('/library/book/{book}/view-pdf/{file}', [LibraryController::class, 'viewPdf'])->name('library.view-pdf-direct');
+
 // Library routes - REQUIRES AUTHENTICATION (interactive features)
 // IMPORTANT: These specific routes must come BEFORE the {slug} route to avoid matching conflicts
 Route::middleware(['auth', 'verified'])->group(function () {
-    // PDF viewing and downloading
-    Route::get('/library/book/{book}/viewer/{file}', [LibraryController::class, 'viewPdfViewer'])->name('library.view-pdf');
-    Route::get('/library/book/{book}/view-pdf/{file}', [LibraryController::class, 'viewPdf'])->name('library.view-pdf-direct');
+    // PDF downloading (requires login)
     Route::get('/library/book/{book}/download/{file}', [LibraryController::class, 'download'])->name('library.download');
 
     // Book interactions (rating, review, access request)

@@ -340,6 +340,8 @@ class LibraryController extends Controller
 
     /**
      * Stream PDF file directly (used by PDF.js viewer and full access)
+     * Note: Book page views are tracked in show() method, not here.
+     * This only serves the PDF file for the viewer.
      */
     public function viewPdf(Book $book, $fileId)
     {
@@ -355,9 +357,6 @@ class LibraryController extends Controller
         if (!$file->file_path || !\Storage::disk('public')->exists($file->file_path)) {
             abort(404, 'PDF file not found');
         }
-
-        // Track PDF view (same as download for analytics)
-        $this->analytics->trackBookDownload($book, request());
 
         // Get file path
         $filePath = storage_path('app/public/' . $file->file_path);
