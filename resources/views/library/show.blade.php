@@ -793,12 +793,6 @@
         text-decoration: none;
     }
 
-    .link-box a:after {
-        content: ",";
-        color: #666;
-        margin-left: 0.1rem;
-    }
-
     .link-box a:last-child:after {
         content: "";
     }
