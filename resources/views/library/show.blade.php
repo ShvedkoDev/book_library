@@ -1040,6 +1040,96 @@
         margin-bottom: var(--spacing-md);
     }
 
+    /* Library Locations Grid */
+    .library-locations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .library-location-box {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        border: 2px solid;
+        border-radius: var(--radius-md);
+        background: var(--color-bg-white);
+        transition: all 0.3s ease;
+    }
+
+    .library-location-box.has-link {
+        border-color: #28a745;
+    }
+
+    .library-location-box.no-link {
+        border-color: #dc3545;
+    }
+
+    .library-location-icon {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-sm);
+        font-size: 1.2rem;
+    }
+
+    .library-location-box.has-link .library-location-icon {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .library-location-box.no-link .library-location-icon {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .library-location-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    .library-location-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--color-text-primary);
+    }
+
+    .library-catalog-link {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #1d496a;
+        color: white;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .library-catalog-link:hover {
+        background-color: #005a8a;
+    }
+
+    .library-catalog-link i {
+        font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+        .library-locations-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
     /* Book Info Cards (OpenLibrary style) */
     .book-info-cards {
         display: grid;
@@ -2403,46 +2493,27 @@
                 <h2 class="section-title text-left">Library locations</h2>
                 <hr class="section-separator">
                 @if($book->libraryReferences->isNotEmpty())
-                    @foreach($book->libraryReferences as $reference)
-                        <div class="detail-group section-wrapper-small">
-                            <h3 class="details-subsection-title">{{ $reference->library_name }}</h3>
-                            @if($reference->reference_number)
-                                <div class="detail-item">
-                                    <span class="detail-label">Reference number:</span>
-                                    <span class="detail-value">{{ $reference->reference_number }}</span>
+                    <div class="library-locations-grid">
+                        @foreach($book->libraryReferences as $reference)
+                            <div class="library-location-box {{ $reference->catalog_link ? 'has-link' : 'no-link' }}">
+                                <div class="library-location-icon">
+                                    @if($reference->catalog_link)
+                                        <i class="fas fa-check"></i>
+                                    @else
+                                        <i class="fas fa-times"></i>
+                                    @endif
                                 </div>
-                            @endif
-                            @if($reference->call_number)
-                                <div class="detail-item">
-                                    <span class="detail-label">Call number:</span>
-                                    <span class="detail-value">{{ $reference->call_number }}</span>
-                                </div>
-                            @endif
-                            @if($reference->catalog_link)
-                                <div class="detail-item">
-                                    <span class="detail-label">Catalog:</span>
-                                    <span class="detail-value">
-                                        <a href="{{ $reference->catalog_link }}" target="_blank">
-                                            View in library catalog <i class="fas fa-external-link-alt"></i>
+                                <div class="library-location-content">
+                                    <div class="library-location-name">{{ $reference->library_name }}</div>
+                                    @if($reference->catalog_link)
+                                        <a href="{{ $reference->catalog_link }}" target="_blank" class="library-catalog-link">
+                                            <i class="fas fa-external-link-alt"></i>
                                         </a>
-                                    </span>
+                                    @endif
                                 </div>
-                            @else
-                                <div class="detail-item">
-                                    <span class="detail-label">Catalog:</span>
-                                    <span class="detail-value">
-                                        Not available <i class="fas fa-times"></i>
-                                    </span>
-                                </div>
-                            @endif
-                            @if($reference->notes)
-                                <div class="detail-item">
-                                    <span class="detail-label">Notes:</span>
-                                    <span class="detail-value">{{ $reference->notes }}</span>
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
+                            </div>
+                        @endforeach
+                    </div>
                 @else
                     <p>No physical library references available for this book.</p>
                 @endif
