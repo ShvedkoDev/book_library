@@ -1042,40 +1042,44 @@
 
     /* Library Locations Grid */
     .library-locations-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
         margin-top: 1.5rem;
+        max-width: 600px;
     }
 
     .library-location-box {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 1rem;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
         border: 2px solid;
-        border-radius: var(--radius-md);
+        border-radius: 4px;
         background: var(--color-bg-white);
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
     }
 
     .library-location-box.has-link {
         border-color: #28a745;
+        background-color: #f8fff9;
     }
 
     .library-location-box.no-link {
         border-color: #dc3545;
+        background-color: #fff8f8;
     }
 
     .library-location-icon {
         flex-shrink: 0;
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: var(--radius-sm);
-        font-size: 1.2rem;
+        border-radius: 3px;
+        font-size: 1rem;
+        font-weight: bold;
     }
 
     .library-location-box.has-link .library-location-icon {
@@ -1093,40 +1097,42 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 0.5rem;
+        gap: 1rem;
     }
 
     .library-location-name {
-        font-weight: 600;
+        font-weight: 500;
         font-size: 0.95rem;
-        color: var(--color-text-primary);
+        color: #333;
+        flex: 1;
     }
 
     .library-catalog-link {
         flex-shrink: 0;
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
         background-color: #1d496a;
         color: white;
-        border-radius: var(--radius-sm);
+        border-radius: 3px;
         text-decoration: none;
-        transition: background-color 0.3s ease;
+        transition: all 0.2s ease;
     }
 
     .library-catalog-link:hover {
         background-color: #005a8a;
+        transform: scale(1.1);
     }
 
     .library-catalog-link i {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
 
     @media (max-width: 768px) {
         .library-locations-grid {
-            grid-template-columns: 1fr;
+            max-width: 100%;
         }
     }
 
