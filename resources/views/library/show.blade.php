@@ -240,7 +240,7 @@
         padding: 0;
         cursor: pointer;
         color: #ddd !important; /* Force grey by default */
-        font-size: 1.12rem; /* 20% smaller than 1.4rem */
+        font-size: 1.7rem;
         transition: color 0.2s ease;
         line-height: 1;
         text-decoration: none !important;
