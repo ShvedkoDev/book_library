@@ -2272,7 +2272,7 @@
                                 <h3 class="details-subsection-title">Keywords</h3>
                                 <p class="details-value">
                                     @foreach($book->keywords as $keywordObj)
-                                        <a href="{{ route('library.index', ['search' => $keywordObj->keyword]) }}" class="author-pill">{{ $keywordObj->keyword }}</a>@if(!$loop->last), @endif
+                                        <a href="{{ route('library.index', ['search' => $keywordObj->keyword]) }}">{{ $keywordObj->keyword }}</a>
                                     @endforeach
                                 </p>
                             </div>
