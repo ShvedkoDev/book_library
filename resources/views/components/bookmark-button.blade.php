@@ -31,33 +31,30 @@
     margin: 0!important;
     font-size: 14px;
     line-height: 1.2;
-    background-color: #fdf4d1;
-    color: #333;
     height: 34px;
     min-height: 34px;
+    /* Blue styling to match logged-in state (like Download PDF when logged in) */
+    background-color: #1d496a;
+    color: white;
 }
 
 .bookmark-button:hover {
-    background: #e6ddb8;
-    color: #333;
+    background: #005a8a;
+    color: white;
 }
 
 .bookmark-button.bookmarked {
-    background: #fdf4d1;
-    color: #333;
+    background: #1d496a;
+    color: white;
 }
 
 .bookmark-button.bookmarked:hover {
-    background: #e6ddb8;
+    background: #005a8a;
 }
 
 .bookmark-button i {
     font-size: 1.1rem;
     transition: all 0.3s;
-}
-
-.bookmark-button.bookmarked i {
-    color: #c9d3e0;
 }
 
 /* Loading state during form submission */
