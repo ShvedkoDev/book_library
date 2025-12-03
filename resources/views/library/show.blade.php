@@ -2214,7 +2214,7 @@
                 <div class="">
                     <div class="subjects-content">
                         <!-- People Section -->
-                        @if($book->authors->isNotEmpty() || $book->illustrators->isNotEmpty())
+                        @if($book->authors->isNotEmpty() || $book->illustrators->isNotEmpty() || $book->editors->isNotEmpty())
                             <div class="link-box">
                                 @if($book->authors->isNotEmpty())
                                     <p class="details-value">
@@ -2224,6 +2224,11 @@
                                 @if($book->illustrators->isNotEmpty())
                                     <p class="details-value">
                                         <strong>Illustrator(s):</strong> {{ $book->illustrators->pluck('name')->join('; ') }}
+                                    </p>
+                                @endif
+                                @if($book->editors->isNotEmpty())
+                                    <p class="details-value">
+                                        <strong>Editor(s):</strong> {{ $book->editors->pluck('name')->join('; ') }}
                                     </p>
                                 @endif
                             </div>

@@ -212,6 +212,9 @@ class LibraryController extends Controller
         $book = Book::with([
             'languages',
             'creators',
+            'authors',
+            'illustrators',
+            'editors',
             'publisher',
             'collection',
             'files',
