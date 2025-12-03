@@ -1044,7 +1044,7 @@
     .library-locations-list {
         list-style: none;
         padding: 0;
-        margin: 1rem 0 0 0;
+        margin: 0!important;
         max-width: 600px;
     }
 
@@ -1084,9 +1084,8 @@
     }
 
     .library-location-text {
-        font-size: 0.95rem;
+        font-size: 0.825rem;
         color: #333;
-        font-weight: 600;
     }
 
     @media (max-width: 768px) {
