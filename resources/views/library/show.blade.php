@@ -2147,7 +2147,7 @@
                 <div class="book-author">
                     @if($book->authors->isNotEmpty())
                         <div>
-                            <span class="author-label">by</span>
+                            <span class="author-label">Author(s):</span>
                             @foreach($book->authors as $author)
                                 <a href="{{ route('library.index', ['search' => $author->name]) }}" class="author-pill">{{ $author->name }}</a>
                             @endforeach
@@ -2155,7 +2155,7 @@
                     @endif
                     @if($book->illustrators->isNotEmpty())
                         <div>
-                            <span class="author-label">illustrated by</span>
+                            <span class="author-label">Illustrator(s):</span>
                             @foreach($book->illustrators as $illustrator)
                                 <a href="{{ route('library.index', ['search' => $illustrator->name]) }}" class="author-pill">{{ $illustrator->name }}</a>
                             @endforeach
@@ -2163,7 +2163,7 @@
                     @endif
                     @if($book->editors->isNotEmpty())
                         <div>
-                            <span class="author-label">edited by</span>
+                            <span class="author-label">Editor(s):</span>
                             @foreach($book->editors as $editor)
                                 <a href="{{ route('library.index', ['search' => $editor->name]) }}" class="author-pill">{{ $editor->name }}</a>
                             @endforeach
