@@ -775,20 +775,28 @@
     }
 
     .link-box a {
-        color: #1d496a;
+        display: inline-block;
+        padding: 0.05rem 0.5rem;
+        background-color: #f0f0f0;
+        color: #333;
+        border-radius: 10px;
         text-decoration: none;
-        margin-right: 0.5rem;
-        transition: color 0.2s;
+        font-size: 0.85rem;
+        transition: background-color 0.2s ease;
+        cursor: pointer;
+        margin-right: 0.25rem;
     }
 
     .link-box a:hover {
-        color: #005a8a;
-        text-decoration: underline;
+        background-color: #e0e0e0;
+        color: #000;
+        text-decoration: none;
     }
 
     .link-box a:after {
         content: ",";
         color: #666;
+        margin-left: 0.1rem;
     }
 
     .link-box a:last-child:after {
