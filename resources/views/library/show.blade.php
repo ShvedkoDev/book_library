@@ -2285,18 +2285,14 @@
                         <h3 class="details-subsection-title">Edition notes</h3>
                         @if($book->publisher)
                             <div class="details-row">
+                                <span class="details-label">Publisher</span>
+                                <span class="details-value">{{ $book->publisher->name }}</span>
+                            </div>
+                        @endif
+                        @if($book->publisher && $book->publisher->program_name)
+                            <div class="details-row">
                                 <span class="details-label">Project/partner</span>
-                                @php
-                                    // Extract program name from publisher name (e.g., "PALM" from "UH Social Science Research Institute (SSRI), University of Hawaii at Manoa")
-                                    $publisherName = $book->publisher->name;
-                                    // Try to extract acronym in parentheses or use first word
-                                    if (preg_match('/\(([A-Z]+)\)/', $publisherName, $matches)) {
-                                        $programName = $matches[1];
-                                    } else {
-                                        $programName = explode(',', $publisherName)[0];
-                                    }
-                                @endphp
-                                <span class="details-value">{{ $programName }}</span>
+                                <span class="details-value">{{ $book->publisher->program_name }}</span>
                             </div>
                         @endif
                     </div>
@@ -2304,7 +2300,7 @@
                     <!-- Classifications -->
                     @if($book->purposeClassifications->isNotEmpty() || $book->genreClassifications->isNotEmpty() || $book->subgenreClassifications->isNotEmpty() || $book->typeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty())
                         <div class="details-subsection">
-                            <h3 class="details-subsection-title">Classifications</h3>
+                            <h3 class="details-subsection-title">Classification</h3>
                             @if($book->purposeClassifications->isNotEmpty())
                                 <div class="details-row">
                                     <span class="details-label">Purpose</span>
@@ -2344,7 +2340,7 @@
                             <h3 class="details-subsection-title">Edition identifiers</h3>
                             @if($book->internal_id)
                                 <div class="details-row">
-                                    <span class="details-label">MTDL ID</span>
+                                    <span class="details-label">NVLAC ID</span>
                                     <span class="details-value">{{ $book->internal_id }}</span>
                                 </div>
                             @endif
