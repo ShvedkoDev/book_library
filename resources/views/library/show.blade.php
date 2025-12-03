@@ -411,6 +411,12 @@
         color: #444;
         margin: 1rem 0;
         display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .book-author > div {
+        display: flex;
         align-items: center;
         gap: 0.5rem;
         flex-wrap: wrap;
@@ -2139,11 +2145,29 @@
                     <h2 class="book-subtitle">{{ $book->subtitle }}</h2>
                 @endif
                 <div class="book-author">
-                    @if($book->creators->isNotEmpty())
-                        <span class="author-label">by</span>
-                        @foreach($book->creators->unique('id') as $creator)
-                            <a href="{{ route('library.index', ['search' => $creator->name]) }}" class="author-pill">{{ $creator->name }}</a>
-                        @endforeach
+                    @if($book->authors->isNotEmpty())
+                        <div>
+                            <span class="author-label">by</span>
+                            @foreach($book->authors as $author)
+                                <a href="{{ route('library.index', ['search' => $author->name]) }}" class="author-pill">{{ $author->name }}</a>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if($book->illustrators->isNotEmpty())
+                        <div>
+                            <span class="author-label">illustrated by</span>
+                            @foreach($book->illustrators as $illustrator)
+                                <a href="{{ route('library.index', ['search' => $illustrator->name]) }}" class="author-pill">{{ $illustrator->name }}</a>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if($book->editors->isNotEmpty())
+                        <div>
+                            <span class="author-label">edited by</span>
+                            @foreach($book->editors as $editor)
+                                <a href="{{ route('library.index', ['search' => $editor->name]) }}" class="author-pill">{{ $editor->name }}</a>
+                            @endforeach
+                        </div>
                     @endif
                 </div>
 
