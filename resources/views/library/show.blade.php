@@ -300,8 +300,8 @@
         align-items: center;
         gap: 0.25rem;
         cursor: pointer;
-        text-decoration: none;
-        color: #999; /* Grey by default (for logged out users) */
+        text-decoration: none !important;
+        color: #999 !important; /* Grey by default (for logged out users) - force override link color */
         transition: color 0.2s ease;
         background: none;
         border: none;
@@ -309,16 +309,24 @@
     }
 
     .action-icon:hover {
-        color: #666; /* Darker grey on hover for logged out users */
+        color: #666 !important; /* Darker grey on hover for logged out users */
+    }
+
+    .action-icon:visited {
+        color: #999 !important; /* Keep grey for visited links */
     }
 
     /* When user is logged in, Review and Notes become blue */
     .action-icons-row.authenticated .action-icon {
-        color: #1d496a; /* Blue for authenticated users */
+        color: #1d496a !important; /* Blue for authenticated users */
     }
 
     .action-icons-row.authenticated .action-icon:hover {
-        color: #005a8a; /* Darker blue on hover */
+        color: #005a8a !important; /* Darker blue on hover */
+    }
+
+    .action-icons-row.authenticated .action-icon:visited {
+        color: #1d496a !important; /* Keep blue for visited links when authenticated */
     }
 
     /* Share button is ALWAYS blue (works for everyone) */
