@@ -2194,7 +2194,7 @@
 
                         @if($book->learnerLevelClassifications->isNotEmpty())
                             <div class="link-box">
-                                <h3 class="details-subsection-title">Grade Levels</h3>
+                                <h3 class="details-subsection-title">Grade levels</h3>
                                 @foreach($book->learnerLevelClassifications as $classification)
                                     <p class="details-value">{{ $classification->value }}</p>
                                 @endforeach
@@ -2229,7 +2229,7 @@
 
                     @if($book->table_of_contents)
                         <div>
-                            <h3>Table of Contents</h3>
+                            <h3>Table of contents</h3>
                             <div class="section-text-wide">{!! nl2br(e($book->table_of_contents)) !!}</div>
                         </div>
                     @endif
@@ -2239,13 +2239,13 @@
             <!-- Details Section -->
             <a id="details" name="details" class="section-anchor"></a>
             <div class="tab-section">
-                <h2 class="section-title text-left">Book Details</h2>
+                <h2 class="section-title text-left">Book details</h2>
                 <hr class="section-separator">
 
                 <div class="details-section">
                     <!-- Edition Notes -->
                     <div class="details-subsection">
-                        <h3 class="details-subsection-title">Edition Notes</h3>
+                        <h3 class="details-subsection-title">Edition notes</h3>
                         @if($book->publisher)
                             <div class="details-row">
                                 <span class="details-label">Project/partner</span>
@@ -2294,7 +2294,7 @@
                             @endif
                             @if($book->learnerLevelClassifications->isNotEmpty())
                                 <div class="details-row">
-                                    <span class="details-label">Grade Level</span>
+                                    <span class="details-label">Grade level</span>
                                     <span class="details-value">{{ $book->learnerLevelClassifications->pluck('value')->join(', ') }}</span>
                                 </div>
                             @endif
@@ -2304,7 +2304,7 @@
                     <!-- Edition Identifiers -->
                     @if($book->isbn_10 || $book->isbn_13 || $book->palm_code || $book->internal_id)
                         <div class="details-subsection">
-                            <h3 class="details-subsection-title">Edition Identifiers</h3>
+                            <h3 class="details-subsection-title">Edition identifiers</h3>
                             @if($book->internal_id)
                                 <div class="details-row">
                                     <span class="details-label">MTDL ID</span>
@@ -2325,7 +2325,7 @@
                             @endif
                             @if($book->palm_code)
                                 <div class="details-row">
-                                    <span class="details-label">PALM Code</span>
+                                    <span class="details-label">PALM code</span>
                                     <span class="details-value">{{ $book->palm_code }}</span>
                                 </div>
                             @endif
@@ -2338,7 +2338,7 @@
             <!-- Library Locations Section -->
             <a id="library" name="library" class="section-anchor"></a>
             <div class="tab-section">
-                <h2 class="section-title text-left">Library Locations</h2>
+                <h2 class="section-title text-left">Library locations</h2>
                 <hr class="section-separator">
                 @if($book->libraryReferences->isNotEmpty())
                     @foreach($book->libraryReferences as $reference)
@@ -2346,13 +2346,13 @@
                             <h3 class="details-subsection-title">{{ $reference->library_name }}</h3>
                             @if($reference->reference_number)
                                 <div class="detail-item">
-                                    <span class="detail-label">Reference Number:</span>
+                                    <span class="detail-label">Reference number:</span>
                                     <span class="detail-value">{{ $reference->reference_number }}</span>
                                 </div>
                             @endif
                             @if($reference->call_number)
                                 <div class="detail-item">
-                                    <span class="detail-label">Call Number:</span>
+                                    <span class="detail-label">Call number:</span>
                                     <span class="detail-value">{{ $reference->call_number }}</span>
                                 </div>
                             @endif
@@ -2361,7 +2361,7 @@
                                     <span class="detail-label">Catalog:</span>
                                     <span class="detail-value">
                                         <a href="{{ $reference->catalog_link }}" target="_blank">
-                                            View in Library Catalog <i class="fas fa-external-link-alt"></i>
+                                            View in library catalog <i class="fas fa-external-link-alt"></i>
                                         </a>
                                     </span>
                                 </div>
