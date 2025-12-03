@@ -229,8 +229,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.15rem;
+        gap: 0.1rem;
         margin: 0.5rem;
+        flex-wrap: nowrap; /* Prevent wrapping to new line */
     }
 
     .star-rating-row .star-btn {
@@ -238,26 +239,49 @@
         border: none;
         padding: 0;
         cursor: pointer;
-        color: #ddd;
-        font-size: 1.4rem;
+        color: #ddd !important; /* Force grey by default */
+        font-size: 1.12rem; /* 20% smaller than 1.4rem */
         transition: color 0.2s ease;
         line-height: 1;
-        text-decoration: none;
+        text-decoration: none !important;
+        flex-shrink: 0; /* Prevent stars from shrinking */
     }
 
+    /* Yellow stars only on hover for authenticated users or when active (rated) */
     .star-rating-row .star-btn:hover,
     .star-rating-row .star-btn.active {
-        color: #ffc107;
+        color: #ffc107 !important; /* Yellow for rated/hover */
     }
 
-    /* Ensure anchor tag stars don't show default blue link color */
+    /* Ensure anchor tag stars (non-logged-in) are ALWAYS grey, never blue */
     .star-rating-row a.star-btn {
-        color: #ddd;
-        text-decoration: none;
+        color: #ddd !important; /* Force grey */
+        text-decoration: none !important;
+        cursor: default; /* Show this is not directly clickable */
     }
 
-    .star-rating-row a.star-btn:visited {
-        color: #ddd;
+    .star-rating-row a.star-btn:visited,
+    .star-rating-row a.star-btn:hover,
+    .star-rating-row a.star-btn:active,
+    .star-rating-row a.star-btn:focus {
+        color: #ddd !important; /* Always grey for non-logged-in users */
+    }
+
+    /* Responsive adjustments for very small screens */
+    @media (max-width: 400px) {
+        .star-rating-row .star-btn {
+            font-size: 1rem; /* Slightly smaller on very small screens */
+            gap: 0.05rem;
+        }
+    }
+
+    /* Rating helper text */
+    .rating-helper-text {
+        text-align: center;
+        font-size: 0.7rem;
+        color: #999;
+        margin-top: 0.25rem;
+        transition: opacity 0.3s ease;
     }
 
     /* Action Icons Row */
@@ -1969,7 +1993,7 @@
                             @csrf
                             <input type="hidden" name="rating" id="quick-rating-value">
                             @for($i = 1; $i <= 5; $i++)
-                                <button type="button" class="star-btn {{ $userRating && $i <= $userRating->rating ? 'active' : '' }}" data-rating="{{ $i }}" onclick="submitQuickRating({{ $i }})">★</button>
+                                <button type="button" class="star-btn {{ $userRating && $i <= $userRating->rating ? 'active' : '' }}" data-rating="{{ $i }}" onclick="submitQuickRating({{ $i }})" title="Click to rate {{ $i }} star{{ $i > 1 ? 's' : '' }}{{ $userRating && $i == $userRating->rating ? ' (click again to remove rating)' : '' }}">★</button>
                             @endfor
                         </form>
                     @else
@@ -1978,6 +2002,11 @@
                         @endfor
                     @endauth
                 </div>
+                @auth
+                    <div id="rating-helper-text" class="rating-helper-text" style="display: {{ $userRating ? 'block' : 'none' }};">
+                        Click your rating again to remove it
+                    </div>
+                @endauth
             </div>
 
             <!-- Action Icons Row -->
@@ -3050,6 +3079,12 @@
                 // Update current rating tracker
                 currentQuickRating = rating;
 
+                // Show helper text for removal
+                const helperText = document.getElementById('rating-helper-text');
+                if (helperText) {
+                    helperText.style.display = 'block';
+                }
+
                 // Update quick star visual state
                 const starButtons = document.querySelectorAll('.star-rating-row .star-btn');
                 starButtons.forEach((star, index) => {
@@ -3116,6 +3151,12 @@
             // Update the detailed form's currentRating if it exists
             if (typeof currentRating !== 'undefined') {
                 currentRating = 0;
+            }
+
+            // Hide helper text
+            const helperText = document.getElementById('rating-helper-text');
+            if (helperText) {
+                helperText.style.display = 'none';
             }
 
             // Clear all quick star visual state
