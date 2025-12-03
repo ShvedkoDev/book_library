@@ -1040,100 +1040,57 @@
         margin-bottom: var(--spacing-md);
     }
 
-    /* Library Locations Grid */
-    .library-locations-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
+    /* Library Locations List (compact) */
+    .library-locations-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0 0 0;
         max-width: 600px;
     }
 
-    .library-location-box {
+    .library-location-item {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        padding: 0.75rem 1rem;
-        border: 2px solid;
-        border-radius: 4px;
-        background: var(--color-bg-white);
-        transition: all 0.2s ease;
+        gap: 0.5rem;
+        margin-bottom: 0.35rem;
     }
 
-    .library-location-box.has-link {
-        border-color: #28a745;
-        background-color: #f8fff9;
-    }
-
-    .library-location-box.no-link {
-        border-color: #dc3545;
-        background-color: #fff8f8;
-    }
-
-    .library-location-icon {
-        flex-shrink: 0;
-        width: 24px;
-        height: 24px;
-        display: flex;
+    .library-location-square {
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
+        border: 1px solid #999;
         border-radius: 3px;
-        font-size: 1rem;
-        font-weight: bold;
+        background: #f0f0f0;
+        color: #555;
+        font-size: 0.7rem;
+        line-height: 1;
     }
 
-    .library-location-box.has-link .library-location-icon {
-        background-color: #28a745;
-        color: white;
-    }
-
-    .library-location-box.no-link .library-location-icon {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .library-location-content {
-        flex: 1;
-        display: flex;
+    .library-location-square.with-link a {
+        color: #1d496a;
+        text-decoration: none;
+        display: inline-flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
     }
 
-    .library-location-name {
-        font-weight: 500;
+    .library-location-square.no-link i {
+        color: #555;
+    }
+
+    .library-location-text {
         font-size: 0.95rem;
         color: #333;
-        flex: 1;
-    }
-
-    .library-catalog-link {
-        flex-shrink: 0;
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #1d496a;
-        color: white;
-        border-radius: 3px;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-    .library-catalog-link:hover {
-        background-color: #005a8a;
-        transform: scale(1.1);
-    }
-
-    .library-catalog-link i {
-        font-size: 0.75rem;
+        font-weight: 600;
     }
 
     @media (max-width: 768px) {
-        .library-locations-grid {
-            max-width: 100%;
-        }
+        .library-locations-list { max-width: 100%; }
     }
 
     /* Book Info Cards (OpenLibrary style) */
@@ -2499,27 +2456,20 @@
                 <h2 class="section-title text-left">Library locations</h2>
                 <hr class="section-separator">
                 @if($book->libraryReferences->isNotEmpty())
-                    <div class="library-locations-grid">
+                    <ul class="library-locations-list">
                         @foreach($book->libraryReferences as $reference)
-                            <div class="library-location-box {{ $reference->catalog_link ? 'has-link' : 'no-link' }}">
-                                <div class="library-location-icon">
+                            <li class="library-location-item">
+                                <span class="library-location-square {{ $reference->catalog_link ? 'with-link' : 'no-link' }}">
                                     @if($reference->catalog_link)
-                                        <i class="fas fa-check"></i>
+                                        <a href="{{ $reference->catalog_link }}" target="_blank" aria-label="Open catalog"><i class="fas fa-external-link-alt"></i></a>
                                     @else
                                         <i class="fas fa-times"></i>
                                     @endif
-                                </div>
-                                <div class="library-location-content">
-                                    <div class="library-location-name">{{ $reference->library_name }}</div>
-                                    @if($reference->catalog_link)
-                                        <a href="{{ $reference->catalog_link }}" target="_blank" class="library-catalog-link">
-                                            <i class="fas fa-external-link-alt"></i>
-                                        </a>
-                                    @endif
-                                </div>
-                            </div>
+                                </span>
+                                <span class="library-location-text">{{ $reference->library_name }}</span>
+                            </li>
                         @endforeach
-                    </div>
+                    </ul>
                 @else
                     <p>No physical library references available for this book.</p>
                 @endif
