@@ -301,7 +301,7 @@
         gap: 0.25rem;
         cursor: pointer;
         text-decoration: none;
-        color: #999;
+        color: #999; /* Grey by default (for logged out users) */
         transition: color 0.2s ease;
         background: none;
         border: none;
@@ -309,19 +309,19 @@
     }
 
     .action-icon:hover {
-        color: #666;
+        color: #666; /* Darker grey on hover for logged out users */
     }
 
-    /* Authenticated user styling - blue for Review and Notes */
+    /* When user is logged in, Review and Notes become blue */
     .action-icons-row.authenticated .action-icon {
-        color: #1d496a;
+        color: #1d496a; /* Blue for authenticated users */
     }
 
     .action-icons-row.authenticated .action-icon:hover {
-        color: #005a8a;
+        color: #005a8a; /* Darker blue on hover */
     }
 
-    /* Share button is always blue */
+    /* Share button is ALWAYS blue (works for everyone) */
     .action-icon.share-icon {
         color: #1d496a !important;
     }
