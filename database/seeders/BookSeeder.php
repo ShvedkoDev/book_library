@@ -35,7 +35,7 @@ class BookSeeder extends Seeder
                 'title' => 'A?a?n a?tin mwa?a?n we pikinik',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Boys at the picnic]',
-                'physical_type' => 'book',
+                'physical_type_id' => 1, // Booklet
                 'collection_id' => 1, // PALM trial
                 'publisher_id' => 1, // UH SSRI
                 'publication_year' => 1979,
@@ -60,7 +60,7 @@ class BookSeeder extends Seeder
                 'title' => 'Ati ac Kenye oasr ke kuhlahs se',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Twin boys go to first grade]',
-                'physical_type' => 'book',
+                'physical_type_id' => 1, // Booklet
                 'collection_id' => 1,
                 'publisher_id' => 1,
                 'publication_year' => 1983,
@@ -85,7 +85,7 @@ class BookSeeder extends Seeder
                 'title' => 'Ahkfuhlwactyen sun lwen ohnkohsr',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Celebrating June 6th]',
-                'physical_type' => 'book',
+                'physical_type_id' => 1, // Booklet
                 'collection_id' => 1,
                 'publisher_id' => 1,
                 'publication_year' => 1979,
@@ -110,7 +110,7 @@ class BookSeeder extends Seeder
                 'title' => 'Bitiiru sukuul ngea seenseey rooraed',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Students and their teacher]',
-                'physical_type' => 'book',
+                'physical_type_id' => 1, // Booklet
                 'collection_id' => 1,
                 'publisher_id' => 1,
                 'publication_year' => 1978,
@@ -135,7 +135,7 @@ class BookSeeder extends Seeder
                 'title' => 'Boechii tiir ni ba balyaang',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[A naughty kid]',
-                'physical_type' => 'book',
+                'physical_type_id' => 1, // Booklet
                 'collection_id' => 1,
                 'publisher_id' => 1,
                 'publication_year' => 1979,
@@ -160,7 +160,7 @@ class BookSeeder extends Seeder
                 'title' => 'Chiechiach kewe',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Our friends]',
-                'physical_type' => 'book',
+                'physical_type_id' => 1, // Booklet
                 'collection_id' => 1,
                 'publisher_id' => 1,
                 'publication_year' => 1980,
@@ -185,7 +185,7 @@ class BookSeeder extends Seeder
                 'title' => 'Dahk emen oh karahs emen weir',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Race between a crab and a needlefish]',
-                'physical_type' => 'book',
+                'physical_type_id' => 1, // Booklet
                 'collection_id' => 1,
                 'publisher_id' => 1,
                 'publication_year' => 1979,
@@ -210,7 +210,7 @@ class BookSeeder extends Seeder
                 'title' => 'Dahme e kin uhd kang',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[What eats what?]',
-                'physical_type' => 'book',
+                'physical_type_id' => 1, // Booklet
                 'collection_id' => 1,
                 'publisher_id' => 1,
                 'publication_year' => 1980,
@@ -235,7 +235,7 @@ class BookSeeder extends Seeder
                 'title' => 'Duen laid ki uhk',
                 'subtitle' => '(trial version)',
                 'translated_title' => '[Net fishing]',
-                'physical_type' => 'book',
+                'physical_type_id' => 1, // Booklet
                 'collection_id' => 1,
                 'publisher_id' => 1,
                 'publication_year' => 1978,
