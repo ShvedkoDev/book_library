@@ -2291,26 +2291,6 @@
             @if($book->purposeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty() || $book->keywords->isNotEmpty() || $book->authors->isNotEmpty() || $book->illustrators->isNotEmpty())
                 <div class="">
                     <div class="subjects-content">
-                        <!-- People Section -->
-                        @if($book->authors->isNotEmpty() || $book->illustrators->isNotEmpty() || $book->editors->isNotEmpty())
-                            <div class="link-box">
-                                @if($book->authors->isNotEmpty())
-                                    <p class="details-value">
-                                        <strong>Author(s):</strong> {{ $book->authors->pluck('name')->join('; ') }}
-                                    </p>
-                                @endif
-                                @if($book->illustrators->isNotEmpty())
-                                    <p class="details-value">
-                                        <strong>Illustrator(s):</strong> {{ $book->illustrators->pluck('name')->join('; ') }}
-                                    </p>
-                                @endif
-                                @if($book->editors->isNotEmpty())
-                                    <p class="details-value">
-                                        <strong>Editor(s):</strong> {{ $book->editors->pluck('name')->join('; ') }}
-                                    </p>
-                                @endif
-                            </div>
-                        @endif
 
                         @if($book->learnerLevelClassifications->isNotEmpty())
                             <div class="link-box">
@@ -2361,6 +2341,31 @@
                 <hr class="section-separator">
 
                 <div class="details-section">
+                    <!-- Contributors -->
+                    @if($book->authors->isNotEmpty() || $book->illustrators->isNotEmpty() || $book->editors->isNotEmpty())
+                        <div class="details-subsection">
+                            <h3 class="details-subsection-title">Contributors</h3>
+                            @if($book->authors->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Author(s)</span>
+                                    <span class="details-value">{{ $book->authors->pluck('name')->join('; ') }}</span>
+                                </div>
+                            @endif
+                            @if($book->illustrators->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Illustrator(s)</span>
+                                    <span class="details-value">{{ $book->illustrators->pluck('name')->join('; ') }}</span>
+                                </div>
+                            @endif
+                            @if($book->editors->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Editor(s)</span>
+                                    <span class="details-value">{{ $book->editors->pluck('name')->join('; ') }}</span>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+
                     <!-- Edition Notes -->
                     <div class="details-subsection">
                         <h3 class="details-subsection-title">Edition notes</h3>
@@ -2877,7 +2882,7 @@
             const headerHeight = 118;
             const navBarHeight = document.querySelector('.nav-bar-wrapper')?.offsetHeight || 52;
             const offset = headerHeight + navBarHeight + 20;
-            
+
             const elementPosition = section.getBoundingClientRect().top + window.pageYOffset;
             const offsetPosition = elementPosition - offset;
 
@@ -2940,7 +2945,7 @@
                     const navBarHeight = navBarWrapper?.offsetHeight || 52;
                     const offset = headerHeight + navBarHeight + 20;
                     const offsetTop = targetSection.offsetTop - offset;
-                    
+
                     window.scrollTo({
                         top: offsetTop,
                         behavior: 'smooth'
