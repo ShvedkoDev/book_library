@@ -1,24 +1,24 @@
 @section('title', 'Login - Micronesian Teachers Digital Library')
 
 <x-guest-layout>
-    <!-- Session Status -->
-    @if (session('status'))
-        <div class="login-message">
-            {{ session('status') }}
-        </div>
-    @endif
-
-    <!-- Validation Errors -->
-    @if ($errors->any())
-        <div class="login-message login-error">
-            @foreach ($errors->all() as $error)
-                <p style="margin: 0;">{{ $error }}</p>
-            @endforeach
-        </div>
-    @endif
-
     <form method="POST" action="{{ route('login') }}" class="login-form" id="loginform">
         @csrf
+
+        <!-- Session Status -->
+        @if (session('status'))
+            <div class="login-message">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <!-- Validation Errors -->
+        @if ($errors->any())
+            <div class="login-message login-error">
+                @foreach ($errors->all() as $error)
+                    <p style="margin: 0;">{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
 
         <!-- Email Address -->
         <div class="form-group">

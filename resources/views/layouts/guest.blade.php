@@ -30,72 +30,73 @@
 
             .login-container {
                 background: var(--wp--preset--color--white);
-                padding: 26px 24px 46px;
                 font-weight: 400;
                 overflow: hidden;
                 position: relative;
-                max-width: 320px;
+                max-width: 450px;
                 width: 100%;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.13);
-                border-radius: 3px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
             }
 
             .login-header {
+                background: linear-gradient(135deg, var(--wp--preset--color--coe-green) 0%, var(--wp--preset--color--coe-blue) 100%);
+                padding: 1.5rem;
                 text-align: center;
-                margin-bottom: 25px;
+                border-radius: 8px 8px 0 0;
             }
 
             .login-header h1 {
-                font-size: 24px;
-                margin: 0 0 25px;
-                color: #1d2327;
+                font-size: 1.5rem;
+                margin: 0;
+                color: var(--wp--preset--color--white);
                 font-weight: 600;
                 font-family: var(--wp--preset--font-family--proxima-nova);
             }
 
             .site-logo {
-                max-width: 200px;
-                margin: 0 auto 25px;
+                max-width: 180px;
+                margin: 0 auto 1rem;
                 display: block;
+                filter: brightness(0) invert(1);
             }
 
             .login-form {
-                margin-top: 20px;
+                padding: 1.5rem;
             }
 
             .form-group {
-                margin-bottom: 16px;
+                margin-bottom: 1.25rem;
             }
 
             label {
                 color: #1d2327;
-                font-size: 14px;
+                font-size: 0.875rem;
                 line-height: 1.5;
                 display: block;
-                margin-bottom: 3px;
+                margin-bottom: 0.5rem;
                 font-weight: 600;
             }
 
             .form-input {
                 background: #fff;
-                border: 1px solid #8c8f94;
-                border-radius: 3px;
+                border: 1px solid #ddd;
+                border-radius: 6px;
                 color: #2c3338;
-                font-size: 24px;
+                font-size: 1rem;
                 width: 100%;
-                border-width: 0.0625rem;
-                font-family: Consolas, Monaco, monospace;
-                line-height: 1.33333333;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+                line-height: 1.5;
                 margin: 0;
-                padding: 3px 5px;
+                padding: 0.75rem 1rem;
                 box-sizing: border-box;
-                transition: 50ms border-color ease-in-out;
+                transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
             }
 
             .form-input:focus {
-                border-color: #007cba;
-                box-shadow: 0 0 0 1px #007cba;
-                outline: 2px solid transparent;
+                border-color: var(--wp--preset--color--coe-blue);
+                box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
+                outline: none;
             }
 
             .checkbox-group {
@@ -119,120 +120,123 @@
             .button {
                 display: inline-block;
                 text-decoration: none;
-                font-size: 13px;
-                line-height: 2.15384615;
-                min-height: 30px;
+                font-size: 1rem;
+                line-height: 1.5;
                 margin: 0;
-                padding: 0 10px;
+                padding: 0.75rem 1.5rem;
                 cursor: pointer;
-                border-width: 1px;
-                border-style: solid;
-                -webkit-appearance: none;
-                border-radius: 3px;
+                border: none;
+                border-radius: 6px;
                 white-space: nowrap;
                 box-sizing: border-box;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+                font-weight: 500;
+                transition: background-color 0.15s ease-in-out, transform 0.1s ease-in-out;
+                width: 100%;
             }
 
             .button-primary {
-                background: #007cba;
-                border-color: #007cba;
+                background: linear-gradient(135deg, var(--wp--preset--color--coe-green) 0%, var(--wp--preset--color--coe-blue) 100%);
                 color: #fff;
             }
 
             .button-primary:hover {
-                background: #005a87;
-                border-color: #005a87;
-                color: #fff;
+                background: linear-gradient(135deg, #007d65 0%, #005a87 100%);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+
+            .button-primary:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
             }
 
             .button-primary:focus {
-                background: #005a87;
-                border-color: #005a87;
-                color: #fff;
-                box-shadow: 0 0 0 1px #007cba;
-                outline: 2px solid transparent;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.3);
             }
 
             .button-large {
-                min-height: 32px;
-                line-height: 2;
-                padding: 0 12px;
+                padding: 0.875rem 1.5rem;
+                font-size: 1.0625rem;
             }
 
             .login-submit {
-                text-align: left;
-                padding: 16px 0 0;
-            }
-
-            .login-submit .button {
-                float: right;
-                margin-left: 8px;
+                margin-top: 1.5rem;
             }
 
             .login-links {
-                margin-top: 16px;
+                padding: 0 1.5rem 1.5rem;
                 text-align: center;
             }
 
             .login-links p {
-                margin: 16px 0 0;
-                font-size: 13px;
+                margin: 0.75rem 0 0;
+                font-size: 0.875rem;
             }
 
             .login-links a {
-                color: #50575e;
+                color: var(--wp--preset--color--coe-blue);
                 text-decoration: none;
+                font-weight: 500;
             }
 
             .login-links a:hover,
             .login-links a:active {
-                color: #135e96;
+                color: var(--wp--preset--color--coe-green);
+                text-decoration: underline;
             }
 
             .back-to-site {
-                margin: 16px 0;
+                padding: 0 1.5rem 1.5rem;
                 text-align: center;
+                border-top: 1px solid #eee;
+                margin-top: 1rem;
+                padding-top: 1rem;
             }
 
             .back-to-site a {
-                color: #50575e;
+                color: #666;
                 text-decoration: none;
-                font-size: 13px;
+                font-size: 0.875rem;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.25rem;
             }
 
             .back-to-site a:hover {
-                color: #135e96;
+                color: var(--wp--preset--color--coe-blue);
             }
 
             .login-message {
                 border-left: 4px solid #00a32a;
-                padding: 12px;
-                margin-left: 0;
-                margin-bottom: 20px;
-                background: #fff;
-                box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+                padding: 1rem;
+                margin-bottom: 1.25rem;
+                background: #f0f9ff;
+                border-radius: 6px;
                 word-wrap: break-word;
-                font-size: 14px;
+                font-size: 0.875rem;
+                color: #1d2327;
             }
 
             .login-error {
                 border-left: 4px solid #d63638;
+                background: #fff5f5;
             }
 
             .demo-credentials {
-                background: #fff9e6;
+                background: #fffbf0;
                 border: 1px solid #f0c947;
                 border-left: 4px solid #f0c947;
-                padding: 16px;
-                margin-top: 20px;
-                border-radius: 3px;
-                font-size: 13px;
+                padding: 1.25rem;
+                margin: 1.25rem 1.5rem;
+                border-radius: 6px;
+                font-size: 0.875rem;
             }
 
             .demo-credentials h3 {
-                margin: 0 0 12px 0;
-                font-size: 14px;
+                margin: 0 0 1rem 0;
+                font-size: 1rem;
                 font-weight: 600;
                 color: #1d2327;
             }
@@ -244,11 +248,16 @@
             }
 
             .demo-credentials li {
-                margin-bottom: 10px;
-                padding: 8px;
+                margin-bottom: 0.75rem;
+                padding: 0.75rem;
                 background: #fff;
-                border-radius: 3px;
+                border-radius: 6px;
                 border: 1px solid #e0e0e0;
+                transition: box-shadow 0.15s ease-in-out;
+            }
+
+            .demo-credentials li:hover {
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
 
             .demo-credentials li:last-child {
@@ -259,30 +268,31 @@
                 font-weight: 600;
                 color: #1d2327;
                 display: block;
-                margin-bottom: 4px;
+                margin-bottom: 0.5rem;
             }
 
             .demo-credentials .user-email {
                 color: #2c3338;
                 font-family: Consolas, Monaco, monospace;
-                font-size: 12px;
+                font-size: 0.8125rem;
                 display: block;
+                margin-bottom: 0.25rem;
             }
 
             .demo-credentials .user-password {
                 color: #666;
                 font-family: Consolas, Monaco, monospace;
-                font-size: 12px;
+                font-size: 0.8125rem;
                 display: block;
             }
 
             .demo-credentials .badge {
                 display: inline-block;
-                padding: 2px 6px;
-                font-size: 11px;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
                 font-weight: 600;
-                border-radius: 3px;
-                margin-left: 6px;
+                border-radius: 4px;
+                margin-left: 0.5rem;
             }
 
             .demo-credentials .badge-admin {
@@ -291,19 +301,31 @@
             }
 
             .demo-credentials .badge-user {
-                background: #007cba;
+                background: var(--wp--preset--color--coe-blue);
                 color: #fff;
             }
 
             /* Responsive design */
             @media screen and (max-width: 782px) {
                 .login-container {
-                    margin: 50px auto;
-                    width: auto;
-                    max-width: none;
-                    box-shadow: none;
-                    background: none;
-                    padding: 0 20px;
+                    margin: 1rem;
+                    max-width: 100%;
+                }
+
+                .login-header {
+                    padding: 1.25rem;
+                }
+
+                .login-form,
+                .login-links,
+                .back-to-site {
+                    padding-left: 1.25rem;
+                    padding-right: 1.25rem;
+                }
+
+                .demo-credentials {
+                    margin-left: 1.25rem;
+                    margin-right: 1.25rem;
                 }
             }
         </style>
