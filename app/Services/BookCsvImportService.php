@@ -557,10 +557,11 @@ class BookCsvImportService
             $bookData['access_level'] = $accessLevelMapping[$data['access_level']] ?? 'unavailable';
         }
 
-        // Handle physical type mapping (normalize to lowercase)
-        if (isset($data['physical_type'])) {
-            $physicalTypeMapping = $this->config['physical_type_mapping'];
-            $bookData['physical_type'] = $physicalTypeMapping[$data['physical_type']] ?? 'book';
+        // Handle physical type - auto-create if doesn't exist
+        if (isset($data['physical_type']) && !empty($data['physical_type'])) {
+            $physicalTypeName = trim($data['physical_type']);
+            $physicalType = \App\Models\PhysicalType::getOrCreate($physicalTypeName);
+            $bookData['physical_type_id'] = $physicalType->id;
         }
 
         // Clean year (remove question marks)

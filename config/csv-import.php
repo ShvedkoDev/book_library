@@ -303,35 +303,12 @@ return [
     |--------------------------------------------------------------------------
     | Physical Type Mapping
     |--------------------------------------------------------------------------
+    |
+    | REMOVED: Physical types are now dynamically created from CSV.
+    | Any physical type value from CSV will automatically create a new
+    | PhysicalType record if it doesn't already exist.
+    |
     */
-    'physical_type_mapping' => [
-        'book' => 'book',
-        'Book' => 'book',
-        'BOOK' => 'book',
-        'Booklet' => 'book',
-        'booklet' => 'book',
-        'BOOKLET' => 'book',
-        'journal' => 'journal',
-        'Journal' => 'journal',
-        'JOURNAL' => 'journal',
-        'magazine' => 'magazine',
-        'Magazine' => 'magazine',
-        'MAGAZINE' => 'magazine',
-        'workbook' => 'workbook',
-        'Workbook' => 'workbook',
-        'WORKBOOK' => 'workbook',
-        'poster' => 'poster',
-        'Poster' => 'poster',
-        'POSTER' => 'poster',
-        'CD-ROM' => 'other',        // NEW: Map CD-ROM to 'other'
-        'cd-rom' => 'other',
-        'CDROM' => 'other',
-        'CD' => 'other',
-        'DVD' => 'other',
-        'other' => 'other',
-        'Other' => 'other',
-        'OTHER' => 'other',
-    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -400,7 +377,7 @@ return [
         ],
 
         'enum_values' => [
-            'physical_type' => ['book', 'journal', 'magazine', 'workbook', 'poster', 'other'],
+            // physical_type removed - now uses dynamic physical_types table
             'access_level' => ['full', 'limited', 'unavailable'],
         ],
     ],

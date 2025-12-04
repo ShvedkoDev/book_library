@@ -113,14 +113,7 @@ trait BookCsvImportValidation
             }
         }
 
-        // Validate physical type
-        if (isset($data['physical_type']) && !empty($data['physical_type'])) {
-            $physicalTypeMapping = $this->config['physical_type_mapping'];
-            if (!isset($physicalTypeMapping[$data['physical_type']])) {
-                $validValues = implode(', ', array_unique(array_values($physicalTypeMapping)));
-                $this->warnings[] = "Row {$this->currentRow}: Invalid physical type '{$data['physical_type']}'. Valid values: {$validValues}";
-            }
-        }
+        // Physical type validation removed - now accepts any value and auto-creates physical type
     }
 
     /**

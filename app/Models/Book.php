@@ -17,7 +17,7 @@ class Book extends Model
         'subtitle',
         'translated_title',
         'slug',
-        'physical_type',
+        'physical_type_id',  // Changed from physical_type enum to FK
         'collection_id',
         'publisher_id',
         'publication_year',
@@ -115,6 +115,11 @@ class Book extends Model
     }
 
     // Relationships - Core
+
+    public function physicalType()
+    {
+        return $this->belongsTo(PhysicalType::class);
+    }
 
     public function collection()
     {
