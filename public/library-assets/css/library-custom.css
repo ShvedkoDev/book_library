@@ -32,18 +32,20 @@
     gap: 0.75rem !important;
 }
 
-/* iREi logo - match height with C4GTS */
+/* iREi logo - increase to match C4GTS visual height */
 .sidebar.header-image.handbook-image .right-logos .irei-logo {
-    height: 65px !important;
-    max-height: 65px !important;
+    height: 85px !important;
+    max-height: 85px !important;
+    min-height: 85px !important;
     width: auto !important;
     object-fit: contain !important;
 }
 
-/* C4GTS logo */
+/* C4GTS logo - keep same height */
 .sidebar.header-image.handbook-image .right-logos .c4gts-logo {
-    height: 65px !important;
-    max-height: 65px !important;
+    height: 85px !important;
+    max-height: 85px !important;
+    min-height: 85px !important;
     width: auto !important;
     object-fit: contain !important;
 }
@@ -106,9 +108,11 @@
         gap: 0.5rem;
     }
 
-    .irei-logo,
-    .c4gts-logo {
-        max-height: 50px;
+    .sidebar.header-image.handbook-image .right-logos .irei-logo,
+    .sidebar.header-image.handbook-image .right-logos .c4gts-logo {
+        height: 50px !important;
+        max-height: 50px !important;
+        min-height: 50px !important;
     }
 }
 
