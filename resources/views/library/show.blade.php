@@ -411,7 +411,6 @@
         color: #444;
         margin: 1rem 0;
         display: flex;
-        flex-direction: column;
         gap: 0.5rem;
     }
 
@@ -428,7 +427,7 @@
 
     .book-author .author-pill {
         display: inline-block;
-        padding: 0.05rem 0.5rem;
+        padding: 0.15rem 0.5rem;
         background-color: #f0f0f0;
         color: #333;
         border-radius: 10px;
@@ -1334,13 +1333,15 @@
     .review-form-footer {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: start;
         margin-top: var(--spacing-md);
     }
 
     .review-form-note {
         color: var(--color-text-muted);
         font-size: var(--font-xs);
+        position: relative;
+        top: -15px;
     }
 
     .btn-submit {
@@ -2199,29 +2200,11 @@
                     <h2 class="book-subtitle">{{ $book->subtitle }}</h2>
                 @endif
                 <div class="book-author">
-                    @if($book->authors->isNotEmpty())
-                        <div>
-                            <span class="author-label">Author(s):</span>
-                            @foreach($book->authors as $author)
-                                <a href="{{ route('library.index', ['search' => $author->name]) }}" class="author-pill">{{ $author->name }}</a>
-                            @endforeach
-                        </div>
-                    @endif
-                    @if($book->illustrators->isNotEmpty())
-                        <div>
-                            <span class="author-label">Illustrator(s):</span>
-                            @foreach($book->illustrators as $illustrator)
-                                <a href="{{ route('library.index', ['search' => $illustrator->name]) }}" class="author-pill">{{ $illustrator->name }}</a>
-                            @endforeach
-                        </div>
-                    @endif
-                    @if($book->editors->isNotEmpty())
-                        <div>
-                            <span class="author-label">Editor(s):</span>
-                            @foreach($book->editors as $editor)
-                                <a href="{{ route('library.index', ['search' => $editor->name]) }}" class="author-pill">{{ $editor->name }}</a>
-                            @endforeach
-                        </div>
+                    @if($book->creators->isNotEmpty())
+                        <span class="author-label">by</span>
+                        @foreach($book->creators->unique('id') as $creator)
+                            <a href="{{ route('library.index', ['search' => $creator->name]) }}" class="author-pill">{{ $creator->name }}</a>
+                        @endforeach
                     @endif
                 </div>
 
@@ -2336,7 +2319,7 @@
 
             <!-- Details Section -->
             <a id="details" name="details" class="section-anchor"></a>
-            <div class="tab-section">
+            <div class="tab-section" style="margin-top: 1rem!important;">
                 <h2 class="section-title text-left">Book details</h2>
                 <hr class="section-separator">
 
@@ -2621,9 +2604,18 @@
 
         <!-- Add New Note Form -->
         <div class="add-note-form">
-            <h3 class="section-title text-left">Add a new note</h3>
             <form action="{{ route('library.notes.store', $book->id) }}" method="POST">
                 @csrf
+                <div class="note-field-margin">
+                    <label for="page_number" class="note-field-label">Page number <span style="font-weight: normal">(optional)</span></label>
+                    <input
+                            type="number"
+                            name="page_number"
+                            id="page_number"
+                            min="1"
+                            placeholder="e.g., 42"
+                            class="note-field-page-input">
+                </div>
                 <div class="note-field-margin">
                     <label for="note" class="note-field-label">Note *</label>
                     <textarea
@@ -2636,17 +2628,6 @@
                         minlength="1"
                         maxlength="5000"></textarea>
                     <small class="note-field-small">Maximum 5,000 characters. Your notes are private.</small>
-                </div>
-
-                <div class="note-field-margin">
-                    <label for="page_number" class="note-field-label">Page number (optional)</label>
-                    <input
-                        type="number"
-                        name="page_number"
-                        id="page_number"
-                        min="1"
-                        placeholder="e.g., 42"
-                        class="note-field-page-input">
                 </div>
 
                 <button type="submit" class="btn-add-note">
