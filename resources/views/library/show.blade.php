@@ -606,7 +606,7 @@
         display: block;
         position: relative;
         visibility: hidden;
-        scroll-margin-top: 170px; /* Account for sticky nav at 118px + nav bar height */
+        scroll-margin-top: 190px; /* Account for sticky header (118px) + nav bar (~52px) + padding (20px) */
     }
 
     .section-anchor--no-height {
@@ -2873,10 +2873,17 @@
     function scrollToSection(sectionId) {
         const section = document.getElementById(sectionId);
         if (section) {
-            // Scroll to top of section with no offset
-            section.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            // Calculate offset: header (118px) + nav-bar height (~52px) + padding (20px)
+            const headerHeight = 118;
+            const navBarHeight = document.querySelector('.nav-bar-wrapper')?.offsetHeight || 52;
+            const offset = headerHeight + navBarHeight + 20;
+            
+            const elementPosition = section.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
             });
         }
     }
@@ -2891,11 +2898,12 @@
         // Update active state based on scroll position
         function updateActiveNav() {
             let current = '';
+            const scrollOffset = 220; // Header + nav-bar + padding for accurate detection
 
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
-                if (window.pageYOffset >= sectionTop - 200) {
+                if (window.pageYOffset >= sectionTop - scrollOffset) {
                     current = section.getAttribute('id');
                 }
             });
@@ -2920,15 +2928,19 @@
 
         window.addEventListener('scroll', updateActiveNav);
 
-        // Smooth scroll to sections
+        // Smooth scroll to sections with proper offset
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href').substring(1);
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
-                    // Reduced offset from 200 to 80 so section appears at the top
-                    const offsetTop = targetSection.offsetTop - 80;
+                    // Calculate offset: header (118px) + nav-bar height (~52px) + padding (20px)
+                    const headerHeight = 118;
+                    const navBarHeight = navBarWrapper?.offsetHeight || 52;
+                    const offset = headerHeight + navBarHeight + 20;
+                    const offsetTop = targetSection.offsetTop - offset;
+                    
                     window.scrollTo({
                         top: offsetTop,
                         behavior: 'smooth'
