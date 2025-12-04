@@ -11,8 +11,6 @@
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    justify-content: space-between !important;
-    gap: 2rem !important;
     padding: 1rem 2rem !important;
     min-height: 160px !important;
 }
@@ -34,8 +32,9 @@
     gap: 0.75rem !important;
 }
 
-/* iREi logo */
+/* iREi logo - match height with C4GTS */
 .sidebar.header-image.handbook-image .right-logos .irei-logo {
+    height: 65px !important;
     max-height: 65px !important;
     width: auto !important;
     object-fit: contain !important;
@@ -43,6 +42,7 @@
 
 /* C4GTS logo */
 .sidebar.header-image.handbook-image .right-logos .c4gts-logo {
+    height: 65px !important;
     max-height: 65px !important;
     width: auto !important;
     object-fit: contain !important;
@@ -66,10 +66,10 @@
 }
 
 .title_banner.with_sidebar .sidebar {
-    flex-basis: 37.4% !important;
     flex-shrink: 0 !important;
     display: flex !important;
     order: 2 !important;
+    top: 10px
 }
 
 /* Override for handbook-image sidebar - don't use flex-end alignment */
