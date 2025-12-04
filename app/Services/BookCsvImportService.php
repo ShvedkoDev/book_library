@@ -581,24 +581,22 @@ class BookCsvImportService
     }
 
     /**
-     * Find existing book by internal_id or palm_code
+     * Find existing book by internal_id only
+     *
+     * NOTE: palm_code is NOT used for matching because it represents the base book,
+     * not specific editions. Multiple books can share the same palm_code but have
+     * different internal_ids (e.g., P011-a and P011-d both have palm_code TAW3).
+     * Each internal_id represents a unique edition/version and should be treated
+     * as a separate book.
      *
      * @param array $bookData
      * @return Book|null
      */
     protected function findExistingBook(array $bookData): ?Book
     {
-        // Try by internal_id first
+        // Match ONLY by internal_id since it's the unique identifier for each edition
         if (!empty($bookData['internal_id'])) {
             $book = Book::where('internal_id', $bookData['internal_id'])->first();
-            if ($book) {
-                return $book;
-            }
-        }
-
-        // Try by palm_code
-        if (!empty($bookData['palm_code']) && $bookData['palm_code'] !== 'unavailable') {
-            $book = Book::where('palm_code', $bookData['palm_code'])->first();
             if ($book) {
                 return $book;
             }
