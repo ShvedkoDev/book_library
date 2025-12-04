@@ -1,4 +1,4 @@
-@section('title', 'Login - Micronesian Teachers Digital Library')
+@section('title', 'National Vernacular Language Arts (VLA) curriculum')
 
 <x-guest-layout>
     <form method="POST" action="{{ route('login') }}" class="login-form" id="loginform">

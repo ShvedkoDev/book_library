@@ -6,45 +6,41 @@
     padding: 0.5rem 1rem;
 }
 
-/* Partner logos in sidebar - CSS Grid applied to wrapper divs */
+/* Partner logos in sidebar - Flex layout with stacked right column */
 .sidebar.header-image.handbook-image {
-    display: grid !important;
-    grid-template-columns: auto 1fr !important;
-    grid-template-rows: 1fr 1fr !important;
-    gap: 1rem 3rem !important;
-    padding: 2rem 3rem !important;
-    background: linear-gradient(to bottom, #b8d4e6 0%, #7ba5c0 100%) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    padding: 0 3rem 1rem 3rem!important;
     min-height: 200px !important;
+    flex-wrap: nowrap !important;
 }
 
-/* Grid cells - wrapper divs get grid positioning */
 .sidebar.header-image.handbook-image .logo-cell {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 }
 
-/* NDOE cell - Column 1, spans both rows (full left side) */
 .sidebar.header-image.handbook-image .ndoe-cell {
-    grid-column: 1 / 2 !important;
-    grid-row: 1 / 3 !important;
+    flex: 0 0 auto !important;
     justify-content: flex-start !important;
-    align-self: center !important;
 }
 
-/* iREi cell - Column 2, Row 1 (top right) */
-.sidebar.header-image.handbook-image .irei-cell {
-    grid-column: 2 / 3 !important;
-    grid-row: 1 / 2 !important;
-    justify-content: flex-end !important;
-    align-self: center !important;
+.sidebar.header-image.handbook-image .right-logos {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.25rem !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
 }
 
-/* C4GTS cell - Column 2, Row 2 (bottom right) */
+.sidebar.header-image.handbook-image .right-logos .logo-cell {
+    justify-content: flex-start !important;
+}
+
+.sidebar.header-image.handbook-image .irei-cell,
 .sidebar.header-image.handbook-image .c4gts-cell {
-    grid-column: 2 / 3 !important;
-    grid-row: 2 / 3 !important;
-    justify-content: flex-end !important;
     align-self: center !important;
 }
 
