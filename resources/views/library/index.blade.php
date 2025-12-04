@@ -21,9 +21,11 @@
             </div>
         </div>
         <aside class="sidebar header-image handbook-image">
-            <img class="ndoe-logo" src="{{ asset('library-assets/images/NDOE.png') }}" alt="">
-            <img class="irei-logo" src="{{ asset('library-assets/images/iREi.png') }}" alt="">
-            <img class="c4gts-logo" src="{{ asset('library-assets/images/C4GTS.png') }}" alt="">
+            <img class="ndoe-logo" src="{{ asset('library-assets/images/NDOE.png') }}" alt="Department of Education - National Government">
+            <div class="right-logos">
+                <img class="irei-logo" src="{{ asset('library-assets/images/iREi.png') }}" alt="Island Research & Education Initiative">
+                <img class="c4gts-logo" src="{{ asset('library-assets/images/C4GTS.png') }}" alt="Center for Getting Things Started">
+            </div>
         </aside>
     </div>
     <div class="page-content">
