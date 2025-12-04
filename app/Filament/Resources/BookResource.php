@@ -61,14 +61,12 @@ class BookResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('internal_id')
                             ->label('Internal ID')
-                            ->unique(ignoreRecord: true)
                             ->maxLength(50)
                             ->placeholder('Auto-generated or manual ID')
                             ->helperText('CSV: ID - Internal unique identifier'),
 
                         Forms\Components\TextInput::make('palm_code')
                             ->label('PALM code')
-                            ->unique(ignoreRecord: true)
                             ->maxLength(100)
                             ->placeholder('PALM catalog code')
                             ->helperText('CSV: PALM code'),
