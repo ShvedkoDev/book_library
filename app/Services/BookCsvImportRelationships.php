@@ -374,14 +374,19 @@ trait BookCsvImportRelationships
      */
     protected function attachFiles(Book $book, array $data, array $options): void
     {
+        $attachedPdf = false;
+        $attachedThumbnail = false;
+
         // Primary PDF
         if (!empty($data['pdf_filename'])) {
             $this->attachFile($book, 'pdf', $data['pdf_filename'], $data['digital_source'] ?? null, true);
+            $attachedPdf = true;
         }
 
         // Primary Thumbnail
         if (!empty($data['thumbnail_filename'])) {
             $this->attachFile($book, 'thumbnail', $data['thumbnail_filename'], null, true);
+            $attachedThumbnail = true;
         }
 
         // Alternative PDF
@@ -392,6 +397,11 @@ trait BookCsvImportRelationships
         // Alternative Thumbnail
         if (!empty($data['thumbnail_filename_alt'])) {
             $this->attachFile($book, 'thumbnail', $data['thumbnail_filename_alt'], null, false);
+        }
+
+        // Auto-match files by internal_id if not explicitly provided
+        if (!$attachedPdf || !$attachedThumbnail) {
+            $this->autoMatchFilesByInternalId($book, $data, $attachedPdf, $attachedThumbnail);
         }
 
         // Audio files
@@ -407,6 +417,48 @@ trait BookCsvImportRelationships
             $videoUrls = $this->splitMultiValue($data['video_urls']);
             foreach ($videoUrls as $index => $url) {
                 $this->attachVideoUrl($book, $url, $index === 0);
+            }
+        }
+    }
+
+    /**
+     * Auto-match files in storage by internal_id pattern
+     *
+     * Searches for PDF and thumbnail files in storage that match the book's internal_id
+     * when the CSV doesn't explicitly specify file names. This enables automatic file
+     * attachment for books where files are named with consistent patterns.
+     */
+    protected function autoMatchFilesByInternalId(Book $book, array $data, bool $hasPdf, bool $hasThumbnail): void
+    {
+        $internalId = $book->internal_id ?? $data['internal_id'] ?? null;
+        if (!$internalId) {
+            return;
+        }
+
+        $booksPath = storage_path('app/public/books');
+        if (!is_dir($booksPath)) {
+            return;
+        }
+
+        // Search for PDF if not attached
+        if (!$hasPdf) {
+            $pdfFiles = glob($booksPath . '/*' . $internalId . '*.pdf');
+            if (!empty($pdfFiles)) {
+                $filename = basename($pdfFiles[0]);
+                $this->attachFile($book, 'pdf', $filename, 'Auto-matched by internal_id', true);
+            }
+        }
+
+        // Search for thumbnail if not attached
+        if (!$hasThumbnail) {
+            $imageExtensions = ['.png', '.jpg', '.jpeg'];
+            foreach ($imageExtensions as $ext) {
+                $imageFiles = glob($booksPath . '/*' . $internalId . '*' . $ext);
+                if (!empty($imageFiles)) {
+                    $filename = basename($imageFiles[0]);
+                    $this->attachFile($book, 'thumbnail', $filename, null, true);
+                    break;
+                }
             }
         }
     }
