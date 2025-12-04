@@ -14,6 +14,14 @@
                 --wp--preset--color--coe-blue: #007cba;
                 --wp--preset--color--white: #ffffff;
                 --wp--preset--font-family--proxima-nova: "Proxima Nova", sans-serif;
+
+                /* Modal matching colors */
+                --color-primary: #1d496a;
+                --color-primary-dark: #007a5e;
+                --radius-xl: 12px;
+                --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+                --spacing-lg: 1.5rem;
+                --font-size-xl: 1.25rem;
             }
 
             /* WordPress login page styling */
@@ -35,19 +43,19 @@
                 position: relative;
                 max-width: 450px;
                 width: 100%;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                border-radius: 8px;
+                box-shadow: var(--shadow-xl);
+                border-radius: var(--radius-xl);
+                border: 2px solid var(--color-primary);
             }
 
             .login-header {
-                background: linear-gradient(135deg, var(--wp--preset--color--coe-green) 0%, var(--wp--preset--color--coe-blue) 100%);
-                padding: 1.5rem;
+                background: var(--color-primary);
+                padding: var(--spacing-lg);
                 text-align: center;
-                border-radius: 8px 8px 0 0;
             }
 
             .login-header h1 {
-                font-size: 1.5rem;
+                font-size: var(--font-size-xl);
                 margin: 0;
                 color: var(--wp--preset--color--white);
                 font-weight: 600;
@@ -94,8 +102,8 @@
             }
 
             .form-input:focus {
-                border-color: var(--wp--preset--color--coe-blue);
-                box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
+                border-color: var(--color-primary);
+                box-shadow: 0 0 0 3px rgba(29, 73, 106, 0.1);
                 outline: none;
             }
 
@@ -136,12 +144,12 @@
             }
 
             .button-primary {
-                background: linear-gradient(135deg, var(--wp--preset--color--coe-green) 0%, var(--wp--preset--color--coe-blue) 100%);
+                background: var(--color-primary);
                 color: #fff;
             }
 
             .button-primary:hover {
-                background: linear-gradient(135deg, #007d65 0%, #005a87 100%);
+                background: #0f2f46;
                 transform: translateY(-1px);
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
             }
@@ -153,7 +161,7 @@
 
             .button-primary:focus {
                 outline: none;
-                box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.3);
+                box-shadow: 0 0 0 3px rgba(29, 73, 106, 0.3);
             }
 
             .button-large {
@@ -176,14 +184,14 @@
             }
 
             .login-links a {
-                color: var(--wp--preset--color--coe-blue);
+                color: var(--color-primary);
                 text-decoration: none;
                 font-weight: 500;
             }
 
             .login-links a:hover,
             .login-links a:active {
-                color: var(--wp--preset--color--coe-green);
+                color: #0f2f46;
                 text-decoration: underline;
             }
 
@@ -205,7 +213,7 @@
             }
 
             .back-to-site a:hover {
-                color: var(--wp--preset--color--coe-blue);
+                color: var(--color-primary);
             }
 
             .login-message {
@@ -301,7 +309,7 @@
             }
 
             .demo-credentials .badge-user {
-                background: var(--wp--preset--color--coe-blue);
+                background: var(--color-primary);
                 color: #fff;
             }
 
@@ -333,7 +341,7 @@
     <body class="login-page">
         <div class="login-container">
             <div class="login-header">
-                <img src="{{ asset('library-assets/images/mtdl-logo.png') }}" alt="{{ $siteName }}" class="site-logo">
+                <img src="{{ asset('library-assets/images/government_of_the_federated_states_of_micronesia.png') }}" class="site-logo" alt="Government of the Federated States of Micronesia">
                 <h1>{{ $siteName }}</h1>
             </div>
 
