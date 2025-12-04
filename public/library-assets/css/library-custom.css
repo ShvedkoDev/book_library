@@ -8,42 +8,45 @@
 
 /* Partner logos in sidebar - NDOE on left, stacked logos on right */
 .sidebar.header-image.handbook-image {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    padding: 1rem 2rem;
-    background: linear-gradient(to bottom, #a8c5d9 0%, #6b9ab8 100%);
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 2rem !important;
+    padding: 1rem 2rem !important;
+    background: linear-gradient(to bottom, #a8c5d9 0%, #6b9ab8 100%) !important;
+    min-height: 160px !important;
 }
 
 /* NDOE logo - large circular logo on the left */
-.ndoe-logo {
-    max-height: 140px;
-    width: auto;
-    object-fit: contain;
-    flex-shrink: 0;
+.sidebar.header-image.handbook-image .ndoe-logo {
+    max-height: 140px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
 }
 
 /* Right logos container - stacked vertically */
-.right-logos {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.75rem;
+.sidebar.header-image.handbook-image .right-logos {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    gap: 0.75rem !important;
 }
 
 /* iREi logo */
-.irei-logo {
-    max-height: 65px;
-    width: auto;
-    object-fit: contain;
+.sidebar.header-image.handbook-image .right-logos .irei-logo {
+    max-height: 65px !important;
+    width: auto !important;
+    object-fit: contain !important;
 }
 
 /* C4GTS logo */
-.c4gts-logo {
-    max-height: 65px;
-    width: auto;
-    object-fit: contain;
+.sidebar.header-image.handbook-image .right-logos .c4gts-logo {
+    max-height: 65px !important;
+    width: auto !important;
+    object-fit: contain !important;
 }
 
 /* Ensure flex layout works for title_banner */
@@ -65,7 +68,11 @@
         flex-basis: 37.4%;
         flex-shrink: 0;
         display: flex;
-        align-items: flex-end;
+    }
+
+    /* Override for handbook-image sidebar - don't use flex-end alignment */
+    .title_banner.with_sidebar .sidebar.header-image.handbook-image {
+        align-items: center !important;
     }
 }
 
