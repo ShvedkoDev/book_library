@@ -11,8 +11,7 @@
             <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
                 <!-- Breadcrumb NavXT 7.4.1 -->
                 <span property="itemListElement" typeof="ListItem">
-                    <a property="item" typeof="WebPage" title="Go to Micronesian Teachers Digital Library." href="{{ url('/') }}" class="main-home">
-                        <span property="name">National Vernacular Language Arts (VLA) Curriculum</span></a>
+                    <span class="main-home" property="name">National Vernacular Language Arts (VLA) Curriculum</span>
                     <meta property="position" content="1">
                 </span>
             </div>

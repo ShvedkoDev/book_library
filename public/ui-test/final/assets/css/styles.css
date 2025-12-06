@@ -2864,7 +2864,7 @@ a:where(:not(.wp-element-button)) {
     margin-bottom: 5px;
     font-size: 14px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-    line-height: 1.4;
+    line-height: 1;
 }
 
 .book-title a {

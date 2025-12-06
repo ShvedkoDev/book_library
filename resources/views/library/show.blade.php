@@ -2009,8 +2009,8 @@
                     @else
                         <a href="{{ route('login', ['redirect' => url()->current()]) }}"
                            class="book-action-btn btn-secondary text-link"
-                           title="Please log in to request access">
-                            Login to request access
+                           title="Request access">
+                            Request access
                         </a>
                     @endauth
                 @else
@@ -2047,8 +2047,8 @@
                     @else
                         <a href="{{ route('login', ['redirect' => url()->current()]) }}"
                            class="book-action-btn btn-secondary text-link"
-                           title="Please log in to request information">
-                            Login to request information
+                           title="Request information">
+                            Request information
                         </a>
                     @endauth
                 @endif
