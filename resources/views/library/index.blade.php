@@ -347,7 +347,11 @@
                             </td>
                             <td class="book-details-cell">
                                 <div class="book-title">
-                                    <a href="{{ route('library.show', $book->slug) }}">{{ $book->title }}</a>
+                                    <a href="{{ route('library.show', $book->slug) }}"><span>{{ $book->title }}</span>
+                                        @if($book->subtitle)
+                                            &nbsp;&ndash; <span style="font-weight: normal">{{ $book->subtitle }}</span>
+                                        @endif
+                                    </a>
                                 </div>
                                 <div class="book-metadata">
                                     {{ $book->publication_year ?? 'N/A' }}

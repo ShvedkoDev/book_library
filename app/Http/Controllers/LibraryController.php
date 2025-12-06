@@ -44,6 +44,7 @@ class LibraryController extends Controller
             ->select([
                 'books.id',
                 'books.title',
+                'books.subtitle',
                 'books.description',
                 'books.publication_year',
                 'books.access_level',
