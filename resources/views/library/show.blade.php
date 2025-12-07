@@ -230,8 +230,24 @@
         justify-content: center;
         align-items: center;
         gap: 0.1rem;
-        margin: 0.5rem;
+        margin: 0.5rem auto;
         flex-wrap: nowrap; /* Prevent wrapping to new line */
+        width: 100%;
+    }
+
+    .star-rating-row input+button,
+    .star-rating-row input+input {
+        margin-top: 0; /* Override global form spacing */
+    }
+
+    .star-rating-inline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.15rem;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        max-width: 100%;
     }
 
     .star-rating-row .star-btn {
@@ -240,7 +256,7 @@
         padding: 0;
         cursor: pointer;
         color: #ddd !important; /* Force grey by default */
-        font-size: 1.7rem;
+        font-size: clamp(0.96rem, 3.2vw, 1.36rem);
         transition: color 0.2s ease;
         line-height: 1;
         text-decoration: none !important;
@@ -270,7 +286,7 @@
     /* Responsive adjustments for very small screens */
     @media (max-width: 400px) {
         .star-rating-row .star-btn {
-            font-size: 1rem; /* Slightly smaller on very small screens */
+            font-size: 0.8rem; /* Slightly smaller on very small screens */
             gap: 0.05rem;
         }
     }
@@ -356,7 +372,7 @@
 
     .stars {
         color: #ffc107;
-        font-size: 1.75rem;
+        font-size: 1.4rem;
     }
 
     .stars .empty {
@@ -1089,6 +1105,28 @@
 
     @media (max-width: 768px) {
         .library-locations-list { max-width: 100%; }
+    }
+
+    .related-books-full-width {
+        width: 100%;
+        margin-top: var(--spacing-3xl);
+    }
+
+    .related-books-section {
+        margin-top: var(--spacing-2xl);
+    }
+
+    .related-books-subsection {
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .related-books-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .related-books-table-wrapper .books-table {
+        width: 100%;
+        margin-bottom: 0;
     }
 
     /* Book Info Cards (OpenLibrary style) */
@@ -2058,7 +2096,7 @@
             <div class="divider-top star-rating-wrapper">
                 <div class="star-rating-row">
                     @auth
-                        <form action="{{ route('library.rate', $book->id) }}" method="POST" id="quick-rating-form">
+                        <form action="{{ route('library.rate', $book->id) }}" method="POST" id="quick-rating-form" class="star-rating-inline">
                             @csrf
                             <input type="hidden" name="rating" id="quick-rating-value">
                             @for($i = 1; $i <= 5; $i++)
@@ -2066,14 +2104,16 @@
                             @endfor
                         </form>
                     @else
-                        @for($i = 1; $i <= 5; $i++)
-                            <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="star-btn" title="Please log in to rate">★</a>
-                        @endfor
+                        <div class="star-rating-inline">
+                            @for($i = 1; $i <= 5; $i++)
+                                <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="star-btn" title="Please log in to rate">★</a>
+                            @endfor
+                        </div>
                     @endauth
                 </div>
                 @auth
                     <div id="rating-helper-text" class="rating-helper-text" style="display: {{ $userRating ? 'block' : 'none' }};">
-                        Click your rating again to remove it
+                        Click rating again to remove
                     </div>
                 @endauth
             </div>
@@ -2135,9 +2175,11 @@
                     <li>
                         <a href="#library">Library locations</a>
                     </li>
-                    <li>
-                        <a href="#related-books">Related books</a>
-                    </li>
+                    @if($hasRelatedBookSections)
+                        <li>
+                            <a href="#related-books">Related books</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
 
@@ -2445,10 +2487,16 @@
                 @if($book->libraryReferences->isNotEmpty())
                     <ul class="library-locations-list">
                         @foreach($book->libraryReferences as $reference)
+                            @php
+                                // Determine which link to use (priority: main_link > catalog_link > alt_link)
+                                $linkUrl = $reference->main_link ?: ($reference->catalog_link ?: $reference->alt_link);
+                            @endphp
                             <li class="library-location-item">
-                                <span class="library-location-square {{ $reference->catalog_link ? 'with-link' : 'no-link' }}">
-                                    @if($reference->catalog_link)
-                                        <a href="{{ $reference->catalog_link }}" target="_blank" aria-label="Open catalog"><i class="fas fa-external-link-alt"></i></a>
+                                <span class="library-location-square {{ $linkUrl ? 'with-link' : 'no-link' }}">
+                                    @if($linkUrl)
+                                        <a href="{{ $linkUrl }}" target="_blank" rel="noopener noreferrer" aria-label="Open library catalog in new tab">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
                                     @else
                                         <i class="fas fa-times"></i>
                                     @endif
@@ -2461,267 +2509,143 @@
                     <p>No physical library references available for this book.</p>
                 @endif
             </div>
-        </div>
-    </div>
 
-    <!-- Related Books Sections -->
-    <a id="related-books" name="related-books" class="section-anchor"></a>
-    <x-library.related-books :books="$relatedByCollection" title="More books from the same collection" sectionId="related-by-collection" />
-    <x-library.related-books :books="$relatedByLanguage" title="More books in the same language" sectionId="related-by-language" />
-    <x-library.related-books :books="$relatedByCreator" title="More books by the same author" sectionId="related-by-creator" />
+            @if($hasAdvancedRelatedBookSections)
+                @php
+                    $relatedSections = [
+                        [
+                            'title' => 'Other editions',
+                            'books' => $relatedOtherEditions,
+                        ],
+                        [
+                            'title' => 'Other language versions',
+                            'books' => $relatedOtherLanguageVersions,
+                        ],
+                        [
+                            'title' => 'Other closely related titles',
+                            'books' => $relatedCloselyTitles,
+                        ],
+                    ];
+                @endphp
 
-    <!-- Reviews and Ratings Section -->
-    <a id="reader-observations" name="reader-observations" class="section-anchor"></a>
-    <div class="reviews-section">
-        <h2>User feedback</h2>
-
-        <!-- Rating Histogram -->
-        <div class="rating-histogram">
-            <h3 class="section-title text-left">Rating distribution</h3>
-            @if($totalRatings > 0)
-                <div class="rating-center">
-                    <div class="rating-score-display">
-                        <div class="rating-score-number">{{ number_format($averageRating, 1) }}</div>
-                        <div class="stars rating-score-stars">
-                            @for($i = 1; $i <= 5; $i++)
-                                <span class="star {{ $i <= round($averageRating) ? '' : 'empty' }}">★</span>
-                            @endfor
-                        </div>
-                        <div class="rating-score-count">{{ $totalRatings }} {{ Str::plural('rating', $totalRatings) }}</div>
-                    </div>
-                    <div class="rating-bars">
-                        @foreach([5, 4, 3, 2, 1] as $rating)
-                            @php
-                                $count = $ratingDistribution[$rating];
-                                $percentage = $totalRatings > 0 ? ($count / $totalRatings) * 100 : 0;
-                            @endphp
-                            <div class="rating-bar-row">
-                                <span class="rating-bar-label">{{ $rating }} stars</span>
-                                <div class="rating-bar-container">
-                                    <div class="rating-bar-fill" style="width: {{ $percentage }}%;"></div>
+                @foreach($relatedSections as $section)
+                    @if($section['books']->isNotEmpty())
+                        <div class="tab-section related-books-section">
+                            <h2 class="section-title text-left">{{ $section['title'] }}</h2>
+                            <hr class="section-separator">
+                            <div class="related-books-subsection">
+                                <div class="related-books-table-wrapper">
+                                    <table class="books-table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 80px;"></th>
+                                                <th>Title/Edition</th>
+                                                <th style="width: 120px;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($section['books'] as $relatedBook)
+                                                @php
+                                                    $descriptionParts = [];
+                                                    if ($relatedBook->purposeClassifications->isNotEmpty()) {
+                                                        $descriptionParts[] = $relatedBook->purposeClassifications->pluck('value')->join(', ');
+                                                    }
+                                                    if ($relatedBook->learnerLevelClassifications->isNotEmpty()) {
+                                                        $descriptionParts[] = $relatedBook->learnerLevelClassifications->pluck('value')->join(', ');
+                                                    }
+                                                    if ($relatedBook->languages->isNotEmpty()) {
+                                                        $descriptionParts[] = $relatedBook->languages->pluck('name')->join(', ');
+                                                    }
+                                                @endphp
+                                                <tr class="book-row">
+                                                    <td class="book-cover-cell">
+                                                        <img src="{{ $relatedBook->getThumbnailUrl() }}"
+                                                             alt="{{ $relatedBook->title }}"
+                                                             class="book-cover">
+                                                    </td>
+                                                    <td class="book-details-cell">
+                                                        <div class="book-title">
+                                                            <a href="{{ route('library.show', $relatedBook->slug) }}">
+                                                                <span>{{ $relatedBook->title }}</span>
+                                                                @if($relatedBook->subtitle)
+                                                                    &nbsp;&ndash; <span style="font-weight: normal">{{ $relatedBook->subtitle }}</span>
+                                                                @endif
+                                                            </a>
+                                                        </div>
+                                                        <div class="book-metadata">
+                                                            {{ $relatedBook->publication_year ?? 'N/A' }}
+                                                            @if($relatedBook->publisher)
+                                                                , {{ $relatedBook->publisher->name }}
+                                                            @endif
+                                                        </div>
+                                                        <div class="book-description">
+                                                            {{ implode(', ', array_filter($descriptionParts)) }}
+                                                        </div>
+                                                        <div class="book-description">
+                                                            @if($relatedBook->access_level === 'full')
+                                                                Full access
+                                                            @elseif($relatedBook->access_level === 'limited')
+                                                                Limited access
+                                                            @else
+                                                                Unavailable
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                                    <td class="book-actions-cell">
+                                                        <div class="book-actions">
+                                                            <a href="{{ route('library.show', $relatedBook->slug) }}" class="button button-primary btn-view">Locate</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <span class="rating-bar-count">{{ $count }}</span>
                             </div>
-                        @endforeach
-                    </div>
-                </div>
-            @else
-                <p class="rating-empty-state">No ratings yet. Be the first to rate this book!</p>
-            @endif
-        </div>
-
-        <!-- User Rating Form -->
-        @auth
-            <div class="user-rating-form">
-                <h3 class="section-title text-left">Rate this book</h3>
-                <form action="{{ route('library.rate', $book->id) }}" method="POST" class="star-rating-form" id="detailed-rating-form">
-                    @csrf
-                    <div class="star-rating">
-                        @for($i = 1; $i <= 5; $i++)
-                            <label>
-                                <input type="radio" name="rating" value="{{ $i }}" style="display: none;"
-                                    {{ $userRating && $userRating->rating == $i ? 'checked' : '' }}>
-                                <span class="rating-star" data-rating="{{ $i }}"
-                                    style="color: {{ $userRating && $i <= $userRating->rating ? '#ffc107' : '#ddd' }}; transition: color 0.2s;">★</span>
-                            </label>
-                        @endfor
-                    </div>
-                    @if($userRating)
-                        <span class="rating-text" id="rating-text">Your rating: {{ $userRating->rating }}/5</span>
-                    @else
-                        <span class="rating-text" id="rating-text">Click to rate</span>
+                        </div>
                     @endif
-                </form>
-            </div>
-        @else
-            <div class="review-guest-message guest-message">
-                <p>Please <a href="{{ route('login', ['redirect' => url()->current()]) }}">log in</a> to rate this book.</p>
-            </div>
-        @endauth
-
-        <!-- User Review Form -->
-        @auth
-            <div class="user-review-form">
-                <h3 class="section-title text-left">Write a review</h3>
-                <form action="{{ route('library.review', $book->id) }}" method="POST">
-                    @csrf
-                    <textarea name="review" rows="5" placeholder="Share your thoughts about this book..."
-                        class="review-form-field"
-                        required minlength="10" maxlength="2000"></textarea>
-                    <div class="review-form-footer">
-                        <span class="review-form-note">Reviews are moderated and will appear after approval.</span>
-                        <button type="submit" class="btn-submit">
-                            Submit review
-                        </button>
-                    </div>
-                </form>
-            </div>
-        @else
-            <div class="review-guest-message guest-message">
-                <p>Please <a href="{{ route('login', ['redirect' => url()->current()]) }}">log in</a> to write a review.</p>
-            </div>
-        @endauth
-
-        <!-- Existing Reviews -->
-        <div class="existing-reviews">
-            <h3 class="section-title text-left">User reviews ({{ $book->reviews->count() }})</h3>
-            @forelse($book->reviews as $review)
-                <div class="review-item">
-                    <div class="review-header">
-                        <div>
-                            <span class="review-author">{{ $review->user->name }}</span>
-                            @php
-                                $reviewUserRating = $book->ratings()->where('user_id', $review->user_id)->first();
-                            @endphp
-                            @if($reviewUserRating)
-                                <div class="stars review-rating">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <span class="star {{ $i <= $reviewUserRating->rating ? '' : 'empty' }}">★</span>
-                                    @endfor
-                                </div>
-                            @endif
-                        </div>
-                        <span class="review-date">{{ $review->created_at->diffForHumans() }}</span>
-                    </div>
-                    <p class="review-text">{{ $review->review }}</p>
-                </div>
-            @empty
-                <div class="review-item guest-message">
-                    <p>No reviews yet. Be the first to review this book!</p>
-                </div>
-            @endforelse
-        </div>
-    </div>
-
-    <!-- Personal Notes Section -->
-    @auth
-    <div id="notes-section" class="notes-section">
-        <h3 class="section-title text-left">My notes
-            @if($userNotes->isNotEmpty())
-                <span>({{ $userNotes->count() }})</span>
+                @endforeach
             @endif
-        </h3>
 
-        <!-- Add New Note Form -->
-        <div class="add-note-form">
-            <form action="{{ route('library.notes.store', $book->id) }}" method="POST">
-                @csrf
-                <div class="note-field-margin">
-                    <label for="page_number" class="note-field-label">Page number <span style="font-weight: normal">(optional)</span></label>
-                    <input
-                            type="number"
-                            name="page_number"
-                            id="page_number"
-                            min="1"
-                            placeholder="e.g., 42"
-                            class="note-field-page-input">
+            <!-- User feedback (reviews) section -->
+            <a id="reader-observations" name="reader-observations" class="section-anchor"></a>
+            <div class="tab-section">
+                <h2 class="section-title text-left">User feedback ({{ $book->reviews->count() }} {{ Str::plural('review', $book->reviews->count()) }})</h2>
+                <hr class="section-separator">
+                <div class="reviews-section">
+                    @include('library.partials.reviews')
                 </div>
-                <div class="note-field-margin">
-                    <label for="note" class="note-field-label">Note *</label>
-                    <textarea
-                        name="note"
-                        id="note"
-                        rows="4"
-                        placeholder="Write your thoughts, observations, or reminders about this book..."
-                        class="note-field-input"
-                        required
-                        minlength="1"
-                        maxlength="5000"></textarea>
-                    <small class="note-field-small">Maximum 5,000 characters. Your notes are private.</small>
-                </div>
+            </div>
 
-                <button type="submit" class="btn-add-note">
-                    <i class="fal fa-plus"></i> Add note
-                </button>
-            </form>
-        </div>
-
-        <!-- Existing Notes -->
-        <div class="existing-notes">
-            <h3 class="section-title text-left">
-                Your notes
-                @if($userNotes->isEmpty())
-                    <span>(none yet)</span>
-                @endif
-            </h3>
-            @forelse($userNotes as $note)
-                <div class="note-item">
-                    <div class="note-item-header">
-                        <div>
-                            @if($note->page_number)
-                                <span class="note-page-badge">
-                                    <i class="fal fa-book-open"></i> Page {{ $note->page_number }}
-                                </span>
-                            @endif
-                            <div class="note-date">
-                                <i class="fal fa-clock"></i> {{ $note->created_at->format('M d, Y') }}
-                                @if($note->created_at != $note->updated_at)
-                                    (edited {{ $note->updated_at->diffForHumans() }})
-                                @endif
-                            </div>
-                        </div>
-                        <div class="note-actions">
-                            <button onclick="editNote({{ $note->id }})" class="btn-note-edit">
-                                <i class="fal fa-edit"></i> Edit
-                            </button>
-                            <form action="{{ route('library.notes.destroy', $note->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this note?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-note-delete">
-                                    <i class="fal fa-trash"></i> Delete
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div id="note-content-{{ $note->id }}" class="note-content">{{ $note->note }}</div>
-
-                    <!-- Edit Form (Hidden by default) -->
-                    <div id="note-edit-form-{{ $note->id }}" class="note-edit-form">
-                        <form action="{{ route('library.notes.update', $note->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <textarea
-                                name="note"
-                                rows="4"
-                                required
-                                minlength="1"
-                                maxlength="5000">{{ $note->note }}</textarea>
-                            <div class="note-field-margin">
-                                <input
-                                    type="number"
-                                    name="page_number"
-                                    value="{{ $note->page_number }}"
-                                    min="1"
-                                    placeholder="Page number (optional)"
-                                    class="note-field-page-input">
-                            </div>
-                            <div class="note-edit-actions">
-                                <button type="submit" class="btn-note-save">
-                                    <i class="fal fa-check"></i> Save
-                                </button>
-                                <button type="button" onclick="cancelEdit({{ $note->id }})" class="btn-note-cancel">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
+            <!-- My notes section -->
+            @auth
+                <a id="notes-section" name="notes-section" class="section-anchor"></a>
+                <div class="tab-section">
+                    <h2 class="section-title text-left">My notes</h2>
+                    <hr class="section-separator">
+                    <div class="notes-section">
+                        @include('library.partials.notes')
                     </div>
                 </div>
-            @empty
-                <div class="notes-empty-state">
-                    <p>You haven't added any notes for this book yet. Use the form above to add your first note!</p>
-                </div>
-            @endforelse
+            @endauth
+
         </div>
     </div>
-    @else
-        <div class="notes-guest-section">
-            <h2>
-                <i class="fal fa-sticky-note"></i> Personal notes
-            </h2>
-            <p>Please <a href="{{ route('login') }}">log in</a> to add personal notes to this book.</p>
+
+    @if($hasRelatedBookSections)
+        <a id="related-books" name="related-books" class="section-anchor"></a>
+        <div class="related-books-full-width">
+            @if($relatedByCreator->isNotEmpty())
+                <x-library.related-books :books="$relatedByCreator" title="More books by the same author" sectionId="related-by-creator" />
+            @endif
+            @if($relatedByCollection->isNotEmpty())
+                <x-library.related-books :books="$relatedByCollection" title="More books from the same collection" sectionId="related-by-collection" />
+            @endif
+            @if($relatedByLanguage->isNotEmpty())
+                <x-library.related-books :books="$relatedByLanguage" title="More books in the same language" sectionId="related-by-language" />
+            @endif
         </div>
-    @endauth
+    @endif
 
     <!-- Access Request Modal -->
     @auth

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Models\BookRelationship;
 use App\Models\Language;
 use App\Models\ClassificationType;
 use App\Models\AccessRequest;
@@ -270,53 +271,92 @@ class LibraryController extends Controller
             $userNotes = $book->getNotesForUser(auth()->id());
         }
 
-        // Get related books (up to 20 each)
-        if ($book->collection_id) {
-            $relatedByCollection = Book::where('collection_id', $book->collection_id)
-                ->where('id', '!=', $book->id)
-                ->where('is_active', true)
-                ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->limit(20)
-                ->get();
-        } else {
-            $relatedByCollection = collect();
-        }
+        $relatedBookEagerLoads = [
+            'publisher:id,name',
+            'languages:id,name,code',
+            'purposeClassifications:id,value',
+            'learnerLevelClassifications:id,value',
+            'files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true),
+        ];
 
-        if ($book->languages->isNotEmpty()) {
-            $languageIds = $book->languages->pluck('id');
-            $relatedByLanguage = Book::whereHas('languages', fn($q) => $q->whereIn('languages.id', $languageIds))
-                ->where('id', '!=', $book->id)
-                ->where('is_active', true)
-                ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->limit(20)
-                ->get();
-        } else {
-            $relatedByLanguage = collect();
-        }
+        $relatedOtherEditions = $book->sameVersionBooks()
+            ->with($relatedBookEagerLoads)
+            ->where('books.is_active', true)
+            ->orderBy('books.title')
+            ->limit(20)
+            ->get();
 
-        if ($book->creators->isNotEmpty()) {
-            $creatorIds = $book->creators->pluck('id');
-            $relatedByCreator = Book::whereHas('creators', fn($q) => $q->whereIn('creators.id', $creatorIds))
+        $relatedOtherLanguageVersions = $book->translatedBooks()
+            ->with($relatedBookEagerLoads)
+            ->where('books.is_active', true)
+            ->orderBy('books.title')
+            ->limit(20)
+            ->get();
+
+        $relatedCloselyTitles = $book->relatedBooks()
+            ->whereIn('book_relationships.relationship_type', [
+                BookRelationship::TYPE_SUPPORTING,
+                BookRelationship::TYPE_SAME_LANGUAGE,
+            ])
+            ->with($relatedBookEagerLoads)
+            ->where('books.is_active', true)
+            ->orderBy('books.title')
+            ->limit(20)
+            ->get();
+
+        $relatedByCollection = $book->collection_id
+            ? Book::where('collection_id', $book->collection_id)
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
                 ->limit(20)
-                ->get();
-        } else {
-            $relatedByCreator = collect();
-        }
+                ->get()
+            : collect();
+
+        $relatedByLanguage = $book->languages->isNotEmpty()
+            ? Book::whereHas('languages', fn($q) => $q->whereIn('languages.id', $book->languages->pluck('id')))
+                ->where('id', '!=', $book->id)
+                ->where('is_active', true)
+                ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
+                ->limit(20)
+                ->get()
+            : collect();
+
+        $relatedByCreator = $book->creators->isNotEmpty()
+            ? Book::whereHas('creators', fn($q) => $q->whereIn('creators.id', $book->creators->pluck('id')))
+                ->where('id', '!=', $book->id)
+                ->where('is_active', true)
+                ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
+                ->limit(20)
+                ->get()
+            : collect();
+
+        $hasAdvancedRelatedBookSections = $relatedOtherEditions->isNotEmpty()
+            || $relatedOtherLanguageVersions->isNotEmpty()
+            || $relatedCloselyTitles->isNotEmpty();
+
+        $hasLegacyRelatedBookSections = $relatedByCollection->isNotEmpty()
+            || $relatedByLanguage->isNotEmpty()
+            || $relatedByCreator->isNotEmpty();
+
+        $hasRelatedBookSections = $hasAdvancedRelatedBookSections || $hasLegacyRelatedBookSections;
 
         return view('library.show', compact(
             'book',
-            'relatedByCollection',
-            'relatedByLanguage',
-            'relatedByCreator',
             'averageRating',
             'totalRatings',
             'ratingDistribution',
             'userRating',
             'userAccessRequest',
-            'userNotes'
+            'userNotes',
+            'relatedOtherEditions',
+            'relatedOtherLanguageVersions',
+            'relatedCloselyTitles',
+            'relatedByCollection',
+            'relatedByLanguage',
+            'relatedByCreator',
+            'hasAdvancedRelatedBookSections',
+            'hasRelatedBookSections'
         ));
     }
 

@@ -336,6 +336,10 @@ class BookCsvImportService
             $rowNumber = $item['row_number'];
             $data = $item['data'];
 
+            // Extract book title for error reporting
+            $bookTitle = $data['title'] ?? 'Unknown';
+            $bookId = $data['internal_id'] ?? $data['palm_code'] ?? 'Unknown ID';
+
             try {
                 DB::beginTransaction();
 
@@ -352,7 +356,8 @@ class BookCsvImportService
                     }
                 } else {
                     $this->importSession->incrementFailed();
-                    $this->importSession->addError($rowNumber, 'general', $result['error'] ?? 'Unknown error');
+                    $errorMessage = ($result['error'] ?? 'Unknown error') . " | Book: \"{$bookTitle}\" (ID: {$bookId})";
+                    $this->importSession->addError($rowNumber, $result['column'] ?? 'general', $errorMessage);
                 }
 
                 // Update performance tracking
@@ -363,9 +368,12 @@ class BookCsvImportService
             } catch (Exception $e) {
                 DB::rollBack();
                 $this->importSession->incrementFailed();
-                $this->importSession->addError($rowNumber, 'exception', $e->getMessage());
+                $errorMessage = $e->getMessage() . " | Book: \"{$bookTitle}\" (ID: {$bookId})";
+                $this->importSession->addError($rowNumber, 'exception', $errorMessage);
                 Log::error('Row Import Error', [
                     'row' => $rowNumber,
+                    'book_title' => $bookTitle,
+                    'book_id' => $bookId,
                     'data' => $data,
                     'exception' => $e->getMessage(),
                 ]);
@@ -557,11 +565,26 @@ class BookCsvImportService
             $bookData['access_level'] = $accessLevelMapping[$data['access_level']] ?? 'unavailable';
         }
 
-        // Handle physical type - auto-create if doesn't exist
+        // Handle physical type - normalize to allowed values
         if (isset($data['physical_type']) && !empty($data['physical_type'])) {
-            $physicalTypeName = trim($data['physical_type']);
-            $physicalType = \App\Models\PhysicalType::getOrCreate($physicalTypeName);
-            $bookData['physical_type_id'] = $physicalType->id;
+            $physicalType = strtolower(trim($data['physical_type']));
+
+            // Map common variations to standard values
+            $physicalTypeMap = [
+                'book' => 'book',
+                'books' => 'book',
+                'journal' => 'journal',
+                'journals' => 'journal',
+                'magazine' => 'magazine',
+                'magazines' => 'magazine',
+                'workbook' => 'workbook',
+                'workbooks' => 'workbook',
+                'poster' => 'poster',
+                'posters' => 'poster',
+            ];
+
+            // Use mapped value or 'other' if not recognized
+            $bookData['physical_type'] = $physicalTypeMap[$physicalType] ?? 'other';
         }
 
         // Clean year (remove question marks)

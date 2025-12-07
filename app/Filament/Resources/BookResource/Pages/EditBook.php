@@ -64,7 +64,8 @@ class EditBook extends EditRecord
                 })
                 ->keyBindings(['mod+s'])
                 ->icon('heroicon-o-check')
-                ->color('success'),
+                ->color('success')
+                ->extraAttributes(['class' => 'action-left']),
 
             Actions\Action::make('saveAndGoToList')
                 ->label('Save and go to list')
@@ -73,14 +74,15 @@ class EditBook extends EditRecord
                     $this->redirect($this->getResource()::getUrl('index'));
                 })
                 ->icon('heroicon-o-arrow-left')
-                ->color('primary'),
+                ->color('primary')
+                ->extraAttributes(['class' => 'action-left']),
 
             // Center: Cancel button
             Actions\Action::make('cancel')
                 ->label('Cancel')
                 ->url($this->getResource()::getUrl('index'))
                 ->color('gray')
-                ->extraAttributes(['class' => 'mx-auto']),
+                ->extraAttributes(['class' => 'action-center']),
 
             // Right side: Duplicate and Delete buttons
             Actions\Action::make('duplicate')
@@ -133,10 +135,11 @@ class EditBook extends EditRecord
                     }
                 })
                 ->successNotification(null)
-                ->extraAttributes(['class' => 'ml-auto']), // Push to the right
+                ->extraAttributes(['class' => 'action-right']),
 
             Actions\DeleteAction::make()
-                ->label('Delete this book'),
+                ->label('Delete this book')
+                ->extraAttributes(['class' => 'action-right']),
         ];
     }
 }

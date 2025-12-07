@@ -98,39 +98,37 @@ class ViewCsvImport extends ViewRecord
                             ->formatStateUsing(fn ($state) => $state ? round($state, 1) . ' seconds' : 'N/A'),
                     ])->columns(3),
 
-                Infolists\Components\Section::make('Error Log')
+                Infolists\Components\Section::make('Failed Books Report')
+                    ->description('Books that could not be imported from the CSV file')
                     ->schema([
-                        Infolists\Components\TextEntry::make('error_log')
+                        Infolists\Components\ViewEntry::make('error_report')
                             ->label('')
-                            ->formatStateUsing(function ($state, $record) {
+                            ->view('filament.infolists.csv-import-error-report'),
+                    ])
+                    ->collapsed()
+                    ->visible(fn ($record) => !empty($record->error_log) && is_array($record->error_log) && count($record->error_log) > 0),
+
+                Infolists\Components\Section::make('Validation Errors')
+                    ->description('Errors found during CSV validation before import')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('validation_errors')
+                            ->label('')
+                            ->formatStateUsing(function ($state) {
                                 if (empty($state)) {
-                                    return 'No errors';
+                                    return 'No validation errors';
                                 }
 
-                                $errors = json_decode($state, true);
-                                if (!is_array($errors)) {
-                                    return $state;
+                                if (is_array($state)) {
+                                    return implode("\n", array_map(fn($error) => "• {$error}", $state));
                                 }
 
-                                $output = [];
-                                foreach (array_slice($errors, 0, 20) as $error) {
-                                    $row = $error['row'] ?? 'Unknown';
-                                    $column = $error['column'] ?? 'N/A';
-                                    $message = $error['message'] ?? 'Unknown error';
-                                    $output[] = "Row {$row}, Column {$column}: {$message}";
-                                }
-
-                                if (count($errors) > 20) {
-                                    $remaining = count($errors) - 20;
-                                    $output[] = "\n... and {$remaining} more errors";
-                                }
-
-                                return implode("\n", $output);
+                                return $state;
                             })
                             ->markdown()
                             ->prose(),
                     ])
-                    ->visible(fn ($record) => !empty($record->error_log)),
+                    ->collapsed()
+                    ->visible(fn ($record) => !empty($record->validation_errors)),
             ]);
     }
 }
