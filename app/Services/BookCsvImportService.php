@@ -531,7 +531,7 @@ class BookCsvImportService
             'title',
             'subtitle',
             'translated_title',
-            'physical_type',
+            // physical_type is handled separately as a relationship (see below)
             'publication_year',
             'pages',
             'description',          // NEW: Now separate from abstract
@@ -565,26 +565,13 @@ class BookCsvImportService
             $bookData['access_level'] = $accessLevelMapping[$data['access_level']] ?? 'unavailable';
         }
 
-        // Handle physical type - normalize to allowed values
+        // Handle physical type - auto-create if doesn't exist
         if (isset($data['physical_type']) && !empty($data['physical_type'])) {
-            $physicalType = strtolower(trim($data['physical_type']));
+            $physicalTypeName = trim($data['physical_type']);
 
-            // Map common variations to standard values
-            $physicalTypeMap = [
-                'book' => 'book',
-                'books' => 'book',
-                'journal' => 'journal',
-                'journals' => 'journal',
-                'magazine' => 'magazine',
-                'magazines' => 'magazine',
-                'workbook' => 'workbook',
-                'workbooks' => 'workbook',
-                'poster' => 'poster',
-                'posters' => 'poster',
-            ];
-
-            // Use mapped value or 'other' if not recognized
-            $bookData['physical_type'] = $physicalTypeMap[$physicalType] ?? 'other';
+            // Get or create the physical type
+            $physicalType = \App\Models\PhysicalType::getOrCreate($physicalTypeName);
+            $bookData['physical_type_id'] = $physicalType->id;
         }
 
         // Clean year (remove question marks)

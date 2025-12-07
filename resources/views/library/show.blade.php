@@ -2234,8 +2234,8 @@
                 @endif
                 <h1 class="book-title">
                     {{ $book->title }}
-                    @if($book->physical_type)
-                        <span class="edition-info" style="font-size: 1rem; font-weight: normal;">({{ $book->physical_type }})</span>
+                    @if($book->physicalType)
+                        <span class="edition-info" style="font-size: 1rem; font-weight: normal;">({{ $book->physicalType->name }})</span>
                     @endif
                 </h1>
                 @if($book->subtitle)
@@ -2297,8 +2297,8 @@
                     <span class="info-card-value">{{ $book->publication_year ?? 'N/A' }}</span>
                 </div>
                 <div class="info-card">
-                    <span class="info-card-label">Physical type</span>
-                    <span class="info-card-value">{{ $book->physical_type ?? 'N/A' }}</span>
+                    <span class="info-card-label">Type</span>
+                    <span class="info-card-value">{{ $book->physicalType?->name ?? 'N/A' }}</span>
                 </div>
                 <div class="info-card">
                     <span class="info-card-label">Language</span>
@@ -2367,46 +2367,86 @@
 
                 <div class="details-section">
                     <!-- Contributors -->
-                    @if($book->authors->isNotEmpty() || $book->illustrators->isNotEmpty() || $book->editors->isNotEmpty())
+                    @if($book->creators->isNotEmpty())
+                        @php
+                            // Group creators by role (use role_description if available, otherwise creator_type)
+                            $creatorsByRole = $book->creators->groupBy(function($creator) {
+                                $type = $creator->pivot->creator_type ?? 'other';
+                                $role = $creator->pivot->role_description;
+
+                                // For standard types without custom role, use the type
+                                if (in_array($type, ['author', 'illustrator', 'editor']) && empty($role)) {
+                                    return $type;
+                                }
+
+                                // For other types with role description, use the role description
+                                if (!empty($role)) {
+                                    return 'role:' . $role;
+                                }
+
+                                // Default to the type
+                                return $type;
+                            });
+                        @endphp
                         <div class="details-subsection">
                             <h3 class="details-subsection-title">Contributors</h3>
-                            @if($book->authors->isNotEmpty())
+
+                            @if($creatorsByRole->has('author'))
                                 <div class="details-row">
                                     <span class="details-label">Author(s)</span>
-                                    <span class="details-value">{{ $book->authors->pluck('name')->join('; ') }}</span>
+                                    <span class="details-value">{{ $creatorsByRole['author']->pluck('name')->join('; ') }}</span>
                                 </div>
                             @endif
-                            @if($book->illustrators->isNotEmpty())
+
+                            @if($creatorsByRole->has('illustrator'))
                                 <div class="details-row">
                                     <span class="details-label">Illustrator(s)</span>
-                                    <span class="details-value">{{ $book->illustrators->pluck('name')->join('; ') }}</span>
+                                    <span class="details-value">{{ $creatorsByRole['illustrator']->pluck('name')->join('; ') }}</span>
                                 </div>
                             @endif
-                            @if($book->editors->isNotEmpty())
+
+                            @if($creatorsByRole->has('editor'))
                                 <div class="details-row">
                                     <span class="details-label">Editor(s)</span>
-                                    <span class="details-value">{{ $book->editors->pluck('name')->join('; ') }}</span>
+                                    <span class="details-value">{{ $creatorsByRole['editor']->pluck('name')->join('; ') }}</span>
                                 </div>
                             @endif
+
+                            @foreach($creatorsByRole as $roleKey => $creators)
+                                @if(!in_array($roleKey, ['author', 'illustrator', 'editor']))
+                                    @php
+                                        // Extract role label from the key
+                                        if (str_starts_with($roleKey, 'role:')) {
+                                            $roleLabel = ucfirst(substr($roleKey, 5)); // Remove 'role:' prefix and capitalize
+                                        } else {
+                                            $roleLabel = ucfirst($roleKey);
+                                        }
+                                    @endphp
+                                    <div class="details-row">
+                                        <span class="details-label">{{ $roleLabel }}</span>
+                                        <span class="details-value">{{ $creators->pluck('name')->join('; ') }}</span>
+                                    </div>
+                                @endif
+                            @endforeach
                         </div>
                     @endif
 
                     <!-- Edition Notes -->
-                    <div class="details-subsection">
-                        <h3 class="details-subsection-title">Edition notes</h3>
-                        @if($book->publisher)
+                    @if($book->publisher)
+                        <div class="details-subsection">
+                            <h3 class="details-subsection-title">Edition notes</h3>
                             <div class="details-row">
                                 <span class="details-label">Publisher</span>
                                 <span class="details-value">{{ $book->publisher->name }}</span>
                             </div>
-                        @endif
-                        @if($book->publisher && $book->publisher->program_name)
-                            <div class="details-row">
-                                <span class="details-label">Project/partner</span>
-                                <span class="details-value">{{ $book->publisher->program_name }}</span>
-                            </div>
-                        @endif
-                    </div>
+                            @if($book->publisher->program_name)
+                                <div class="details-row">
+                                    <span class="details-label">Project/partner</span>
+                                    <span class="details-value">{{ $book->publisher->program_name }}</span>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
 
                     <!-- Classifications -->
                     @if($book->purposeClassifications->isNotEmpty() || $book->genreClassifications->isNotEmpty() || $book->subgenreClassifications->isNotEmpty() || $book->typeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty())

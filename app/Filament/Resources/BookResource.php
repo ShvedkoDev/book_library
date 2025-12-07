@@ -94,19 +94,22 @@ class BookResource extends Resource
                             ->helperText('CSV: Translated-title')
                             ->columnSpanFull(),
 
-                        Forms\Components\Select::make('physical_type')
+                        Forms\Components\Select::make('physical_type_id')
                             ->label('Physical type')
-                            ->options([
-                                'book' => 'Book',
-                                'journal' => 'Journal',
-                                'magazine' => 'Magazine',
-                                'workbook' => 'Workbook',
-                                'poster' => 'Poster',
-                                'other' => 'Other',
+                            ->relationship('physicalType', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(100)
+                                    ->unique(ignoreRecord: true),
+                                Forms\Components\Textarea::make('description')
+                                    ->maxLength(500),
                             ])
                             ->native(false)
                             ->placeholder('Select type')
-                            ->helperText('CSV: Physical type'),
+                            ->helperText('CSV: Physical type - Can create new types if needed'),
                     ])
                     ->columns(2),
 
