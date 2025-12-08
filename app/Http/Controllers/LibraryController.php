@@ -373,8 +373,9 @@ class LibraryController extends Controller
             abort(403, 'This book is not available for viewing. Please request access.');
         }
 
-        // Check if file exists in storage
-        if (!$file->file_path || !\Storage::disk('public')->exists($file->file_path)) {
+        // Check if file exists in storage (with Unicode normalization)
+        $filePath = $file->file_path ? \Normalizer::normalize($file->file_path, \Normalizer::NFC) : null;
+        if (!$filePath || !\Storage::disk('public')->exists($filePath)) {
             abort(404, 'PDF file not found');
         }
 
@@ -397,18 +398,21 @@ class LibraryController extends Controller
             abort(403, 'This book is not available for viewing. Please request access.');
         }
 
+        // Normalize Unicode path for filesystem compatibility
+        $normalizedPath = $file->file_path ? \Normalizer::normalize($file->file_path, \Normalizer::NFC) : null;
+
         // Check if file exists in storage
-        if (!$file->file_path || !\Storage::disk('public')->exists($file->file_path)) {
+        if (!$normalizedPath || !\Storage::disk('public')->exists($normalizedPath)) {
             abort(404, 'PDF file not found');
         }
 
-        // Get file path
-        $filePath = storage_path('app/public/' . $file->file_path);
+        // Get file path (use normalized path)
+        $filePath = storage_path('app/public/' . $normalizedPath);
 
         // Stream the PDF file for inline viewing with proper headers
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($file->file_path)) . '"',
+            'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($normalizedPath)) . '"',
             'Cache-Control' => 'public, max-age=3600',
             'X-Content-Type-Options' => 'nosniff',
         ]);
@@ -427,18 +431,21 @@ class LibraryController extends Controller
             abort(403, 'This book is not available for download. Please request access.');
         }
 
+        // Normalize Unicode path for filesystem compatibility
+        $normalizedPath = $file->file_path ? \Normalizer::normalize($file->file_path, \Normalizer::NFC) : null;
+
         // Check if file exists in storage
-        if (!$file->file_path || !\Storage::disk('public')->exists($file->file_path)) {
+        if (!$normalizedPath || !\Storage::disk('public')->exists($normalizedPath)) {
             abort(404, 'File not found');
         }
 
         // Track the download
         $this->analytics->trackBookDownload($book, request());
 
-        // Return the file for download
+        // Return the file for download (use normalized path)
         return \Storage::disk('public')->download(
-            $file->file_path,
-            $file->filename ?? basename($file->file_path)
+            $normalizedPath,
+            $file->filename ?? basename($normalizedPath)
         );
     }
 

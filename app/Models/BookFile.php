@@ -27,7 +27,8 @@ class BookFile extends Model
     {
         return [
             'book_id' => 'integer',
-            'file_path' => 'array',
+            // Note: file_path can be string (legacy) or JSON array (Filament uploads)
+            // Don't cast here - handle in getFilePath() method
             'file_size' => 'integer',
             'is_primary' => 'boolean',
             'is_active' => 'boolean',
@@ -97,19 +98,31 @@ class BookFile extends Model
      */
     public function getFilePath(): ?string
     {
-        if (empty($this->file_path)) {
+        $rawPath = $this->getRawOriginal('file_path');
+
+        if (empty($rawPath)) {
             return null;
         }
 
-        // If already a string, return it
-        if (is_string($this->file_path)) {
-            return $this->file_path;
+        // If already a string, return it (legacy format)
+        if (is_string($rawPath)) {
+            return $rawPath;
         }
 
-        // If it's an array (from Filament FileUpload)
-        if (is_array($this->file_path)) {
+        // Try to decode as JSON (Filament format)
+        if (is_string($rawPath)) {
+            $decoded = json_decode($rawPath, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                // Get the first item (Filament stores as array with UUID keys)
+                $firstItem = reset($decoded);
+                return is_string($firstItem) ? $firstItem : null;
+            }
+        }
+
+        // If it's already an array (from Filament FileUpload)
+        if (is_array($rawPath)) {
             // Get the first item (Filament stores as array with UUID keys)
-            $firstItem = reset($this->file_path);
+            $firstItem = reset($rawPath);
 
             // If the first item is an array/object, get its first value
             if (is_array($firstItem) || is_object($firstItem)) {
@@ -117,7 +130,7 @@ class BookFile extends Model
                 return $values[0] ?? null;
             }
 
-            return $firstItem;
+            return is_string($firstItem) ? $firstItem : null;
         }
 
         return null;

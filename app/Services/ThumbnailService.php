@@ -22,8 +22,12 @@ class ThumbnailService
 
         if ($thumbnailFile) {
             $filePath = $thumbnailFile->getFilePath();
-            if ($filePath && Storage::disk('public')->exists($filePath)) {
-                return Storage::disk('public')->url($filePath);
+            if ($filePath) {
+                // Normalize Unicode path (NFD to NFC) for filesystem compatibility
+                $normalizedPath = \Normalizer::normalize($filePath, \Normalizer::NFC);
+                if (Storage::disk('public')->exists($normalizedPath)) {
+                    return Storage::disk('public')->url($normalizedPath);
+                }
             }
         }
 
@@ -60,7 +64,13 @@ class ThumbnailService
         }
 
         $pdfFilePath = $pdfFile->getFilePath();
-        if (!$pdfFilePath || !Storage::disk('public')->exists($pdfFilePath)) {
+        if (!$pdfFilePath) {
+            return null;
+        }
+
+        // Normalize Unicode path (NFD to NFC) for filesystem compatibility
+        $pdfFilePath = \Normalizer::normalize($pdfFilePath, \Normalizer::NFC);
+        if (!Storage::disk('public')->exists($pdfFilePath)) {
             return null;
         }
 
