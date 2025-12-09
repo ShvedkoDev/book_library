@@ -59,6 +59,8 @@
     width: auto !important;
     object-fit: contain !important;
     display: block !important;
+    position: relative;
+    top: 6px;
 }
 
 .sidebar.header-image.handbook-image .c4gts-logo {
