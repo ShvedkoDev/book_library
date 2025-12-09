@@ -42,7 +42,7 @@
         font-size: 1rem;
         font-weight: 500;
         margin: 0;
-        color: #ffffff;
+        color: #ffffff!important;
     }
 
     .pdf-controls {
