@@ -146,22 +146,6 @@
                 </ul>
             </div>
             @endguest
-
-            <!-- Help Section -->
-            <div class="sitemap-section">
-                <h2 class="sitemap-section-title">
-                    <i class="fas fa-question-circle"></i>
-                    Help & Information
-                </h2>
-                <ul class="sitemap-list">
-                    <li class="sitemap-item">
-                        <span class="sitemap-text-only">
-                            <i class="fas fa-info-circle"></i>
-                            <span>For questions or support, please contact the FSM Department of Education</span>
-                        </span>
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
 </div>

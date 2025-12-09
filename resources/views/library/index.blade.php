@@ -25,7 +25,7 @@
             </div>
             <div class="right-logos">
                 <div class="logo-cell irei-cell">
-                    <img class="irei-logo" src="{{ asset('library-assets/images/iREi.png') }}" alt="Island Research & Education Initiative">
+                    <img class="irei-logo" src="{{ asset('library-assets/images/iREi-top.png') }}" alt="Island Research & Education Initiative">
                 </div>
                 <div class="logo-cell c4gts-cell">
                     <img class="c4gts-logo" src="{{ asset('library-assets/images/C4GTS.png') }}" alt="Center for Getting Things Started">
