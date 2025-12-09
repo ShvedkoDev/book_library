@@ -42,6 +42,7 @@
         font-size: 1rem;
         font-weight: 500;
         margin: 0;
+        color: #ffffff;
     }
 
     .pdf-controls {
@@ -53,21 +54,31 @@
     .pdf-btn {
         background: #474b4f;
         border: none;
-        color: white;
+        color: #ffffff !important;
         padding: 0.5rem 1rem;
         border-radius: 4px;
         cursor: pointer;
         font-size: 0.9rem;
         transition: background 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .pdf-btn:hover:not(:disabled) {
         background: #5a5e62;
+        color: #ffffff !important;
+        text-decoration: none;
     }
 
     .pdf-btn:disabled {
         opacity: 0.5;
         cursor: not-allowed;
+    }
+
+    .pdf-btn i {
+        color: #ffffff;
     }
 
     .pdf-page-info {

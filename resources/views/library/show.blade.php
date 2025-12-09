@@ -2232,11 +2232,8 @@
                         First published in {{ $book->publication_year }}
                     </div>
                 @endif
-                <h1 class="book-title">
+                <h1 class="book-title" @if($book->translated_title) title="{{ $book->translated_title }}" @endif>
                     {{ $book->title }}
-                    @if($book->physicalType)
-                        <span class="edition-info" style="font-size: 1rem; font-weight: normal;">({{ $book->physicalType->name }})</span>
-                    @endif
                 </h1>
                 @if($book->subtitle)
                     <h2 class="book-subtitle">{{ $book->subtitle }}</h2>
