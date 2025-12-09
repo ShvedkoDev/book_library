@@ -208,42 +208,35 @@
                             @endforeach
                         @endif
 
-                        <!-- Theme Filter (renamed from Type) -->
-                        @if($availableTypes->isNotEmpty())
-                            @foreach($availableTypes as $typeGroup)
-                                @if($typeGroup->classificationValues->isNotEmpty())
-                                    @php
-                                        $activeTypesCount = count(array_intersect(
-                                            $typeGroup->classificationValues->pluck('id')->toArray(),
-                                            $filters['types'] ?? []
-                                        ));
-                                        $isExpanded = $activeTypesCount > 0;
-                                    @endphp
-                                    <div class="filter-group {{ $activeTypesCount > 0 ? 'has-active-filters' : '' }}">
-                                        <h4 class="filter-toggle" onclick="toggleFilterGroup(this)">
-                                            <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
-                                            {{ $typeGroup->name }}
-                                            @if($activeTypesCount > 0)
-                                                <span class="active-filter-badge">{{ $activeTypesCount }} selected</span>
-                                            @endif
-                                        </h4>
-                                        <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
-                                            @foreach($typeGroup->classificationValues as $classification)
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        name="types[]"
-                                                        value="{{ $classification->id }}"
-                                                        {{ in_array($classification->id, $filters['types'] ?? []) ? 'checked' : '' }}
-                                                        onchange="this.form.submit()"
-                                                    >
-                                                    &nbsp;{{ $classification->value }}
-                                                </label>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
+                        <!-- Physical Type Filter -->
+                        @if($availablePhysicalTypes->isNotEmpty())
+                            @php
+                                $activeTypesCount = count($filters['types'] ?? []);
+                                $isExpanded = $activeTypesCount > 0;
+                            @endphp
+                            <div class="filter-group {{ $activeTypesCount > 0 ? 'has-active-filters' : '' }}">
+                                <h4 class="filter-toggle" onclick="toggleFilterGroup(this)">
+                                    <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
+                                    Type
+                                    @if($activeTypesCount > 0)
+                                        <span class="active-filter-badge">{{ $activeTypesCount }} selected</span>
+                                    @endif
+                                </h4>
+                                <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
+                                    @foreach($availablePhysicalTypes as $physicalType)
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                name="types[]"
+                                                value="{{ $physicalType->id }}"
+                                                {{ in_array($physicalType->id, $filters['types'] ?? []) ? 'checked' : '' }}
+                                                onchange="this.form.submit()"
+                                            >
+                                            &nbsp;{{ $physicalType->name }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
                         @endif
 
                         <!-- Language Filter -->
@@ -277,33 +270,6 @@
                             </div>
                         @endif
 
-                        <!-- Learner Level Filter (Disabled - for future use) -->
-                        @if($availableGrades->isNotEmpty())
-                            @foreach($availableGrades as $gradeType)
-                                @if($gradeType->classificationValues->isNotEmpty())
-                                    <div class="filter-group filter-disabled" style="opacity: 0.5; pointer-events: none;">
-                                        <h4 class="filter-toggle">
-                                            <i class="fal fa-chevron-right toggle-icon"></i>
-                                            Learner level
-                                            <span style="font-size: 0.75rem; color: #999; font-weight: normal; margin-left: 0.5rem;">(Coming soon)</span>
-                                        </h4>
-                                        <div class="checkbox-group collapsed">
-                                            @foreach($gradeType->classificationValues as $classification)
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        name="grades[]"
-                                                        value="{{ $classification->id }}"
-                                                        disabled
-                                                    >
-                                                    &nbsp;{{ $classification->value }}
-                                                </label>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                        @endif
                     </form>
                 </div>
             </aside>

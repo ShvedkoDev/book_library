@@ -97,18 +97,9 @@ class LibraryController extends Controller
             );
         }
 
-        // Grade level filter (Learner level classifications) - currently disabled
-        if (!empty($filters['grades'])) {
-            $query->whereHas('learnerLevelClassifications', fn($q) =>
-                $q->whereIn('classification_values.id', $filters['grades'])
-            );
-        }
-
-        // Resource type filter (Type classifications)
+        // Physical Type filter (books.physical_type_id)
         if (!empty($filters['types'])) {
-            $query->whereHas('typeClassifications', fn($q) =>
-                $q->whereIn('classification_values.id', $filters['types'])
-            );
+            $query->whereIn('physical_type_id', $filters['types']);
         }
 
         // Language filter
@@ -155,18 +146,6 @@ class LibraryController extends Controller
             }])
             ->get();
 
-        $availableGrades = ClassificationType::where('slug', 'learner-level')
-            ->with(['classificationValues' => function($q) {
-                $q->whereHas('books', fn($bookQuery) => $bookQuery->where('is_active', true));
-            }])
-            ->get();
-
-        $availableTypes = ClassificationType::where('slug', 'type')
-            ->with(['classificationValues' => function($q) {
-                $q->whereHas('books', fn($bookQuery) => $bookQuery->where('is_active', true));
-            }])
-            ->get();
-
         // Get Genre values (children of selected Purpose values)
         $availableGenres = ClassificationType::where('slug', 'genre')
             ->with(['classificationValues' => function($q) use ($filters) {
@@ -189,6 +168,11 @@ class LibraryController extends Controller
             }])
             ->get();
 
+        // Get Physical Types (from physical_types table, not classifications)
+        $availablePhysicalTypes = \App\Models\PhysicalType::whereHas('books', function($q) {
+            $q->where('is_active', true);
+        })->orderBy('sort_order')->get();
+
         return view('library.index', compact(
             'books',
             'search',
@@ -200,8 +184,7 @@ class LibraryController extends Controller
             'availableSubjects',
             'availableGenres',
             'availableSubgenres',
-            'availableGrades',
-            'availableTypes'
+            'availablePhysicalTypes'
         ));
     }
 
