@@ -614,19 +614,82 @@ trait BookCsvImportRelationships
                 continue;
             }
 
-            $relatedIds = $this->splitMultiValue($data[$dataKey]);
+            // The CSV contains relationship CODES (like 'YSCI'), not book IDs
+            // We need to find all books with the same code and create relationships
+            $relationshipCodes = $this->splitMultiValue($data[$dataKey]);
 
-            foreach ($relatedIds as $relatedId) {
-                // Find related book by internal_id
-                $relatedBook = Book::where('internal_id', $relatedId)->first();
+            foreach ($relationshipCodes as $relationshipCode) {
+                // Find all books that have this same relationship code
+                // We'll create relationships later in a post-processing step
+                // For now, just store the code so we can find related books later
+                
+                // Store a placeholder relationship with the code
+                // The related_book_id will be NULL initially
+                $book->bookRelationships()->updateOrCreate(
+                    [
+                        'relationship_type' => $relationshipType,
+                        'relationship_code' => $relationshipCode,
+                    ],
+                    [
+                        'related_book_id' => null,  // Will be filled in post-processing
+                        'description' => 'Pending relationship matching',
+                    ]
+                );
+            }
+        }
+    }
 
-                if ($relatedBook) {
+    /**
+     * Post-process book relationships to match books with same codes
+     * This should be called after all books are imported
+     */
+    public function processBookRelationships(): void
+    {
+        // Get all book_relationships with NULL related_book_id
+        $pendingRelationships = \DB::table('book_relationships')
+            ->whereNull('related_book_id')
+            ->get();
+
+        foreach ($pendingRelationships as $relationship) {
+            $book = Book::find($relationship->book_id);
+            if (!$book) {
+                continue;
+            }
+
+            // Find all OTHER books with the same relationship code and type
+            $relatedBooks = \DB::table('book_relationships')
+                ->join('books', 'books.id', '=', 'book_relationships.book_id')
+                ->where('book_relationships.relationship_code', $relationship->relationship_code)
+                ->where('book_relationships.relationship_type', $relationship->relationship_type)
+                ->where('book_relationships.book_id', '!=', $relationship->book_id)
+                ->where('books.is_active', true)
+                ->select('books.id')
+                ->get();
+
+            // Create relationships to all related books
+            foreach ($relatedBooks as $relatedBook) {
+                \DB::table('book_relationships')
+                    ->where('id', $relationship->id)
+                    ->update([
+                        'related_book_id' => $relatedBook->id,
+                        'description' => null,
+                        'updated_at' => now(),
+                    ]);
+
+                // If there are multiple related books, create additional relationship records
+                // for books beyond the first one
+                if ($relatedBooks->count() > 1 && $relatedBook->id != $relatedBooks->first()->id) {
                     $book->bookRelationships()->create([
                         'related_book_id' => $relatedBook->id,
-                        'relationship_type' => $relationshipType,
-                        'relationship_code' => $relatedId,
+                        'relationship_type' => $relationship->relationship_type,
+                        'relationship_code' => $relationship->relationship_code,
                     ]);
                 }
+            }
+
+            // If no related books found, delete this orphan relationship
+            if ($relatedBooks->isEmpty()) {
+                \DB::table('book_relationships')->where('id', $relationship->id)->delete();
             }
         }
     }

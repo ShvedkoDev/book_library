@@ -245,6 +245,9 @@ class BookCsvImportService
                 $this->runQualityChecks();
             }
 
+            // Process book relationships (match books with same relationship codes)
+            $this->processBookRelationships();
+
         } catch (Exception $e) {
             // Disable database optimizations on error
             if ($optimizationsEnabled) {
