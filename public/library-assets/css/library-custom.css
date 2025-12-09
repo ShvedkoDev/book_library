@@ -1,5 +1,21 @@
 /* Library Custom Styles - Fix for logo positioning and display */
 
+/* Custom Font - Marck Script for Footer Tagline */
+@font-face {
+    font-family: 'Marck Script';
+    src: url('../fonts/MarckScript-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Footer Tagline with Custom Font */
+footer.department-footer .tagline {
+    font-family: 'Marck Script', cursive, serif;
+    font-size: 1.5rem;
+    line-height: 1.6;
+}
+
 /* Fix government logo - ensure no background */
 .left-institution img {
     background: transparent !important;
