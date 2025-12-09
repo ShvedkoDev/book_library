@@ -349,3 +349,10 @@ footer.department-footer .tagline {
     color: #6b7280;
     background: transparent;
 }
+
+/* Search section heading - match filter section styling */
+.search-section h3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
