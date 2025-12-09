@@ -6,19 +6,20 @@
 @section('content')
 <div class="library-container">
     <div class="library-content-wrapper">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1 class="page-title">
-                <i class="fas fa-sitemap" style="color: var(--coe-green-primary); margin-right: 0.5rem;"></i>
-                Sitemap
-            </h1>
-            <p class="page-description">
-                Browse the complete structure of our website and easily find all available pages and resources.
-            </p>
-        </div>
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fas fa-sitemap" style="color: var(--coe-green-primary); margin-right: 0.5rem;"></i>
+                    Sitemap
+                </h1>
+                <p class="page-description">
+                    Browse the complete structure of our website and easily find all available pages and resources.
+                </p>
+            </div>
 
-        <!-- Sitemap Content -->
-        <div class="sitemap-wrapper">
+            <!-- Sitemap Content -->
+            <div class="sitemap-wrapper">
             <!-- Main Pages Section -->
             <div class="sitemap-section">
                 <h2 class="sitemap-section-title">
@@ -163,6 +164,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <style>
