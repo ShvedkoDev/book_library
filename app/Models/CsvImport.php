@@ -27,6 +27,9 @@ class CsvImport extends Model
         'created_count',
         'updated_count',
         'error_log',
+        'created_log',
+        'updated_log',
+        'skipped_log',
         'error_summary',
         'success_log',
         'validation_errors',
@@ -41,10 +44,14 @@ class CsvImport extends Model
     protected function casts(): array
     {
         return [
-            'options' => 'array',
+            // Don't cast these to arrays - handle manually with accessors
+            // 'options' => 'array',
+            // 'performance_metrics' => 'array',
             'error_log' => 'array',
+            'created_log' => 'array',
+            'updated_log' => 'array',
+            'skipped_log' => 'array',
             'error_summary' => 'array',
-            'performance_metrics' => 'array',
             'validation_errors' => 'array',
             'total_rows' => 'integer',
             'processed_rows' => 'integer',
@@ -58,6 +65,22 @@ class CsvImport extends Model
             'started_at' => 'datetime',
             'completed_at' => 'datetime',
         ];
+    }
+
+    // Accessor for options - return as array when needed
+    protected function options(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => is_string($value) ? json_decode($value, true) : $value,
+        );
+    }
+
+    // Accessor for performance_metrics - return as array when needed  
+    protected function performanceMetrics(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => is_string($value) ? json_decode($value, true) : $value,
+        );
     }
 
     // Relationships
@@ -182,6 +205,63 @@ class CsvImport extends Model
         ];
 
         $this->update(['error_log' => $errors]);
+    }
+
+    public function addCreated(int $row, string $title, ?string $internalId, ?string $palmCode, int $bookId)
+    {
+        $created = $this->created_log ?? [];
+        if (!is_array($created)) {
+            $created = [];
+        }
+
+        $created[] = [
+            'row' => $row,
+            'title' => mb_convert_encoding($title, 'UTF-8', 'UTF-8'),
+            'internal_id' => $internalId,
+            'palm_code' => $palmCode,
+            'book_id' => $bookId,
+            'timestamp' => now()->toISOString(),
+        ];
+
+        $this->update(['created_log' => $created]);
+    }
+
+    public function addUpdated(int $row, string $title, ?string $internalId, ?string $palmCode, int $bookId)
+    {
+        $updated = $this->updated_log ?? [];
+        if (!is_array($updated)) {
+            $updated = [];
+        }
+
+        $updated[] = [
+            'row' => $row,
+            'title' => mb_convert_encoding($title, 'UTF-8', 'UTF-8'),
+            'internal_id' => $internalId,
+            'palm_code' => $palmCode,
+            'book_id' => $bookId,
+            'timestamp' => now()->toISOString(),
+        ];
+
+        $this->update(['updated_log' => $updated]);
+    }
+
+    public function addSkipped(int $row, string $title, ?string $internalId, ?string $palmCode, string $reason)
+    {
+        $skipped = $this->skipped_log ?? [];
+        if (!is_array($skipped)) {
+            $skipped = [];
+        }
+
+        $skipped[] = [
+            'row' => $row,
+            'title' => mb_convert_encoding($title, 'UTF-8', 'UTF-8'),
+            'internal_id' => $internalId,
+            'palm_code' => $palmCode,
+            'reason' => $reason,
+            'timestamp' => now()->toISOString(),
+        ];
+
+        $this->update(['skipped_log' => $skipped]);
     }
 
     /**

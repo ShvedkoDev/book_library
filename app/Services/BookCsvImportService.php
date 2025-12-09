@@ -349,10 +349,31 @@ class BookCsvImportService
                 if ($result['success']) {
                     if ($result['action'] === 'created') {
                         $this->importSession->incrementCreated();
+                        $this->importSession->addCreated(
+                            $rowNumber,
+                            $bookTitle,
+                            $data['internal_id'] ?? null,
+                            $data['palm_code'] ?? null,
+                            $result['book_id']
+                        );
                     } elseif ($result['action'] === 'updated') {
                         $this->importSession->incrementUpdated();
+                        $this->importSession->addUpdated(
+                            $rowNumber,
+                            $bookTitle,
+                            $data['internal_id'] ?? null,
+                            $data['palm_code'] ?? null,
+                            $result['book_id']
+                        );
                     } elseif ($result['action'] === 'skipped') {
                         $this->importSession->incrementSkipped();
+                        $this->importSession->addSkipped(
+                            $rowNumber,
+                            $bookTitle,
+                            $data['internal_id'] ?? null,
+                            $data['palm_code'] ?? null,
+                            $result['message'] ?? 'Skipped'
+                        );
                     }
                 } else {
                     $this->importSession->incrementFailed();

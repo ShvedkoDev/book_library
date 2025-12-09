@@ -101,7 +101,8 @@ class CsvImportResource extends Resource
                         Forms\Components\Textarea::make('error_log')
                             ->disabled()
                             ->rows(10)
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->formatStateUsing(fn ($state) => is_array($state) ? json_encode($state, JSON_PRETTY_PRINT) : $state),
                     ])
                     ->visible(fn ($record) => !empty($record?->error_log)),
             ]);
