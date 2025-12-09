@@ -1,6 +1,6 @@
 @extends('layouts.library')
 
-@section('title', 'Profile Settings - Micronesian Teachers Digital Library')
+@section('title', 'Profile Settings - FSM National Vernacular Language Arts (VLA) Curriculum')
 @section('description', 'Manage your account settings and preferences')
 
 @push('styles')

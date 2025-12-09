@@ -1,4 +1,4 @@
-@section('title', 'Forgot Password - Micronesian Teachers Digital Library')
+@section('title', 'Forgot Password - FSM National Vernacular Language Arts (VLA) Curriculum')
 
 <x-guest-layout>
     <!-- Session Status -->

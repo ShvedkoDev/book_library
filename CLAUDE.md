@@ -1,4 +1,4 @@
-# Micronesian Teachers Digital Library Project
+# FSM National Vernacular Language Arts (VLA) Curriculum
 
 ## Project Overview
 Building a digital library website for teachers in Micronesia with ~2,000 educational books in local languages.

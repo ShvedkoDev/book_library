@@ -1,4 +1,4 @@
-@section('title', 'Register - Micronesian Teachers Digital Library')
+@section('title', 'Register - FSM National Vernacular Language Arts (VLA) Curriculum')
 
 <x-guest-layout>
     <!-- Validation Errors -->

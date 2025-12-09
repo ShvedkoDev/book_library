@@ -1,7 +1,7 @@
 @extends('layouts.library')
 
-@section('title', 'My Bookmarks - Activity - Micronesian Teachers Digital Library')
-@section('description', 'View all books you have bookmarked in the Micronesian Teachers Digital Library')
+@section('title', 'My Bookmarks - Activity - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('description', 'View all books you have bookmarked in the FSM National Vernacular Language Arts (VLA) Curriculum')
 
 @push('styles')
 <style>

@@ -1,7 +1,7 @@
 @extends('layouts.library')
 
-@section('title', 'Activity Timeline - Micronesian Teachers Digital Library')
-@section('description', 'View your complete activity timeline in the Micronesian Teachers Digital Library')
+@section('title', 'Activity Timeline - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('description', 'View your complete activity timeline in the FSM National Vernacular Language Arts (VLA) Curriculum')
 
 @push('styles')
 <style>

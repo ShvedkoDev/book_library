@@ -1,7 +1,7 @@
 # COPILOT.md - Project Context for AI Sessions
 
 **Last Updated:** 2025-12-03  
-**Project:** Micronesian Teachers Digital Library
+**Project:** FSM National Vernacular Language Arts (VLA) Curriculum
 
 ---
 
@@ -765,4 +765,4 @@ docker-compose down
 
 **End of COPILOT.md**
 
-*This file contains essential context for AI assistants working on the Micronesian Teachers Digital Library project. Update as project evolves.*
+*This file contains essential context for AI assistants working on the FSM National Vernacular Language Arts (VLA) Curriculum project. Update as project evolves.*

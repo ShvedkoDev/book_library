@@ -228,7 +228,7 @@
                         <li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-2335"><a href="{{ url('/') }}">Home</a></li>
                         <li id="menu-item-1362" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1362"><a href="#">About Us</a>
                             <ul class="sub-menu">
-                                <li id="menu-item-314" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-314"><a href="{{ url('/about') }}">What is MTDL?</a></li>
+                                <li id="menu-item-314" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-314"><a href="{{ url('/about') }}">What is VLA?</a></li>
                                 <li id="menu-item-320" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-320"><a href="{{ url('/why') }}">Why Digital Library?</a></li>
                                 <li id="menu-item-1692" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1692"><a href="{{ url('/photo-gallery') }}">Photo Gallery</a></li>
                             </ul>

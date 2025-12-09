@@ -1,6 +1,6 @@
 @extends('layouts.library')
 
-@section('title', $book->title . ' - Micronesian Teachers Digital Library')
+@section('title', $book->title . ' - FSM National Vernacular Language Arts (VLA) Curriculum')
 @section('description', Str::limit($book->description ?? 'Educational resource for Micronesian teachers', 160))
 @section('og_type', 'book')
 @section('og_image', $book->getThumbnailUrl())

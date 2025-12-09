@@ -1,6 +1,6 @@
 @extends('layouts.library')
 
-@section('title', $page->title . ' - Micronesian Teachers Digital Library')
+@section('title', $page->title . ' - FSM National Vernacular Language Arts (VLA) Curriculum')
 @section('description', $page->meta_description ?? $page->excerpt)
 @section('og_type', 'article')
 

@@ -16,7 +16,7 @@ class TermsOfUseSeeder extends Seeder
         $termsVersions = [
             [
                 'version' => '1.0',
-                'content' => 'Welcome to the Micronesian Teachers Digital Library. By accessing and using this digital library, you agree to the following terms:\n\n1. Educational Use: This library is intended for educational purposes only.\n2. Respect for Authors: All materials are protected by copyright and should be used respectfully.\n3. No Commercial Use: Materials may not be used for commercial purposes without permission.\n4. Attribution: When using materials, proper attribution should be given to authors and publishers.\n5. Community Guidelines: Users should maintain respectful behavior in reviews and interactions.\n\nFor questions about these terms, please contact the library administrators.',
+                'content' => 'Welcome to the FSM National Vernacular Language Arts (VLA) Curriculum. By accessing and using this digital library, you agree to the following terms:\n\n1. Educational Use: This library is intended for educational purposes only.\n2. Respect for Authors: All materials are protected by copyright and should be used respectfully.\n3. No Commercial Use: Materials may not be used for commercial purposes without permission.\n4. Attribution: When using materials, proper attribution should be given to authors and publishers.\n5. Community Guidelines: Users should maintain respectful behavior in reviews and interactions.\n\nFor questions about these terms, please contact the library administrators.',
                 'is_active' => true,
                 'effective_date' => now()->subDays(30),
                 'created_at' => now()->subDays(30),

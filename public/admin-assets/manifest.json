@@ -1,7 +1,7 @@
 {
-  "name": "MTDL Admin Panel",
-  "short_name": "MTDL Admin",
-  "description": "Administrative interface for the Micronesian Teachers Digital Library",
+  "name": "VLA Admin Panel",
+  "short_name": "VLA Admin",
+  "description": "Administrative interface for the FSM National Vernacular Language Arts (VLA) Curriculum",
   "start_url": "/admin",
   "display": "standalone",
   "background_color": "#ffffff",

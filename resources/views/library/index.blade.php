@@ -1,6 +1,6 @@
 @extends('layouts.library')
 
-@section('title', 'Library - Micronesian Teachers Digital Library')
+@section('title', 'Library - FSM National Vernacular Language Arts (VLA) Curriculum')
 @section('description', 'Browse our collection of over 2,000 educational resources in local Micronesian languages')
 
 @section('content')
@@ -39,7 +39,12 @@
             <aside class="sidebar sidebar-links library-sidebar">
                 <div class="search-filters">
                     <div class="search-section">
-                        <h3>Keyword Search</h3>
+                        <h3>
+                            Keyword Search
+                            @if(!empty($search))
+                                <i class="fal fa-times-circle clear-filters-icon" onclick="clearSearch()" title="Clear Search"></i>
+                            @endif
+                        </h3>
                         <div class="search-box">
                             <input
                                 type="text"
@@ -49,11 +54,7 @@
                                 class="search-input input"
                                 value="{{ $search ?? '' }}"
                                 onkeypress="if(event.key === 'Enter') submitSearch()"
-                                oninput="toggleClearButton()"
                             >
-                            <button type="button" class="clear-search-button" id="clearSearchButton" onclick="clearSearch()" style="display: {{ !empty($search) ? 'flex' : 'none' }};" title="Clear search">
-                                <i class="fal fa-times"></i>
-                            </button>
                             <button type="button" class="search-button" onclick="submitSearch()">
                                 <i class="fal fa-search"></i>
                             </button>
@@ -469,21 +470,7 @@
         searchForm.submit();
     }
 
-    function toggleClearButton() {
-        const searchInput = document.getElementById('searchInput');
-        const clearButton = document.getElementById('clearSearchButton');
-
-        if (searchInput.value.trim() !== '') {
-            clearButton.style.display = 'flex';
-        } else {
-            clearButton.style.display = 'none';
-        }
-    }
-
     function clearSearch() {
-        const searchInput = document.getElementById('searchInput');
-        searchInput.value = '';
-
         // Build URL without search parameter but preserve other params
         const url = new URL(window.location.href);
         url.searchParams.delete('search');

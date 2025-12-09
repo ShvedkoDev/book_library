@@ -1,7 +1,7 @@
 @extends('layouts.library')
 
-@section('title', 'My Ratings - Activity - Micronesian Teachers Digital Library')
-@section('description', 'View all books you have rated in the Micronesian Teachers Digital Library')
+@section('title', 'My Ratings - Activity - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('description', 'View all books you have rated in the FSM National Vernacular Language Arts (VLA) Curriculum')
 
 @push('styles')
 <style>

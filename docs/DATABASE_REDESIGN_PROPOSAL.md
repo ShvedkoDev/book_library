@@ -1,4 +1,4 @@
-# Database Redesign Proposal - MTDL Project
+# Database Redesign Proposal - VLA Project
 
 **Date:** 2025-10-20
 **Status:** Proposal for Review
