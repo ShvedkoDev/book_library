@@ -1,8 +1,8 @@
 @props(['books', 'title', 'sectionId'])
 
 @if($books->isNotEmpty())
-    <div class="related-books" id="{{ $sectionId }}">
-        <h3 class="section-title text-left">{{ $title }}</h3>
+    <div class="related-books-section" id="{{ $sectionId }}">
+        <h3 class="related-books-title text-left">{{ $title }}</h3>
         <div class="related-books-table-container">
             <table class="books-table related-books-table">
                 <thead>
@@ -14,14 +14,14 @@
                 </thead>
                 <tbody>
                     @foreach($books as $relatedBook)
-                        <tr class="book-row">
-                            <td class="book-cover-cell">
+                        <tr class="related-book-row">
+                            <td class="related-book-cover-cell">
                                 <img src="{{ $relatedBook->getThumbnailUrl() }}" 
                                      alt="{{ $relatedBook->title }}" 
-                                     class="book-cover">
+                                     class="related-book-cover">
                             </td>
-                            <td class="book-details-cell">
-                                <div class="book-title">
+                            <td class="related-book-details-cell">
+                                <div class="related-book-title">
                                     <a href="{{ route('library.show', $relatedBook->slug) }}">
                                         <span>{{ $relatedBook->title }}</span>
                                         @if($relatedBook->subtitle)
@@ -29,13 +29,13 @@
                                         @endif
                                     </a>
                                 </div>
-                                <div class="book-metadata">
+                                <div class="related-book-metadata">
                                     {{ $relatedBook->publication_year ?? 'N/A' }}
                                     @if($relatedBook->publisher)
                                         , {{ $relatedBook->publisher->name }}
                                     @endif
                                 </div>
-                                <div class="book-description">
+                                <div class="related-book-description">
                                     @php
                                         $descriptionParts = [];
                                         if($relatedBook->purposeClassifications->isNotEmpty()) {
@@ -50,7 +50,7 @@
                                     @endphp
                                     {{ implode(', ', $descriptionParts) }}
                                 </div>
-                                <div class="book-description">
+                                <div class="related-book-access">
                                     @if($relatedBook->access_level === 'full')
                                         Full access
                                     @elseif($relatedBook->access_level === 'limited')
@@ -60,13 +60,13 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="book-actions-cell">
-                                <div class="book-actions">
-                                    <a href="{{ route('library.show', $relatedBook->slug) }}" class="book-action-btn view-btn">
+                            <td class="related-book-actions-cell">
+                                <div class="related-book-actions">
+                                    <a href="{{ route('library.show', $relatedBook->slug) }}" class="related-book-action-btn related-view-btn">
                                         <i class="fal fa-book-open"></i> View
                                     </a>
                                     @if($relatedBook->access_level === 'full' && $relatedBook->pdf_path)
-                                        <a href="{{ route('library.pdf.viewer', $relatedBook->slug) }}" class="book-action-btn pdf-btn">
+                                        <a href="{{ route('library.pdf.viewer', $relatedBook->slug) }}" class="related-book-action-btn related-pdf-btn">
                                             <i class="fal fa-file-pdf"></i> Read
                                         </a>
                                     @endif
@@ -81,7 +81,7 @@
 @endif
 
 <style>
-.related-books {
+.related-books-section {
     margin-top: 2rem;
     width: 100%;
 }
@@ -90,14 +90,14 @@
     margin-top: 1rem;
 }
 
-.related-books .section-title {
+.related-books-title {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 1rem;
     color: #333;
 }
 
-/* Reuse the library table styles */
+/* Scoped table styles to avoid conflicts */
 .related-books-table {
     width: 100%;
     border-collapse: collapse;
@@ -117,21 +117,21 @@
     color: #666;
 }
 
-.related-books-table .book-row {
+.related-book-row {
     border-bottom: 1px solid #e0e0e0;
     transition: background-color 0.2s;
 }
 
-.related-books-table .book-row:hover {
+.related-book-row:hover {
     background-color: #f9f9f9;
 }
 
-.related-books-table .book-cover-cell {
+.related-book-cover-cell {
     padding: 0.75rem;
     text-align: center;
 }
 
-.related-books-table .book-cover {
+.related-book-cover {
     width: 60px;
     height: 90px;
     object-fit: cover;
@@ -139,53 +139,60 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.related-books-table .book-details-cell {
+.related-book-details-cell {
     padding: 0.75rem 1rem;
     vertical-align: middle;
 }
 
-.related-books-table .book-title {
+.related-book-title {
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
 }
 
-.related-books-table .book-title a {
+.related-book-title a {
     color: #1d496a;
     text-decoration: none;
 }
 
-.related-books-table .book-title a:hover {
+.related-book-title a:hover {
     text-decoration: underline;
 }
 
-.related-books-table .book-metadata {
+.related-book-metadata {
     font-size: 0.875rem;
     color: #666;
     margin-bottom: 0.25rem;
 }
 
-.related-books-table .book-description {
+.related-book-description {
     font-size: 0.813rem;
     color: #888;
     margin-bottom: 0.25rem;
     line-height: 1.4;
 }
 
-.related-books-table .book-actions-cell {
+.related-book-access {
+    font-size: 0.813rem;
+    color: #888;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+}
+
+.related-book-actions-cell {
     padding: 0.75rem;
     text-align: center;
     vertical-align: middle;
 }
 
-.related-books-table .book-actions {
+.related-book-actions {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     align-items: stretch;
 }
 
-.related-books-table .book-action-btn {
+.related-book-action-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -198,40 +205,41 @@
     white-space: nowrap;
 }
 
-.related-books-table .view-btn {
+.related-view-btn {
     background-color: #1d496a;
     color: white;
 }
 
-.related-books-table .view-btn:hover {
+.related-view-btn:hover {
     background-color: #005a8a;
 }
 
-.related-books-table .pdf-btn {
+.related-pdf-btn {
     background-color: #d32f2f;
     color: white;
 }
 
-.related-books-table .pdf-btn:hover {
+.related-pdf-btn:hover {
     background-color: #b71c1c;
 }
 
 @media (max-width: 768px) {
-    .related-books-table .book-cover {
+    .related-book-cover {
         width: 50px;
         height: 75px;
     }
     
-    .related-books-table .book-title {
+    .related-book-title {
         font-size: 0.938rem;
     }
     
-    .related-books-table .book-metadata,
-    .related-books-table .book-description {
+    .related-book-metadata,
+    .related-book-description,
+    .related-book-access {
         font-size: 0.75rem;
     }
     
-    .related-books-table .book-action-btn {
+    .related-book-action-btn {
         font-size: 0.75rem;
         padding: 0.375rem 0.75rem;
     }
