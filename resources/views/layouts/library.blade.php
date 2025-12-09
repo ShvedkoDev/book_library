@@ -230,12 +230,10 @@
                             <ul class="sub-menu">
                                 <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">FSM Language Policy</a></li>
                                 <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">FSM VLA Standards</a></li>
-                                <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">Resource guide</a></li>
                                 <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">Resource library</a></li>
                                 <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">Photo gallery</a></li>
                             </ul>
                         </li>
-                        <li id="menu-item-resource-guide" class="menu-item menu-item-type-post_type menu-item-object-page {{ request()->is('/') ? 'current-menu-item' : '' }}"><a href="{{ url('/') }}">Resource guide</a></li>
 
                         {{-- Dynamic CMS Pages --}}
                         @if(isset($cmsPages) && $cmsPages->count() > 0)
