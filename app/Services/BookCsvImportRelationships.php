@@ -656,6 +656,16 @@ trait BookCsvImportRelationships
                 continue;
             }
 
+            // Skip invalid relationship codes (like "*TRUE if Translated-title identical*")
+            if (empty($relationship->relationship_code) || 
+                str_starts_with($relationship->relationship_code, '*') ||
+                str_contains(strtolower($relationship->relationship_code), 'true') ||
+                str_contains(strtolower($relationship->relationship_code), 'false')) {
+                // Delete invalid relationship
+                \DB::table('book_relationships')->where('id', $relationship->id)->delete();
+                continue;
+            }
+
             // Find all OTHER books with the same relationship code and type
             $relatedBooks = \DB::table('book_relationships')
                 ->join('books', 'books.id', '=', 'book_relationships.book_id')
@@ -664,31 +674,43 @@ trait BookCsvImportRelationships
                 ->where('book_relationships.book_id', '!=', $relationship->book_id)
                 ->where('books.is_active', true)
                 ->select('books.id')
+                ->distinct()
                 ->get();
 
             // Create relationships to all related books
-            foreach ($relatedBooks as $relatedBook) {
+            if ($relatedBooks->isNotEmpty()) {
+                // Update the first relationship
                 \DB::table('book_relationships')
                     ->where('id', $relationship->id)
                     ->update([
-                        'related_book_id' => $relatedBook->id,
+                        'related_book_id' => $relatedBooks->first()->id,
                         'description' => null,
                         'updated_at' => now(),
                     ]);
 
-                // If there are multiple related books, create additional relationship records
-                // for books beyond the first one
-                if ($relatedBooks->count() > 1 && $relatedBook->id != $relatedBooks->first()->id) {
-                    $book->bookRelationships()->create([
-                        'related_book_id' => $relatedBook->id,
-                        'relationship_type' => $relationship->relationship_type,
-                        'relationship_code' => $relationship->relationship_code,
-                    ]);
+                // Create additional relationships for other books (if more than one)
+                foreach ($relatedBooks->skip(1) as $relatedBook) {
+                    // Check if relationship already exists to avoid duplicates
+                    $exists = \DB::table('book_relationships')
+                        ->where('book_id', $relationship->book_id)
+                        ->where('related_book_id', $relatedBook->id)
+                        ->where('relationship_type', $relationship->relationship_type)
+                        ->exists();
+                    
+                    if (!$exists) {
+                        \DB::table('book_relationships')->insert([
+                            'book_id' => $relationship->book_id,
+                            'related_book_id' => $relatedBook->id,
+                            'relationship_type' => $relationship->relationship_type,
+                            'relationship_code' => $relationship->relationship_code,
+                            'description' => null,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
                 }
-            }
-
-            // If no related books found, delete this orphan relationship
-            if ($relatedBooks->isEmpty()) {
+            } else {
+                // If no related books found, delete this orphan relationship
                 \DB::table('book_relationships')->where('id', $relationship->id)->delete();
             }
         }
