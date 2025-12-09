@@ -248,11 +248,12 @@ class CsvImport extends Page implements HasForms
                     ])
                     ->send();
             } else {
+                // Success - show notification and open modal
                 Notification::make()
                     ->title('Import Completed Successfully')
-                    ->body("Imported {$result->successful_rows} books successfully.")
+                    ->body("Imported {$result->successful_rows} books successfully. Click 'Process Relationships' to link related books.")
                     ->success()
-                    ->duration(10000)
+                    ->duration(15000)
                     ->actions([
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View details')
@@ -260,6 +261,9 @@ class CsvImport extends Page implements HasForms
                             ->button(),
                     ])
                     ->send();
+                
+                // Auto-open the relationships modal
+                $this->dispatch('open-modal', id: 'process-relationships-modal');
             }
 
             // Reset form
@@ -294,5 +298,38 @@ class CsvImport extends Page implements HasForms
                 ->modalDescription('Are you sure you want to import this CSV file? This action cannot be undone.')
                 ->modalSubmitActionLabel('Yes, import'),
         ];
+    }
+
+    public function processRelationshipsModal(): void
+    {
+        $this->dispatch('open-modal', id: 'process-relationships-modal');
+    }
+
+    public function processRelationships(): void
+    {
+        try {
+            Notification::make()
+                ->title('Processing Relationships')
+                ->body('Book relationships are being processed. This may take a few minutes...')
+                ->info()
+                ->send();
+
+            $importService = app(BookCsvImportService::class);
+            $importService->processBookRelationships();
+
+            Notification::make()
+                ->title('Relationships Processed')
+                ->body('All book relationships have been processed successfully!')
+                ->success()
+                ->send();
+
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Processing Failed')
+                ->body('Failed to process relationships: ' . $e->getMessage())
+                ->danger()
+                ->persistent()
+                ->send();
+        }
     }
 }
