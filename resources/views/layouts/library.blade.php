@@ -228,11 +228,11 @@
                         <li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-2335"><a href="{{ url('/') }}">Home</a></li>
                         <li id="menu-item-1362" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1362"><a href="#">About</a>
                             <ul class="sub-menu">
-                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">FSM Language Policy</a></li>
-                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">FSM VLA Standards</a></li>
-                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">Resource guide</a></li>
-                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">Resource library</a></li>
-                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">Photo gallery</a></li>
+                                <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">FSM Language Policy</a></li>
+                                <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">FSM VLA Standards</a></li>
+                                <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">Resource guide</a></li>
+                                <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">Resource library</a></li>
+                                <li class="menu-item-disabled"><a href="#" onclick="event.preventDefault();">Photo gallery</a></li>
                             </ul>
                         </li>
                         <li id="menu-item-resource-guide" class="menu-item menu-item-type-post_type menu-item-object-page {{ request()->is('/') ? 'current-menu-item' : '' }}"><a href="{{ url('/') }}">Resource guide</a></li>
@@ -338,7 +338,7 @@
                 <p>FSM Department of Education<br>
                     PO Box PS 87<br>
                     Palikir, Pohnpei, FM 96941<br>
-                    <a href="www.national.doe.fm" style="color: white" target="_blank">www.national.doe.fm</a>
+                    <a href="https://www.national.doe.fm" style="color: white" target="_blank" rel="noopener noreferrer">www.national.doe.fm</a>
                 </p>
 
             </address>
@@ -348,7 +348,7 @@
                 <p>Island Research & Education Initiative<br>
                     PO Box PS 303<br>
                     Palikir, Pohnpei, FM 96941<br>
-                    <a href="www.islandresearch.org" style="color: white" target="_blank">www.islandresearch.org</a>
+                    <a href="https://www.islandresearch.org" style="color: white" target="_blank" rel="noopener noreferrer">www.islandresearch.org</a>
                 </p>
 
             </address>
@@ -358,15 +358,15 @@
                 <p>Center for Getting Things Started<br>
                     472 Inia Lane<br>
                     Hilo, HI 96720<br>
-                    <a href="www.c4gts.org" style="color: white" target="_blank">www.c4gts.org</a>
+                    <a href="https://www.c4gts.org" style="color: white" target="_blank" rel="noopener noreferrer">www.c4gts.org</a>
                 </p>
 
             </address>
             <ul class="other-links-col other-links-col2">
-                <li><a href="#" target="_self">Accessibility info</a></li>
-                <li><a href="#" target="_self">Suggest educational content</a></li>
-                <li><a href="#" target="_self">Contributor form</a></li>
-                <li><a href="#" target="_self">Submit resources</a></li>
+                <li><span style="color: #999; cursor: default;">Accessibility info</span></li>
+                <li><span style="color: #999; cursor: default;">Suggest educational content</span></li>
+                <li><span style="color: #999; cursor: default;">Contributor form</span></li>
+                <li><span style="color: #999; cursor: default;">Submit resources</span></li>
             </ul>
         </div>
         <div class="logos-coe-links">
