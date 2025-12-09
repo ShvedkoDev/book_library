@@ -58,7 +58,7 @@
 }
 
 .bookmark-button.bookmarked i {
-    color: #c9d3e0;
+    color: #1d496a;
 }
 
 /* Loading state during form submission */

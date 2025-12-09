@@ -348,7 +348,7 @@
                                         'star' => 'fa-star',
                                         'chat' => 'fa-comment',
                                         'download' => 'fa-download',
-                                        'bookmark' => 'fa-heart',
+                                        'bookmark' => 'fa-bookmark',
                                         'pencil' => 'fa-sticky-note',
                                         default => 'fa-circle'
                                     };

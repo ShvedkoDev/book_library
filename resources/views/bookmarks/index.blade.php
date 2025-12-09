@@ -219,7 +219,7 @@
 
     <div class="bookmarks-header">
         <h1>
-            <i class="fas fa-heart" style="color: #ff6b6b;"></i> My Bookmarks
+            <i class="fas fa-bookmark" style="color: #1d496a;"></i> My Bookmarks
             @if($bookmarks->total() > 0)
                 <span class="bookmarks-count">{{ $bookmarks->total() }}</span>
             @endif

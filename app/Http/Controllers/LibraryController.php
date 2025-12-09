@@ -19,6 +19,30 @@ class LibraryController extends Controller
     {
         $this->analytics = $analytics;
     }
+
+    /**
+     * Normalize search term by removing apostrophes and diacritics
+     */
+    private function normalizeSearchTerm($term)
+    {
+        // Remove apostrophes
+        $term = str_replace("'", '', $term);
+        
+        // Convert to lowercase
+        $term = mb_strtolower($term, 'UTF-8');
+        
+        // Remove common diacritics
+        $diacritics = [
+            'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
+            'à' => 'a', 'è' => 'e', 'ì' => 'i', 'ò' => 'o', 'ù' => 'u',
+            'â' => 'a', 'ê' => 'e', 'î' => 'i', 'ô' => 'o', 'û' => 'u',
+            'ä' => 'a', 'ë' => 'e', 'ï' => 'i', 'ö' => 'o', 'ü' => 'u',
+            'ã' => 'a', 'õ' => 'o', 'ñ' => 'n', 'ç' => 'c',
+        ];
+        
+        return str_replace(array_keys($diacritics), array_values($diacritics), $term);
+    }
+
     /**
      * Display a listing of books with search and filters.
      */
@@ -66,25 +90,40 @@ class LibraryController extends Controller
 
         // Apply search with diacritics and apostrophe insensitivity
         if ($search) {
-            // Normalize search term: remove apostrophes and prepare for diacritic-insensitive search
-            $normalizedSearch = str_replace("'", '', $search);
+            // Normalize search term: remove apostrophes and special characters
+            $normalizedSearch = $this->normalizeSearchTerm($search);
 
             $query->where(function($q) use ($normalizedSearch) {
-                // Search in title (remove apostrophes from field for comparison)
-                $q->whereRaw("REPLACE(title, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"])
+                // Search in title (remove apostrophes and diacritics from field for comparison)
+                $q->whereRaw("REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                    LOWER(title), 'á', 'a'), 'é', 'e'), 'í', 'i'), 'ó', 'o'), 'ú', 'u'),
+                    'à', 'a'), 'è', 'e'), 'ì', 'i'), 'ò', 'o'), 'ù', 'u'),
+                    'â', 'a'), 'ê', 'e'), 'î', 'i'), 'ô', 'o'), 'û', 'u'), '''', '') LIKE ?", ["%{$normalizedSearch}%"])
                   // Search in description
-                  ->orWhereRaw("REPLACE(description, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"])
+                  ->orWhereRaw("REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                    LOWER(description), 'á', 'a'), 'é', 'e'), 'í', 'i'), 'ó', 'o'), 'ú', 'u'),
+                    'à', 'a'), 'è', 'e'), 'ì', 'i'), 'ò', 'o'), 'ù', 'u'),
+                    'â', 'a'), 'ê', 'e'), 'î', 'i'), 'ô', 'o'), 'û', 'u'), '''', '') LIKE ?", ["%{$normalizedSearch}%"])
                   // Search in creators' names
                   ->orWhereHas('creators', function($q) use ($normalizedSearch) {
-                      $q->whereRaw("REPLACE(name, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"]);
+                      $q->whereRaw("REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                        LOWER(name), 'á', 'a'), 'é', 'e'), 'í', 'i'), 'ó', 'o'), 'ú', 'u'),
+                        'à', 'a'), 'è', 'e'), 'ì', 'i'), 'ò', 'o'), 'ù', 'u'),
+                        'â', 'a'), 'ê', 'e'), 'î', 'i'), 'ô', 'o'), 'û', 'u'), '''', '') LIKE ?", ["%{$normalizedSearch}%"]);
                   })
                   // Search in publisher name
                   ->orWhereHas('publisher', function($q) use ($normalizedSearch) {
-                      $q->whereRaw("REPLACE(name, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"]);
+                      $q->whereRaw("REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                        LOWER(name), 'á', 'a'), 'é', 'e'), 'í', 'i'), 'ó', 'o'), 'ú', 'u'),
+                        'à', 'a'), 'è', 'e'), 'ì', 'i'), 'ò', 'o'), 'ù', 'u'),
+                        'â', 'a'), 'ê', 'e'), 'î', 'i'), 'ô', 'o'), 'û', 'u'), '''', '') LIKE ?", ["%{$normalizedSearch}%"]);
                   })
                   // Search in collection title
                   ->orWhereHas('collection', function($q) use ($normalizedSearch) {
-                      $q->whereRaw("REPLACE(title, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"]);
+                      $q->whereRaw("REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                        LOWER(title), 'á', 'a'), 'é', 'e'), 'í', 'i'), 'ó', 'o'), 'ú', 'u'),
+                        'à', 'a'), 'è', 'e'), 'ì', 'i'), 'ò', 'o'), 'ù', 'u'),
+                        'â', 'a'), 'ê', 'e'), 'î', 'i'), 'ô', 'o'), 'û', 'u'), '''', '') LIKE ?", ["%{$normalizedSearch}%"]);
                   });
             });
         }

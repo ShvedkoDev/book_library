@@ -283,7 +283,7 @@
                             <li class="menu-item menu-item-has-children menu-user">
                                 <a href="#">{{ Auth::user()->name }}</a>
                                 <ul class="sub-menu">
-                                    <li><a href="{{ route('bookmarks.index') }}"><i class="fal fa-heart"></i> My Bookmarks</a></li>
+                                    <li><a href="{{ route('bookmarks.index') }}"><i class="fal fa-bookmark"></i> My Bookmarks</a></li>
                                     <li><a href="{{ route('profile.edit') }}">Profile</a></li>
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}" style="display: inline;">

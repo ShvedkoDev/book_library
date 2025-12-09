@@ -270,7 +270,7 @@
             <li><i class="fal fa-star"></i> <strong>{{ $stats['ratings_count'] }}</strong> books rated</li>
             <li><i class="fal fa-comment"></i> <strong>{{ $stats['reviews_count'] }}</strong> reviews submitted</li>
             <li><i class="fal fa-download"></i> <strong>{{ $stats['downloads_count'] }}</strong> files downloaded</li>
-            <li><i class="fal fa-heart"></i> <strong>{{ $stats['bookmarks_count'] }}</strong> books bookmarked</li>
+            <li><i class="fal fa-bookmark"></i> <strong>{{ $stats['bookmarks_count'] }}</strong> books bookmarked</li>
             <li><i class="fal fa-sticky-note"></i> <strong>{{ $stats['notes_count'] }}</strong> notes created</li>
         </ul>
     </div>
