@@ -201,8 +201,6 @@ class CsvImport extends Page implements HasForms
         }
 
         try {
-            $importService = app(BookCsvImportService::class);
-
             // Handle array or string from file upload
             $csvFile = is_array($data['csv_file']) ? $data['csv_file'][0] : $data['csv_file'];
             $filePath = Storage::disk('local')->path($csvFile);
@@ -214,53 +212,15 @@ class CsvImport extends Page implements HasForms
                 'original_filename' => basename($csvFile),
             ];
 
-            // Perform import
-            $result = $importService->importCsv($filePath, $options, auth()->id());
+            // Dispatch job to process import in background
+            \App\Jobs\ProcessCsvImport::dispatch($filePath, $options, auth()->id());
 
-            // Show appropriate notification based on results
-            if ($result->failed_rows > 0) {
-                // Parse error log to show specific errors
-                $errors = [];
-                if (!empty($result->error_log)) {
-                    $errorLines = is_array($result->error_log)
-                        ? $result->error_log
-                        : json_decode($result->error_log, true) ?? [];
-
-                    $errors = collect($errorLines)
-                        ->take(10) // Show first 10 errors
-                        ->map(fn($error) => "• {$error}")
-                        ->toArray();
-                }
-
-                $errorList = !empty($errors) ? "\n\n" . implode("\n", $errors) : "";
-                $moreErrors = count($errors) < $result->failed_rows ? "\n\n...and " . ($result->failed_rows - count($errors)) . " more errors. View details for complete list." : "";
-
-                Notification::make()
-                    ->title('Import Completed with Errors')
-                    ->body("Successfully imported {$result->successful_rows} books. {$result->failed_rows} failed.{$errorList}{$moreErrors}")
-                    ->warning()
-                    ->persistent()
-                    ->actions([
-                        \Filament\Notifications\Actions\Action::make('view')
-                            ->label('View full details')
-                            ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
-                            ->button(),
-                    ])
-                    ->send();
-            } else {
-                Notification::make()
-                    ->title('Import Completed Successfully')
-                    ->body("Imported {$result->successful_rows} books successfully.")
-                    ->success()
-                    ->duration(10000)
-                    ->actions([
-                        \Filament\Notifications\Actions\Action::make('view')
-                            ->label('View details')
-                            ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
-                            ->button(),
-                    ])
-                    ->send();
-            }
+            // Show notification that import has been queued
+            Notification::make()
+                ->title('Import Started')
+                ->body('Your CSV import is being processed in the background. You will be notified when it completes. You can check the status in the CSV Imports list.')
+                ->success()
+                ->send();
 
             // Reset form
             $this->form->fill();
