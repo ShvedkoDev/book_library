@@ -2706,13 +2706,13 @@
         <a id="related-books" name="related-books" class="section-anchor"></a>
         <div class="related-books-full-width">
             @if($relatedByCreator->isNotEmpty())
-                <x-library.related-books :books="$relatedByCreator" title="More books by the same author" sectionId="related-by-creator" />
+                <x-library.related-books-carousel :books="$relatedByCreator" title="More books by the same author" sectionId="related-by-creator" />
             @endif
             @if($relatedByCollection->isNotEmpty())
-                <x-library.related-books :books="$relatedByCollection" title="More books from the same collection" sectionId="related-by-collection" />
+                <x-library.related-books-carousel :books="$relatedByCollection" title="More books from the same collection" sectionId="related-by-collection" />
             @endif
             @if($relatedByLanguage->isNotEmpty())
-                <x-library.related-books :books="$relatedByLanguage" title="More books in the same language" sectionId="related-by-language" />
+                <x-library.related-books-carousel :books="$relatedByLanguage" title="More books in the same language" sectionId="related-by-language" />
             @endif
         </div>
     @endif
