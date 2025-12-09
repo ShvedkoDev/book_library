@@ -441,7 +441,7 @@
         margin-right: 0.25rem;
     }
 
-    .book-author .author-pill {
+    .book-author .author-pill, .details-section .author-pill {
         display: inline-block;
         padding: 0.15rem 0.5rem;
         background-color: #f0f0f0;
@@ -453,7 +453,7 @@
         cursor: pointer;
     }
 
-    .book-author .author-pill:hover {
+    .book-author .author-pill:hover, .details-section .author-pill:hover {
         background-color: #e0e0e0;
         color: #000;
     }
@@ -2555,7 +2555,7 @@
                         'Micronesian Seminar',
                         'University of Guam'
                     ];
-                    
+
                     // Create a lookup map for existing references
                     $libraryLinksMap = [];
                     foreach($book->libraryReferences as $reference) {
