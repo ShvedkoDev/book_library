@@ -16,6 +16,31 @@ footer.department-footer .tagline {
     line-height: 1.6;
 }
 
+/* Custom Scrollbar for Filter Sidebar */
+.library-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 152, 119, 0.3) transparent;
+}
+
+.library-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.library-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+}
+
+.library-sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 152, 119, 0.3);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.library-sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 152, 119, 0.5);
+}
+
 /* Fix government logo - ensure no background */
 .left-institution img {
     background: transparent !important;
