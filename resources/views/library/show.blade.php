@@ -2605,7 +2605,7 @@
                                                     </td>
                                                     <td class="book-details-cell">
                                                         <div class="book-title related-book-title-block">
-                                                            <a href="{{ route('library.show', $relatedBook->slug) }}">
+                                                            <a target="_blank" href="{{ route('library.show', $relatedBook->slug) }}">
                                                                 <span>{{ $relatedBook->title }}</span>
                                                                 @if($relatedBook->subtitle)
                                                                     &nbsp;&ndash; <span style="font-weight: normal">{{ $relatedBook->subtitle }}</span>
@@ -2614,9 +2614,6 @@
                                                         </div>
                                                         <div class="book-metadata">
                                                             {{ $relatedBook->publication_year ?? 'N/A' }}
-                                                            @if($relatedBook->publisher)
-                                                                , {{ $relatedBook->publisher->name }}
-                                                            @endif
                                                         </div>
                                                         <div class="book-description">
                                                             {{ implode(', ', array_filter($descriptionParts)) }}
