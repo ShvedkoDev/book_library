@@ -7,6 +7,7 @@ use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\BookNoteController;
 use App\Http\Controllers\BookReviewController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Api\ShareTrackingController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -93,6 +94,9 @@ Route::middleware('auth')->group(function () {
 
 // CMS Page preview route (admin only - authorization checked in controller)
 Route::middleware('auth')->get('/admin/pages/{id}/preview', [PageController::class, 'preview'])->name('pages.preview');
+
+// Sitemap route
+Route::get('/sitemap', [SitemapController::class, 'index'])->name('sitemap');
 
 // CSV Template & Export Download routes (admin only)
 Route::middleware(['auth'])->group(function () {

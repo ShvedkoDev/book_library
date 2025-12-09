@@ -357,9 +357,10 @@ footer.department-footer .tagline {
     justify-content: space-between;
 }
 
-/* Disabled menu items styling */
+/* Disabled menu items styling - maintain same appearance as regular items */
 .menu-item-disabled a {
     cursor: not-allowed !important;
     pointer-events: none;
     opacity: 0.6;
+    text-transform: none !important;
 }
