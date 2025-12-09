@@ -16,7 +16,7 @@ class AdditionalSettingsSeeder extends Seeder
             // General Settings
             [
                 'key' => 'site_name',
-                'value' => 'Micronesian Teachers Digital Library',
+                'value' => 'FSM National Vernacular Language Arts (VLA) Curriculum',
                 'type' => 'string',
                 'group' => 'general',
                 'description' => 'Name of the website displayed in header, title tags, and throughout the site',
@@ -290,7 +290,7 @@ class AdditionalSettingsSeeder extends Seeder
             ],
             [
                 'key' => 'from_name',
-                'value' => 'Micronesian Teachers Digital Library',
+                'value' => 'FSM National Vernacular Language Arts (VLA) Curriculum',
                 'type' => 'string',
                 'group' => 'email',
                 'description' => 'Default "from" name for system emails',

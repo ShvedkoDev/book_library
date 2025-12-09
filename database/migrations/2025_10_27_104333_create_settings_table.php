@@ -37,7 +37,7 @@ return new class extends Migration
             ],
             [
                 'key' => 'site_name',
-                'value' => 'Micronesian Teachers Digital Library',
+                'value' => 'FSM National Vernacular Language Arts (VLA) Curriculum',
                 'type' => 'string',
                 'group' => 'general',
                 'description' => 'Name of the library site',

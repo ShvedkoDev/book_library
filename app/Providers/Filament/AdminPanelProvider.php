@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandLogo(fn () => view('filament.admin.brand-logo'))
-            ->brandName('Micronesian Teachers Digital Library')
+            ->brandName('FSM National Vernacular Language Arts (VLA) Curriculum')
             ->colors([
                 'primary' => Color::hex('#009877'),    // COE green
                 'secondary' => Color::hex('#005a70'),  // COE blue
