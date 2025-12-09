@@ -245,8 +245,9 @@ class BookCsvImportService
                 $this->runQualityChecks();
             }
 
-            // Process book relationships (match books with same relationship codes)
-            $this->processBookRelationships();
+            // Skip relationship processing during import to avoid timeout
+            // Relationships will be processed on-demand when viewing books
+            // Or can be run manually via artisan command
 
         } catch (Exception $e) {
             // Disable database optimizations on error
