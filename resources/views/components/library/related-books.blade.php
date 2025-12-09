@@ -3,186 +3,237 @@
 @if($books->isNotEmpty())
     <div class="related-books" id="{{ $sectionId }}">
         <h3 class="section-title text-left">{{ $title }}</h3>
-        <div class="books-scroll-container">
-            <button class="scroll-arrow scroll-arrow-left" id="scroll-left-{{ $sectionId }}" onclick="scrollBooks('{{ $sectionId }}', 'left')" style="display: none;" disabled>
-                <i class="fal fa-chevron-left"></i>
-            </button>
-            <div class="books-grid-scroll" id="books-grid-{{ $sectionId }}">
-                @foreach($books as $relatedBook)
-                    <a href="{{ route('library.show', $relatedBook->slug) }}" class="book-card">
-                        <img src="{{ $relatedBook->getThumbnailUrl() }}" alt="{{ $relatedBook->title }}" class="book-card-cover">
-                        <div class="book-card-title">{{ $relatedBook->title }}</div>
-                        <div class="book-card-author">
-                            @if($relatedBook->creators->count() > 1)
-                                {{ $relatedBook->creators->first()->name }} et al.
-                            @elseif($relatedBook->creators->count() === 1)
-                                {{ $relatedBook->creators->first()->name }}
-                            @endif
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-            <button class="scroll-arrow scroll-arrow-right" id="scroll-right-{{ $sectionId }}" onclick="scrollBooks('{{ $sectionId }}', 'right')" style="display: none;">
-                <i class="fal fa-chevron-right"></i>
-            </button>
+        <div class="related-books-table-container">
+            <table class="books-table related-books-table">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;"></th>
+                        <th>Title/Edition</th>
+                        <th style="width: 120px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($books as $relatedBook)
+                        <tr class="book-row">
+                            <td class="book-cover-cell">
+                                <img src="{{ $relatedBook->getThumbnailUrl() }}" 
+                                     alt="{{ $relatedBook->title }}" 
+                                     class="book-cover">
+                            </td>
+                            <td class="book-details-cell">
+                                <div class="book-title">
+                                    <a href="{{ route('library.show', $relatedBook->slug) }}">
+                                        <span>{{ $relatedBook->title }}</span>
+                                        @if($relatedBook->subtitle)
+                                            &nbsp;&ndash; <span style="font-weight: normal">{{ $relatedBook->subtitle }}</span>
+                                        @endif
+                                    </a>
+                                </div>
+                                <div class="book-metadata">
+                                    {{ $relatedBook->publication_year ?? 'N/A' }}
+                                    @if($relatedBook->publisher)
+                                        , {{ $relatedBook->publisher->name }}
+                                    @endif
+                                </div>
+                                <div class="book-description">
+                                    @php
+                                        $descriptionParts = [];
+                                        if($relatedBook->purposeClassifications->isNotEmpty()) {
+                                            $descriptionParts[] = $relatedBook->purposeClassifications->pluck('value')->join(', ');
+                                        }
+                                        if($relatedBook->learnerLevelClassifications->isNotEmpty()) {
+                                            $descriptionParts[] = $relatedBook->learnerLevelClassifications->pluck('value')->join(', ');
+                                        }
+                                        if($relatedBook->languages->isNotEmpty()) {
+                                            $descriptionParts[] = $relatedBook->languages->pluck('name')->join(', ');
+                                        }
+                                    @endphp
+                                    {{ implode(', ', $descriptionParts) }}
+                                </div>
+                                <div class="book-description">
+                                    @if($relatedBook->access_level === 'full')
+                                        Full access
+                                    @elseif($relatedBook->access_level === 'limited')
+                                        Limited access
+                                    @else
+                                        Unavailable
+                                    @endif
+                                </div>
+                            </td>
+                            <td class="book-actions-cell">
+                                <div class="book-actions">
+                                    <a href="{{ route('library.show', $relatedBook->slug) }}" class="book-action-btn view-btn">
+                                        <i class="fal fa-book-open"></i> View
+                                    </a>
+                                    @if($relatedBook->access_level === 'full' && $relatedBook->pdf_path)
+                                        <a href="{{ route('library.pdf.viewer', $relatedBook->slug) }}" class="book-action-btn pdf-btn">
+                                            <i class="fal fa-file-pdf"></i> Read
+                                        </a>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 @endif
 
 <style>
-.books-scroll-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+.related-books {
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.related-books-table-container {
     margin-top: 1rem;
 }
 
-.books-grid-scroll {
-    display: flex;
-    gap: 0.75rem;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
-    padding: 0.5rem 0;
-    flex: 1;
+.related-books .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
 }
 
-.books-grid-scroll::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+/* Reuse the library table styles */
+.related-books-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
 }
 
-.scroll-arrow {
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #1d496a;
-    color: white;
-    border: none;
-    cursor: pointer;
+.related-books-table thead {
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #ddd;
+}
+
+.related-books-table th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.related-books-table .book-row {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s;
+}
+
+.related-books-table .book-row:hover {
+    background-color: #f9f9f9;
+}
+
+.related-books-table .book-cover-cell {
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.related-books-table .book-cover {
+    width: 60px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.related-books-table .book-details-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+}
+
+.related-books-table .book-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.related-books-table .book-title a {
+    color: #1d496a;
+    text-decoration: none;
+}
+
+.related-books-table .book-title a:hover {
+    text-decoration: underline;
+}
+
+.related-books-table .book-metadata {
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.related-books-table .book-description {
+    font-size: 0.813rem;
+    color: #888;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+}
+
+.related-books-table .book-actions-cell {
+    padding: 0.75rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.related-books-table .book-actions {
     display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.related-books-table .book-action-btn {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 10;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
 }
 
-.scroll-arrow:hover:not(:disabled) {
-    background: #005a8a;
-    transform: scale(1.1);
+.related-books-table .view-btn {
+    background-color: #1d496a;
+    color: white;
 }
 
-.scroll-arrow:active:not(:disabled) {
-    transform: scale(0.95);
+.related-books-table .view-btn:hover {
+    background-color: #005a8a;
 }
 
-.scroll-arrow:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    opacity: 0.5;
-    box-shadow: none;
+.related-books-table .pdf-btn {
+    background-color: #d32f2f;
+    color: white;
 }
 
-.scroll-arrow i {
-    font-size: 1rem;
+.related-books-table .pdf-btn:hover {
+    background-color: #b71c1c;
 }
 
 @media (max-width: 768px) {
-    .scroll-arrow {
-        width: 32px;
-        height: 32px;
-        font-size: 1rem;
+    .related-books-table .book-cover {
+        width: 50px;
+        height: 75px;
     }
-
-    .scroll-arrow i {
-        font-size: 0.875rem;
+    
+    .related-books-table .book-title {
+        font-size: 0.938rem;
+    }
+    
+    .related-books-table .book-metadata,
+    .related-books-table .book-description {
+        font-size: 0.75rem;
+    }
+    
+    .related-books-table .book-action-btn {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.75rem;
     }
 }
 </style>
-
-<script>
-function scrollBooks(sectionId, direction) {
-    const grid = document.getElementById('books-grid-' + sectionId);
-    if (!grid) return;
-
-    const scrollAmount = 300; // Pixels to scroll
-
-    if (direction === 'left') {
-        grid.scrollBy({
-            left: -scrollAmount,
-            behavior: 'smooth'
-        });
-    } else {
-        grid.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth'
-        });
-    }
-
-    // Update arrow visibility after scroll
-    setTimeout(() => updateArrowVisibility(sectionId), 100);
-}
-
-function updateArrowVisibility(sectionId) {
-    const grid = document.getElementById('books-grid-' + sectionId);
-    const leftArrow = document.getElementById('scroll-left-' + sectionId);
-    const rightArrow = document.getElementById('scroll-right-' + sectionId);
-
-    if (!grid || !leftArrow || !rightArrow) return;
-
-    // Check if content is scrollable
-    const hasOverflow = grid.scrollWidth > grid.clientWidth;
-
-    if (!hasOverflow) {
-        // No overflow - hide both arrows
-        leftArrow.style.display = 'none';
-        rightArrow.style.display = 'none';
-        return;
-    }
-
-    // Has overflow - show both arrows and enable/disable based on scroll position
-    leftArrow.style.display = 'flex';
-    rightArrow.style.display = 'flex';
-
-    const scrollLeft = grid.scrollLeft;
-    const maxScroll = grid.scrollWidth - grid.clientWidth;
-
-    // Disable/enable left arrow
-    if (scrollLeft <= 0) {
-        leftArrow.disabled = true;
-    } else {
-        leftArrow.disabled = false;
-    }
-
-    // Disable/enable right arrow
-    if (scrollLeft >= maxScroll - 1) {
-        rightArrow.disabled = true;
-    } else {
-        rightArrow.disabled = false;
-    }
-}
-
-// Initialize arrow visibility on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Update for all sections
-    const sections = ['related-by-collection', 'related-by-language', 'related-by-creator'];
-    sections.forEach(sectionId => {
-        updateArrowVisibility(sectionId);
-
-        // Add scroll event listener to update arrows while scrolling
-        const grid = document.getElementById('books-grid-' + sectionId);
-        if (grid) {
-            grid.addEventListener('scroll', () => updateArrowVisibility(sectionId));
-        }
-    });
-
-    // Update on window resize
-    window.addEventListener('resize', () => {
-        sections.forEach(sectionId => updateArrowVisibility(sectionId));
-    });
-});
-</script>
