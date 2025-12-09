@@ -189,6 +189,7 @@ class ViewCsvImport extends ViewRecord
                                 $html .= '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Row #</th>';
                                 $html .= '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Title</th>';
                                 $html .= '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">IDs</th>';
+                                $html .= '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Changes</th>';
                                 $html .= '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>';
                                 $html .= '</tr>';
                                 $html .= '</thead>';
@@ -202,6 +203,26 @@ class ViewCsvImport extends ViewRecord
                                     if (!empty($book['internal_id'])) $html .= 'Internal: ' . e($book['internal_id']) . '<br>';
                                     if (!empty($book['palm_code'])) $html .= 'PALM: ' . e($book['palm_code']);
                                     $html .= '</td>';
+                                    
+                                    // Changes column
+                                    $html .= '<td class="px-6 py-4 text-xs">';
+                                    if (!empty($book['changes']) && is_array($book['changes'])) {
+                                        $html .= '<div class="space-y-1">';
+                                        foreach ($book['changes'] as $field => $change) {
+                                            $fieldLabel = ucwords(str_replace('_', ' ', $field));
+                                            $html .= '<div class="text-gray-600 dark:text-gray-400">';
+                                            $html .= '<span class="font-semibold">' . e($fieldLabel) . ':</span><br>';
+                                            $html .= '<span class="text-red-600 dark:text-red-400 line-through">' . e($change['old'] ?? 'empty') . '</span> ';
+                                            $html .= '<span class="text-gray-400">→</span> ';
+                                            $html .= '<span class="text-green-600 dark:text-green-400">' . e($change['new'] ?? 'empty') . '</span>';
+                                            $html .= '</div>';
+                                        }
+                                        $html .= '</div>';
+                                    } else {
+                                        $html .= '<span class="text-gray-400">No changes recorded</span>';
+                                    }
+                                    $html .= '</td>';
+                                    
                                     $html .= '<td class="px-6 py-4 text-sm">';
                                     if (!empty($book['book_id'])) {
                                         $editUrl = route('filament.admin.resources.books.edit', ['record' => $book['book_id']]);

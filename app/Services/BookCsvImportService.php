@@ -363,7 +363,8 @@ class BookCsvImportService
                             $bookTitle,
                             $data['internal_id'] ?? null,
                             $data['palm_code'] ?? null,
-                            $result['book_id']
+                            $result['book_id'],
+                            $result['changes'] ?? []
                         );
                     } elseif ($result['action'] === 'skipped') {
                         $this->importSession->incrementSkipped();
@@ -429,14 +430,18 @@ class BookCsvImportService
 
         // Create or update book
         if ($existingBook && $mode !== 'create_duplicates') {
+            // Detect what changed before updating
+            $changes = $this->detectChanges($existingBook, $bookData);
             $book = $this->updateBook($existingBook, $bookData, $data, $options);
             $action = 'updated';
+            $result = ['success' => true, 'action' => $action, 'book_id' => $book->id, 'changes' => $changes];
         } else {
             $book = $this->createBook($bookData, $data, $options);
             $action = 'created';
+            $result = ['success' => true, 'action' => $action, 'book_id' => $book->id];
         }
 
-        return ['success' => true, 'action' => $action, 'book_id' => $book->id];
+        return $result;
     }
 
     /**

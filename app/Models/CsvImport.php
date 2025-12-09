@@ -226,7 +226,7 @@ class CsvImport extends Model
         $this->update(['created_log' => $created]);
     }
 
-    public function addUpdated(int $row, string $title, ?string $internalId, ?string $palmCode, int $bookId)
+    public function addUpdated(int $row, string $title, ?string $internalId, ?string $palmCode, int $bookId, array $changes = [])
     {
         $updated = $this->updated_log ?? [];
         if (!is_array($updated)) {
@@ -239,6 +239,7 @@ class CsvImport extends Model
             'internal_id' => $internalId,
             'palm_code' => $palmCode,
             'book_id' => $bookId,
+            'changes' => $changes,
             'timestamp' => now()->toISOString(),
         ];
 
