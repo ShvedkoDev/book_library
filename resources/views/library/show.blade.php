@@ -410,7 +410,7 @@
         font-size: 0.875rem;
     }
 
-    .book-title {
+    .book-title:not(.related-book-title-block) {
         font-size: 1.8rem;
         margin: 0.5rem 0;
         color: #333;
@@ -2604,7 +2604,7 @@
                                                              class="book-cover">
                                                     </td>
                                                     <td class="book-details-cell">
-                                                        <div class="book-title">
+                                                        <div class="book-title related-book-title-block">
                                                             <a href="{{ route('library.show', $relatedBook->slug) }}">
                                                                 <span>{{ $relatedBook->title }}</span>
                                                                 @if($relatedBook->subtitle)

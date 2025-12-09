@@ -22,8 +22,7 @@
                             </td>
                             <td class="related-book-details-cell">
                                 <div class="related-book-title">
-                                    <a href="{{ route('library.show', $relatedBook->slug) }}">
-                                        <span>{{ $relatedBook->title }}</span>
+                                    <a href="{{ route('library.show', $relatedBook->slug) }}"><span>{{ $relatedBook->title }}</span>
                                         @if($relatedBook->subtitle)
                                             &nbsp;&ndash; <span style="font-weight: normal">{{ $relatedBook->subtitle }}</span>
                                         @endif
@@ -50,7 +49,7 @@
                                     @endphp
                                     {{ implode(', ', $descriptionParts) }}
                                 </div>
-                                <div class="related-book-access">
+                                <div class="related-book-description">
                                     @if($relatedBook->access_level === 'full')
                                         Full access
                                     @elseif($relatedBook->access_level === 'limited')
@@ -62,14 +61,7 @@
                             </td>
                             <td class="related-book-actions-cell">
                                 <div class="related-book-actions">
-                                    <a href="{{ route('library.show', $relatedBook->slug) }}" class="related-book-action-btn related-view-btn">
-                                        <i class="fal fa-book-open"></i> View
-                                    </a>
-                                    @if($relatedBook->access_level === 'full' && $relatedBook->pdf_path)
-                                        <a href="{{ route('library.pdf.viewer', $relatedBook->slug) }}" class="related-book-action-btn related-pdf-btn">
-                                            <i class="fal fa-file-pdf"></i> Read
-                                        </a>
-                                    @endif
+                                    <a href="{{ route('library.show', $relatedBook->slug) }}" class="button button-primary btn-view">Locate</a>
                                 </div>
                             </td>
                         </tr>
@@ -192,37 +184,6 @@
     align-items: stretch;
 }
 
-.related-book-action-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    text-decoration: none;
-    transition: all 0.2s;
-    white-space: nowrap;
-}
-
-.related-view-btn {
-    background-color: #1d496a;
-    color: white;
-}
-
-.related-view-btn:hover {
-    background-color: #005a8a;
-}
-
-.related-pdf-btn {
-    background-color: #d32f2f;
-    color: white;
-}
-
-.related-pdf-btn:hover {
-    background-color: #b71c1c;
-}
-
 @media (max-width: 768px) {
     .related-book-cover {
         width: 50px;
@@ -234,14 +195,8 @@
     }
     
     .related-book-metadata,
-    .related-book-description,
-    .related-book-access {
+    .related-book-description {
         font-size: 0.75rem;
-    }
-    
-    .related-book-action-btn {
-        font-size: 0.75rem;
-        padding: 0.375rem 0.75rem;
     }
 }
 </style>

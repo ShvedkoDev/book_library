@@ -64,14 +64,28 @@ class LibraryController extends Controller
             ])
             ->where('is_active', true);
 
-        // Apply search
+        // Apply search with diacritics and apostrophe insensitivity
         if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhereHas('creators', fn($q) => $q->where('name', 'like', "%{$search}%"))
-                  ->orWhereHas('publisher', fn($q) => $q->where('name', 'like', "%{$search}%"))
-                  ->orWhereHas('collection', fn($q) => $q->where('title', 'like', "%{$search}%"));
+            // Normalize search term: remove apostrophes and prepare for diacritic-insensitive search
+            $normalizedSearch = str_replace("'", '', $search);
+
+            $query->where(function($q) use ($normalizedSearch) {
+                // Search in title (remove apostrophes from field for comparison)
+                $q->whereRaw("REPLACE(title, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"])
+                  // Search in description
+                  ->orWhereRaw("REPLACE(description, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"])
+                  // Search in creators' names
+                  ->orWhereHas('creators', function($q) use ($normalizedSearch) {
+                      $q->whereRaw("REPLACE(name, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"]);
+                  })
+                  // Search in publisher name
+                  ->orWhereHas('publisher', function($q) use ($normalizedSearch) {
+                      $q->whereRaw("REPLACE(name, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"]);
+                  })
+                  // Search in collection title
+                  ->orWhereHas('collection', function($q) use ($normalizedSearch) {
+                      $q->whereRaw("REPLACE(title, '''', '') COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$normalizedSearch}%"]);
+                  });
             });
         }
 

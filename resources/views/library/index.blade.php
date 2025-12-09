@@ -49,7 +49,11 @@
                                 class="search-input input"
                                 value="{{ $search ?? '' }}"
                                 onkeypress="if(event.key === 'Enter') submitSearch()"
+                                oninput="toggleClearButton()"
                             >
+                            <button type="button" class="clear-search-button" id="clearSearchButton" onclick="clearSearch()" style="display: {{ !empty($search) ? 'flex' : 'none' }};" title="Clear search">
+                                <i class="fal fa-times"></i>
+                            </button>
                             <button type="button" class="search-button" onclick="submitSearch()">
                                 <i class="fal fa-search"></i>
                             </button>
@@ -463,6 +467,27 @@
 
         // Submit the form
         searchForm.submit();
+    }
+
+    function toggleClearButton() {
+        const searchInput = document.getElementById('searchInput');
+        const clearButton = document.getElementById('clearSearchButton');
+
+        if (searchInput.value.trim() !== '') {
+            clearButton.style.display = 'flex';
+        } else {
+            clearButton.style.display = 'none';
+        }
+    }
+
+    function clearSearch() {
+        const searchInput = document.getElementById('searchInput');
+        searchInput.value = '';
+
+        // Build URL without search parameter but preserve other params
+        const url = new URL(window.location.href);
+        url.searchParams.delete('search');
+        window.location.href = url.toString();
     }
 
     function toggleFilterGroup(element) {
