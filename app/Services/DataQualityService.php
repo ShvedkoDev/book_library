@@ -285,7 +285,11 @@ class DataQualityService
     {
         $issues = collect();
 
-        $classificationCount = $book->classifications()->count();
+        // Count all classification types
+        $classificationCount = $book->purposeClassifications()->count() +
+                             $book->genreClassifications()->count() +
+                             $book->subgenreClassifications()->count() +
+                             $book->learnerLevelClassifications()->count();
 
         if ($classificationCount === 0) {
             $issues->push(DataQualityIssue::create([
