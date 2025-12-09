@@ -2524,30 +2524,40 @@
             <div class="tab-section">
                 <h2 class="section-title text-left">Library locations</h2>
                 <hr class="section-separator">
-                @if($book->libraryReferences->isNotEmpty())
-                    <ul class="library-locations-list">
-                        @foreach($book->libraryReferences as $reference)
-                            @php
-                                // Determine which link to use (priority: main_link > catalog_link > alt_link)
-                                $linkUrl = $reference->main_link ?: ($reference->catalog_link ?: $reference->alt_link);
-                            @endphp
-                            <li class="library-location-item">
-                                <span class="library-location-square {{ $linkUrl ? 'with-link' : 'no-link' }}">
-                                    @if($linkUrl)
-                                        <a href="{{ $linkUrl }}" target="_blank" rel="noopener noreferrer" aria-label="Open library catalog in new tab">
-                                            <i class="fas fa-external-link-alt"></i>
-                                        </a>
-                                    @else
-                                        <i class="fas fa-times"></i>
-                                    @endif
-                                </span>
-                                <span class="library-location-text">{{ $reference->library_name }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <p>No physical library references available for this book.</p>
-                @endif
+                @php
+                    // All libraries to display
+                    $allLibraries = [
+                        'University of Hawaiʻi',
+                        'College of Micronesia - FSM',
+                        'Micronesian Seminar',
+                        'University of Guam'
+                    ];
+                    
+                    // Create a lookup map for existing references
+                    $libraryLinksMap = [];
+                    foreach($book->libraryReferences as $reference) {
+                        $libraryLinksMap[$reference->library_name] = $reference->main_link ?: ($reference->catalog_link ?: $reference->alt_link);
+                    }
+                @endphp
+                <ul class="library-locations-list">
+                    @foreach($allLibraries as $libraryName)
+                        @php
+                            $linkUrl = $libraryLinksMap[$libraryName] ?? null;
+                        @endphp
+                        <li class="library-location-item">
+                            <span class="library-location-square {{ $linkUrl ? 'with-link' : 'no-link' }}">
+                                @if($linkUrl)
+                                    <a href="{{ $linkUrl }}" target="_blank" rel="noopener noreferrer" aria-label="Open library catalog in new tab">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                @else
+                                    <i class="fas fa-times"></i>
+                                @endif
+                            </span>
+                            <span class="library-location-text">{{ $libraryName }}</span>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
 
             @if($hasAdvancedRelatedBookSections)

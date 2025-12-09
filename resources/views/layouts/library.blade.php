@@ -226,13 +226,16 @@
                 <div class="menu-main-container">
                     <ul id="menu-main" class="nav">
                         <li id="menu-item-2335" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-2335"><a href="{{ url('/') }}">Home</a></li>
-                        <li id="menu-item-1362" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1362"><a href="#">About Us</a>
+                        <li id="menu-item-1362" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1362"><a href="#">About</a>
                             <ul class="sub-menu">
-                                <li id="menu-item-314" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-314"><a href="{{ url('/about') }}">What is VLA?</a></li>
-                                <li id="menu-item-320" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-320"><a href="{{ url('/why') }}">Why Digital Library?</a></li>
-                                <li id="menu-item-1692" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1692"><a href="{{ url('/photo-gallery') }}">Photo Gallery</a></li>
+                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">FSM Language Policy</a></li>
+                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">FSM VLA Standards</a></li>
+                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">Resource guide</a></li>
+                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">Resource library</a></li>
+                                <li class="menu-item menu-item-disabled"><a href="#" class="disabled" onclick="event.preventDefault();" style="cursor: not-allowed; opacity: 0.5;">Photo gallery</a></li>
                             </ul>
                         </li>
+                        <li id="menu-item-resource-guide" class="menu-item menu-item-type-post_type menu-item-object-page {{ request()->is('/') ? 'current-menu-item' : '' }}"><a href="{{ url('/') }}">Resource guide</a></li>
 
                         {{-- Dynamic CMS Pages --}}
                         @if(isset($cmsPages) && $cmsPages->count() > 0)
