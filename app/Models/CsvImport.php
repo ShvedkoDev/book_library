@@ -44,9 +44,8 @@ class CsvImport extends Model
     protected function casts(): array
     {
         return [
-            // Don't cast these to arrays - handle manually with accessors
-            // 'options' => 'array',
-            // 'performance_metrics' => 'array',
+            'options' => 'array',
+            'performance_metrics' => 'array',
             'error_log' => 'array',
             'created_log' => 'array',
             'updated_log' => 'array',
@@ -65,22 +64,6 @@ class CsvImport extends Model
             'started_at' => 'datetime',
             'completed_at' => 'datetime',
         ];
-    }
-
-    // Accessor for options - return as array when needed
-    protected function options(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => is_string($value) ? json_decode($value, true) : $value,
-        );
-    }
-
-    // Accessor for performance_metrics - return as array when needed  
-    protected function performanceMetrics(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => is_string($value) ? json_decode($value, true) : $value,
-        );
     }
 
     // Relationships
