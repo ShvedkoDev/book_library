@@ -241,7 +241,7 @@
                 <div class="profile-nav-section">
                     <div class="profile-nav-header">Profile settings</div>
                     <a href="{{ route('profile.edit') }}" class="profile-nav-item active">
-                        <i class="fas fa-user-edit"></i> Edit Profile
+                        <i class="fas fa-user-edit"></i> Edit profile
                     </a>
                 </div>
 
@@ -364,7 +364,7 @@
             <!-- Delete Account Card -->
             <div class="profile-card" style="border-color: #dc3545;">
                 <div class="profile-card-header">
-                    <h2 style="color: #dc3545;">Delete Account</h2>
+                    <h2 style="color: #dc3545;">Delete account</h2>
                     <p>Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.</p>
                 </div>
 
@@ -384,7 +384,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-trash-alt"></i> Delete Account
+                        <i class="fas fa-trash-alt"></i> Delete account
                     </button>
                 </form>
             </div>

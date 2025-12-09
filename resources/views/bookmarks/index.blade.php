@@ -183,13 +183,21 @@
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s;
-        color: #ff6b6b;
-        font-size: 1.1rem;
+        color: #1d496a;
+        font-size: 1rem;
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        padding: 0;
+    }
+
+    .bookmark-remove-btn i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
     }
 
     .bookmark-remove-btn:hover {
-        background: #ff6b6b;
+        background: #1d496a;
         color: white;
         transform: scale(1.1);
     }
@@ -229,7 +237,7 @@
 
     @if($bookmarks->isEmpty())
         <div class="bookmarks-empty">
-            <i class="fal fa-heart"></i>
+            <i class="fal fa-bookmark"></i>
             <h2>No bookmarks yet</h2>
             <p>Start building your collection by bookmarking books you want to save for later.</p>
             <a href="{{ route('library.index') }}" class="btn">Browse Library</a>
@@ -242,7 +250,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="bookmark-remove-btn" title="Remove bookmark">
-                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-bookmark"></i>
                         </button>
                     </form>
 

@@ -8,7 +8,7 @@
         <div class="profile-nav-section">
             <div class="profile-nav-header">Profile settings</div>
             <a href="{{ route('profile.edit') }}" class="profile-nav-item {{ $currentRoute === 'profile.edit' ? 'active' : '' }}">
-                <i class="fas fa-user-edit"></i> Edit Profile
+                <i class="fas fa-user-edit"></i> Edit profile
             </a>
         </div>
 

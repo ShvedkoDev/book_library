@@ -2434,37 +2434,63 @@
                             <h3 class="details-subsection-title">Edition notes</h3>
                             <div class="details-row">
                                 <span class="details-label">Publisher</span>
-                                <span class="details-value">{{ $book->publisher->name }}</span>
+                                <span class="details-value">
+                                    <a href="{{ route('library.index', ['search' => $book->publisher->name]) }}" class="author-pill">{{ $book->publisher->name }}</a>
+                                </span>
                             </div>
                             @if($book->publisher->program_name)
                                 <div class="details-row">
                                     <span class="details-label">Project/partner</span>
-                                    <span class="details-value">{{ $book->publisher->program_name }}</span>
+                                    <span class="details-value">
+                                        <a href="{{ route('library.index', ['search' => $book->publisher->program_name]) }}" class="author-pill">{{ $book->publisher->program_name }}</a>
+                                    </span>
                                 </div>
                             @endif
                         </div>
                     @endif
 
                     <!-- Classifications -->
-                    @if($book->purposeClassifications->isNotEmpty() || $book->genreClassifications->isNotEmpty() || $book->subgenreClassifications->isNotEmpty() || $book->typeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty())
+                    @if($book->purposeClassifications->isNotEmpty() || $book->genreClassifications->isNotEmpty() || $book->subgenreClassifications->isNotEmpty() || $book->themesClassifications->isNotEmpty() || $book->typeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty())
                         <div class="details-subsection">
                             <h3 class="details-subsection-title">Classification</h3>
                             @if($book->purposeClassifications->isNotEmpty())
                                 <div class="details-row">
                                     <span class="details-label">Purpose</span>
-                                    <span class="details-value">{{ $book->purposeClassifications->pluck('value')->join(', ') }}</span>
+                                    <span class="details-value">
+                                        @foreach($book->purposeClassifications as $index => $classification)
+                                            <a href="{{ route('library.index', ['subjects' => [$classification->id]]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->purposeClassifications->count() - 1 ? ', ' : '' }}
+                                        @endforeach
+                                    </span>
                                 </div>
                             @endif
                             @if($book->genreClassifications->isNotEmpty())
                                 <div class="details-row">
                                     <span class="details-label">Genre</span>
-                                    <span class="details-value">{{ $book->genreClassifications->pluck('value')->join(', ') }}</span>
+                                    <span class="details-value">
+                                        @foreach($book->genreClassifications as $index => $classification)
+                                            <a href="{{ route('library.index', ['genres' => [$classification->id]]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->genreClassifications->count() - 1 ? ', ' : '' }}
+                                        @endforeach
+                                    </span>
                                 </div>
                             @endif
                             @if($book->subgenreClassifications->isNotEmpty())
                                 <div class="details-row">
                                     <span class="details-label">Sub-genre</span>
-                                    <span class="details-value">{{ $book->subgenreClassifications->pluck('value')->join(', ') }}</span>
+                                    <span class="details-value">
+                                        @foreach($book->subgenreClassifications as $index => $classification)
+                                            <a href="{{ route('library.index', ['subgenres' => [$classification->id]]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->subgenreClassifications->count() - 1 ? ', ' : '' }}
+                                        @endforeach
+                                    </span>
+                                </div>
+                            @endif
+                            @if($book->themesClassifications->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Subject</span>
+                                    <span class="details-value">
+                                        @foreach($book->themesClassifications as $index => $classification)
+                                            <a href="{{ route('library.index', ['search' => $classification->value]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->themesClassifications->count() - 1 ? ', ' : '' }}
+                                        @endforeach
+                                    </span>
                                 </div>
                             @endif
                             @if($book->typeClassifications->isNotEmpty())
