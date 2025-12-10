@@ -27,7 +27,11 @@
             /* WordPress login page styling */
             body {
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-                background: #f1f1f1;
+                background-color: rgba(230, 245, 241, 0.2);
+                background-image: url('/library-assets/images/large-topo-bg1_d7935853.png');
+                background-position: top;
+                background-repeat: repeat;
+                background-size: 900px;
                 margin: 0;
                 padding: 0;
                 min-height: 100vh;
@@ -341,15 +345,10 @@
     <body class="login-page">
         <div class="login-container">
             <div class="login-header">
-                <img src="{{ asset('library-assets/images/government_of_the_federated_states_of_micronesia.png') }}" class="site-logo" alt="Government of the Federated States of Micronesia">
-                <h1>{{ $siteName }}</h1>
+                <h1>@yield('page_title', 'Log in')</h1>
             </div>
 
             {{ $slot }}
-
-            <div class="back-to-site">
-                <a href="{{ route('library.index') }}">← Go to {{ $siteName }}</a>
-            </div>
         </div>
     </body>
 </html>

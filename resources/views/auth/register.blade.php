@@ -1,4 +1,5 @@
-@section('title', 'Register - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('title', 'Registration - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('page_title', 'Registration')
 
 <x-guest-layout>
     <!-- Validation Errors -->
@@ -15,13 +16,13 @@
 
         <!-- Name -->
         <div class="form-group">
-            <label for="name">Full Name</label>
+            <label for="name">Full name</label>
             <input id="name" type="text" name="name" class="form-input" value="{{ old('name') }}" required autofocus autocomplete="name">
         </div>
 
         <!-- Email Address -->
         <div class="form-group">
-            <label for="email">Email Address</label>
+            <label for="email">Email address</label>
             <input id="email" type="email" name="email" class="form-input" value="{{ old('email') }}" required autocomplete="username">
         </div>
 
@@ -33,7 +34,7 @@
 
         <!-- Confirm Password -->
         <div class="form-group">
-            <label for="password_confirmation">Confirm Password</label>
+            <label for="password_confirmation">Confirm password</label>
             <input id="password_confirmation" type="password" name="password_confirmation" class="form-input" required autocomplete="new-password">
         </div>
 

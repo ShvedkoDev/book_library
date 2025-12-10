@@ -1,3 +1,6 @@
+@section('title', 'Confirm password - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('page_title', 'Confirm password')
+
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600">
         {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}

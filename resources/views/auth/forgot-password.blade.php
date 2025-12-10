@@ -1,4 +1,5 @@
-@section('title', 'Forgot Password - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('title', 'Forgot password - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('page_title', 'Forgot password?')
 
 <x-guest-layout>
     <!-- Session Status -->
@@ -17,7 +18,7 @@
         </div>
     @endif
 
-    <div style="margin-bottom: 20px; font-size: 14px; color: #1d2327; line-height: 1.5;">
+    <div style="font-size: 1rem;color: #1d2327;line-height: 1.5;padding: 1.5rem;">
         Forgot your password? No problem. Just enter your email address and we will email you a password reset link.
     </div>
 
@@ -26,18 +27,18 @@
 
         <!-- Email Address -->
         <div class="form-group">
-            <label for="email">Email Address</label>
+            <label for="email">Email address</label>
             <input id="email" type="email" name="email" class="form-input" value="{{ old('email') }}" required autofocus autocomplete="username">
         </div>
 
         <!-- Submit Button -->
         <div class="login-submit">
-            <input type="submit" class="button button-primary button-large" value="Email Password Reset Link">
+            <input type="submit" class="button button-primary button-large" value="Email password reset link">
         </div>
     </form>
 
     <!-- Links -->
     <div class="login-links">
-        <p><a href="{{ route('login') }}">Back to Login</a></p>
+        <p><a href="{{ route('login') }}">Back to login</a></p>
     </div>
 </x-guest-layout>

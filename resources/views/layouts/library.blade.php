@@ -511,5 +511,10 @@
 
 @stack('scripts')
 
+{{-- Login Modal - shown when user clicks login --}}
+@guest
+    <x-login-modal />
+@endguest
+
 </body>
 </html>

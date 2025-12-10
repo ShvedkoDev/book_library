@@ -43,6 +43,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // If the request came from a modal (check referer), redirect back
+        $referer = $request->headers->get('referer');
+        if ($referer && !str_contains($referer, '/login')) {
+            return redirect()->to($referer);
+        }
+
         return redirect()->intended(route('library.index', absolute: false));
     }
 
