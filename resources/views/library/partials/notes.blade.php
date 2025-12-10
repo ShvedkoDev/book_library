@@ -24,12 +24,13 @@
                 required
                 minlength="1"
                 maxlength="5000"></textarea>
-            <small class="note-field-small">Maximum 5,000 characters. Your notes are private.</small>
         </div>
-
-        <button type="submit" class="btn-add-note">
-            <i class="fal fa-plus"></i> Add note
-        </button>
+        <div class="review-form-footer">
+            <span class="review-form-note">Maximum 5,000 characters. Your notes are private.</span>
+            <button type="submit" class="btn-submit">
+                Add note
+            </button>
+        </div>
     </form>
 </div>
 
