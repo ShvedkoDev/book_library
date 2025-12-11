@@ -7,6 +7,7 @@ use App\Filament\Resources\PageResource\RelationManagers;
 use App\Models\Page;
 use App\Models\ResourceContributor;
 use FilamentTiptapEditor\TiptapEditor;
+use FilamentTiptapEditor\Enums\TiptapOutput;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -83,6 +84,7 @@ class PageResource extends Resource
                     ->schema([
                         TiptapEditor::make('content')
                             ->profile('default')
+                            ->output(TiptapOutput::Html)
                             ->tools([
                                 'heading',
                                 'bold',
@@ -103,14 +105,33 @@ class PageResource extends Resource
                                 'color',
                                 'highlight',
                                 'hr',
-                                'source', // Enable HTML source code editing
+                                'source',
                             ])
                             ->disk('public')
                             ->directory('page-media')
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'])
-                            ->maxSize(5120) // 5MB
+                            ->maxSize(5120)
                             ->columnSpanFull()
-                            ->helperText('Use H2 headings for sections that will appear in the table of contents. Click the </> button to edit HTML source.'),
+                            ->helperText('Use H2 for sections. Mark where custom blocks should appear with placeholders like {{block-1}}, {{block-2}}, etc.'),
+
+                        Forms\Components\Repeater::make('custom_html_blocks')
+                            ->label('Custom HTML Blocks')
+                            ->schema([
+                                Forms\Components\TextInput::make('id')
+                                    ->label('Block ID')
+                                    ->required()
+                                    ->placeholder('block-1')
+                                    ->helperText('Use this ID in content as {{block-1}}'),
+                                Forms\Components\Textarea::make('html')
+                                    ->label('HTML Content')
+                                    ->required()
+                                    ->rows(8)
+                                    ->helperText('Enter raw HTML for this block (divs, special styling, etc.)'),
+                            ])
+                            ->collapsible()
+                            ->itemLabel(fn (array $state): ?string => $state['id'] ?? null)
+                            ->columnSpanFull()
+                            ->helperText('Add custom HTML blocks here. Reference them in the main content using {{block-id}}. Example: <div class="resource-guide-special-block">...</div>'),
                     ]),
 
                 // SEO & Metadata Section

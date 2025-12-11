@@ -30,6 +30,7 @@ class Page extends Model
         'title',
         'slug',
         'content',
+        'custom_html_blocks',
         'meta_description',
         'meta_keywords',
         'is_published',
@@ -46,6 +47,7 @@ class Page extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'custom_html_blocks' => 'array',
         'published_at' => 'datetime',
         'is_published' => 'boolean',
         'show_in_navigation' => 'boolean',
@@ -200,6 +202,7 @@ class Page extends Model
 
     /**
      * Extract H2 sections from the page content using PageSectionExtractor service.
+     * Uses merged content with custom HTML blocks.
      *
      * @return array
      */
@@ -209,8 +212,11 @@ class Page extends Model
             return [];
         }
 
+        // Extract from merged content so custom blocks' H2s are included
+        $mergedContent = $this->getMergedContent();
+
         $extractor = app(PageSectionExtractor::class);
-        return $extractor->extractSectionsFromHtml($this->content);
+        return $extractor->extractSectionsFromHtml($mergedContent);
     }
 
     /**
@@ -250,6 +256,7 @@ class Page extends Model
 
     /**
      * Get content with anchor IDs injected into H2 tags using PageSectionExtractor service.
+     * Also merges custom HTML blocks before injecting anchors.
      *
      * @return string
      */
@@ -259,8 +266,12 @@ class Page extends Model
             return '';
         }
 
+        // First, merge custom HTML blocks
+        $mergedContent = $this->getMergedContent();
+
+        // Then, inject anchor IDs into H2 tags
         $extractor = app(PageSectionExtractor::class);
-        return $extractor->injectAnchorIds($this->content);
+        return $extractor->injectAnchorIds($mergedContent);
     }
 
     /**
@@ -304,5 +315,31 @@ class Page extends Model
         }
 
         return route('pages.show', ['slug' => $this->slug]);
+    }
+
+    /**
+     * Get content with custom HTML blocks merged in.
+     * Replaces placeholders like {{block-1}} with actual HTML blocks.
+     *
+     * @return string
+     */
+    public function getMergedContent(): string
+    {
+        $content = $this->content ?? '';
+
+        // If no custom blocks, return content as-is
+        if (empty($this->custom_html_blocks)) {
+            return $content;
+        }
+
+        // Replace each custom HTML block placeholder
+        foreach ($this->custom_html_blocks as $block) {
+            if (isset($block['id']) && isset($block['html'])) {
+                $placeholder = '{{' . $block['id'] . '}}';
+                $content = str_replace($placeholder, $block['html'], $content);
+            }
+        }
+
+        return $content;
     }
 }

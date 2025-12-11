@@ -22,7 +22,9 @@ class PageSectionExtractor
 
         $dom = new DOMDocument();
         // Suppress warnings for malformed HTML
-        @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        // Wrap content in a div to prevent incorrect nesting
+        $wrappedHtml = '<div>' . mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8') . '</div>';
+        @$dom->loadHTML($wrappedHtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         $h2Tags = $dom->getElementsByTagName('h2');
         $sections = [];
@@ -71,7 +73,9 @@ class PageSectionExtractor
 
         $dom = new DOMDocument();
         // Suppress warnings for malformed HTML
-        @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        // Wrap content in a div to prevent incorrect nesting
+        $wrappedHtml = '<div>' . mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8') . '</div>';
+        @$dom->loadHTML($wrappedHtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         $h2Tags = $dom->getElementsByTagName('h2');
         $anchorCounts = []; // Track anchor usage for duplicates
@@ -105,11 +109,12 @@ class PageSectionExtractor
             $h2->setAttribute('id', $anchor);
         }
 
-        // Save HTML without doctype and html/body wrappers
+        // Save HTML and extract content from wrapper div
         $html = $dom->saveHTML();
 
-        // Clean up unwanted tags added by DOMDocument
+        // Remove the wrapper div and clean up unwanted tags
         $html = preg_replace('~<(?:!DOCTYPE|/?(?:html|body))[^>]*>\s*~i', '', $html);
+        $html = preg_replace('~^<div>|</div>$~i', '', $html);
 
         return trim($html);
     }

@@ -209,7 +209,7 @@
             <div class="module-toggle">
                 <div class="toggle-switch-container">
                     <div class="toggle-switch">
-                        <button class="toggle-option {{ request()->is('/') ? 'active' : '' }}" onclick="window.location.href='{{ url('/') }}'" data-module="guide">Resource guide</button>
+                        <button class="toggle-option {{ request()->is('/') || request()->routeIs('pages.*') ? 'active' : '' }}" onclick="window.location.href='{{ url('/') }}'" data-module="guide">Resource guide</button>
                         @auth
                             <button class="toggle-option {{ request()->is('library*') ? 'active' : '' }}" onclick="window.location.href='{{ route('library.index') }}'" data-module="library">Resource library</button>
                         @else

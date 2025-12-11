@@ -6,8 +6,40 @@
 
 @push('styles')
 <style>
+    .main_content.page-content-wrapper .page-body h1{
+        color: #333!important;
+        text-transform: capitalize!important;
+    }
+
+    .main_content.page-content-wrapper .page-body h2 {
+        text-transform: capitalize!important;
+        color: #294867!important;
+    }
+
+    .main_content.page-content-wrapper .page-body h3 {
+        text-transform: capitalize!important;
+        color: #8a9ab2!important;
+    }
+
+    .main_content.page-content-wrapper .page-body {
+        padding-bottom: 2rem;
+    }
+
+    .main_content.page-content-wrapper .page-body .resource-guide-special-block {
+        border: 4px solid #8a9ab2;
+        color: #8a9ab2;
+        border-radius: 10px;
+        padding: 0 2rem 2rem 2rem;
+        margin: 1rem 0;
+    }
+
+    .main_content.page-content-wrapper .page-body .resource-guide-special-block:hover {
+        border-color: #294867;
+        color: #294867;
+    }
+
     /* Preview Banner */
-    .preview-banner {
+    .main_content.page-content-wrapper .page-body .preview-banner {
         background: #fef3c7;
         border: 2px solid #f59e0b;
         border-radius: 8px;
@@ -20,6 +52,9 @@
         color: #92400e;
     }
 
+    .main_content.page-content-wrapper .page-body .greetings {
+        color: #294867;
+    }
     /* Page Content Typography */
     .main_content.page-content-wrapper .page-body {
         line-height: 1.8;
@@ -122,7 +157,7 @@
         font-weight: 600;
     }
 
-    .page-meta {
+    .main_content.page-content-wrapper .page-meta {
         display: flex;
         gap: 1rem;
         color: #6b7280;
@@ -130,13 +165,13 @@
         margin-bottom: 1.5rem;
     }
 
-    .page-meta-item {
+    .main_content.page-content-wrapper .page-meta-item {
         display: flex;
         align-items: center;
         gap: 0.25rem;
     }
 
-    .page-meta-item svg {
+    .main_content.page-content-wrapper .page-meta-item svg {
         width: 1rem;
         height: 1rem;
     }
@@ -265,11 +300,11 @@
                 <!-- All CMS Pages -->
                 <div class="sidebar_item sidebar-menu">
                     @if(count($allPages) > 0)
-                    <h2>Chapters</h2>
+                    <h2>CHAPTERS</h2>
                     <ul class="section-list">
                         @foreach($allPages as $navPage)
                         <li>
-                            <a class="section-anchor {{ $navPage->id === $page->id ? 'active' : '' }}" href="{{ route('pages.show', $navPage->slug) }}">{{ $navPage->title }}</a>
+                            <a class="section-anchor {{ $navPage->id === $page->id ? 'active' : '' }}" href="{{ $navPage->is_homepage ? '/' : route('pages.show', $navPage->slug) }}">{{ $navPage->title }}</a>
                         </li>
                         @endforeach
                     </ul>

@@ -45,7 +45,7 @@ class PageController extends Controller
         // Get all published pages for sidebar navigation
         $allPages = Page::published()
             ->ordered()
-            ->select('id', 'title', 'slug', 'parent_id')
+            ->select('id', 'title', 'slug', 'parent_id', 'is_homepage')
             ->get();
 
         // Return view with page data
@@ -85,7 +85,7 @@ class PageController extends Controller
         // Get all published pages for sidebar navigation
         $allPages = Page::published()
             ->ordered()
-            ->select('id', 'title', 'slug', 'parent_id')
+            ->select('id', 'title', 'slug', 'parent_id', 'is_homepage')
             ->get();
 
         // Return view with page data and preview flag
