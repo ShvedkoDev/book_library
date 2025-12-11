@@ -85,6 +85,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
         return $table
             ->query($this->getTableQuery())
             ->paginated(false) // Disable pagination since we're loading all files
+            ->deferLoading() // Prevent initial database query for bulk actions
             ->columns([
                 ImageColumn::make('thumbnail')
                     ->label('Preview')
@@ -392,6 +393,15 @@ class PageMediaManager extends Page implements HasForms, HasTable
         }
 
         return null;
+    }
+
+    /**
+     * Override to prevent database queries for bulk action availability check.
+     * Returns true if there are any records in our in-memory collection.
+     */
+    public function getTableRecordsForBulkActionCheck()
+    {
+        return $this->getTableRecords();
     }
 
 }
