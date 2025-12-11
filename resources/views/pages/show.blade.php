@@ -194,8 +194,8 @@
     /* Sticky sidebar with independent scrolling */
     .page-content .sidebar.sidebar-links {
         position: sticky;
-        top: 2rem;
-        max-height: calc(100vh - 4rem);
+        top: 120px;
+        max-height: calc(100vh - 140px);
         overflow-y: auto;
         overflow-x: hidden;
         align-self: flex-start;
