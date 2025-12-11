@@ -40,11 +40,12 @@ class FileUploadResource extends Resource
                             ->disk('local')
                             ->directory('uploads')
                             ->visibility('private')
+                            ->preserveFilenames() // Preserve original filenames
                             ->downloadable()
                             ->previewable(true)
                             ->openable()
                             ->maxSize(102400) // 100MB
-                            ->helperText('Upload any file type. Maximum size: 100MB. Files will be stored in storage/app/uploads/')
+                            ->helperText('Upload any file type. Maximum size: 100MB. Original filenames will be preserved.')
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('description')

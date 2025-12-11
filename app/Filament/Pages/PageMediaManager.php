@@ -85,6 +85,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
         return $table
             ->query($this->getTableQuery())
             ->paginated(false) // Disable pagination since we're loading all files
+            ->selectCurrentPageOnly() // Important for in-memory models to avoid DB queries
             ->columns([
                 ImageColumn::make('thumbnail')
                     ->label('Preview')
