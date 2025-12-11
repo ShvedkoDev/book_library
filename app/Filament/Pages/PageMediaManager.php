@@ -85,7 +85,6 @@ class PageMediaManager extends Page implements HasForms, HasTable
         return $table
             ->query($this->getTableQuery())
             ->paginated(false) // Disable pagination since we're loading all files
-            ->selectCurrentPageOnly() // Important for in-memory models to avoid DB queries
             ->columns([
                 ImageColumn::make('thumbnail')
                     ->label('Preview')
@@ -207,53 +206,6 @@ class PageMediaManager extends Page implements HasForms, HasTable
                             }
                         }
                     }),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkAction::make('delete')
-                        ->label('Delete selected')
-                        ->icon('heroicon-m-trash')
-                        ->color('danger')
-                        ->requiresConfirmation()
-                        ->modalHeading('Delete selected files')
-                        ->modalDescription('Are you sure you want to delete the selected files? Files that are in use by pages will be deleted, which may break those pages.')
-                        ->action(function ($records) {
-                            $totalDeleted = 0;
-                            $filesInUse = 0;
-
-                            foreach ($records as $record) {
-                                if ($record->pages_count > 0) {
-                                    $filesInUse++;
-                                }
-
-                                if (Storage::disk('public')->exists($record->path)) {
-                                    Storage::disk('public')->delete($record->path);
-                                    $totalDeleted++;
-                                }
-                            }
-
-                            // Clear cached files
-                            $this->cachedFiles = null;
-
-                            if ($filesInUse > 0) {
-                                Notification::make()
-                                    ->warning()
-                                    ->title('Files deleted with warnings')
-                                    ->body("{$totalDeleted} file(s) deleted. {$filesInUse} of them were in use by pages and may have broken references.")
-                                    ->persistent()
-                                    ->send();
-                            } else {
-                                Notification::make()
-                                    ->success()
-                                    ->title('Files deleted')
-                                    ->body("{$totalDeleted} file(s) deleted successfully.")
-                                    ->send();
-                            }
-
-                            // Refresh the table
-                            $this->dispatch('$refresh');
-                        }),
-                ]),
             ])
             ->emptyStateHeading('No media files found')
             ->emptyStateDescription('Upload images and documents using the form above')

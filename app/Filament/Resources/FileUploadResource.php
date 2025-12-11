@@ -114,8 +114,10 @@ class FileUploadResource extends Resource
                     ->label('File Type')
                     ->options(function () {
                         return FileUpload::query()
+                            ->whereNotNull('mime_type')
                             ->distinct()
                             ->pluck('mime_type', 'mime_type')
+                            ->filter() // Remove any null values
                             ->toArray();
                     }),
             ])
