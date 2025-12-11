@@ -42,11 +42,18 @@ class PageController extends Controller
         // Get content with anchor IDs injected
         $contentWithAnchors = $page->getContentWithAnchors();
 
+        // Get all published pages for sidebar navigation
+        $allPages = Page::published()
+            ->ordered()
+            ->select('id', 'title', 'slug', 'parent_id')
+            ->get();
+
         // Return view with page data
         return view('pages.show', [
             'page' => $page,
             'tableOfContents' => $tableOfContents,
             'contentWithAnchors' => $contentWithAnchors,
+            'allPages' => $allPages,
         ]);
     }
 
@@ -75,11 +82,18 @@ class PageController extends Controller
         // Get content with anchor IDs injected
         $contentWithAnchors = $page->getContentWithAnchors();
 
+        // Get all published pages for sidebar navigation
+        $allPages = Page::published()
+            ->ordered()
+            ->select('id', 'title', 'slug', 'parent_id')
+            ->get();
+
         // Return view with page data and preview flag
         return view('pages.show', [
             'page' => $page,
             'tableOfContents' => $tableOfContents,
             'contentWithAnchors' => $contentWithAnchors,
+            'allPages' => $allPages,
             'isPreview' => true,
         ]);
     }

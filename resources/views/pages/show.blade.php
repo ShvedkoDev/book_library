@@ -140,6 +140,50 @@
         width: 1rem;
         height: 1rem;
     }
+
+    /* Active page in sidebar navigation */
+    .sidebar_item.sidebar-menu .section-list a.section-anchor.active {
+        background: #e0f2fe;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: block;
+    }
+
+    .sidebar_item.sidebar-menu .section-list a.section-anchor:hover {
+        background: #bae6fd;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: block;
+    }
+
+    /* Sticky sidebar with independent scrolling */
+    .page-content .sidebar.sidebar-links {
+        position: sticky;
+        top: 2rem;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+        overflow-x: hidden;
+        align-self: flex-start;
+    }
+
+    /* Custom scrollbar for sidebar (optional but nice) */
+    .page-content .sidebar.sidebar-links::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .page-content .sidebar.sidebar-links::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+    }
+
+    .page-content .sidebar.sidebar-links::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+    }
+
+    .page-content .sidebar.sidebar-links::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
 </style>
 @endpush
 
@@ -153,18 +197,9 @@
                     <span class="main-home" property="name">National Vernacular Language Arts (VLA) curriculum</span>
                     <meta property="position" content="1">
                 </span>
-                @if($page->parent)
-                <span> &gt; </span>
-                <span property="itemListElement" typeof="ListItem">
-                    <a property="item" typeof="WebPage" href="{{ route('pages.show', $page->parent->slug) }}">
-                        <span property="name">{{ $page->parent->title }}</span>
-                    </a>
-                    <meta property="position" content="2">
-                </span>
-                @endif
             </div>
             <div class="handbook-header-menu">
-                <h1>{{ $page->title }}</h1>
+                <h1>Resource guide</h1>
             </div>
         </div>
         <aside class="sidebar header-image handbook-image">
@@ -225,16 +260,16 @@
                 </article>
             </div>
 
-            <!-- Right Sidebar with TOC -->
+            <!-- Right Sidebar with Page Navigation -->
             <aside class="sidebar sidebar-links">
-                <!-- Table of Contents -->
+                <!-- All CMS Pages -->
                 <div class="sidebar_item sidebar-menu">
-                    @if(count($tableOfContents) > 0)
-                    <h2>Sections</h2>
+                    @if(count($allPages) > 0)
+                    <h2>Chapters</h2>
                     <ul class="section-list">
-                        @foreach($tableOfContents as $section)
+                        @foreach($allPages as $navPage)
                         <li>
-                            <a class="section-anchor" href="{{ $section['url'] }}">{{ $section['heading'] }}</a>
+                            <a class="section-anchor {{ $navPage->id === $page->id ? 'active' : '' }}" href="{{ route('pages.show', $navPage->slug) }}">{{ $navPage->title }}</a>
                         </li>
                         @endforeach
                     </ul>
@@ -243,22 +278,25 @@
 
                 <!-- Ready to Explore -->
                 <div class="sidebar_item text-sidebar">
-                    <h2>Ready to Explore?</h2>
-                    <p>Have you reviewed this material and agreed to terms of use?</p>
-                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('library.index') }}"><strong>Access the Digital Library</strong></a></p>
+                    <h2>Wish to know more?</h2>
+                    <p>To make the most out of thi site, please review out user guides:</p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('pages.show', 'introduction') }}"><strong>How to use Resource guide</strong></a></p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('pages.show', 'introduction') }}"><strong>How to use Resource library</strong></a></p>
                 </div>
-
-                <!-- Resource Contributors -->
-                @if($page->resourceContributors->count() > 0)
+                <!-- Ready to Explore -->
                 <div class="sidebar_item text-sidebar">
-                    <h2>Resource Contributors</h2>
-                    <p style="text-align: left;">@foreach($page->resourceContributors as $contributor)@if($contributor->website_url)<a href="{{ $contributor->website_url }}" target="_blank" rel="noopener">{{ $contributor->name }}<br/>
-                            </a>@else{{ $contributor->name }}<br/>
-@endif
-@endforeach</p>
-
+                    <h2>Ready to explore?</h2>
+                    <p>Once you have reviewed this guide? you are ready to explore the available resources:</p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('library.index') }}"><strong>Access the Resource library</strong></a></p>
                 </div>
-                @endif
+
+                <!-- Ready to Explore -->
+                <div class="sidebar_item text-sidebar">
+                    <h2>Back to the basics?</h2>
+                    <p>If you wish to refer to the udnerlying policy and curriculm? please check these links</p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" target="_blank" href="https://www.national.doe.fm/wp-content/uploads/2023/03/FSM-language-Policy.pdf"><strong>FSM Language Policy</strong></a></p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" target="_blank" href="https://www.national.doe.fm/language-arts-vernacular-curriculum/"><strong>FSM VLA Curriculm</strong></a></p>
+                </div>
             </aside>
         </div>
     </div>
