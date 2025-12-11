@@ -288,3 +288,122 @@ Comprehensive analytics system tracking user behavior and content performance ac
 
 ### Admin Access
 All analytics features accessible through FilamentPHP admin panel under "Analytics" navigation group.
+## CMS File Management System ✅
+
+### Overview
+Comprehensive file upload and management system for CMS pages and general file storage.
+
+### File Upload Resource (`/admin/file-uploads`)
+Universal file manager for uploading any file type to `storage/app/uploads/`.
+
+**Features:**
+- ✅ **Universal Upload**: Accept ANY file type (no restrictions)
+- ✅ **Large Files**: Support up to 100MB per file
+- ✅ **Metadata Tracking**: Automatic detection of filename, MIME type, size
+- ✅ **User Tracking**: Records who uploaded each file
+- ✅ **Descriptions**: Optional file descriptions
+- ✅ **Search & Filter**: Find files by name, type, or description
+- ✅ **Download**: Download files with original names
+- ✅ **Path Copy**: Get relative and absolute file paths
+- ✅ **Bulk Operations**: Delete multiple files at once
+
+**File List Columns:**
+- File name (clickable to copy)
+- MIME type (badge)
+- File size (human-readable)
+- Description
+- Uploaded by (user)
+- Upload date/time
+
+**Actions Available:**
+- Download with original filename
+- Copy file paths (relative and absolute)
+- Edit description or replace file
+- Delete file (removes from storage and database)
+- Bulk delete with confirmation
+
+**Storage Location:** `storage/app/uploads/`
+
+**Documentation:** See `FILE_UPLOADS.md` for complete usage guide
+
+### Page Media Manager (`/admin/page-media-manager`)
+Specialized media manager for CMS page assets (images and PDFs).
+
+**Features:**
+- ✅ **Original Filenames**: Preserves original file names (like TipTap editor)
+- ✅ **Image Support**: JPG, PNG, GIF, WebP, SVG
+- ✅ **PDF Support**: Upload PDF documents
+- ✅ **Image Editor**: Built-in image editing capabilities
+- ✅ **Preview Thumbnails**: Visual preview of uploaded images
+- ✅ **Usage Tracking**: See which pages use each file
+- ✅ **Bulk Upload**: Upload multiple files at once
+- ✅ **URL Copying**: Copy file URLs to clipboard
+
+**File Operations:**
+- View file in new tab
+- Copy public URL
+- Show pages using file
+- Download file
+- Delete with usage warnings
+
+**Storage Location:** `storage/app/public/page-media/`
+
+**Usage Warnings:**
+- System detects if file is used by pages
+- Shows warning before deleting in-use files
+- Displays page list using the file
+
+### TipTap Editor Integration
+CMS pages use TipTap WYSIWYG editor with media upload support:
+- Inline image uploads
+- Images stored in `storage/app/public/page-media/`
+- Supports JPG, PNG, GIF, WebP, SVG
+- Max file size: 5MB
+- Image editor included
+
+### Custom HTML Blocks
+CMS pages support custom HTML blocks alongside TipTap content:
+- Create reusable HTML blocks with IDs
+- Reference in main content using `{{block-id}}` placeholders
+- Preserves complex HTML structures (divs, special classes)
+- Merged with TipTap content during rendering
+
+**Example:**
+1. Create custom block with ID: `block-1`
+2. Add HTML: `<div class="special-block">Content</div>`
+3. Reference in TipTap content: `{{block-1}}`
+4. System replaces placeholder when rendering page
+
+### CMS Navigation Structure
+All CMS-related features grouped under "CMS" navigation:
+1. **Pages** (sort: 1) - CMS page management
+2. **Resource Contributors** (sort: 2) - Page contributors
+3. **Page Assets** (sort: 3) - Media manager for page images/PDFs
+4. **File Uploads** (sort: 4) - Universal file upload manager
+
+### CMS Pages Backup/Import
+Export and import CMS pages between environments:
+- **Export Command**: `php artisan pages:export`
+- **Import Command**: `php artisan pages:import`
+- Preserves content, custom HTML blocks, relationships
+- Documentation: `CMS_PAGES_BACKUP.md`
+
+### Technical Details
+**Models:**
+- `FileUpload` - Universal file upload records
+- `Page` - CMS page content
+- `ResourceContributor` - Page contributors
+- `FileRecord` - In-memory model for page media
+
+**Database Tables:**
+- `file_uploads` - Universal file metadata
+- `pages` - CMS page content
+- `page_resource_contributor` - Pivot table
+
+**Services:**
+- `PageSectionExtractor` - Extracts h2 sections for navigation
+- Page rendering with placeholder replacement
+
+**Storage Disks:**
+- `local` disk for File Uploads (`storage/app/`)
+- `public` disk for Page Media (`storage/app/public/`)
