@@ -30,11 +30,11 @@ class PageMediaManager extends Page implements HasForms, HasTable
 
     protected static string $view = 'filament.pages.page-media-manager';
 
-    protected static ?string $navigationGroup = 'Media';
+    protected static ?string $navigationGroup = 'CMS';
 
     protected static ?string $navigationLabel = 'Page assets';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 
     public ?array $data = [];
 
@@ -56,6 +56,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
                             ->label('Images & documents')
                             ->disk('public')
                             ->directory('page-media')
+                            ->preserveFilenames() // Preserve original filenames like TipTap
                             ->acceptedFileTypes([
                                 'image/jpeg',
                                 'image/png',
@@ -72,7 +73,7 @@ class PageMediaManager extends Page implements HasForms, HasTable
                             ->imagePreviewHeight('250')
                             ->downloadable()
                             ->openable()
-                            ->helperText('Upload images (JPG, PNG, GIF, WebP, SVG) or PDFs (max 10MB each).'),
+                            ->helperText('Upload images (JPG, PNG, GIF, WebP, SVG) or PDFs (max 10MB each). Original filenames will be preserved.'),
                     ]),
             ])
             ->statePath('data');

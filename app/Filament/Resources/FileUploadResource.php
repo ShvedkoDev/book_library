@@ -20,7 +20,7 @@ class FileUploadResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-arrow-up';
 
-    protected static ?string $navigationGroup = 'Content Management';
+    protected static ?string $navigationGroup = 'CMS';
 
     protected static ?string $modelLabel = 'File Upload';
 
@@ -46,30 +46,7 @@ class FileUploadResource extends Resource
                             ->acceptedFileTypes([]) // Accept all file types
                             ->maxSize(102400) // 100MB
                             ->helperText('Upload any file type. Maximum size: 100MB. Files will be stored in storage/app/uploads/')
-                            ->afterStateUpdated(function ($state, callable $set, $livewire) {
-                                if ($state) {
-                                    $file = $livewire->getCachedUploadedFile($state);
-                                    if ($file) {
-                                        $set('original_name', $file->getClientOriginalName());
-                                        $set('file_name', $file->hashName());
-                                        $set('mime_type', $file->getMimeType());
-                                        $set('file_size', $file->getSize());
-                                    }
-                                }
-                            })
                             ->columnSpanFull(),
-
-                        Forms\Components\TextInput::make('original_name')
-                            ->label('Original File Name')
-                            ->disabled()
-                            ->dehydrated()
-                            ->columnSpan(1),
-
-                        Forms\Components\TextInput::make('mime_type')
-                            ->label('File Type')
-                            ->disabled()
-                            ->dehydrated()
-                            ->columnSpan(1),
 
                         Forms\Components\Textarea::make('description')
                             ->label('Description')
@@ -77,12 +54,10 @@ class FileUploadResource extends Resource
                             ->placeholder('Add a description for this file (optional)')
                             ->columnSpanFull(),
 
-                        Forms\Components\Hidden::make('file_name'),
-                        Forms\Components\Hidden::make('file_size'),
                         Forms\Components\Hidden::make('uploaded_by')
                             ->default(fn () => auth()->id()),
                     ])
-                    ->columns(2),
+                    ->columns(1),
             ]);
     }
 
