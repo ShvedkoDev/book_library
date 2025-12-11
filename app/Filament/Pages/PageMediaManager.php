@@ -207,6 +207,66 @@ class PageMediaManager extends Page implements HasForms, HasTable
                         }
                     }),
             ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('delete')
+                        ->label('Delete selected')
+                        ->icon('heroicon-m-trash')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->modalHeading('Delete selected files')
+                        ->modalDescription('Are you sure you want to delete the selected files? Files that are in use by pages will be deleted, which may break those pages.')
+                        ->action(function (array $data) {
+                            // Get selected record keys
+                            $selectedKeys = $this->selectedTableRecords;
+                            $records = $this->getTableRecords();
+
+                            $totalDeleted = 0;
+                            $filesInUse = 0;
+
+                            foreach ($selectedKeys as $key) {
+                                // Find the record by key
+                                $record = $records->first(function ($r) use ($key) {
+                                    return $r->getKey() === $key;
+                                });
+
+                                if (!$record) {
+                                    continue;
+                                }
+
+                                if ($record->pages_count > 0) {
+                                    $filesInUse++;
+                                }
+
+                                if (Storage::disk('public')->exists($record->path)) {
+                                    Storage::disk('public')->delete($record->path);
+                                    $totalDeleted++;
+                                }
+                            }
+
+                            // Clear cached files
+                            $this->cachedFiles = null;
+
+                            // Clear selection
+                            $this->selectedTableRecords = [];
+
+                            if ($filesInUse > 0) {
+                                Notification::make()
+                                    ->warning()
+                                    ->title('Files deleted with warnings')
+                                    ->body("{$totalDeleted} file(s) deleted. {$filesInUse} of them were in use by pages and may have broken references.")
+                                    ->persistent()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->success()
+                                    ->title('Files deleted')
+                                    ->body("{$totalDeleted} file(s) deleted successfully.")
+                                    ->send();
+                            }
+                        }),
+                ]),
+            ])
             ->emptyStateHeading('No media files found')
             ->emptyStateDescription('Upload images and documents using the form above')
             ->emptyStateIcon('heroicon-o-photo');
