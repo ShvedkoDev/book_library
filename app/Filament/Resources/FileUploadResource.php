@@ -43,7 +43,6 @@ class FileUploadResource extends Resource
                             ->downloadable()
                             ->previewable(true)
                             ->openable()
-                            ->acceptedFileTypes([]) // Accept all file types
                             ->maxSize(102400) // 100MB
                             ->helperText('Upload any file type. Maximum size: 100MB. Files will be stored in storage/app/uploads/')
                             ->columnSpanFull(),
