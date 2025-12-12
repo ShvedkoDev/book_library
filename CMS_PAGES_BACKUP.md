@@ -4,6 +4,18 @@ This guide explains how to backup CMS pages from your local environment and impo
 
 ## Export CMS Pages (Local Environment)
 
+You can export pages using either the web interface or command line.
+
+### Method 1: Web Interface (Recommended)
+
+1. Log in to the admin panel: `/admin`
+2. Navigate to **CMS > Pages**
+3. Click the **"Export Pages"** button (green button in the top right)
+4. Click **"Export & Download"** in the confirmation modal
+5. The JSON file will download to your browser with filename: `pages-export-YYYY-MM-DD-HHMMSS.json`
+
+### Method 2: Command Line
+
 Export all CMS pages with their content, custom HTML blocks, and relationships:
 
 ```bash
@@ -37,6 +49,24 @@ scp storage/app/pages-export.json user@production-server:/path/to/production/sto
 Or download it from local and upload to production via FTP/SFTP.
 
 ## Import CMS Pages (Production Environment)
+
+You can import pages using either the web interface or command line.
+
+### Method 1: Web Interface (Recommended)
+
+1. Log in to the admin panel: `/admin`
+2. Navigate to **CMS > Pages**
+3. Click the **"Import Pages"** button in the top right
+4. Upload your `pages-export.json` file
+5. Optionally enable **"Fresh Import"** to delete all existing pages first (⚠️ use with caution!)
+6. Click **"Import"** to proceed
+
+The web interface will show you a summary of:
+- Pages created
+- Pages updated
+- Pages skipped (if any errors)
+
+### Method 2: Command Line
 
 On your production server:
 

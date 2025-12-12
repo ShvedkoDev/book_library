@@ -383,9 +383,13 @@ All CMS-related features grouped under "CMS" navigation:
 
 ### CMS Pages Backup/Import
 Export and import CMS pages between environments:
+- **Export via Web Interface**: `/admin/pages` → "Export Pages" button (recommended)
 - **Export Command**: `php artisan pages:export`
+- **Import via Web Interface**: `/admin/pages` → "Import Pages" button (recommended)
 - **Import Command**: `php artisan pages:import`
 - Preserves content, custom HTML blocks, relationships
+- Supports "Fresh Import" to delete all existing pages before import
+- Timestamped export filenames when using web interface
 - Documentation: `CMS_PAGES_BACKUP.md`
 
 ### Technical Details
