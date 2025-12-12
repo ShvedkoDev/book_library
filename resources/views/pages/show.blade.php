@@ -219,6 +219,61 @@
     .page-content .sidebar.sidebar-links::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
     }
+
+    /* Toggle Functionality Styles */
+    .toggle-trigger {
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #0369a1;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .toggle-trigger:hover {
+        color: #075985;
+    }
+
+    .toggle-trigger i {
+        transition: transform 0.3s ease;
+    }
+
+    .toggle-trigger.active i.fa-eye {
+        transform: rotate(180deg);
+    }
+
+    .toggle-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out;
+        opacity: 0;
+    }
+
+    .toggle-content.active {
+        max-height: 5000px;
+        opacity: 1;
+        margin-top: 1rem;
+    }
+
+    .toggle-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .toggle-actions a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .toggle-actions i {
+        font-size: 1.1em;
+    }
 </style>
 @endpush
 
@@ -337,4 +392,45 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all toggle triggers on the page
+    const toggleTriggers = document.querySelectorAll('.toggle-trigger');
+
+    toggleTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the target content element
+            const targetId = this.getAttribute('data-toggle');
+            const targetContent = document.getElementById(targetId);
+
+            if (targetContent) {
+                // Toggle active class on trigger
+                this.classList.toggle('active');
+
+                // Toggle active class on content
+                targetContent.classList.toggle('active');
+
+                // Update aria-expanded for accessibility
+                const isExpanded = targetContent.classList.contains('active');
+                this.setAttribute('aria-expanded', isExpanded);
+
+                // Smooth scroll to content if opening
+                if (isExpanded) {
+                    setTimeout(() => {
+                        targetContent.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest'
+                        });
+                    }, 100);
+                }
+            }
+        });
+    });
+});
+</script>
+@endpush
 
