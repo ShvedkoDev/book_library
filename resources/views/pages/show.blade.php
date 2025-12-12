@@ -6,6 +6,14 @@
 
 @push('styles')
 <style>
+    /* Apply Bebas Neue Rounded only to section-list navigation */
+    .section-list,
+    .section-list li,
+    .section-list a {
+        font-family: var(--font-heading);
+        letter-spacing: 0.5px;
+    }
+
     .main_content.page-content-wrapper .page-body h1{
         color: #333!important;
         text-transform: capitalize!important;
