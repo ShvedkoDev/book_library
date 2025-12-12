@@ -251,7 +251,7 @@
     }
 
     .toggle-content.active {
-        max-height: 5000px;
+        max-height: 15000px;
         opacity: 1;
         margin-top: 1rem;
     }
