@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Bebas Neue Rounded';
+    src: url('BebasNeueRounded-Regular.eot');
+    src: local('Bebas Neue Rounded Regular'), local('BebasNeueRounded-Regular'),
+        url('BebasNeueRounded-Regular.eot?#iefix') format('embedded-opentype'),
+        url('BebasNeueRounded-Regular.woff2') format('woff2'),
+        url('BebasNeueRounded-Regular.woff') format('woff'),
+        url('BebasNeueRounded-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

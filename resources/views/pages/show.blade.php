@@ -199,16 +199,6 @@
         display: block;
     }
 
-    /* Sticky sidebar with independent scrolling */
-    .page-content .sidebar.sidebar-links {
-        position: sticky;
-        top: 120px;
-        max-height: calc(100vh - 140px);
-        overflow-y: auto;
-        overflow-x: hidden;
-        align-self: flex-start;
-    }
-
     /* Custom scrollbar for sidebar (optional but nice) */
     .page-content .sidebar.sidebar-links::-webkit-scrollbar {
         width: 6px;
@@ -281,6 +271,10 @@
 
     .toggle-actions i {
         font-size: 1.1em;
+    }
+
+    .sidebar {
+        position: unset!important;
     }
 </style>
 @endpush
@@ -376,24 +370,24 @@
 
                 <!-- Ready to Explore -->
                 <div class="sidebar_item text-sidebar">
-                    <h2>Wish to know more?</h2>
-                    <p>To make the most out of thi site, please review out user guides:</p>
-                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('pages.show', 'introduction') }}"><strong>How to use Resource guide</strong></a></p>
-                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('pages.show', 'introduction') }}"><strong>How to use Resource library</strong></a></p>
+                    <h2>How to use?</h2>
+                    <p>To make the most out of this site, please review our user guides:</p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('pages.show', 'introduction') }}"><strong>How to use the<br><em>Resource guide</em></strong></a></p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('pages.show', 'introduction') }}"><strong>How to use the<br><em>Resource library</em></strong></a></p>
                 </div>
                 <!-- Ready to Explore -->
                 <div class="sidebar_item text-sidebar">
                     <h2>Ready to explore?</h2>
-                    <p>Once you have reviewed this guide? you are ready to explore the available resources:</p>
-                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('library.index') }}"><strong>Access the Resource library</strong></a></p>
+                    <p>Once you have reviewed this guide, you are ready to explore the available resources:</p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('library.index') }}"><strong>Access the<br><em>Resource library</em></strong></a></p>
                 </div>
 
                 <!-- Ready to Explore -->
                 <div class="sidebar_item text-sidebar">
                     <h2>Back to the basics?</h2>
-                    <p>If you wish to refer to the udnerlying policy and curriculm? please check these links</p>
+                    <p>If you wish to refer to the underlying policy and curriculum, please check these links:</p>
                     <p><a class="button-line-color button-line library-entry-sidebar-btn" target="_blank" href="https://www.national.doe.fm/wp-content/uploads/2023/03/FSM-language-Policy.pdf"><strong>FSM Language Policy</strong></a></p>
-                    <p><a class="button-line-color button-line library-entry-sidebar-btn" target="_blank" href="https://www.national.doe.fm/language-arts-vernacular-curriculum/"><strong>FSM VLA Curriculm</strong></a></p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" target="_blank" href="https://www.national.doe.fm/language-arts-vernacular-curriculum/"><strong>FSM VLA Curriculum</strong></a></p>
                 </div>
             </aside>
         </div>
