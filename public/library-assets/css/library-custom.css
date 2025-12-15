@@ -367,3 +367,215 @@ footer.department-footer .tagline {
 .menu-item-disabled a:hover {
     color: #007cba !important;
 }
+
+/* Smooth scrolling for anchor links with offset for sticky header */
+html {
+    scroll-behavior: smooth !important;
+    scroll-padding-top: 180px !important; /* Offset for sticky header */
+}
+
+/* Add scroll margin to heading targets to prevent overlap with sticky header */
+h2[id], h3[id], h4[id] {
+    scroll-margin-top: 180px !important;
+}
+
+/* Framework Icons Container - Horizontal Layout */
+.framework-icons-container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    gap: 2rem !important;
+    margin: 3rem auto !important;
+    flex-wrap: nowrap !important;
+    max-width: 1400px !important;
+    padding: 0 1rem !important;
+}
+
+.framework-icon {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    background-color: transparent !important;
+    text-decoration: none !important;
+    color: inherit !important;
+    cursor: pointer !important;
+    transition: transform 0.3s ease, opacity 0.3s ease !important;
+}
+
+.framework-icon:hover {
+    transform: translateY(-8px) !important;
+    opacity: 0.9 !important;
+}
+
+.framework-icon:focus {
+    outline: 2px solid #007cba !important;
+    outline-offset: 4px !important;
+    border-radius: 8px !important;
+}
+
+.framework-icon .icon-image {
+    width: 300px !important;
+    height: 300px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 50px !important;
+    background-color: transparent !important;
+    background: none !important;
+}
+
+.framework-icon .icon-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+.framework-icon p {
+    margin: 0 !important;
+    font-size: 1.1rem !important;
+    line-height: 1.4 !important;
+    color: #333 !important;
+}
+
+/* Colored text highlights matching the icon backgrounds */
+.framework-icon:nth-child(1) p span {
+    color: #a1b78a !important;
+    padding: 3px 8px !important;
+    border-radius: 3px !important;
+    background-color: #fff !important;
+}
+
+.framework-icon:nth-child(2) p span {
+    color: #8aafcb !important;
+    padding: 3px 8px !important;
+    border-radius: 3px !important;
+    background-color: #fff !important;
+}
+
+.framework-icon:nth-child(3) p span {
+    color: #a5a5c7 !important;
+    padding: 3px 8px !important;
+    border-radius: 3px !important;
+    background-color: #fff !important;
+}
+
+.framework-icon:nth-child(4) p span {
+    color: #d6b6c7 !important;
+    padding: 3px 8px !important;
+    border-radius: 3px !important;
+    background-color: #fff !important;
+}
+
+/* Framework Quote Box Styling */
+.framework-quote-box {
+    display: flex !important;
+    flex-direction: row !important;
+    margin: 2rem 0 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.quote-box-left {
+    flex: 0 0 280px !important;
+    padding: 2rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.quote-box-left h3 {
+    color: #fff !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    margin: 0 0 1.5rem 0 !important;
+    text-align: center !important;
+}
+
+.quote-box-left .icon-image {
+    width: 280px !important;
+    height: 240px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.quote-box-right {
+    flex: 1 !important;
+    padding: 2.5rem 3rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+.quote-box-right p {
+    margin: 0 0 1rem 0 !important;
+    font-size: 1rem !important;
+    line-height: 1.8 !important;
+    color: #333 !important;
+}
+
+.quote-box-right p:last-child {
+    margin-bottom: 0 !important;
+}
+
+.quote-box-right .quote-attribution {
+    color: #666 !important;
+    font-size: 0.95rem !important;
+    margin-top: 1rem !important;
+}
+
+/* Mobile responsive */
+@media screen and (max-width: 1200px) {
+    .framework-icons-container {
+        flex-wrap: wrap !important;
+        gap: 3rem 2rem !important;
+    }
+
+    .framework-icon {
+        flex: 0 0 calc(50% - 1rem) !important;
+    }
+
+    .framework-icon .icon-image {
+        width: 300px !important;
+        height: 300px !important;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .framework-icon .icon-image {
+        width: 200px !important;
+        height: 200px !important;
+        padding: 40px !important;
+    }
+
+    .framework-icon p {
+        font-size: 1rem !important;
+    }
+
+    .framework-quote-box {
+        flex-direction: column !important;
+    }
+
+    .quote-box-left {
+        flex: 0 0 auto !important;
+    }
+
+    .quote-box-left .icon-image {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    .quote-box-right {
+        padding: 2rem !important;
+    }
+}

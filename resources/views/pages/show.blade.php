@@ -22,6 +22,7 @@
     .main_content.page-content-wrapper .page-body h2 {
         text-transform: capitalize!important;
         color: #294867!important;
+        line-height: 1.25;
     }
 
     .main_content.page-content-wrapper .page-body h3 {
@@ -275,6 +276,28 @@
 
     .sidebar {
         position: unset!important;
+    }
+
+    .theme-divider{
+        margin-top: 3rem;
+        border-radius: 10px;
+        height: 1rem;
+    }
+
+    .theme-divider+h2{
+        margin-top: 1rem!important;
+    }
+
+    .collapsible-header  {
+        border-radius: 10px;
+    }
+
+    .collapsible-header h4 {
+        padding: 0 1rem;
+    }
+
+    .quote-box-right h3 {
+        margin: 0!important;
     }
 </style>
 @endpush
