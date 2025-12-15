@@ -292,6 +292,9 @@
         border-radius: 10px;
     }
 
+    .collapsible-header h4:hover {
+        cursor: pointer;
+    }
     .collapsible-header h4 {
         padding: 0 1rem;
     }
@@ -425,6 +428,41 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleTriggers = document.querySelectorAll('.toggle-trigger');
 
     toggleTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the target content element
+            const targetId = this.getAttribute('data-toggle');
+            const targetContent = document.getElementById(targetId);
+
+            if (targetContent) {
+                // Toggle active class on trigger
+                this.classList.toggle('active');
+
+                // Toggle active class on content
+                targetContent.classList.toggle('active');
+
+                // Update aria-expanded for accessibility
+                const isExpanded = targetContent.classList.contains('active');
+                this.setAttribute('aria-expanded', isExpanded);
+
+                // Smooth scroll to content if opening
+                if (isExpanded) {
+                    setTimeout(() => {
+                        targetContent.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest'
+                        });
+                    }, 100);
+                }
+            }
+        });
+    });   // Initialize all toggle triggers on the page
+
+
+    const toggleTriggersHeadlines = document.querySelectorAll('.collapsible-header h4');
+
+    toggleTriggersHeadlines.forEach(trigger => {
         trigger.addEventListener('click', function(e) {
             e.preventDefault();
 

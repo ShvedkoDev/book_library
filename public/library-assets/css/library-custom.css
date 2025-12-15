@@ -446,29 +446,21 @@ h2[id], h3[id], h4[id] {
 /* Colored text highlights matching the icon backgrounds */
 .framework-icon:nth-child(1) p span {
     color: #a1b78a !important;
-    padding: 3px 8px !important;
-    border-radius: 3px !important;
     background-color: #fff !important;
 }
 
 .framework-icon:nth-child(2) p span {
     color: #8aafcb !important;
-    padding: 3px 8px !important;
-    border-radius: 3px !important;
     background-color: #fff !important;
 }
 
 .framework-icon:nth-child(3) p span {
     color: #a5a5c7 !important;
-    padding: 3px 8px !important;
-    border-radius: 3px !important;
     background-color: #fff !important;
 }
 
 .framework-icon:nth-child(4) p span {
     color: #d6b6c7 !important;
-    padding: 3px 8px !important;
-    border-radius: 3px !important;
     background-color: #fff !important;
 }
 
