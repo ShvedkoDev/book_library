@@ -260,15 +260,52 @@ class BookResource extends Resource
                             ->required()
                             ->helperText('Select one or more languages'),
 
-                        Forms\Components\Select::make('creators')
-                            ->relationship('creators', 'name')
-                            ->multiple()
-                            ->searchable()
-                            ->preload()
-                            ->createOptionForm([
-                                Forms\Components\TextInput::make('name')->required(),
+                        Forms\Components\Repeater::make('bookCreators')
+                            ->relationship('bookCreators')
+                            ->label('Creators')
+                            ->schema([
+                                Forms\Components\Select::make('creator_id')
+                                    ->label('Person')
+                                    ->relationship('creator', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->required()
+                                    ->createOptionForm([
+                                        Forms\Components\TextInput::make('name')
+                                            ->required()
+                                            ->maxLength(255),
+                                        Forms\Components\Textarea::make('biography')
+                                            ->rows(3),
+                                    ])
+                                    ->columnSpan(2),
+
+                                Forms\Components\Select::make('creator_type')
+                                    ->label('Role')
+                                    ->options([
+                                        'author' => 'Author',
+                                        'illustrator' => 'Illustrator',
+                                        'editor' => 'Editor',
+                                        'translator' => 'Translator',
+                                        'contributor' => 'Contributor',
+                                    ])
+                                    ->default('author')
+                                    ->required()
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('role_description')
+                                    ->label('Role description')
+                                    ->placeholder('e.g. Cover art')
+                                    ->maxLength(255)
+                                    ->columnSpan(1),
                             ])
-                            ->helperText('Authors, illustrators, translators'),
+                            ->columns(4)
+                            ->defaultItems(0)
+                            ->addActionLabel('Add creator')
+                            ->reorderable()
+                            ->orderColumn('sort_order')
+                            ->collapsible()
+                            ->itemLabel(fn (array $state): ?string => $state['creator_id'] ? \App\Models\Creator::find($state['creator_id'])?->name : null)
+                            ->helperText('Authors, illustrators, translators, etc.'),
 
                         Forms\Components\Select::make('geographicLocations')
                             ->label('Geographic locations')
