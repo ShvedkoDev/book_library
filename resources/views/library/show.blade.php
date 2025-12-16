@@ -2587,7 +2587,7 @@
                 @php
                     // All libraries to display
                     $allLibraries = [
-                        'University of Hawaiʻi',
+                        'University of Hawaii',
                         'College of Micronesia - FSM',
                         'Micronesian Seminar',
                         'University of Guam'
