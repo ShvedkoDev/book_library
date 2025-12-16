@@ -20,6 +20,7 @@ class ImportBooksFromCsv extends Command
                             {--preview : Show what would change without importing}
                             {--create-missing : Create missing relations (collections, publishers, creators)}
                             {--skip-invalid : Skip invalid rows instead of failing}
+                            {--generate-translations : Automatically generate translation relationships after import}
                             {--user-id=1 : User ID for import session}';
 
     /**
@@ -130,6 +131,22 @@ class ImportBooksFromCsv extends Command
             $this->displayResults($result);
 
             if ($result->status === 'completed') {
+                // Automatically generate translation relationships if requested
+                if ($this->option('generate-translations')) {
+                    $this->newLine();
+                    $this->info('Generating translation relationships based on identical translated titles...');
+                    $this->newLine();
+
+                    $exitCode = $this->call('books:generate-translations');
+
+                    if ($exitCode === 0) {
+                        $this->newLine();
+                        $this->info('✓ Translation relationships generated successfully');
+                    } else {
+                        $this->warn('Translation relationship generation encountered issues');
+                    }
+                }
+
                 return self::SUCCESS;
             } else {
                 return self::FAILURE;

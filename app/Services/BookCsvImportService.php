@@ -1013,6 +1013,27 @@ class BookCsvImportService
     }
 
     /**
+     * Attach book relationships (e.g., translations, supporting materials)
+     *
+     * @param Book $book
+     * @param array $data
+     * @param bool $isUpdate
+     * @return void
+     */
+    protected function attachBookRelationships(Book $book, array $data, bool $isUpdate = false): void
+    {
+        // Store translated_title for post-processing
+        // We'll process translation relationships after all books are imported
+        // to ensure all related books exist in the database
+
+        // For now, we just store the data - relationships will be created
+        // by running: php artisan books:generate-translations
+
+        // Future enhancement: Could queue translation relationship generation
+        // after import completes
+    }
+
+    /**
      * Remove UTF-8 BOM (Byte Order Mark) from headers if present
      *
      * CSV files saved with UTF-8 BOM (e.g., from Excel) include invisible
