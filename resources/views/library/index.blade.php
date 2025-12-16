@@ -78,7 +78,7 @@
                         <h3>
                             Filter Results
                             @if(!empty(array_filter($filters)))
-                                <i class="fal fa-times-circle clear-filters-icon" onclick="window.location.href='{{ route('library.index') }}'" title="Clear All Filters"></i>
+                                <i class="fal fa-times-circle clear-filters-icon" onclick="clearFilters()" title="Clear All Filters"></i>
                             @endif
                         </h3>
 
@@ -126,7 +126,7 @@
                                                         name="subjects[]"
                                                         value="{{ $classification->id }}"
                                                         {{ in_array($classification->id, $filters['subjects'] ?? []) ? 'checked' : '' }}
-                                                        onchange="this.form.submit()"
+                                                        onchange="submitFilterForm()"
                                                     >
                                                     &nbsp;{{ $classification->value }}
                                                 </label>
@@ -164,7 +164,7 @@
                                                         name="genres[]"
                                                         value="{{ $classification->id }}"
                                                         {{ in_array($classification->id, $filters['genres'] ?? []) ? 'checked' : '' }}
-                                                        onchange="this.form.submit()"
+                                                        onchange="submitFilterForm()"
                                                     >
                                                     &nbsp;{{ $classification->value }}
                                                 </label>
@@ -202,7 +202,7 @@
                                                         name="subgenres[]"
                                                         value="{{ $classification->id }}"
                                                         {{ in_array($classification->id, $filters['subgenres'] ?? []) ? 'checked' : '' }}
-                                                        onchange="this.form.submit()"
+                                                        onchange="submitFilterForm()"
                                                     >
                                                     &nbsp;{{ $classification->value }}
                                                 </label>
@@ -235,7 +235,7 @@
                                                 name="types[]"
                                                 value="{{ $physicalType->id }}"
                                                 {{ in_array($physicalType->id, $filters['types'] ?? []) ? 'checked' : '' }}
-                                                onchange="this.form.submit()"
+                                                onchange="submitFilterForm()"
                                             >
                                             &nbsp;{{ $physicalType->name }}
                                         </label>
@@ -266,7 +266,7 @@
                                                 name="languages[]"
                                                 value="{{ $language->code }}"
                                                 {{ in_array($language->code, $filters['languages'] ?? []) ? 'checked' : '' }}
-                                                onchange="this.form.submit()"
+                                                onchange="submitFilterForm()"
                                             >
                                             &nbsp;{{ $language->name }}
                                         </label>
@@ -440,20 +440,28 @@
 @push('scripts')
 <script>
     // Save and restore scroll position for filter changes
+    (function() {
+        // Restore scroll position IMMEDIATELY (before DOMContentLoaded)
+        const savedScrollPos = sessionStorage.getItem('libraryScrollPosition');
+        if (savedScrollPos !== null) {
+            // Restore scroll as early as possible to prevent jump
+            window.scrollTo(0, parseInt(savedScrollPos));
+
+            // Also restore after DOM is ready (in case content shifts)
+            window.addEventListener('load', function() {
+                window.scrollTo(0, parseInt(savedScrollPos));
+                sessionStorage.removeItem('libraryScrollPosition');
+            });
+        }
+    })();
+
     document.addEventListener('DOMContentLoaded', function() {
         const filtersForm = document.getElementById('filters-form');
 
-        // Restore scroll position if coming back from a filter submission
-        const savedScrollPos = sessionStorage.getItem('libraryScrollPosition');
-        if (savedScrollPos !== null) {
-            window.scrollTo(0, parseInt(savedScrollPos));
-            sessionStorage.removeItem('libraryScrollPosition');
-        }
-
-        // Save scroll position before filter form submission
+        // Save exact scroll position before filter form submission
         if (filtersForm) {
             filtersForm.addEventListener('submit', function() {
-                sessionStorage.setItem('libraryScrollPosition', window.scrollY);
+                sessionStorage.setItem('libraryScrollPosition', window.scrollY.toString());
             });
         }
     });
@@ -466,11 +474,17 @@
         // Update the hidden form's search value with the visible input's value
         hiddenSearchInput.value = searchInput.value;
 
+        // Save current scroll position before submitting
+        sessionStorage.setItem('libraryScrollPosition', window.scrollY.toString());
+
         // Submit the form
         searchForm.submit();
     }
 
     function clearSearch() {
+        // Don't restore scroll position when clearing search - go to top
+        sessionStorage.removeItem('libraryScrollPosition');
+
         // Build URL without search parameter but preserve other params
         const url = new URL(window.location.href);
         url.searchParams.delete('search');
@@ -487,6 +501,9 @@
     }
 
     function changeSorting(value) {
+        // Don't restore scroll position when changing sort - go to top
+        sessionStorage.removeItem('libraryScrollPosition');
+
         const [sortBy, sortDirection] = value.split('-');
         const url = new URL(window.location.href);
         url.searchParams.set('sort_by', sortBy);
@@ -495,6 +512,9 @@
     }
 
     function changeEntriesPerPage(value) {
+        // Don't restore scroll position when changing entries per page - go to top
+        sessionStorage.removeItem('libraryScrollPosition');
+
         const url = new URL(window.location.href);
         url.searchParams.set('per_page', value);
         url.searchParams.delete('page'); // Reset to page 1
@@ -502,7 +522,14 @@
     }
 
     function clearFilters() {
+        // Don't restore scroll position when clearing filters - go to top
+        sessionStorage.removeItem('libraryScrollPosition');
         window.location.href = '{{ route('library.index') }}';
+    }
+
+    function submitFilterForm() {
+        sessionStorage.setItem('libraryScrollPosition', window.scrollY.toString());
+        document.getElementById('filters-form').submit();
     }
 </script>
 @endpush
