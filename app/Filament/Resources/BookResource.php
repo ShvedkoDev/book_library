@@ -602,9 +602,19 @@ class BookResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('cover_image')
-                    ->square()
-                    ->size(60),
+                Tables\Columns\ImageColumn::make('thumbnail')
+                    ->label('Cover')
+                    ->getStateUsing(function ($record) {
+                        $url = $record->getThumbnailUrl();
+                        // If URL is empty, force regenerate placeholder
+                        if (empty($url)) {
+                            $thumbnailService = app(\App\Services\ThumbnailService::class);
+                            return $thumbnailService->generateColoredPlaceholder($record);
+                        }
+                        return $url;
+                    })
+                    ->size(60)
+                    ->extraImgAttributes(['loading' => 'lazy']),
 
                 Tables\Columns\TextColumn::make('internal_id')
                     ->label('ID')

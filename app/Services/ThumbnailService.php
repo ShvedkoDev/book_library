@@ -26,7 +26,18 @@ class ThumbnailService
                 // Normalize Unicode path (NFD to NFC) for filesystem compatibility
                 $normalizedPath = \Normalizer::normalize($filePath, \Normalizer::NFC);
                 if (Storage::disk('public')->exists($normalizedPath)) {
-                    return Storage::disk('public')->url($normalizedPath);
+                    // Get URL and ensure it's properly encoded
+                    $url = Storage::disk('public')->url($normalizedPath);
+                    // Encode the path part of the URL properly
+                    $parts = parse_url($url);
+                    if (isset($parts['path'])) {
+                        $parts['path'] = implode('/', array_map('rawurlencode', explode('/', $parts['path'])));
+                        $url = $parts['scheme'] . '://' . $parts['host'] . (isset($parts['port']) ? ':' . $parts['port'] : '') . $parts['path'];
+                    }
+                    return $url;
+                } else {
+                    // File record exists but file is missing - log warning
+                    logger()->warning("Thumbnail file missing for book {$book->id}: {$normalizedPath}");
                 }
             }
         }
