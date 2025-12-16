@@ -28,7 +28,7 @@
                 <i class="fas fa-download"></i> My downloads
             </a>
             <a href="{{ route('profile.bookmarks') }}" class="profile-nav-item {{ $currentRoute === 'profile.bookmarks' ? 'active' : '' }}">
-                <i class="fas fa-bookmark"></i> My bookmarks
+                <i class="fas fa-bookmark"></i>&nbsp;&nbsp;My bookmarks
             </a>
             <a href="{{ route('profile.notes') }}" class="profile-nav-item {{ $currentRoute === 'profile.notes' ? 'active' : '' }}">
                 <i class="fas fa-sticky-note"></i> My notes

@@ -11,7 +11,7 @@
             <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
                 <!-- Breadcrumb NavXT 7.4.1 -->
                 <span property="itemListElement" typeof="ListItem">
-                    <span class="main-home" property="name">National Vernacular Language Arts (VLA) Curriculum</span>
+                    <span class="main-home" property="name">National Vernacular Language Arts (VLA) curriculum</span>
                     <meta property="position" content="1">
                 </span>
             </div>
@@ -365,7 +365,7 @@
                         <tr>
                             <td colspan="3" style="text-align: center; padding: 40px;">
                                 <p>No books found matching your criteria.</p>
-                                <a href="{{ route('library.index') }}" class="button button-secondary">Clear Filters</a>
+                                <a href="{{ route('library.index') }}" class="button button-secondary">Clear filters</a>
                             </td>
                         </tr>
                     @endforelse

@@ -1,6 +1,6 @@
 @extends('layouts.library')
 
-@section('title', 'My Bookmarks - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('title', 'My bookmarks - FSM National Vernacular Language Arts (VLA) Curriculum')
 @section('description', 'Your saved books and resources from the FSM National Vernacular Language Arts (VLA) Curriculum')
 
 @push('styles')
@@ -227,7 +227,7 @@
 
     <div class="bookmarks-header">
         <h1>
-            <i class="fas fa-bookmark" style="color: #1d496a;"></i> My Bookmarks
+            <i class="fas fa-bookmark" style="color: #1d496a;"></i>&nbsp;My bookmarks
             @if($bookmarks->total() > 0)
                 <span class="bookmarks-count">{{ $bookmarks->total() }}</span>
             @endif
@@ -290,7 +290,7 @@
                         Saved {{ $bookmark->created_at->diffForHumans() }}
                     </div>
 
-                    <a href="{{ route('library.show', $bookmark->book->slug) }}" class="book-card-btn" style="display: block; text-decoration: none;">View</a>
+                    <a href="{{ route('library.show', $bookmark->book->slug) }}" class="button button-primary btn-view" style="display: block; text-decoration: none;">Locate</a>
                 </div>
             @endforeach
         </div>

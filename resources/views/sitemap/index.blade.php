@@ -68,55 +68,55 @@
             <div class="sitemap-section">
                 <h2 class="sitemap-section-title">
                     <i class="fas fa-user"></i>
-                    My Account
+                    My account
                 </h2>
                 <ul class="sitemap-list">
                     <li class="sitemap-item">
                         <a href="{{ route('profile.edit') }}" class="sitemap-link">
                             <i class="fas fa-chevron-right"></i>
-                            <span>Profile Settings</span>
+                            <span>Profile settings</span>
                         </a>
                     </li>
                     <li class="sitemap-item">
                         <a href="{{ route('bookmarks.index') }}" class="sitemap-link">
                             <i class="fas fa-chevron-right"></i>
-                            <span>My Bookmarks</span>
+                            <span>My bookmarks</span>
                         </a>
                     </li>
                     <li class="sitemap-item">
                         <a href="{{ route('profile.activity') }}" class="sitemap-link">
                             <i class="fas fa-chevron-right"></i>
-                            <span>My Activity</span>
+                            <span>My activity</span>
                         </a>
                     </li>
                     <li class="sitemap-item">
                         <a href="{{ route('profile.ratings') }}" class="sitemap-link">
                             <i class="fas fa-chevron-right"></i>
-                            <span>My Ratings</span>
+                            <span>My ratings</span>
                         </a>
                     </li>
                     <li class="sitemap-item">
                         <a href="{{ route('profile.reviews') }}" class="sitemap-link">
                             <i class="fas fa-chevron-right"></i>
-                            <span>My Reviews</span>
+                            <span>My reviews</span>
                         </a>
                     </li>
                     <li class="sitemap-item">
                         <a href="{{ route('profile.downloads') }}" class="sitemap-link">
                             <i class="fas fa-chevron-right"></i>
-                            <span>My Downloads</span>
+                            <span>My downloads</span>
                         </a>
                     </li>
                     <li class="sitemap-item">
                         <a href="{{ route('profile.notes') }}" class="sitemap-link">
                             <i class="fas fa-chevron-right"></i>
-                            <span>My Notes</span>
+                            <span>My notes</span>
                         </a>
                     </li>
                     <li class="sitemap-item">
                         <a href="{{ route('profile.timeline') }}" class="sitemap-link">
                             <i class="fas fa-chevron-right"></i>
-                            <span>Activity Timeline</span>
+                            <span>Activity timeline</span>
                         </a>
                     </li>
                 </ul>
@@ -128,7 +128,7 @@
             <div class="sitemap-section">
                 <h2 class="sitemap-section-title">
                     <i class="fas fa-sign-in-alt"></i>
-                    Account Access
+                    Account access
                 </h2>
                 <ul class="sitemap-list">
                     <li class="sitemap-item">

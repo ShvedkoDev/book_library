@@ -1,6 +1,6 @@
 @extends('layouts.library')
 
-@section('title', 'My Bookmarks - Activity - FSM National Vernacular Language Arts (VLA) Curriculum')
+@section('title', 'My bookmarks - Activity - FSM National Vernacular Language Arts (VLA) curriculum')
 @section('description', 'View all books you have bookmarked in the FSM National Vernacular Language Arts (VLA) Curriculum')
 
 @push('styles')
