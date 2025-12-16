@@ -428,14 +428,11 @@
         margin: 1rem 0;
         display: flex;
         gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
     }
 
-    .book-author > div {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
+
 
     .book-author .author-label {
         margin-right: 0.25rem;
