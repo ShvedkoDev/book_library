@@ -210,6 +210,87 @@ class PeopleResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('merge')
+                    ->label('Merge')
+                    ->icon('heroicon-m-arrows-right-left')
+                    ->color('warning')
+                    ->modalHeading('Merge Person')
+                    ->modalDescription('Merge this person into another record. This action cannot be undone.')
+                    ->form([
+                        Forms\Components\Placeholder::make('warning')
+                            ->label('Warning')
+                            ->content('You are about to merge this person into another record. All book associations will be moved to the selected target person, and this record will be PERMANENTLY DELETED.')
+                            ->columnSpanFull(),
+                        
+                        Forms\Components\Placeholder::make('source_person')
+                            ->label('Person being merged (will be deleted)')
+                            ->content(fn (Creator $record) => $record->name)
+                            ->columnSpanFull(),
+
+                        Forms\Components\Select::make('target_id')
+                            ->label('Merge into (Target person)')
+                            ->options(fn (Creator $record) => Creator::where('id', '!=', $record->id)
+                                ->orderBy('name')
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->required()
+                            ->helperText('Select the person record that should be kept. All books will be moved to this person.')
+                            ->columnSpanFull(),
+                    ])
+                    ->action(function (Creator $record, array $data) {
+                        $target = Creator::find($data['target_id']);
+                        
+                        if (!$target) {
+                            \Filament\Notifications\Notification::make()
+                                ->danger()
+                                ->title('Target person not found')
+                                ->send();
+                            return;
+                        }
+
+                        \Illuminate\Support\Facades\DB::transaction(function () use ($record, $target) {
+                            // Get all book relationships for the source creator
+                            $sourceRelationships = \Illuminate\Support\Facades\DB::table('book_creators')
+                                ->where('creator_id', $record->id)
+                                ->get();
+
+                            $movedCount = 0;
+                            $skippedCount = 0;
+
+                            foreach ($sourceRelationships as $rel) {
+                                // Check if the target creator already has a relationship with this book and role
+                                $exists = \Illuminate\Support\Facades\DB::table('book_creators')
+                                    ->where('book_id', $rel->book_id)
+                                    ->where('creator_id', $target->id)
+                                    ->where('creator_type', $rel->creator_type)
+                                    ->exists();
+
+                                if ($exists) {
+                                    // If relationship already exists, just delete the source relationship (it's a duplicate)
+                                    \Illuminate\Support\Facades\DB::table('book_creators')->where('id', $rel->id)->delete();
+                                    $skippedCount++;
+                                } else {
+                                    // Move relationship to target
+                                    \Illuminate\Support\Facades\DB::table('book_creators')
+                                        ->where('id', $rel->id)
+                                        ->update(['creator_id' => $target->id]);
+                                    $movedCount++;
+                                }
+                            }
+
+                            // Delete the source creator
+                            $record->delete();
+
+                            \Filament\Notifications\Notification::make()
+                                ->success()
+                                ->title('People merged successfully')
+                                ->body("Merged '{$record->name}' into '{$target->name}'. Moved {$movedCount} books, skipped {$skippedCount} duplicates.")
+                                ->persistent()
+                                ->send();
+                        });
+                    })
+                    ->requiresConfirmation()
+                    ->modalSubmitActionLabel('Merge People'),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
