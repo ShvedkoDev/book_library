@@ -645,6 +645,18 @@ trait BookCsvImportRelationships
      */
     public function processBookRelationships(): void
     {
+        // Step 1: Process coded relationships (same_version, supporting, omnibus)
+        $this->processCodedRelationships();
+
+        // Step 2: Generate translation relationships based on translated_title
+        $this->generateTranslationRelationships();
+    }
+
+    /**
+     * Process relationships with relationship codes
+     */
+    protected function processCodedRelationships(): void
+    {
         // Get all book_relationships with NULL related_book_id grouped by code and type
         $pendingRelationships = \DB::table('book_relationships')
             ->whereNull('related_book_id')
@@ -657,7 +669,7 @@ trait BookCsvImportRelationships
         foreach ($pendingRelationships as $groupKey => $relationships) {
             // Skip invalid relationship codes (like "*TRUE if Translated-title identical*")
             $sampleCode = $relationships->first()->relationship_code;
-            if (empty($sampleCode) || 
+            if (empty($sampleCode) ||
                 str_starts_with($sampleCode, '*') ||
                 str_contains(strtolower($sampleCode), 'true') ||
                 str_contains(strtolower($sampleCode), 'false')) {
@@ -669,17 +681,17 @@ trait BookCsvImportRelationships
 
             // Get all book IDs in this relationship group
             $bookIds = $relationships->pluck('book_id')->unique()->toArray();
-            
+
             // For each book in the group, link it to all other books in the same group
             foreach ($relationships as $relationship) {
                 $relatedBookIds = array_diff($bookIds, [$relationship->book_id]);
-                
+
                 if (empty($relatedBookIds)) {
                     // No other books in this group, delete orphan
                     \DB::table('book_relationships')->where('id', $relationship->id)->delete();
                     continue;
                 }
-                
+
                 // Update the first relationship
                 $firstRelatedId = array_shift($relatedBookIds);
                 \DB::table('book_relationships')
@@ -689,7 +701,7 @@ trait BookCsvImportRelationships
                         'description' => null,
                         'updated_at' => now(),
                     ]);
-                
+
                 // Create additional relationships for remaining books
                 foreach ($relatedBookIds as $relatedBookId) {
                     // Check if relationship already exists
@@ -698,7 +710,7 @@ trait BookCsvImportRelationships
                         ->where('related_book_id', $relatedBookId)
                         ->where('relationship_type', $relationship->relationship_type)
                         ->exists();
-                    
+
                     if (!$exists) {
                         \DB::table('book_relationships')->insert([
                             'book_id' => $relationship->book_id,
@@ -706,6 +718,68 @@ trait BookCsvImportRelationships
                             'relationship_type' => $relationship->relationship_type,
                             'relationship_code' => $relationship->relationship_code,
                             'description' => null,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Generate translation relationships based on identical translated_title values
+     */
+    protected function generateTranslationRelationships(): void
+    {
+        // Find books with translated titles
+        $booksWithTranslations = Book::where('is_active', true)
+            ->whereNotNull('translated_title')
+            ->where('translated_title', '!=', '')
+            ->with('languages')
+            ->get();
+
+        // Group books by translated title (case-insensitive, trimmed)
+        $translationGroups = $booksWithTranslations->groupBy(function ($book) {
+            return strtolower(trim($book->translated_title));
+        })->filter(function ($group) {
+            // Only keep groups with 2 or more books (translations must have multiple versions)
+            return $group->count() >= 2;
+        });
+
+        // Create bidirectional relationships between all books in each group
+        foreach ($translationGroups as $translatedTitle => $books) {
+            foreach ($books as $book1) {
+                foreach ($books as $book2) {
+                    if ($book1->id === $book2->id) {
+                        continue; // Skip self-relationship
+                    }
+
+                    // Check if they have different languages (optional but recommended)
+                    $book1Languages = $book1->languages->pluck('code')->toArray();
+                    $book2Languages = $book2->languages->pluck('code')->toArray();
+
+                    // If both books have the same language(s), they might be duplicates, not translations
+                    $hasCommonLanguage = !empty(array_intersect($book1Languages, $book2Languages));
+                    if ($hasCommonLanguage && count($book1Languages) === 1 && count($book2Languages) === 1) {
+                        continue; // Skip same-language pairs
+                    }
+
+                    // Check if relationship already exists
+                    $exists = \DB::table('book_relationships')
+                        ->where('book_id', $book1->id)
+                        ->where('related_book_id', $book2->id)
+                        ->where('relationship_type', 'translated')
+                        ->exists();
+
+                    if (!$exists) {
+                        \DB::table('book_relationships')->insert([
+                            'book_id' => $book1->id,
+                            'related_book_id' => $book2->id,
+                            'relationship_type' => 'translated',
+                            'relationship_code' => null,
+                            'description' => null,
+                            'notes' => 'Auto-generated: Identical translated title',
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]);

@@ -251,7 +251,7 @@ class CsvImport extends Page implements HasForms
                 // Success - show notification and open modal
                 Notification::make()
                     ->title('Import Completed Successfully')
-                    ->body("Imported {$result->successful_rows} books successfully. Click 'Process Relationships' to link related books.")
+                    ->body("Imported {$result->successful_rows} books successfully. Click 'Process Relationships' to link related books and generate translation relationships.")
                     ->success()
                     ->duration(15000)
                     ->actions([
@@ -310,7 +310,7 @@ class CsvImport extends Page implements HasForms
         try {
             Notification::make()
                 ->title('Processing Relationships')
-                ->body('Book relationships are being processed. This may take a few minutes...')
+                ->body('Book relationships and translations are being processed. This may take a few minutes...')
                 ->info()
                 ->send();
 
@@ -319,7 +319,7 @@ class CsvImport extends Page implements HasForms
 
             Notification::make()
                 ->title('Relationships Processed')
-                ->body('All book relationships have been processed successfully!')
+                ->body('All book relationships and translation links have been processed successfully!')
                 ->success()
                 ->send();
 

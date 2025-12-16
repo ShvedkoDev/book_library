@@ -61,8 +61,12 @@
         </x-slot>
 
         <x-slot name="description">
-            The CSV import is complete, but book relationships have not been processed yet. 
-            Click the button below to match and link related books based on their relationship codes.
+            The CSV import is complete, but book relationships have not been processed yet.
+            Click the button below to:
+            <ul class="list-disc ml-6 mt-2">
+                <li>Match and link related books based on their relationship codes (same version, supporting, omnibus)</li>
+                <li>Generate translation relationships for books with identical translated titles</li>
+            </ul>
         </x-slot>
 
         <div class="space-y-4">
