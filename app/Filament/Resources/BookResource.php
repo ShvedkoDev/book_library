@@ -315,7 +315,7 @@ class BookResource extends Resource
                             ->preload()
                             ->helperText('Islands and states'),
                     ])
-                    ->columns(2),
+                    ->columns(1),
 
                 Forms\Components\Section::make('Classifications')
                     ->schema([
