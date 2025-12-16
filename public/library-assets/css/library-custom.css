@@ -95,13 +95,13 @@ footer.department-footer .tagline {
 }
 
 .sidebar.header-image.handbook-image .irei-logo {
-    height: 75px !important;
-    max-height: 75px !important;
+    height: 85px !important;
+    max-height: 85px !important;
     width: auto !important;
     object-fit: contain !important;
     display: block !important;
     position: relative;
-    top: 6px;
+    top: 12px;
 }
 
 .sidebar.header-image.handbook-image .c4gts-logo {
