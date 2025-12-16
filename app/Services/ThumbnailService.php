@@ -156,27 +156,35 @@ class ThumbnailService
      */
     private function getColorForLetter(string $letter): string
     {
+        // Pastel Color Palette - Soft, professional colors for book thumbnails
         $colors = [
-            '#EF4444', // Red
-            '#F59E0B', // Amber
-            '#10B981', // Emerald
-            '#3B82F6', // Blue
-            '#8B5CF6', // Violet
-            '#EC4899', // Pink
-            '#14B8A6', // Teal
-            '#F97316', // Orange
-            '#84CC16', // Lime
-            '#06B6D4', // Cyan
-            '#6366F1', // Indigo
-            '#A855F7', // Purple
-            '#EAB308', // Yellow
-            '#22C55E', // Green
-            '#0EA5E9', // Sky
-            '#D946EF', // Fuchsia
-            '#F43F5E', // Rose
-            '#78716C', // Stone
-            '#64748B', // Slate
-            '#6B7280', // Gray
+            // Row 1: Pink/Coral tones
+            '#f5e5e8', // Very Light Pink/Blush
+            '#f0b8c8', // Rose Pink
+            '#e89a9a', // Coral/Salmon
+            '#f5c3a0', // Light Peach
+            '#f0aa8f', // Peachy Coral
+
+            // Row 2: Blue/Purple tones
+            '#a0bdd9', // Powder Blue
+            '#7fa9d8', // Cornflower Blue
+            '#9b95c9', // Lavender Purple
+            '#b9a5c5', // Mauve/Light Purple
+            '#c9b5d4', // Pale Lilac
+
+            // Row 3: Green tones
+            '#8fb5a8', // Sage Green
+            '#7db5a0', // Medium Sage/Sea Green
+            '#92cdc9', // Mint/Aqua
+            '#b5d499', // Light Yellow-Green
+            '#d5e599', // Pale Chartreuse/Lime
+
+            // Row 4: Neutral/Yellow tones
+            '#9ca899', // Olive Gray/Sage Gray
+            '#c5c9bd', // Light Gray/Greige
+            '#e8ec99', // Pale Yellow
+            '#f0ec99', // Light Butter Yellow
+            '#f5f0a8', // Cream Yellow
         ];
 
         // Use ASCII value to pick consistent color
