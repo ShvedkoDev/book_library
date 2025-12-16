@@ -214,15 +214,15 @@ class PageResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable()
-                    ->limit(50)
-                    ->description(fn (Page $record): string => $record->excerpt ? Str::limit($record->excerpt, 80) : ''),
+                    ->limit(30),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
                     ->badge()
                     ->color('gray')
                     ->copyable()
                     ->copyMessage('Slug copied!')
-                    ->icon('heroicon-m-link'),
+                    ->icon('heroicon-m-link')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_homepage')
                     ->label('Homepage')
                     ->boolean()
@@ -238,11 +238,12 @@ class PageResource extends Resource
                     ->label('Publish date')
                     ->dateTime('M j, Y')
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('parent.title')
                     ->label('Parent page')
                     ->badge()
                     ->color('info')
+                    ->limit(30)
                     ->sortable()
                     ->toggleable()
                     ->placeholder('(Root)'),
@@ -250,11 +251,11 @@ class PageResource extends Resource
                     ->label('Order')
                     ->numeric()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime('M j, Y g:i A')
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_published')

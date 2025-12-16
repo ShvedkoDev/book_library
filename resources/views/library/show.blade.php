@@ -1939,6 +1939,46 @@
             opacity: 1;
         }
     }
+
+    /* Collapsible sections styles */
+    .collapsible-section {
+        margin-top: 2rem;
+    }
+
+    .collapsible-header {
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.2s ease;
+    }
+
+    .collapsible-header:hover {
+        color: var(--color-primary);
+    }
+
+    .collapsible-header .toggle-icon {
+        font-size: 0.9rem;
+        transition: transform 0.2s ease;
+        color: var(--color-text-secondary);
+    }
+
+    .collapsible-header.expanded .toggle-icon {
+        transform: rotate(90deg);
+    }
+
+    .collapsible-content {
+        max-height: 5000px;
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.3s ease;
+        opacity: 1;
+    }
+
+    .collapsible-content.collapsed {
+        max-height: 0;
+        opacity: 0;
+    }
 </style>
 @endpush
 
@@ -2170,14 +2210,14 @@
                         <a href="#details">Details</a>
                     </li>
                     <li>
-                        <a href="#reader-observations">User feedback{{ $book->reviews->count() > 0 ? ' (' . $book->reviews->count() . ')' : '' }}</a>
+                        <a href="#library">Library locations</a>
                     </li>
                     <li>
-                        <a href="#library">Library locations</a>
+                        <a href="#reader-observations">User feedback{{ $book->reviews->count() > 0 ? ' (' . $book->reviews->count() . ')' : '' }}</a>
                     </li>
                     @if($hasRelatedBookSections)
                         <li>
-                            <a href="#related-books">Related books</a>
+                            <a href="#related-books">More books</a>
                         </li>
                     @endif
                 </ul>
@@ -2679,22 +2719,32 @@
 
             <!-- User feedback (reviews) section -->
             <a id="reader-observations" name="reader-observations" class="section-anchor"></a>
-            <div class="tab-section">
-                <h2 class="section-title text-left">User feedback ({{ $book->reviews->count() }} {{ Str::plural('review', $book->reviews->count()) }})</h2>
-                <hr class="section-separator">
-                <div class="reviews-section">
-                    @include('library.partials.reviews')
+            <div class="tab-section collapsible-section">
+                <h2 class="section-title text-left collapsible-header" onclick="toggleCollapsibleSection(this)">
+                    <i class="fal fa-chevron-right toggle-icon"></i>
+                    User feedback ({{ $book->reviews->count() }} {{ Str::plural('review', $book->reviews->count()) }})
+                </h2>
+                <div class="collapsible-content collapsed">
+                    <hr class="section-separator">
+                    <div class="reviews-section">
+                        @include('library.partials.reviews')
+                    </div>
                 </div>
             </div>
 
             <!-- My notes section -->
             @auth
                 <a id="notes-section" name="notes-section" class="section-anchor"></a>
-                <div class="tab-section">
-                    <h2 class="section-title text-left">My notes</h2>
-                    <hr class="section-separator">
-                    <div class="notes-section">
-                        @include('library.partials.notes')
+                <div class="tab-section collapsible-section">
+                    <h2 class="section-title text-left collapsible-header" onclick="toggleCollapsibleSection(this)">
+                        <i class="fal fa-chevron-right toggle-icon"></i>
+                        My notes
+                    </h2>
+                    <div class="collapsible-content collapsed">
+                        <hr class="section-separator">
+                        <div class="notes-section">
+                            @include('library.partials.notes')
+                        </div>
                     </div>
                 </div>
             @endauth
@@ -3423,5 +3473,20 @@
             }
         }
     });
+
+    // Toggle collapsible sections
+    function toggleCollapsibleSection(headerElement) {
+        const content = headerElement.nextElementSibling;
+        const isCollapsed = content.classList.contains('collapsed');
+
+        // Toggle collapsed state
+        if (isCollapsed) {
+            content.classList.remove('collapsed');
+            headerElement.classList.add('expanded');
+        } else {
+            content.classList.add('collapsed');
+            headerElement.classList.remove('expanded');
+        }
+    }
 </script>
 @endpush

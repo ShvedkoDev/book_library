@@ -58,13 +58,13 @@
             <div class="auth-checkbox-group">
                 <label for="modal-remember_me">
                     <input id="modal-remember_me" type="checkbox" name="remember">
-                    Remember Me
+                    Remember me
                 </label>
             </div>
 
             <!-- Submit Button -->
             <div class="auth-submit">
-                <button type="submit" class="auth-button auth-button-primary">Log In</button>
+                <button type="submit" class="auth-button auth-button-primary">Log in</button>
             </div>
         </form>
 
@@ -74,7 +74,7 @@
                 <p><a href="{{ route('password.request') }}">Lost your password?</a></p>
             @endif
             @if (Route::has('register'))
-                <p><a href="{{ route('register') }}">Please register.</a></p>
+                <p><a href="{{ route('register') }}">Don't have an account? Please register.</a></p>
             @endif
         </div>
 

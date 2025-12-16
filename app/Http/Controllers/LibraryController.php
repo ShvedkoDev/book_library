@@ -27,10 +27,10 @@ class LibraryController extends Controller
     {
         // Remove apostrophes
         $term = str_replace("'", '', $term);
-        
+
         // Convert to lowercase
         $term = mb_strtolower($term, 'UTF-8');
-        
+
         // Remove common diacritics
         $diacritics = [
             'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
@@ -38,9 +38,48 @@ class LibraryController extends Controller
             'â' => 'a', 'ê' => 'e', 'î' => 'i', 'ô' => 'o', 'û' => 'u',
             'ä' => 'a', 'ë' => 'e', 'ï' => 'i', 'ö' => 'o', 'ü' => 'u',
             'ã' => 'a', 'õ' => 'o', 'ñ' => 'n', 'ç' => 'c',
+            'Á' => 'A', 'É' => 'E', 'Í' => 'I', 'Ó' => 'O', 'Ú' => 'U',
+            'À' => 'A', 'È' => 'E', 'Ì' => 'I', 'Ò' => 'O', 'Ù' => 'U',
+            'Â' => 'A', 'Ê' => 'E', 'Î' => 'I', 'Ô' => 'O', 'Û' => 'U',
+            'Ä' => 'A', 'Ë' => 'E', 'Ï' => 'I', 'Ö' => 'O', 'Ü' => 'U',
+            'Ã' => 'A', 'Õ' => 'O', 'Ñ' => 'N', 'Ç' => 'C',
         ];
-        
+
         return str_replace(array_keys($diacritics), array_values($diacritics), $term);
+    }
+
+    /**
+     * Generate MySQL expression to normalize a field for searching
+     * (removes apostrophes and diacritics)
+     */
+    private function getNormalizedFieldExpression($fieldName)
+    {
+        // Build nested REPLACE() calls to remove apostrophes and diacritics
+        // Order matters: remove apostrophes first, then diacritics
+        $expression = "LOWER({$fieldName})";
+
+        // Remove apostrophes
+        $expression = "REPLACE({$expression}, \"'\", '')";
+
+        // Remove diacritics (both uppercase and lowercase)
+        $diacritics = [
+            'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
+            'à' => 'a', 'è' => 'e', 'ì' => 'i', 'ò' => 'o', 'ù' => 'u',
+            'â' => 'a', 'ê' => 'e', 'î' => 'i', 'ô' => 'o', 'û' => 'u',
+            'ä' => 'a', 'ë' => 'e', 'ï' => 'i', 'ö' => 'o', 'ü' => 'u',
+            'ã' => 'a', 'õ' => 'o', 'ñ' => 'n', 'ç' => 'c',
+            'Á' => 'A', 'É' => 'E', 'Í' => 'I', 'Ó' => 'O', 'Ú' => 'U',
+            'À' => 'A', 'È' => 'E', 'Ì' => 'I', 'Ò' => 'O', 'Ù' => 'U',
+            'Â' => 'A', 'Ê' => 'E', 'Î' => 'I', 'Ô' => 'O', 'Û' => 'U',
+            'Ä' => 'A', 'Ë' => 'E', 'Ï' => 'I', 'Ö' => 'O', 'Ü' => 'U',
+            'Ã' => 'A', 'Õ' => 'O', 'Ñ' => 'N', 'Ç' => 'C',
+        ];
+
+        foreach ($diacritics as $from => $to) {
+            $expression = "REPLACE({$expression}, '{$from}', '{$to}')";
+        }
+
+        return $expression;
     }
 
     /**
@@ -90,45 +129,60 @@ class LibraryController extends Controller
 
         // Apply search with diacritics and apostrophe insensitivity
         if ($search) {
-            // Helper function to normalize text for searching (remove diacritics and apostrophes)
-            $normalizeForSearch = function($text) {
-                // Remove apostrophes
-                $text = str_replace("'", '', $text);
-                // Remove common diacritics
-                $diacritics = [
-                    'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
-                    'à' => 'a', 'è' => 'e', 'ì' => 'i', 'ò' => 'o', 'ù' => 'u',
-                    'â' => 'a', 'ê' => 'e', 'î' => 'i', 'ô' => 'o', 'û' => 'u',
-                    'ä' => 'a', 'ë' => 'e', 'ï' => 'i', 'ö' => 'o', 'ü' => 'u',
-                    'ã' => 'a', 'õ' => 'o', 'ñ' => 'n', 'ç' => 'c',
-                    'Á' => 'A', 'É' => 'E', 'Í' => 'I', 'Ó' => 'O', 'Ú' => 'U',
-                    'À' => 'A', 'È' => 'E', 'Ì' => 'I', 'Ò' => 'O', 'Ù' => 'U',
-                    'Â' => 'A', 'Ê' => 'E', 'Î' => 'I', 'Ô' => 'O', 'Û' => 'U',
-                    'Ä' => 'A', 'Ë' => 'E', 'Ï' => 'I', 'Ö' => 'O', 'Ü' => 'U',
-                    'Ã' => 'A', 'Õ' => 'O', 'Ñ' => 'N', 'Ç' => 'C',
-                ];
-                return strtr($text, $diacritics);
-            };
-
-            $normalizedSearch = $normalizeForSearch(mb_strtolower($search));
+            // Normalize the search term (remove apostrophes and diacritics)
+            $normalizedSearch = $this->normalizeSearchTerm($search);
 
             $query->where(function($q) use ($normalizedSearch) {
-                // Search in title
-                $q->where('title', 'LIKE', "%{$normalizedSearch}%")
-                  // Search in description  
-                  ->orWhere('description', 'LIKE', "%{$normalizedSearch}%")
-                  // Search in creators' names
-                  ->orWhereHas('creators', function($creatorQuery) use ($normalizedSearch) {
-                      $creatorQuery->where('name', 'LIKE', "%{$normalizedSearch}%");
-                  })
-                  // Search in publisher name
-                  ->orWhereHas('publisher', function($publisherQuery) use ($normalizedSearch) {
-                      $publisherQuery->where('name', 'LIKE', "%{$normalizedSearch}%");
-                  })
-                  // Search in collection title
-                  ->orWhereHas('collection', function($collectionQuery) use ($normalizedSearch) {
-                      $collectionQuery->where('title', 'LIKE', "%{$normalizedSearch}%");
-                  });
+                // Define all book fields to search (including ALL metadata fields)
+                $bookFields = [
+                    'books.title',
+                    'books.subtitle',
+                    'books.translated_title',
+                    'books.description',
+                    'books.abstract',
+                    'books.toc',
+                    'books.notes_issue',
+                    'books.notes_version',
+                    'books.notes_content',
+                    'books.internal_id',
+                    'books.palm_code',
+                ];
+
+                // Search in all book fields with normalization
+                foreach ($bookFields as $field) {
+                    $normalizedField = $this->getNormalizedFieldExpression($field);
+                    $q->orWhereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
+                }
+
+                // Search in creators' names (with normalization)
+                $q->orWhereHas('creators', function($creatorQuery) use ($normalizedSearch) {
+                    $normalizedField = $this->getNormalizedFieldExpression('name');
+                    $creatorQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
+                });
+
+                // Search in publisher name (with normalization)
+                $q->orWhereHas('publisher', function($publisherQuery) use ($normalizedSearch) {
+                    $normalizedField = $this->getNormalizedFieldExpression('name');
+                    $publisherQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
+                });
+
+                // Search in collection title (with normalization)
+                $q->orWhereHas('collection', function($collectionQuery) use ($normalizedSearch) {
+                    $normalizedField = $this->getNormalizedFieldExpression('title');
+                    $collectionQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
+                });
+
+                // Search in keywords
+                $q->orWhereHas('keywords', function($keywordQuery) use ($normalizedSearch) {
+                    $normalizedField = $this->getNormalizedFieldExpression('keyword');
+                    $keywordQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
+                });
+
+                // Search in languages
+                $q->orWhereHas('languages', function($languageQuery) use ($normalizedSearch) {
+                    $normalizedField = $this->getNormalizedFieldExpression('name');
+                    $languageQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
+                });
             });
         }
 
