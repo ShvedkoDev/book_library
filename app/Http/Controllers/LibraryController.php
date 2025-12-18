@@ -28,10 +28,18 @@ class LibraryController extends Controller
         // Remove apostrophes
         $term = str_replace("'", '', $term);
 
+        // Normalize to NFD to separate diacritics (if intl extension is available)
+        if (class_exists('Normalizer')) {
+            $term = \Normalizer::normalize($term, \Normalizer::NFD);
+        }
+
+        // Remove combining diacritics
+        $term = preg_replace('/\p{Mn}/u', '', $term);
+
         // Convert to lowercase
         $term = mb_strtolower($term, 'UTF-8');
 
-        // Remove common diacritics
+        // Remove common diacritics (fallback for precomposed chars if Normalizer failed or wasn't available)
         $diacritics = [
             'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
             'à' => 'a', 'è' => 'e', 'ì' => 'i', 'ò' => 'o', 'ù' => 'u',
@@ -60,6 +68,19 @@ class LibraryController extends Controller
 
         // Remove apostrophes
         $expression = "REPLACE({$expression}, \"'\", '')";
+
+        // Remove combining diacritics (for NFD normalized data)
+        $combiningDiacritics = [
+            "\u{0300}" => '', // Grave
+            "\u{0301}" => '', // Acute
+            "\u{0302}" => '', // Circumflex
+            "\u{0303}" => '', // Tilde
+            "\u{0308}" => '', // Diaeresis
+        ];
+
+        foreach ($combiningDiacritics as $from => $to) {
+            $expression = "REPLACE({$expression}, '{$from}', '{$to}')";
+        }
 
         // Remove diacritics (both uppercase and lowercase)
         $diacritics = [
@@ -176,6 +197,12 @@ class LibraryController extends Controller
                 $q->orWhereHas('keywords', function($keywordQuery) use ($normalizedSearch) {
                     $normalizedField = $this->getNormalizedFieldExpression('keyword');
                     $keywordQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
+                });
+
+                // Search in themes
+                $q->orWhereHas('themesClassifications', function($themeQuery) use ($normalizedSearch) {
+                    $normalizedField = $this->getNormalizedFieldExpression('value');
+                    $themeQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
                 });
 
                 // Search in languages

@@ -217,9 +217,7 @@
     /* Toggle Functionality Styles */
     .toggle-trigger {
         cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
+        display: inline;
         color: #0369a1;
         text-decoration: none;
         transition: all 0.2s ease;
