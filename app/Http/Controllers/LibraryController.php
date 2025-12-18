@@ -377,14 +377,12 @@ class LibraryController extends Controller
             ->with($relatedBookEagerLoads)
             ->where('books.is_active', true)
             ->orderBy('books.title')
-            ->limit(20)
             ->get();
 
         $relatedOtherLanguageVersions = $book->translatedBooks()
             ->with($relatedBookEagerLoads)
             ->where('books.is_active', true)
             ->orderBy('books.title')
-            ->limit(20)
             ->get();
 
         $relatedCloselyTitles = $book->relatedBooks()
@@ -403,7 +401,6 @@ class LibraryController extends Controller
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->limit(20)
                 ->get()
             : collect();
 
@@ -412,7 +409,6 @@ class LibraryController extends Controller
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->limit(20)
                 ->get()
             : collect();
 
@@ -421,7 +417,6 @@ class LibraryController extends Controller
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
-                ->limit(20)
                 ->get()
             : collect();
 
