@@ -49,6 +49,43 @@ class BooksMediaManager extends Page implements HasForms, HasTable
     {
         return $form
             ->schema([
+                Section::make('File Statistics')
+                    ->description('Overview of files in the books directory')
+                    ->schema([
+                        \Filament\Forms\Components\Placeholder::make('file_stats')
+                            ->label('')
+                            ->content(function () {
+                                $stats = $this->getFileTypeBreakdown();
+                                $html = '<div class="grid grid-cols-2 md:grid-cols-4 gap-4">';
+
+                                foreach ($stats as $type => $count) {
+                                    $icon = match($type) {
+                                        'pdf' => '📄',
+                                        'image' => '🖼️',
+                                        'video' => '🎬',
+                                        'audio' => '🎵',
+                                        default => '📁',
+                                    };
+                                    $color = match($type) {
+                                        'pdf' => 'text-red-600',
+                                        'image' => 'text-green-600',
+                                        'video' => 'text-blue-600',
+                                        'audio' => 'text-yellow-600',
+                                        default => 'text-gray-600',
+                                    };
+                                    $html .= "<div class='p-3 bg-gray-50 dark:bg-gray-800 rounded-lg'>";
+                                    $html .= "<div class='text-2xl'>{$icon}</div>";
+                                    $html .= "<div class='font-bold text-xl {$color}'>{$count}</div>";
+                                    $html .= "<div class='text-sm text-gray-600 dark:text-gray-400'>" . strtoupper($type) . "</div>";
+                                    $html .= "</div>";
+                                }
+
+                                $html .= '</div>';
+                                return new \Illuminate\Support\HtmlString($html);
+                            }),
+                    ])
+                    ->collapsible()
+                    ->collapsed(false),
                 Section::make('Upload Books')
                     ->description('Upload PDF files for your book library')
                     ->schema([
@@ -72,16 +109,22 @@ class BooksMediaManager extends Page implements HasForms, HasTable
     {
         return $table
             ->query($this->getTableQuery())
-            ->paginated(false) // Disable pagination since we're loading all files
+            ->paginated([10, 25, 50, 100])
+            ->defaultPaginationPageOption(25)
+            ->defaultSort('modified', 'desc')
+            ->striped()
+            ->deferLoading()
             ->columns([
                 TextColumn::make('filename')
                     ->label('File name')
                     ->searchable()
                     ->sortable()
-                    ->description(fn ($record) => $record->path)
+                    ->limit(50)
+                    ->tooltip(fn ($record) => $record->filename)
                     ->copyable()
-                    ->copyMessage('Path copied!')
-                    ->icon('heroicon-m-document'),
+                    ->copyMessage('Filename copied!')
+                    ->icon('heroicon-m-document')
+                    ->wrap(),
                 TextColumn::make('type')
                     ->label('Type')
                     ->badge()
@@ -198,10 +241,10 @@ class BooksMediaManager extends Page implements HasForms, HasTable
         return $builder;
     }
 
-    public function getTableRecords(): \Illuminate\Database\Eloquent\Collection
+    protected function getAllFileRecords(): \Illuminate\Support\Collection
     {
         if ($this->cachedFiles === null) {
-            $files = collect(Storage::disk('public')->files('books'))
+            $this->cachedFiles = collect(Storage::disk('public')->files('books'))
                 ->map(function ($file) {
                     $fullPath = Storage::disk('public')->path($file);
                     $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
@@ -217,9 +260,6 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                 })
                 ->sortByDesc('modified')
                 ->values();
-
-            // Convert to Eloquent Collection
-            $this->cachedFiles = new \Illuminate\Database\Eloquent\Collection($files->all());
         }
 
         return $this->cachedFiles;
@@ -278,6 +318,27 @@ class BooksMediaManager extends Page implements HasForms, HasTable
         return round($bytes, $precision) . ' ' . $units[$i];
     }
 
+    protected function getFileTypeBreakdown(): array
+    {
+        $files = Storage::disk('public')->files('books');
+        $breakdown = [
+            'pdf' => 0,
+            'image' => 0,
+            'video' => 0,
+            'audio' => 0,
+            'other' => 0,
+        ];
+
+        foreach ($files as $file) {
+            $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            $type = $this->getFileType($extension);
+            $breakdown[$type] = ($breakdown[$type] ?? 0) + 1;
+        }
+
+        // Remove types with 0 count
+        return array_filter($breakdown, fn($count) => $count > 0);
+    }
+
     public function save(): void
     {
         $data = $this->form->getState();
@@ -289,10 +350,13 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                 ->body(count($data['books']) . ' file(s) uploaded successfully.')
                 ->send();
 
+            // Clear cache to refresh stats and table
+            $this->cachedFiles = null;
+
             // Reset form
             $this->form->fill();
 
-            // Refresh table
+            // Refresh page
             $this->dispatch('$refresh');
         }
     }
@@ -303,7 +367,7 @@ class BooksMediaManager extends Page implements HasForms, HasTable
      */
     public function getTableRecord($key): ?FileRecord
     {
-        $records = $this->getTableRecords();
+        $records = $this->getAllFileRecords();
 
         foreach ($records as $record) {
             if ($record->getKey() === $key) {
@@ -312,6 +376,32 @@ class BooksMediaManager extends Page implements HasForms, HasTable
         }
 
         return null;
+    }
+
+    /**
+     * Override to provide custom pagination for filesystem-based records.
+     */
+    protected function paginateTableQuery(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Contracts\Pagination\Paginator
+    {
+        $perPage = $this->getTableRecordsPerPage();
+        $page = \Illuminate\Pagination\Paginator::resolveCurrentPage('page');
+
+        // Get all file records from cache
+        $items = $this->getAllFileRecords();
+
+        $totalCount = $items->count();
+        $paginatedItems = $items->forPage($page, $perPage);
+
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $paginatedItems,
+            $totalCount,
+            $perPage,
+            $page,
+            [
+                'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+                'pageName' => 'page',
+            ]
+        );
     }
 
 }
