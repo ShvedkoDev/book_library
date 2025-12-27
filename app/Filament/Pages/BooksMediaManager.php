@@ -20,6 +20,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BooksMediaManager extends Page implements HasForms, HasTable
 {
@@ -115,6 +116,15 @@ class BooksMediaManager extends Page implements HasForms, HasTable
             ->defaultSort('modified', 'desc')
             ->striped()
             ->deferLoading()
+            ->headerActions([
+                Action::make('export')
+                    ->label('Export Files')
+                    ->icon('heroicon-m-arrow-down-tray')
+                    ->color('success')
+                    ->action(function () {
+                        return $this->exportFiles();
+                    }),
+            ])
             ->columns([
                 TextColumn::make('filename')
                     ->label('File name')
@@ -403,6 +413,51 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                 'pageName' => 'page',
             ]
         );
+    }
+
+    /**
+     * Export all file records to CSV
+     */
+    public function exportFiles(): StreamedResponse
+    {
+        $timestamp = now()->format('Y-m-d_His');
+        $filename = "books-media-export_{$timestamp}.csv";
+
+        return new StreamedResponse(function () {
+            $handle = fopen('php://output', 'w');
+
+            // Add CSV headers
+            fputcsv($handle, [
+                'Filename',
+                'Type',
+                'Size (Bytes)',
+                'Size (Human)',
+                'Last Modified',
+                'Books Count',
+                'File Path',
+            ]);
+
+            // Get all file records
+            $files = $this->getAllFileRecords();
+
+            // Write each file record to CSV
+            foreach ($files as $file) {
+                fputcsv($handle, [
+                    $file->filename,
+                    strtoupper($file->type),
+                    $file->size,
+                    $this->formatBytes($file->size),
+                    date('Y-m-d H:i:s', $file->modified),
+                    $file->books_count,
+                    $file->path,
+                ]);
+            }
+
+            fclose($handle);
+        }, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
     }
 
 }
