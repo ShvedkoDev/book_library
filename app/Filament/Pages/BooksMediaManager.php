@@ -95,6 +95,7 @@ class BooksMediaManager extends Page implements HasForms, HasTable
                             ->directory('books')
                             ->acceptedFileTypes(['application/pdf'])
                             ->maxSize(512000) // 500MB
+                            ->preserveFilenames()
                             ->multiple()
                             ->reorderable()
                             ->downloadable()
