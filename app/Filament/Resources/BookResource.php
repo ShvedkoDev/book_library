@@ -446,10 +446,10 @@ class BookResource extends Resource
                                     ->directory('books')
                                     ->visibility('public')
                                     ->preserveFilenames()
-                                    ->maxSize(102400)
+                                    ->maxSize(512000)
                                     ->acceptedFileTypes(['application/pdf', 'image/*', 'audio/*'])
                                     ->hidden(fn ($get) => $get('file_type') === 'video')
-                                    ->helperText('Upload PDF, image, or audio file (max 100MB). Leave empty when editing to keep existing file.')
+                                    ->helperText('Upload PDF, image, or audio file (max 500MB). Leave empty when editing to keep existing file.')
                                     ->columnSpan(2),
 
                                 Forms\Components\TextInput::make('external_url')

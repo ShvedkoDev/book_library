@@ -104,13 +104,13 @@ class MediaManager extends Page implements HasForms, HasTable
                             ->disk('public')
                             ->directory('books')
                             ->acceptedFileTypes(['application/pdf'])
-                            ->maxSize(204800) // 200MB
+                            ->maxSize(512000) // 500MB
                             ->multiple()
                             ->reorderable()
                             ->downloadable()
                             ->openable()
                             ->preserveFilenames()
-                            ->helperText("📄 Drag and drop PDF files. Max {$this->maxFilesPerBatch} files per batch. Max 200MB per file.")
+                            ->helperText("📄 Drag and drop PDF files. Max {$this->maxFilesPerBatch} files per batch. Max 500MB per file.")
                             ->columnSpanFull()
                             ->reactive()
                             ->afterStateUpdated(function ($state) {

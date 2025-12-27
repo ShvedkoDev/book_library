@@ -44,8 +44,8 @@ class FileUploadResource extends Resource
                             ->downloadable()
                             ->previewable(true)
                             ->openable()
-                            ->maxSize(102400) // 100MB
-                            ->helperText('Upload any file type. Maximum size: 100MB. Original filenames will be preserved.')
+                            ->maxSize(512000) // 500MB
+                            ->helperText('Upload any file type. Maximum size: 500MB. Original filenames will be preserved.')
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('description')
