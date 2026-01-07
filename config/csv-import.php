@@ -166,7 +166,7 @@ return [
         // ==========================================
         // ACCESS LEVEL (special mapping: Y/N/L → full/unavailable/limited)
         // ==========================================
-        'UPLOADED' => 'access_level',
+        'LEVEL' => 'access_level',                      // Renamed from "UPLOADED"
 
         // ==========================================
         // RELATIONAL FIELDS (many-to-many)
@@ -190,24 +190,22 @@ return [
         'State' => 'geographic_state',
 
         // Creators (many-to-many with types)
-        'Author' => 'author_1',
-        'Author2' => 'author_2',
-        'Author3' => 'author_3',
-        'Other creator' => 'other_creator_1',
-        'Other creator ROLE' => 'other_creator_1_role',
+        'Author' => 'author_1',                         // Now supports pipe separator
+        'Other creator1' => 'other_creator_1',         // Renamed from "Other creator"
+        'Other creator1 ROLE' => 'other_creator_1_role',  // Renamed from "Other creator ROLE"
         'Other creator2' => 'other_creator_2',
         'Other creator2 ROLE' => 'other_creator_2_role',
-        'Illustrator' => 'illustrator_1',
-        'Illustrator2' => 'illustrator_2',
-        'Illustrator3' => 'illustrator_3',
-        'Illustrator4' => 'illustrator_4',
-        'Illustrator5' => 'illustrator_5',
+        'Other creator3' => 'other_creator_3',         // NEW
+        'Other creator3 ROLE' => 'other_creator_3_role',  // NEW
+        'Illustrator' => 'illustrator_1',               // Now supports pipe separator
 
         // Classifications (many-to-many)
         'Purpose' => 'classification_purpose',
         'Genre' => 'classification_genre',
+        'Subject' => 'classification_subject',          // NEW: Subject classification
         'Sub-genre' => 'classification_subgenre',
         'Type' => 'classification_type',
+        'Area' => 'classification_area',                // NEW: Area classification
         'Themes/Uses' => 'classification_themes',
         'Learner level' => 'classification_learner_level',
 
@@ -218,8 +216,7 @@ return [
         'Related (same)' => 'related_same_version',
         'Related (omnibus)' => 'related_omnibus',
         'Related (support)' => 'related_supporting',
-        'Related (translated)' => 'related_translated',  // NEW: Updated column name
-        'Related (same title, different language, or similar)' => 'related_other_language',  // OLD: For backward compatibility
+        'Related (same title, different language, or similar)' => 'related_other_language',  // For backward compatibility
 
         // ==========================================
         // FILE REFERENCES
@@ -230,8 +227,10 @@ return [
         'ALTERNATIVE DOCUMENT FILENAME' => 'pdf_filename_alt',
         'ALTERNATIVE THUMBNAIL FILENAME' => 'thumbnail_filename_alt',
         'ALTERNATIVE DIGITAL SOURCE (WHERE IS THE PDF FROM)' => 'digital_source_alt',
-        'Coupled audio' => 'audio_files',
-        'Coupled video' => 'video_urls',
+        'Uploaded audio' => 'audio_files',              // Renamed from "Coupled audio"
+        'Uploaded video' => 'video_urls',               // Renamed from "Coupled video"
+        'External video link' => 'video_urls',          // NEW: External video links
+        'External web page link' => 'external_link',    // NEW: External web page links
 
         // ==========================================
         // LIBRARY REFERENCES
@@ -244,17 +243,21 @@ return [
         'COM hard copy call number' => 'com_call_number',
         'COM hard copy ref NOTE' => 'com_notes',
 
-        // NEW: Library Links (5 libraries × 2 links each = 10 fields)
-        'Library link UH' => 'library_link_uh',                    // Column BH
-        'Library link UH alt.' => 'library_link_uh_alt',           // Column BI
-        'Library link COM-FSM' => 'library_link_com_fsm',          // Column BJ
-        'Library link COM-FSM alt.' => 'library_link_com_fsm_alt', // Column BK
-        'Library link MARC' => 'library_link_marc',                // Column BL
-        'Library link MARC alt.' => 'library_link_marc_alt',       // Column BM
-        'Library link MICSEM' => 'library_link_micsem',            // Column BN
-        'Library link MICSEM alt.' => 'library_link_micsem_alt',   // Column BO
-        'Library link 5' => 'library_link_5',                      // Column BP
-        'Library link 5 alt.' => 'library_link_5_alt',             // Column BQ
+        // NEW: Library Links (6 libraries × 2 links each = 12 fields)
+        'Library UH link' => 'library_link_uh',                     // Renamed from "Library link UH"
+        'Library UH comment' => 'library_link_uh_alt',              // Renamed from "Library link UH alt."
+        'Library COM link' => 'library_link_com_fsm',               // Renamed from "Library link COM-FSM"
+        'Library COM comment' => 'library_link_com_fsm_alt',        // Renamed from "Library link COM-FSM alt."
+        'Library UOG link' => 'library_link_uog',                   // NEW
+        'Library UOG comment' => 'library_link_uog_alt',            // NEW
+        'Library MICSEM link' => 'library_link_micsem',             // Renamed from "Library link MICSEM"
+        'Library MICSEM comment' => 'library_link_micsem_alt',      // Renamed from "Library link MICSEM alt."
+
+        // ==========================================
+        // EXTERNAL LINKS
+        // ==========================================
+        'External link' => 'external_link',                        // NEW: General external link
+        'External web page link' => 'external_link',               // NEW: Web page link variant
 
         // ==========================================
         // BOOK IDENTIFIERS (NEW)
@@ -262,12 +265,24 @@ return [
         'OLLC number' => 'oclc_number',      // Column BR
         'ISBN number' => 'isbn_number',      // Column BS
         'Other number' => 'other_number',    // Column BT
+        'COM call number' => 'com_call_number',  // NEW: Library call number
 
         // ==========================================
-        // IGNORED/METADATA FIELDS
+        // IGNORED/METADATA FIELDS (Not stored in database)
         // ==========================================
-        'Name match check' => null, // Not stored
-        'books.internal_id' => null, // Database mapping row - ignore
+        // Note: "Related (translated)" and "Name match check" have been REMOVED
+        'books.internal_id' => null,          // Database mapping row - ignore
+        'Verified' => null,                   // Verification flag - not stored
+        'Notes' => null,                      // General notes column - not stored
+        'Comments' => null,                   // Comments column - not stored
+        'Status' => null,                     // Status indicator - not stored
+        'Last updated' => null,               // Timestamp - not stored
+        'Created by' => null,                 // Creator info - not stored
+        'Record ID' => null,                  // Internal record reference - not stored
+        'Batch number' => null,               // Batch tracking - not stored
+        'Import date' => null,                // Import timestamp - not stored
+        'Source' => null,                     // Data source - not stored
+        'Quality check' => null,              // QA flag - not stored
     ],
 
     /*
@@ -279,13 +294,23 @@ return [
     |
     */
     'access_level_mapping' => [
+        // Full Access (Y or T = Temporary/Full quality)
         'Y' => 'full',
         'y' => 'full',
+        'T' => 'full',                      // NEW: Temporary - same as full until better scan available
+        't' => 'full',
         'yes' => 'full',
         'YES' => 'full',
         'full' => 'full',
         'FULL' => 'full',
 
+        // Restricted Access
+        'R' => 'limited',                   // NEW: Restricted - same as limited
+        'r' => 'limited',
+        'restricted' => 'limited',
+        'RESTRICTED' => 'limited',
+
+        // Unavailable
         'N' => 'unavailable',
         'n' => 'unavailable',
         'no' => 'unavailable',
@@ -293,6 +318,7 @@ return [
         'unavailable' => 'unavailable',
         'UNAVAILABLE' => 'unavailable',
 
+        // Limited Access
         'L' => 'limited',
         'l' => 'limited',
         'limited' => 'limited',
@@ -321,8 +347,10 @@ return [
     'classification_type_mapping' => [
         'classification_purpose' => 'purpose',
         'classification_genre' => 'genre',
+        'classification_subject' => 'subject',          // NEW
         'classification_subgenre' => 'sub-genre',
         'classification_type' => 'type',
+        'classification_area' => 'area',                // NEW
         'classification_themes' => 'themes-uses',
         'classification_learner_level' => 'learner-level',
     ],
@@ -336,8 +364,7 @@ return [
         'related_same_version' => 'same_version',
         'related_omnibus' => 'omnibus',
         'related_supporting' => 'supporting',
-        'related_translated' => 'translated',        // NEW
-        'related_other_language' => 'other_language', // Keep for backward compatibility
+        'related_other_language' => 'other_language', // For backward compatibility
     ],
 
     /*

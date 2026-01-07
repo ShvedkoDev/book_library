@@ -61,6 +61,7 @@ trait BookCsvImportRelationships
 
     /**
      * Attach languages to book
+     * Supports pipe-separated values for multiple languages
      */
     protected function attachLanguages(Book $book, array $data, array $options, bool $isUpdate): void
     {
@@ -70,19 +71,25 @@ trait BookCsvImportRelationships
 
         $languagesToAttach = [];
 
-        // Primary language
+        // Primary language(s) - can be pipe-separated
         if (!empty($data['primary_language'])) {
-            $language = $this->resolveLanguage($data['primary_language'], $data['primary_language_iso'] ?? null);
-            if ($language) {
-                $languagesToAttach[$language->id] = ['is_primary' => true];
+            $primaryLanguages = $this->splitMultiValue($data['primary_language']);
+            foreach ($primaryLanguages as $langName) {
+                $language = $this->resolveLanguage($langName, null);
+                if ($language) {
+                    $languagesToAttach[$language->id] = ['is_primary' => true];
+                }
             }
         }
 
-        // Secondary language
+        // Secondary language(s) - can be pipe-separated
         if (!empty($data['secondary_language'])) {
-            $language = $this->resolveLanguage($data['secondary_language'], $data['secondary_language_iso'] ?? null);
-            if ($language) {
-                $languagesToAttach[$language->id] = ['is_primary' => false];
+            $secondaryLanguages = $this->splitMultiValue($data['secondary_language']);
+            foreach ($secondaryLanguages as $langName) {
+                $language = $this->resolveLanguage($langName, null);
+                if ($language) {
+                    $languagesToAttach[$language->id] = ['is_primary' => false];
+                }
             }
         }
 
@@ -124,6 +131,7 @@ trait BookCsvImportRelationships
 
     /**
      * Attach creators (authors, illustrators, etc.) to book
+     * Supports pipe-separated values for multiple creators in each field
      */
     protected function attachCreators(Book $book, array $data, array $options, bool $isUpdate): void
     {
@@ -133,27 +141,40 @@ trait BookCsvImportRelationships
 
         $sortOrder = 0;
 
-        // Authors
+        // Authors - each field can contain pipe-separated author names
         foreach (['author_1', 'author_2', 'author_3'] as $key) {
             if (!empty($data[$key])) {
-                $this->attachCreator($book, $data[$key], 'author', null, $sortOrder++, $options);
+                // Support pipe-separated author names
+                $authors = $this->splitMultiValue($data[$key]);
+                foreach ($authors as $authorName) {
+                    $this->attachCreator($book, $authorName, 'author', null, $sortOrder++, $options);
+                }
             }
         }
 
-        // Other creators with roles
-        foreach (['other_creator_1', 'other_creator_2'] as $index => $key) {
+        // Other creators with roles - can have pipe-separated values
+        foreach (['other_creator_1', 'other_creator_2', 'other_creator_3'] as $index => $key) {
             if (!empty($data[$key])) {
                 $roleKey = $key . '_role';
                 $role = $data[$roleKey] ?? null;
-                $type = $this->determineCreatorType($role);
-                $this->attachCreator($book, $data[$key], $type, $role, $sortOrder++, $options);
+
+                // Support pipe-separated creator names
+                $creators = $this->splitMultiValue($data[$key]);
+                foreach ($creators as $creatorName) {
+                    $type = $this->determineCreatorType($role);
+                    $this->attachCreator($book, $creatorName, $type, $role, $sortOrder++, $options);
+                }
             }
         }
 
-        // Illustrators
+        // Illustrators - each field can contain pipe-separated illustrator names
         foreach (['illustrator_1', 'illustrator_2', 'illustrator_3', 'illustrator_4', 'illustrator_5'] as $key) {
             if (!empty($data[$key])) {
-                $this->attachCreator($book, $data[$key], 'illustrator', null, $sortOrder++, $options);
+                // Support pipe-separated illustrator names
+                $illustrators = $this->splitMultiValue($data[$key]);
+                foreach ($illustrators as $illustratorName) {
+                    $this->attachCreator($book, $illustratorName, 'illustrator', null, $sortOrder++, $options);
+                }
             }
         }
     }
@@ -487,7 +508,7 @@ trait BookCsvImportRelationships
             $book->libraryReferences()->delete();
         }
 
-        // Define library mappings (5 libraries with main_link and alt_link)
+        // Define library mappings (6 libraries with main_link and alt_link)
         $libraryMappings = [
             [
                 'code' => 'UH',
@@ -495,36 +516,30 @@ trait BookCsvImportRelationships
                 'reference' => 'uh_reference_number',
                 'call_number' => 'uh_call_number',
                 'catalog_link' => 'uh_catalog_link',
-                'main_link' => 'library_link_uh',           // NEW: Column BH
-                'alt_link' => 'library_link_uh_alt',        // NEW: Column BI
+                'main_link' => 'library_uh_link',         // Renamed from 'library_link_uh'
+                'alt_link' => 'library_uh_comment',       // Renamed from 'library_link_uh_alt'
                 'notes' => 'uh_notes',
             ],
             [
-                'code' => 'COM-FSM',
+                'code' => 'COM',
                 'name' => 'College of Micronesia - FSM',
                 'reference' => 'com_reference_number',
                 'call_number' => 'com_call_number',
-                'main_link' => 'library_link_com_fsm',      // NEW: Column BJ
-                'alt_link' => 'library_link_com_fsm_alt',   // NEW: Column BK
+                'main_link' => 'library_com_link',        // Renamed from 'library_link_com_fsm'
+                'alt_link' => 'library_com_comment',      // Renamed from 'library_link_com_fsm_alt'
                 'notes' => 'com_notes',
             ],
             [
-                'code' => 'MARC',
-                'name' => 'University of Guam (MARC)',
-                'main_link' => 'library_link_marc',         // NEW: Column BL
-                'alt_link' => 'library_link_marc_alt',      // NEW: Column BM
+                'code' => 'UOG',
+                'name' => 'University of Guam',
+                'main_link' => 'library_uog_link',        // NEW
+                'alt_link' => 'library_uog_comment',      // NEW
             ],
             [
                 'code' => 'MICSEM',
                 'name' => 'Micronesian Seminar',
-                'main_link' => 'library_link_micsem',       // NEW: Column BN
-                'alt_link' => 'library_link_micsem_alt',    // NEW: Column BO
-            ],
-            [
-                'code' => 'LIB5',
-                'name' => 'Library #5 (Reserved)',
-                'main_link' => 'library_link_5',            // NEW: Column BP
-                'alt_link' => 'library_link_5_alt',         // NEW: Column BQ
+                'main_link' => 'library_micsem_link',     // Renamed from 'library_link_micsem'
+                'alt_link' => 'library_micsem_comment',   // Renamed from 'library_link_micsem_alt'
             ],
         ];
 
@@ -547,8 +562,8 @@ trait BookCsvImportRelationships
                     'reference_number' => isset($library['reference']) ? ($data[$library['reference']] ?? null) : null,
                     'call_number' => isset($library['call_number']) ? ($data[$library['call_number']] ?? null) : null,
                     'catalog_link' => isset($library['catalog_link']) ? ($data[$library['catalog_link']] ?? null) : null,
-                    'main_link' => isset($library['main_link']) ? ($data[$library['main_link']] ?? null) : null,     // NEW
-                    'alt_link' => isset($library['alt_link']) ? ($data[$library['alt_link']] ?? null) : null,        // NEW
+                    'main_link' => isset($library['main_link']) ? ($data[$library['main_link']] ?? null) : null,
+                    'alt_link' => isset($library['alt_link']) ? ($data[$library['alt_link']] ?? null) : null,
                     'notes' => isset($library['notes']) ? ($data[$library['notes']] ?? null) : null,
                 ]);
             }
@@ -622,7 +637,7 @@ trait BookCsvImportRelationships
                 // Find all books that have this same relationship code
                 // We'll create relationships later in a post-processing step
                 // For now, just store the code so we can find related books later
-                
+
                 // Store a placeholder relationship with the code
                 // The related_book_id will be NULL initially
                 $book->bookRelationships()->updateOrCreate(
@@ -778,8 +793,7 @@ trait BookCsvImportRelationships
                             'related_book_id' => $book2->id,
                             'relationship_type' => 'translated',
                             'relationship_code' => null,
-                            'description' => null,
-                            'notes' => 'Auto-generated: Identical translated title',
+                            'description' => 'Auto-generated: Identical translated title',
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]);

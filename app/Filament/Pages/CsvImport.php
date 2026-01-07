@@ -47,7 +47,14 @@ class CsvImport extends Page implements HasForms
                             ->directory('csv-imports')
                             ->visibility('private')
                             ->required()
-                            ->helperText('Maximum file size: 50MB. Accepted formats: .csv, .txt'),
+                            ->helperText('Maximum file size: 50MB. Accepted formats: .csv, .txt
+                            
+⚠️ Multi-value Fields: Use the pipe separator (|) to separate multiple items. Examples:
+• Authors: "lastname1, firstname1|lastname2, firstname2|lastname3"
+• Languages: "Yapese|Pohnpeian|Chuukese|English"
+• Keywords: "keyword1|keyword2|keyword3"
+• Islands/States: "Island1|Island2|Island3"
+The pipe separator can appear in ANY column EXCEPT single-value fields like Title, Subtitle, Year, etc.'),
                     ]),
 
                 Forms\Components\Section::make('Import Settings')
@@ -275,7 +282,7 @@ class CsvImport extends Page implements HasForms
             if (is_array($errorMessage)) {
                 $errorMessage = json_encode($errorMessage);
             }
-            
+
             Notification::make()
                 ->title('Import Failed')
                 ->body('Failed to import CSV file: ' . (string)$errorMessage)

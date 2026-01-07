@@ -1,0 +1,7 @@
+ID,PALM code,Title,Author,Language 1,Language 2,Genre,Keywords,Island,Illustrator
+P001,TAW001,"My Adventure Story","Smith, John|Jones, Mary|Brown, Alice","English","Spanish|French","Fiction|Adventure","education|culture|reading","Chuuk|Pohnpei","Davis, Sarah"
+P002,TAW002,"Learning Through Stories","Wilson, Jane","English|Yapese","German","Educational|Reference","learning|traditions|language","Kosrae","Green, Tom|Wilson, Emma"
+P003,TAW003,"Tales of the Islands","Davis, Samuel|Garcia, Maria|Lee, Thomas","Pohnpeian|English","French","Fiction|Fantasy|Adventure","culture|folklore|traditions","Chuuk|Kosrae|Yap","Anderson, Robert|Taylor, Susan"
+P004,TAW004,"Community Book","Martinez, Jose|Chen, Wei","English","Portuguese|Japanese","Community|Educational","community|participation|history","Pohnpei","White, Diana"
+P005,TAW005,"Young Readers Collection","Thompson, Robert|Jackson, Patricia|Miller, Christopher|Harris, Linda","English|Spanish|Chuukese","Italian","Children's|Picture Book|Educational","reading|fun|learning|education","All","Garcia, Ana|Williams, Michael|Brown, Jennifer"
+
