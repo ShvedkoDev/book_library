@@ -1,0 +1,68 @@
+﻿ID,ID
+Purpose,Purpose
+Area,Themes/Uses
+Genre,Genre
+Sub-genre,Sub-genre
+Subject,Subject
+Keywords,Keywords
+Collection,Collection
+Type,Physical type
+Title,Title
+Sub-title,Sub-title
+Translated-title,Translated-title
+PALM code,PALM code
+Related (same),Related (same)
+Related (omnibus),Related (omnibus)
+Related (support),Related (support)
+REMOVE,Related (translated)
+Year,Year
+Author,Author|Author2|Author3
+Other creator1,Other creator
+Other creator1 ROLE,Other creator ROLE
+Other creator2,Other creator2
+Other creator2 ROLE,Other creator2 ROLE
+Other creator3,NEW
+Other creator3 ROLE,NEW
+Illustrator,Illustrator|Illustrator2|Illustrator3|Illustrator4|Illustrator5
+Publisher,Publisher
+Contributor / Project / Partner,Contributor / Project / Partner
+Pages,Pages
+Language 1,Language 1
+ISO (Language 1),ISO (Language 1)
+Language 2,Language 2
+ISO (Language 2),ISO (Language 2)
+Island,Island
+State,State
+Learner level,Learner level
+VLA standard,VLA standard
+VLA benchmark,VLA benchmark
+TOC,TOC
+Notes related to the issue.,Notes related to the issue.
+Notes related to version.,Notes related to version.
+Notes related to content.,Notes related to content.
+DESCRIPTION,DESCRIPTION
+ABSTRACT,ABSTRACT
+LEVEL,UPLOADED
+DOCUMENT FILENAME,DOCUMENT FILENAME
+THUMBNAIL FILENAME,THUMBNAIL FILENAME
+DIGITAL SOURCE (WHERE IS THE PDF FROM),DIGITAL SOURCE (WHERE IS THE PDF FROM)
+REMOVE,Name match check
+ALTERNATIVE DOCUMENT FILENAME,ALTERNATIVE DOCUMENT FILENAME
+ALTERNATIVE THUMBNAIL FILENAME,ALTERNATIVE THUMBNAIL FILENAME
+ALTERNATIVE DIGITAL SOURCE (WHERE IS THE PDF FROM),ALTERNATIVE DIGITAL SOURCE (WHERE IS THE PDF FROM)
+Uploaded audio,Coupled audio
+Uploaded video,Coupled video
+External video link,NEW
+External web page link,NEW
+CONTACT,CONTACT
+Library UH link,Library link UH
+Library UH comment,Library link UH alt.
+Library COM link,Library link COM-FSM
+Library COM comment,Library link COM-FSM alt.
+Library UOG link,NEW
+Library UOG comment,NEW
+Library MICSEM link,Library link MICSEM
+Library MICSEM comment,Library link MICSEM alt.
+OLLC number,OLLC number
+ISBN number,ISBN number
+COM call number,NEW

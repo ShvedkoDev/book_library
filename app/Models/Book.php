@@ -251,6 +251,24 @@ class Book extends Model
             ->withTimestamps();
     }
 
+    public function areaClassifications()
+    {
+        return $this->belongsToMany(ClassificationValue::class, 'book_classifications')
+            ->whereHas('classificationType', function ($q) {
+                $q->where('slug', 'area');
+            })
+            ->withTimestamps();
+    }
+
+    public function subjectClassifications()
+    {
+        return $this->belongsToMany(ClassificationValue::class, 'book_classifications')
+            ->whereHas('classificationType', function ($q) {
+                $q->where('slug', 'subject');
+            })
+            ->withTimestamps();
+    }
+
     public function themesClassifications()
     {
         return $this->belongsToMany(ClassificationValue::class, 'book_classifications')

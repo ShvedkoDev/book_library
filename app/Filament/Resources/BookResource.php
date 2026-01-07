@@ -375,6 +375,34 @@ class BookResource extends Resource
                             ->preload()
                             ->helperText('CSV: Type'),
 
+                        Forms\Components\Select::make('areaClassifications')
+                            ->label('Area')
+                            ->relationship(
+                                'areaClassifications',
+                                'value',
+                                fn ($query) => $query->whereHas('classificationType', function ($q) {
+                                    $q->where('slug', 'area');
+                                })
+                            )
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->helperText('CSV: Area'),
+
+                        Forms\Components\Select::make('subjectClassifications')
+                            ->label('Subject')
+                            ->relationship(
+                                'subjectClassifications',
+                                'value',
+                                fn ($query) => $query->whereHas('classificationType', function ($q) {
+                                    $q->where('slug', 'subject');
+                                })
+                            )
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->helperText('CSV: Subject'),
+
                         Forms\Components\Select::make('themesClassifications')
                             ->label('Themes/uses')
                             ->relationship(
