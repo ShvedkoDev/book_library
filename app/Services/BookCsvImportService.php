@@ -459,6 +459,9 @@ class BookCsvImportService
      */
     protected function createBook(array $bookData, array $fullData, array $options): Book
     {
+        // Sanitize book data to ensure all values are scalar
+        $bookData = $this->sanitizeBookData($bookData);
+
         // Create book
         $book = Book::create($bookData);
 
@@ -479,6 +482,9 @@ class BookCsvImportService
      */
     protected function updateBook(Book $book, array $bookData, array $fullData, array $options): Book
     {
+        // Sanitize book data to ensure all values are scalar
+        $bookData = $this->sanitizeBookData($bookData);
+
         // Update book data
         $book->update($bookData);
 
@@ -620,6 +626,53 @@ class BookCsvImportService
         $bookData['is_featured'] = false;
 
         return $bookData;
+    }
+
+    /**
+     * Sanitize book data to ensure all values are scalar
+     * This prevents "Array to string conversion" errors when saving to database
+     *
+     * @param array $bookData
+     * @return array
+     */
+    protected function sanitizeBookData(array $bookData): array
+    {
+        $sanitized = [];
+
+        foreach ($bookData as $key => $value) {
+            // Skip null values
+            if ($value === null) {
+                $sanitized[$key] = $value;
+                continue;
+            }
+
+            // If value is an array, convert to JSON string
+            if (is_array($value)) {
+                $sanitized[$key] = json_encode($value);
+                continue;
+            }
+
+            // For boolean values, convert to integer (0 or 1)
+            if (is_bool($value)) {
+                $sanitized[$key] = (int)$value;
+                continue;
+            }
+
+            // For integer fields, ensure proper type casting
+            if (in_array($key, ['publication_year', 'pages', 'physical_type_id'])) {
+                if (is_numeric($value)) {
+                    $sanitized[$key] = (int)$value;
+                } else {
+                    $sanitized[$key] = null;
+                }
+                continue;
+            }
+
+            // For all other fields, convert to string
+            $sanitized[$key] = (string)$value;
+        }
+
+        return $sanitized;
     }
 
     /**
