@@ -346,6 +346,8 @@ class LibraryController extends Controller
             'genreClassifications.classificationType',
             'subgenreClassifications.classificationType',
             'typeClassifications.classificationType',
+            'areaClassifications.classificationType',
+            'subjectClassifications.classificationType',
             'themesClassifications.classificationType',
             'learnerLevelClassifications.classificationType',
             'libraryReferences',

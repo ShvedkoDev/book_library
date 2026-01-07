@@ -2328,21 +2328,21 @@
             <div class="book-info-cards">
                 <div class="info-card">
                     <span class="info-card-label">Publication date</span>
-                    <span class="info-card-value">{{ $book->publication_year ?? 'N/A' }}</span>
+                    <span class="info-card-value">{{ $book->publication_year ?? '' }}</span>
                 </div>
                 <div class="info-card">
                     <span class="info-card-label">Type</span>
-                    <span class="info-card-value">{{ $book->physicalType?->name ?? 'N/A' }}</span>
+                    <span class="info-card-value">{{ $book->typeClassifications->pluck('value')->join(', ') }}</span>
                 </div>
                 <div class="info-card">
                     <span class="info-card-label">Language</span>
                     <span class="info-card-value">
-                            {{ $book->languages->isNotEmpty() ? $book->languages->pluck('name')->join(', ') : 'N/A' }}
+                            {{ $book->languages->isNotEmpty() ? $book->languages->pluck('name')->join(', ') : '' }}
                         </span>
                 </div>
                 <div class="info-card">
                     <span class="info-card-label">Pages</span>
-                    <span class="info-card-value">{{ $book->pages ?? 'N/A' }}</span>
+                    <span class="info-card-value">{{ $book->pages ?? '' }}</span>
                 </div>
             </div>
 
@@ -2357,17 +2357,6 @@
                                 @foreach($book->learnerLevelClassifications as $classification)
                                     <p class="details-value">{{ $classification->value }}</p>
                                 @endforeach
-                            </div>
-                        @endif
-
-                        @if($book->keywords && $book->keywords->isNotEmpty())
-                            <div class="link-box">
-                                <h3 class="details-subsection-title">Keywords</h3>
-                                <p class="details-value">
-                                    @foreach($book->keywords as $keywordObj)
-                                        <a href="{{ route('library.index', ['search' => $keywordObj->keyword]) }}">{{ $keywordObj->keyword }}</a>
-                                    @endforeach
-                                </p>
                             </div>
                         @endif
                     </div>
@@ -2487,7 +2476,7 @@
                     @endif
 
                     <!-- Classifications -->
-                    @if($book->purposeClassifications->isNotEmpty() || $book->genreClassifications->isNotEmpty() || $book->subgenreClassifications->isNotEmpty() || $book->themesClassifications->isNotEmpty() || $book->typeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty())
+                    @if($book->purposeClassifications->isNotEmpty() || $book->genreClassifications->isNotEmpty() || $book->subgenreClassifications->isNotEmpty() || $book->areaClassifications->isNotEmpty() || $book->subjectClassifications->isNotEmpty() || $book->themesClassifications->isNotEmpty() || $book->typeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty())
                         <div class="details-subsection">
                             <h3 class="details-subsection-title">Classification</h3>
                             @if($book->purposeClassifications->isNotEmpty())
@@ -2520,9 +2509,29 @@
                                     </span>
                                 </div>
                             @endif
-                            @if($book->themesClassifications->isNotEmpty())
+                            @if($book->areaClassifications->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Area</span>
+                                    <span class="details-value">
+                                        @foreach($book->areaClassifications as $index => $classification)
+                                            <a href="{{ route('library.index', ['search' => $classification->value]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->areaClassifications->count() - 1 ? ', ' : '' }}
+                                        @endforeach
+                                    </span>
+                                </div>
+                            @endif
+                            @if($book->subjectClassifications->isNotEmpty())
                                 <div class="details-row">
                                     <span class="details-label">Subject</span>
+                                    <span class="details-value">
+                                        @foreach($book->subjectClassifications as $index => $classification)
+                                            <a href="{{ route('library.index', ['search' => $classification->value]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->subjectClassifications->count() - 1 ? ', ' : '' }}
+                                        @endforeach
+                                    </span>
+                                </div>
+                            @endif
+                            @if($book->themesClassifications->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Themes/Uses</span>
                                     <span class="details-value">
                                         @foreach($book->themesClassifications as $index => $classification)
                                             <a href="{{ route('library.index', ['search' => $classification->value]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->themesClassifications->count() - 1 ? ', ' : '' }}
@@ -2530,16 +2539,20 @@
                                     </span>
                                 </div>
                             @endif
-                            @if($book->typeClassifications->isNotEmpty())
-                                <div class="details-row">
-                                    <span class="details-label">Type</span>
-                                    <span class="details-value">{{ $book->typeClassifications->pluck('value')->join(', ') }}</span>
-                                </div>
-                            @endif
                             @if($book->learnerLevelClassifications->isNotEmpty())
                                 <div class="details-row">
                                     <span class="details-label">Grade level</span>
                                     <span class="details-value">{{ $book->learnerLevelClassifications->pluck('value')->join(', ') }}</span>
+                                </div>
+                            @endif
+                            @if($book->keywords && $book->keywords->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Keywords</span>
+                                    <span class="details-value">
+                                        @foreach($book->keywords as $index => $keywordObj)
+                                            <a href="{{ route('library.index', ['search' => $keywordObj->keyword]) }}" class="author-pill">{{ $keywordObj->keyword }}</a>{{ $index < $book->keywords->count() - 1 ? ', ' : '' }}
+                                        @endforeach
+                                    </span>
                                 </div>
                             @endif
                         </div>
@@ -2683,7 +2696,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="book-metadata">
-                                                            {{ $relatedBook->publication_year ?? 'N/A' }}
+                                                            {{ $relatedBook->publication_year ?? '' }}
                                                         </div>
                                                         <div class="book-description">
                                                             {{ implode(', ', array_filter($descriptionParts)) }}
