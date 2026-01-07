@@ -401,16 +401,26 @@ class BooksMediaManager extends Page implements HasForms, HasTable
         $items = $this->getAllFileRecords();
 
         // Apply search filter if present
-        if (method_exists($this->table, 'getSearchQuery')) {
-            $searchQuery = $this->table->getSearchQuery();
-            if (!empty($searchQuery)) {
-                $items = $items->filter(function ($record) use ($searchQuery) {
-                    $query = strtolower($searchQuery);
-                    return str_contains(strtolower($record->filename), $query) ||
-                           str_contains(strtolower($record->type), $query) ||
-                           str_contains(strtolower($this->formatBytes($record->size)), $query);
-                })->values();
-            }
+        $searchQuery = trim($this->tableSearch ?? '');
+        \Log::info('Search Query:', ['query' => $searchQuery, 'tableSearch' => $this->tableSearch]);
+
+        if (!empty($searchQuery)) {
+            $searchLower = strtolower($searchQuery);
+            $items = $items->filter(function ($record) use ($searchLower) {
+                // Search in filename
+                if (str_contains(strtolower($record->filename), $searchLower)) {
+                    return true;
+                }
+                // Search in file type
+                if (str_contains(strtolower($record->type), $searchLower)) {
+                    return true;
+                }
+                // Search in file size (human-readable format)
+                if (str_contains(strtolower($this->formatBytes($record->size)), $searchLower)) {
+                    return true;
+                }
+                return false;
+            })->values();
         }
 
         $totalCount = $items->count();
