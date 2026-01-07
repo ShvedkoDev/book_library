@@ -39,6 +39,8 @@ class BooksMediaManager extends Page implements HasForms, HasTable
 
     public ?array $data = [];
 
+    public ?string $tableSearch = '';
+
     protected $cachedFiles = null;
 
     public function mount(): void
@@ -402,7 +404,6 @@ class BooksMediaManager extends Page implements HasForms, HasTable
 
         // Apply search filter if present
         $searchQuery = trim($this->tableSearch ?? '');
-        \Log::info('Search Query:', ['query' => $searchQuery, 'tableSearch' => $this->tableSearch]);
 
         if (!empty($searchQuery)) {
             $searchLower = strtolower($searchQuery);
