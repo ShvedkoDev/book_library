@@ -261,8 +261,8 @@ class CsvImport extends Page implements HasForms
                             ->button(),
                     ])
                     ->send();
-                
-                // Auto-open the relationships modal
+
+                // Auto-open the relationships modal using Livewire dispatch
                 $this->dispatch('open-modal', id: 'process-relationships-modal');
             }
 
