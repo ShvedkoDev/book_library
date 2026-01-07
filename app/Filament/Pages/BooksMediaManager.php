@@ -39,7 +39,6 @@ class BooksMediaManager extends Page implements HasForms, HasTable
 
     public ?array $data = [];
 
-    public ?string $tableSearch = '';
 
     protected $cachedFiles = null;
 
