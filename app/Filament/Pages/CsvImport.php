@@ -270,9 +270,15 @@ class CsvImport extends Page implements HasForms
             $this->form->fill();
 
         } catch (\Exception $e) {
+            // Safely convert exception message to string
+            $errorMessage = $e->getMessage();
+            if (is_array($errorMessage)) {
+                $errorMessage = json_encode($errorMessage);
+            }
+            
             Notification::make()
                 ->title('Import Failed')
-                ->body('Failed to import CSV file: ' . $e->getMessage())
+                ->body('Failed to import CSV file: ' . (string)$errorMessage)
                 ->danger()
                 ->persistent()
                 ->send();

@@ -394,7 +394,8 @@ class BookCsvImportService
             } catch (Exception $e) {
                 DB::rollBack();
                 $this->importSession->incrementFailed();
-                $errorMessage = $e->getMessage() . " | Book: \"{$bookTitle}\" (ID: {$bookId})";
+                $exceptionMessage = (string)$e->getMessage();
+                $errorMessage = $exceptionMessage . " | Book: \"{$bookTitle}\" (ID: {$bookId})";
                 $this->importSession->addError($rowNumber, 'exception', $errorMessage);
                 Log::error('Row Import Error', [
                     'row' => $rowNumber,
