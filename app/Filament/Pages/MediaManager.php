@@ -642,6 +642,28 @@ class MediaManager extends Page implements HasForms, HasTable
             ->sortByDesc('modified')
             ->values();
 
+        // Apply search filter if present
+        $searchQuery = trim($this->tableSearch ?? '');
+
+        if (!empty($searchQuery)) {
+            $searchLower = strtolower($searchQuery);
+            $items = $items->filter(function ($record) use ($searchLower) {
+                // Search in filename
+                if (str_contains(strtolower($record->filename), $searchLower)) {
+                    return true;
+                }
+                // Search in file type
+                if (str_contains(strtolower($record->type), $searchLower)) {
+                    return true;
+                }
+                // Search in file size (human-readable format)
+                if (str_contains(strtolower($this->formatBytes($record->size)), $searchLower)) {
+                    return true;
+                }
+                return false;
+            })->values();
+        }
+
         $totalCount = $items->count();
         $paginatedItems = $items->forPage($page, $perPage);
 
