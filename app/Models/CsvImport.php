@@ -121,11 +121,26 @@ class CsvImport extends Model
 
     public function markAsFailed(string $error = null)
     {
+        $errorLog = $this->error_log;
+        
+        // If error_log is an array, keep it as is; if it's a string or null, initialize as array
+        if (!is_array($errorLog)) {
+            $errorLog = [];
+        }
+        
+        // Add the new error message to the error log
+        if ($error) {
+            $errorLog[] = [
+                'message' => $error,
+                'timestamp' => now()->toISOString(),
+            ];
+        }
+        
         $this->update([
             'status' => 'failed',
             'completed_at' => now(),
             'duration_seconds' => $this->started_at ? now()->diffInSeconds($this->started_at) : null,
-            'error_log' => $error ? $this->error_log . "\n" . $error : $this->error_log,
+            'error_log' => $errorLog,
         ]);
     }
 
