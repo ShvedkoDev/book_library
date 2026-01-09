@@ -138,7 +138,22 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
 
             // Handle array or string from file upload
             $csvFile = is_array($data['csv_file']) ? $data['csv_file'][0] : $data['csv_file'];
+
+            // Ensure csvFile is a string
+            if (is_array($csvFile)) {
+                throw new \Exception('Invalid file upload: Multiple files detected. Please upload only one CSV file.');
+            }
+
+            if (empty($csvFile) || !is_string($csvFile)) {
+                throw new \Exception('Invalid file upload: No valid file path received.');
+            }
+
             $filePath = Storage::disk('local')->path($csvFile);
+
+            // Verify file exists
+            if (!file_exists($filePath)) {
+                throw new \Exception('File not found: The uploaded CSV file could not be located.');
+            }
 
             $validation = $importService->validateCsv($filePath);
 
@@ -212,7 +227,22 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
 
             // Handle array or string from file upload
             $csvFile = is_array($data['csv_file']) ? $data['csv_file'][0] : $data['csv_file'];
+
+            // Ensure csvFile is a string
+            if (is_array($csvFile)) {
+                throw new \Exception('Invalid file upload: Multiple files detected. Please upload only one CSV file.');
+            }
+
+            if (empty($csvFile) || !is_string($csvFile)) {
+                throw new \Exception('Invalid file upload: No valid file path received.');
+            }
+
             $filePath = Storage::disk('local')->path($csvFile);
+
+            // Verify file exists
+            if (!file_exists($filePath)) {
+                throw new \Exception('File not found: The uploaded CSV file could not be located.');
+            }
 
             $options = [
                 'mode' => $data['mode'] ?? 'upsert',
@@ -277,12 +307,27 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
             $this->form->fill();
 
         } catch (\Exception $e) {
+            // Log the full error for debugging
+            \Log::error('CSV Import Error', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+                'data' => $data,
+            ]);
+
             // Safely convert exception message to string
             $errorMessage = $this->safeStringConvert($e->getMessage());
 
+            // Add line number for debugging
+            $errorDetails = $errorMessage;
+            if (app()->environment('local')) {
+                $errorDetails .= ' (Error in: ' . basename($e->getFile()) . ':' . $e->getLine() . ')';
+            }
+
             Notification::make()
                 ->title('Import Failed')
-                ->body('Failed to import CSV file: ' . $errorMessage)
+                ->body('Failed to import CSV file: ' . $errorDetails)
                 ->danger()
                 ->persistent()
                 ->send();
