@@ -274,14 +274,22 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
 
                 Notification::make()
                     ->title('Import Completed with Errors')
-                    ->body("Successfully imported {$result->successful_rows} books. {$result->failed_rows} failed.{$errorList}{$moreErrors}")
+                    ->body("Successfully imported {$result->successful_rows} books. {$result->failed_rows} failed.{$errorList}{$moreErrors}\n\nClick 'Process Relationships' to link the successfully imported books.")
                     ->warning()
                     ->persistent()
                     ->actions([
+                        \Filament\Notifications\Actions\Action::make('process_relationships')
+                            ->label('Process Relationships')
+                            ->button()
+                            ->color('warning')
+                            ->action(function () {
+                                $this->dispatch('open-modal', id: 'process-relationships-modal');
+                            }),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View full details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
-                            ->button(),
+                            ->button()
+                            ->color('gray'),
                     ])
                     ->send();
             } else {
