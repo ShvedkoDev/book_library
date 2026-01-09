@@ -274,7 +274,7 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
 
                 Notification::make()
                     ->title('Import Completed with Errors')
-                    ->body("Successfully imported {$result->successful_rows} books. {$result->failed_rows} failed.{$errorList}{$moreErrors}\n\nClick 'Process Relationships' to link the successfully imported books.")
+                    ->body("Successfully imported {$result->successful_rows} books. {$result->failed_rows} failed.{$errorList}{$moreErrors}\n\nClick 'Process Relationships' to link the successfully imported books. This may take a few minutes.")
                     ->warning()
                     ->persistent()
                     ->actions([
@@ -282,10 +282,6 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                             ->label('Process Relationships')
                             ->button()
                             ->color('warning')
-                            ->requiresConfirmation()
-                            ->modalHeading('Process Book Relationships')
-                            ->modalDescription('This will match and link related books based on their relationship codes, and generate translation relationships for books with identical translated titles. This may take a few minutes.')
-                            ->modalSubmitActionLabel('Yes, process now')
                             ->action(fn () => $this->processRelationships()),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View full details')
@@ -298,7 +294,7 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                 // Success - show notification with relationship processing button
                 Notification::make()
                     ->title('Import Completed Successfully')
-                    ->body("Imported {$result->successful_rows} books successfully. Click 'Process Relationships' to link related books and generate translation relationships.")
+                    ->body("Imported {$result->successful_rows} books successfully. Click 'Process Relationships' to link related books and generate translation relationships. This may take a few minutes.")
                     ->success()
                     ->duration(30000)
                     ->actions([
@@ -306,10 +302,6 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                             ->label('Process Relationships')
                             ->button()
                             ->color('warning')
-                            ->requiresConfirmation()
-                            ->modalHeading('Process Book Relationships')
-                            ->modalDescription('This will match and link related books based on their relationship codes, and generate translation relationships for books with identical translated titles. This may take a few minutes.')
-                            ->modalSubmitActionLabel('Yes, process now')
                             ->action(fn () => $this->processRelationships()),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View details')
