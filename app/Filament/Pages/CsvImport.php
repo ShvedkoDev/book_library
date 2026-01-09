@@ -10,6 +10,7 @@ use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\On;
 
 class CsvImport extends Page implements HasForms
 {
@@ -282,7 +283,7 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                             ->label('Process Relationships')
                             ->button()
                             ->color('warning')
-                            ->action(fn () => $this->processRelationships()),
+                            ->dispatch('processRelationships'),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View full details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
@@ -302,7 +303,7 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                             ->label('Process Relationships')
                             ->button()
                             ->color('warning')
-                            ->action(fn () => $this->processRelationships()),
+                            ->dispatch('processRelationships'),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
@@ -364,6 +365,7 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
         ];
     }
 
+    #[On('processRelationships')]
     public function processRelationships(): void
     {
         try {
