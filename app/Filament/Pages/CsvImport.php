@@ -28,6 +28,8 @@ class CsvImport extends Page implements HasForms
 
     public ?array $data = [];
 
+    public bool $processingRelationships = false;
+
     public function mount(): void
     {
         $this->form->fill();
@@ -283,6 +285,8 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                             ->label('Process Relationships')
                             ->button()
                             ->color('warning')
+                            ->icon('heroicon-o-arrow-path')
+                            ->close()
                             ->dispatch('processRelationships'),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View full details')
@@ -303,6 +307,8 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                             ->label('Process Relationships')
                             ->button()
                             ->color('warning')
+                            ->icon('heroicon-o-arrow-path')
+                            ->close()
                             ->dispatch('processRelationships'),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View details')
@@ -368,7 +374,19 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
     #[On('processRelationships')]
     public function processRelationships(): void
     {
+        // Set processing flag
+        $this->processingRelationships = true;
+
         try {
+            // Show immediate feedback
+            Notification::make()
+                ->title('Processing Started')
+                ->body('Book relationships and translations are being processed. Please wait...')
+                ->info()
+                ->icon('heroicon-o-arrow-path')
+                ->iconColor('info')
+                ->send();
+
             // ===================================================================
             // PREVENT TIMEOUTS FOR RELATIONSHIP PROCESSING (PHP-level solutions)
             // ===================================================================
@@ -387,19 +405,14 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
             // 3. Keep script running even if user closes browser
             @ignore_user_abort(true);
 
-            Notification::make()
-                ->title('Processing Relationships')
-                ->body('Book relationships and translations are being processed. This may take a few minutes...')
-                ->info()
-                ->send();
-
             $importService = app(BookCsvImportService::class);
             $importService->processBookRelationships();
 
             Notification::make()
-                ->title('Relationships Processed')
-                ->body('All book relationships and translation links have been processed successfully!')
+                ->title('Relationships Processed Successfully!')
+                ->body('All book relationships and translation links have been created.')
                 ->success()
+                ->duration(10000)
                 ->send();
 
         } catch (\Exception $e) {
@@ -409,6 +422,9 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                 ->danger()
                 ->persistent()
                 ->send();
+        } finally {
+            // Reset processing flag
+            $this->processingRelationships = false;
         }
     }
 
