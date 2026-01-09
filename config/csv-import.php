@@ -16,9 +16,15 @@ return [
     |--------------------------------------------------------------------------
     | Batch Processing
     |--------------------------------------------------------------------------
+    |
+    | batch_size: Number of rows to process in each batch
+    | Lower values = slower but safer for memory/timeout
+    | Higher values = faster but may hit memory/timeout limits
+    | Recommended: 50-100 for large imports
+    |
     */
-    'batch_size' => env('CSV_IMPORT_BATCH_SIZE', 100),
-    'chunk_size' => env('CSV_IMPORT_CHUNK_SIZE', 100),
+    'batch_size' => env('CSV_IMPORT_BATCH_SIZE', 50),  // Reduced from 100 for safer large imports
+    'chunk_size' => env('CSV_IMPORT_CHUNK_SIZE', 50),  // Reduced from 100
 
     /*
     |--------------------------------------------------------------------------
@@ -244,14 +250,29 @@ return [
         'COM hard copy ref NOTE' => 'com_notes',
 
         // NEW: Library Links (6 libraries × 2 links each = 12 fields)
-        'Library UH link' => 'library_link_uh',                     // Renamed from "Library link UH"
-        'Library UH comment' => 'library_link_uh_alt',              // Renamed from "Library link UH alt."
-        'Library COM link' => 'library_link_com_fsm',               // Renamed from "Library link COM-FSM"
-        'Library COM comment' => 'library_link_com_fsm_alt',        // Renamed from "Library link COM-FSM alt."
-        'Library UOG link' => 'library_link_uog',                   // NEW
-        'Library UOG comment' => 'library_link_uog_alt',            // NEW
-        'Library MICSEM link' => 'library_link_micsem',             // Renamed from "Library link MICSEM"
-        'Library MICSEM comment' => 'library_link_micsem_alt',      // Renamed from "Library link MICSEM alt."
+        // Support both old and new CSV formats
+        'Library link UH' => 'library_link_uh',                     // Old CSV format
+        'Library link UH alt.' => 'library_link_uh_alt',            // Old CSV format
+        'Library UH link' => 'library_link_uh',                     // New CSV format (production)
+        'Library UH comment' => 'library_link_uh_alt',              // New CSV format (production)
+
+        'Library link COM-FSM' => 'library_link_com_fsm',           // Old CSV format
+        'Library link COM-FSM alt.' => 'library_link_com_fsm_alt',  // Old CSV format
+        'Library COM link' => 'library_link_com_fsm',               // New CSV format (production)
+        'Library COM comment' => 'library_link_com_fsm_alt',        // New CSV format (production)
+
+        'Library link UOG' => 'library_link_uog',                   // Old CSV format
+        'Library link UOG alt.' => 'library_link_uog_alt',          // Old CSV format
+        'Library UOG link' => 'library_link_uog',                   // New CSV format (production)
+        'Library UOG comment' => 'library_link_uog_alt',            // New CSV format (production)
+
+        'Library link MICSEM' => 'library_link_micsem',             // Old CSV format
+        'Library link MICSEM alt.' => 'library_link_micsem_alt',    // Old CSV format
+        'Library MICSEM link' => 'library_link_micsem',             // New CSV format (production)
+        'Library MICSEM comment' => 'library_link_micsem_alt',      // New CSV format (production)
+
+        'Library link MARC' => 'library_link_marc',                 // Old CSV format
+        'Library link MARC alt.' => 'library_link_marc_alt',        // Old CSV format
 
         // ==========================================
         // EXTERNAL LINKS

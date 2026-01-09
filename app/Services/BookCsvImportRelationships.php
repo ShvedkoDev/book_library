@@ -516,8 +516,8 @@ trait BookCsvImportRelationships
                 'reference' => 'uh_reference_number',
                 'call_number' => 'uh_call_number',
                 'catalog_link' => 'uh_catalog_link',
-                'main_link' => 'library_uh_link',         // Renamed from 'library_link_uh'
-                'alt_link' => 'library_uh_comment',       // Renamed from 'library_link_uh_alt'
+                'main_link' => 'library_link_uh',         // Match config field_mapping
+                'alt_link' => 'library_link_uh_alt',      // Match config field_mapping
                 'notes' => 'uh_notes',
             ],
             [
@@ -525,21 +525,27 @@ trait BookCsvImportRelationships
                 'name' => 'College of Micronesia - FSM',
                 'reference' => 'com_reference_number',
                 'call_number' => 'com_call_number',
-                'main_link' => 'library_com_link',        // Renamed from 'library_link_com_fsm'
-                'alt_link' => 'library_com_comment',      // Renamed from 'library_link_com_fsm_alt'
+                'main_link' => 'library_link_com_fsm',    // Match config field_mapping
+                'alt_link' => 'library_link_com_fsm_alt', // Match config field_mapping
                 'notes' => 'com_notes',
             ],
             [
                 'code' => 'UOG',
                 'name' => 'University of Guam',
-                'main_link' => 'library_uog_link',        // NEW
-                'alt_link' => 'library_uog_comment',      // NEW
+                'main_link' => 'library_link_uog',        // Match config field_mapping
+                'alt_link' => 'library_link_uog_alt',     // Match config field_mapping
             ],
             [
                 'code' => 'MICSEM',
                 'name' => 'Micronesian Seminar',
-                'main_link' => 'library_micsem_link',     // Renamed from 'library_link_micsem'
-                'alt_link' => 'library_micsem_comment',   // Renamed from 'library_link_micsem_alt'
+                'main_link' => 'library_link_micsem',     // Match config field_mapping
+                'alt_link' => 'library_link_micsem_alt',  // Match config field_mapping
+            ],
+            [
+                'code' => 'MARC',
+                'name' => 'MARC',
+                'main_link' => 'library_link_marc',       // Match config field_mapping
+                'alt_link' => 'library_link_marc_alt',    // Match config field_mapping
             ],
         ];
 

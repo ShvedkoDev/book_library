@@ -111,7 +111,7 @@ class LibraryController extends Controller
         // Get filter and search parameters
         $search = $request->input('search');
         $perPage = $request->input('per_page', 10);
-        $sortBy = $request->input('sort_by', 'title');
+        $sortBy = $request->input('sort_by', 'random');
         $sortDirection = $request->input('sort_direction', 'asc');
 
         $filters = [
@@ -253,11 +253,15 @@ class LibraryController extends Controller
         }
 
         // Apply sorting
-        $validSortColumns = ['title', 'publication_year', 'created_at', 'view_count'];
-        if (!in_array($sortBy, $validSortColumns)) {
-            $sortBy = 'title';
+        if ($sortBy === 'random') {
+            $query->inRandomOrder();
+        } else {
+            $validSortColumns = ['title', 'publication_year', 'created_at', 'view_count'];
+            if (!in_array($sortBy, $validSortColumns)) {
+                $sortBy = 'random';
+            }
+            $query->orderBy($sortBy, $sortDirection);
         }
-        $query->orderBy($sortBy, $sortDirection);
 
         // Paginate results
         $books = $query->paginate($perPage)->withQueryString();

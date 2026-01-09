@@ -157,6 +157,28 @@ class BookCsvImportService
      */
     public function importCsv(string $filePath, array $options = [], ?int $userId = null): CsvImport
     {
+        // ===================================================================
+        // PREVENT TIMEOUTS FOR LARGE IMPORTS (PHP-level solutions)
+        // ===================================================================
+
+        // 1. Remove execution time limit (no timeout)
+        @set_time_limit(0);
+        @ini_set('max_execution_time', '0');
+
+        // 2. Increase memory limit for large datasets
+        $currentMemoryLimit = ini_get('memory_limit');
+        if ($this->parseMemoryLimit($currentMemoryLimit) < 512 * 1024 * 1024) {
+            @ini_set('memory_limit', '512M');
+        }
+
+        // 3. Keep script running even if user closes browser
+        @ignore_user_abort(true);
+
+        // 4. Disable output buffering to allow periodic flushing
+        if (ob_get_level()) {
+            ob_end_flush();
+        }
+
         // Initialize performance tracking
         $this->startPerformanceTracking();
 
@@ -292,6 +314,7 @@ class BookCsvImportService
         $batchSize = $this->config['batch_size'];
         $totalRows = 0;
         $this->currentRow = $this->isHeaderRow($secondRow) ? 3 : 2;
+        $lastKeepAliveTime = time();
 
         while (($row = fgetcsv($handle)) !== false) {
             if ($this->isEmptyRow($row)) {
@@ -311,6 +334,13 @@ class BookCsvImportService
             if (count($batch) >= $batchSize) {
                 $this->processBatch($batch, $options);
                 $batch = [];
+
+                // Keep connection alive - prevent gateway timeouts
+                // Send a small amount of data every 10 seconds
+                if (time() - $lastKeepAliveTime >= 10) {
+                    $this->sendKeepAlive();
+                    $lastKeepAliveTime = time();
+                }
             }
         }
 
@@ -1218,5 +1248,56 @@ class BookCsvImportService
 
         // If all else fails, return null
         return null;
+    }
+
+    /**
+     * Parse memory limit string to bytes
+     *
+     * @param string $memoryLimit
+     * @return int
+     */
+    protected function parseMemoryLimit(string $memoryLimit): int
+    {
+        $memoryLimit = trim($memoryLimit);
+        $lastChar = strtolower($memoryLimit[strlen($memoryLimit) - 1]);
+        $value = (int) $memoryLimit;
+
+        switch ($lastChar) {
+            case 'g':
+                $value *= 1024 * 1024 * 1024;
+                break;
+            case 'm':
+                $value *= 1024 * 1024;
+                break;
+            case 'k':
+                $value *= 1024;
+                break;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Send keep-alive to prevent gateway timeouts
+     * Outputs a small comment that won't affect JSON responses
+     *
+     * @return void
+     */
+    protected function sendKeepAlive(): void
+    {
+        // Reset execution time limit to prevent timeouts
+        @set_time_limit(300); // Reset to 5 more minutes
+
+        // Only send keep-alive if not in CLI mode
+        if (php_sapi_name() !== 'cli') {
+            // Send a whitespace character to keep connection alive
+            echo ' ';
+
+            // Flush output buffers to send data immediately
+            if (ob_get_level() > 0) {
+                @ob_flush();
+            }
+            @flush();
+        }
     }
 }

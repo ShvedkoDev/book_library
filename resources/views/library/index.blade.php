@@ -290,6 +290,7 @@
                 <div class="sort-options">
                     <label for="sort-select">Sort by:&nbsp;</label>
                     <select id="sort-select" onchange="changeSorting(this.value)">
+                        <option value="random-asc" {{ $sortBy == 'random' ? 'selected' : '' }}>Random</option>
                         <option value="title-asc" {{ $sortBy == 'title' && $sortDirection == 'asc' ? 'selected' : '' }}>Title A-Z</option>
                         <option value="title-desc" {{ $sortBy == 'title' && $sortDirection == 'desc' ? 'selected' : '' }}>Title Z-A</option>
                         <option value="publication_year-desc" {{ $sortBy == 'publication_year' && $sortDirection == 'desc' ? 'selected' : '' }}>Newest</option>

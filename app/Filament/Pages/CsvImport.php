@@ -321,6 +321,24 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
     public function processRelationships(): void
     {
         try {
+            // ===================================================================
+            // PREVENT TIMEOUTS FOR RELATIONSHIP PROCESSING (PHP-level solutions)
+            // ===================================================================
+
+            // 1. Remove execution time limit (no timeout)
+            @set_time_limit(0);
+            @ini_set('max_execution_time', '0');
+
+            // 2. Increase memory limit if needed
+            $currentMemoryLimit = ini_get('memory_limit');
+            $memoryLimitBytes = $this->parseMemoryLimit($currentMemoryLimit);
+            if ($memoryLimitBytes < 512 * 1024 * 1024) {
+                @ini_set('memory_limit', '512M');
+            }
+
+            // 3. Keep script running even if user closes browser
+            @ignore_user_abort(true);
+
             Notification::make()
                 ->title('Processing Relationships')
                 ->body('Book relationships and translations are being processed. This may take a few minutes...')
@@ -344,5 +362,32 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                 ->persistent()
                 ->send();
         }
+    }
+
+    /**
+     * Parse memory limit string to bytes
+     *
+     * @param string $memoryLimit
+     * @return int
+     */
+    protected function parseMemoryLimit(string $memoryLimit): int
+    {
+        $memoryLimit = trim($memoryLimit);
+        $lastChar = strtolower($memoryLimit[strlen($memoryLimit) - 1]);
+        $value = (int) $memoryLimit;
+
+        switch ($lastChar) {
+            case 'g':
+                $value *= 1024 * 1024 * 1024;
+                break;
+            case 'm':
+                $value *= 1024 * 1024;
+                break;
+            case 'k':
+                $value *= 1024;
+                break;
+        }
+
+        return $value;
     }
 }
