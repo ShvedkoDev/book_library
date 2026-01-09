@@ -265,7 +265,7 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
 
                     $errors = collect($errorLines)
                         ->take(10) // Show first 10 errors
-                        ->map(fn($error) => "• {$error}")
+                        ->map(fn($error) => "• " . $this->safeStringConvert($error))
                         ->toArray();
                 }
 
