@@ -282,9 +282,11 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                             ->label('Process Relationships')
                             ->button()
                             ->color('warning')
-                            ->action(function () {
-                                $this->dispatch('open-modal', id: 'process-relationships-modal');
-                            }),
+                            ->requiresConfirmation()
+                            ->modalHeading('Process Book Relationships')
+                            ->modalDescription('This will match and link related books based on their relationship codes, and generate translation relationships for books with identical translated titles. This may take a few minutes.')
+                            ->modalSubmitActionLabel('Yes, process now')
+                            ->action(fn () => $this->processRelationships()),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View full details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
@@ -304,9 +306,11 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                             ->label('Process Relationships')
                             ->button()
                             ->color('warning')
-                            ->action(function () {
-                                $this->dispatch('open-modal', id: 'process-relationships-modal');
-                            }),
+                            ->requiresConfirmation()
+                            ->modalHeading('Process Book Relationships')
+                            ->modalDescription('This will match and link related books based on their relationship codes, and generate translation relationships for books with identical translated titles. This may take a few minutes.')
+                            ->modalSubmitActionLabel('Yes, process now')
+                            ->action(fn () => $this->processRelationships()),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
@@ -366,11 +370,6 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                 ->modalDescription('Are you sure you want to import this CSV file? This action cannot be undone.')
                 ->modalSubmitActionLabel('Yes, import'),
         ];
-    }
-
-    public function processRelationshipsModal(): void
-    {
-        $this->dispatch('open-modal', id: 'process-relationships-modal');
     }
 
     public function processRelationships(): void

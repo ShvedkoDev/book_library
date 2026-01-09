@@ -38,6 +38,7 @@
                 <li>Upload the CSV file using the form above</li>
                 <li>Click "Validate Only" to check for errors (recommended)</li>
                 <li>Click "Import CSV" to perform the actual import</li>
+                <li>Click "Process Relationships" in the success notification to link related books</li>
             </ol>
 
             <h4>Import Modes:</h4>
@@ -53,47 +54,4 @@
             </p>
         </div>
     </x-filament::section>
-
-    {{-- Process Relationships Modal --}}
-    <x-filament::modal id="process-relationships-modal" width="lg">
-        <x-slot name="heading">
-            Process Book Relationships
-        </x-slot>
-
-        <x-slot name="description">
-            The CSV import is complete, but book relationships have not been processed yet.
-            Click the button below to:
-            <ul class="list-disc ml-6 mt-2">
-                <li>Match and link related books based on their relationship codes (same version, supporting, omnibus)</li>
-                <li>Generate translation relationships for books with identical translated titles</li>
-            </ul>
-        </x-slot>
-
-        <div class="space-y-4">
-            <div class="bg-warning-50 dark:bg-warning-900/20 p-4 rounded-lg border border-warning-200 dark:border-warning-800">
-                <p class="text-sm text-warning-800 dark:text-warning-200">
-                    <strong>Note:</strong> This process may take a few minutes depending on the number of books imported. 
-                    The page will show a notification when complete.
-                </p>
-            </div>
-        </div>
-
-        <x-slot name="footerActions">
-            <x-filament::button
-                color="warning"
-                wire:click="processRelationships"
-                wire:loading.attr="disabled"
-            >
-                <span wire:loading.remove>Process Relationships Now</span>
-                <span wire:loading>Processing...</span>
-            </x-filament::button>
-
-            <x-filament::button
-                color="gray"
-                x-on:click="close"
-            >
-                Skip for Now
-            </x-filament::button>
-        </x-slot>
-    </x-filament::modal>
 </x-filament-panels::page>
