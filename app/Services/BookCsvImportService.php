@@ -370,9 +370,9 @@ class BookCsvImportService
             $rowNumber = $item['row_number'];
             $data = $item['data'];
 
-            // Extract book title for error reporting
-            $bookTitle = $data['title'] ?? 'Unknown';
-            $bookId = $data['internal_id'] ?? $data['palm_code'] ?? 'Unknown ID';
+            // Extract book title for error reporting - safely handle arrays
+            $bookTitle = $this->safeStringConvert($data['title'] ?? 'Unknown');
+            $bookId = $this->safeStringConvert($data['internal_id'] ?? $data['palm_code'] ?? 'Unknown ID');
 
             try {
                 DB::beginTransaction();
@@ -412,7 +412,7 @@ class BookCsvImportService
                     }
                 } else {
                     $this->importSession->incrementFailed();
-                    $errorMessage = ($result['error'] ?? 'Unknown error') . " | Book: \"{$bookTitle}\" (ID: {$bookId})";
+                    $errorMessage = $this->safeStringConvert($result['error'] ?? 'Unknown error') . " | Book: \"{$bookTitle}\" (ID: {$bookId})";
                     $this->importSession->addError($rowNumber, $result['column'] ?? 'general', $errorMessage);
                 }
 
@@ -1299,5 +1299,52 @@ class BookCsvImportService
             }
             @flush();
         }
+    }
+
+    /**
+     * Safely convert value to string, handling arrays and objects
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function safeStringConvert($value): string
+    {
+        // If already a string, return as-is
+        if (is_string($value)) {
+            return $value;
+        }
+
+        // If null, return empty string
+        if ($value === null) {
+            return '';
+        }
+
+        // If boolean, convert to string
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        // If numeric, convert to string
+        if (is_numeric($value)) {
+            return (string) $value;
+        }
+
+        // If array, convert to JSON
+        if (is_array($value)) {
+            return json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+
+        // If object with __toString, use it
+        if (is_object($value) && method_exists($value, '__toString')) {
+            return (string) $value;
+        }
+
+        // If object without __toString, convert to JSON
+        if (is_object($value)) {
+            return json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+
+        // Fallback: cast to string
+        return (string) $value;
     }
 }

@@ -278,14 +278,11 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
 
         } catch (\Exception $e) {
             // Safely convert exception message to string
-            $errorMessage = $e->getMessage();
-            if (is_array($errorMessage)) {
-                $errorMessage = json_encode($errorMessage);
-            }
+            $errorMessage = $this->safeStringConvert($e->getMessage());
 
             Notification::make()
                 ->title('Import Failed')
-                ->body('Failed to import CSV file: ' . (string)$errorMessage)
+                ->body('Failed to import CSV file: ' . $errorMessage)
                 ->danger()
                 ->persistent()
                 ->send();
@@ -389,5 +386,52 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
         }
 
         return $value;
+    }
+
+    /**
+     * Safely convert value to string, handling arrays and objects
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function safeStringConvert($value): string
+    {
+        // If already a string, return as-is
+        if (is_string($value)) {
+            return $value;
+        }
+
+        // If null, return empty string
+        if ($value === null) {
+            return '';
+        }
+
+        // If boolean, convert to string
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        // If numeric, convert to string
+        if (is_numeric($value)) {
+            return (string) $value;
+        }
+
+        // If array, convert to JSON
+        if (is_array($value)) {
+            return json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+
+        // If object with __toString, use it
+        if (is_object($value) && method_exists($value, '__toString')) {
+            return (string) $value;
+        }
+
+        // If object without __toString, convert to JSON
+        if (is_object($value)) {
+            return json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+
+        // Fallback: cast to string
+        return (string) $value;
     }
 }
