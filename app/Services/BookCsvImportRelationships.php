@@ -103,6 +103,9 @@ trait BookCsvImportRelationships
      */
     protected function resolveLanguage(string $nameOrCode, ?string $isoCode): ?Language
     {
+        // Generate the code we'll use
+        $codeToUse = $isoCode ?? strtolower(substr($nameOrCode, 0, 3));
+
         // Try by ISO code first
         if ($isoCode) {
             $language = Language::where('code', $isoCode)->first();
@@ -113,17 +116,28 @@ trait BookCsvImportRelationships
 
         // Try by name
         $language = Language::where('name', $nameOrCode)->first();
+        if ($language) {
+            return $language;
+        }
 
-        // Create if not found and auto-create is enabled
-        if (!$language) {
-            $language = Language::create([
+        // Try by generated code (in case it exists with different name)
+        $language = Language::where('code', $codeToUse)->first();
+        if ($language) {
+            return $language;
+        }
+
+        // Create if not found - use firstOrCreate for extra safety
+        $language = Language::firstOrCreate(
+            ['code' => $codeToUse], // Match by code
+            [
                 'name' => $nameOrCode,
-                'code' => $isoCode ?? strtolower(substr($nameOrCode, 0, 3)),
                 'native_name' => $nameOrCode,
                 'is_active' => true,
-            ]);
+            ]
+        );
 
-            \Illuminate\Support\Facades\Log::info("Created new language: {$nameOrCode} ({$isoCode})");
+        if ($language->wasRecentlyCreated) {
+            \Illuminate\Support\Facades\Log::info("Created new language: {$nameOrCode} ({$codeToUse})");
         }
 
         return $language;
