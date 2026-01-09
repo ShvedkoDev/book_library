@@ -285,22 +285,27 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                     ])
                     ->send();
             } else {
-                // Success - show notification and open modal
+                // Success - show notification with relationship processing button
                 Notification::make()
                     ->title('Import Completed Successfully')
                     ->body("Imported {$result->successful_rows} books successfully. Click 'Process Relationships' to link related books and generate translation relationships.")
                     ->success()
-                    ->duration(15000)
+                    ->duration(30000)
                     ->actions([
+                        \Filament\Notifications\Actions\Action::make('process_relationships')
+                            ->label('Process Relationships')
+                            ->button()
+                            ->color('warning')
+                            ->action(function () {
+                                $this->dispatch('open-modal', id: 'process-relationships-modal');
+                            }),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
-                            ->button(),
+                            ->button()
+                            ->color('gray'),
                     ])
                     ->send();
-
-                // Auto-open the relationships modal using Livewire dispatch
-                $this->dispatch('open-modal', id: 'process-relationships-modal');
             }
 
             // Reset form
