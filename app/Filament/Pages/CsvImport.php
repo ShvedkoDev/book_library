@@ -277,17 +277,10 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
 
                 Notification::make()
                     ->title('Import Completed with Errors')
-                    ->body("Successfully imported {$result->successful_rows} books. {$result->failed_rows} failed.{$errorList}{$moreErrors}\n\nClick 'Process Relationships' to link the successfully imported books. This may take a few minutes.")
+                    ->body("Successfully imported {$result->successful_rows} books. {$result->failed_rows} failed.{$errorList}{$moreErrors}\n\nUse the 'Process Relationships' button above to link the successfully imported books.")
                     ->warning()
                     ->persistent()
                     ->actions([
-                        \Filament\Notifications\Actions\Action::make('process_relationships')
-                            ->label('Process Relationships')
-                            ->button()
-                            ->color('warning')
-                            ->icon('heroicon-o-arrow-path')
-                            ->close()
-                            ->dispatch('processRelationships'),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View full details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
@@ -296,20 +289,13 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                     ])
                     ->send();
             } else {
-                // Success - show notification with relationship processing button
+                // Success - show notification
                 Notification::make()
                     ->title('Import Completed Successfully')
-                    ->body("Imported {$result->successful_rows} books successfully. Click 'Process Relationships' to link related books and generate translation relationships. This may take a few minutes.")
+                    ->body("Imported {$result->successful_rows} books successfully. Use the 'Process Relationships' button above to link related books and generate translation relationships.")
                     ->success()
                     ->duration(30000)
                     ->actions([
-                        \Filament\Notifications\Actions\Action::make('process_relationships')
-                            ->label('Process Relationships')
-                            ->button()
-                            ->color('warning')
-                            ->icon('heroicon-o-arrow-path')
-                            ->close()
-                            ->dispatch('processRelationships'),
                         \Filament\Notifications\Actions\Action::make('view')
                             ->label('View details')
                             ->url(route('filament.admin.resources.csv-imports.view', ['record' => $result->id]))
@@ -368,43 +354,50 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                 ->modalHeading('Confirm import')
                 ->modalDescription('Are you sure you want to import this CSV file? This action cannot be undone.')
                 ->modalSubmitActionLabel('Yes, import'),
+
+            Forms\Components\Actions\Action::make('processRelationships')
+                ->label('Process Relationships')
+                ->icon('heroicon-o-arrow-path')
+                ->color('warning')
+                ->action('processRelationships')
+                ->requiresConfirmation()
+                ->modalHeading('Process Book Relationships')
+                ->modalDescription('This will create relationships between books based on:\n• Same editions (Related same)\n• Omnibus collections (Related omnibus)\n• Supporting materials (Related support)\n• Translations (Translated title)\n\nThis process may take several minutes. Do not close the browser during processing.')
+                ->modalSubmitActionLabel('Yes, process relationships')
+                ->modalIcon('heroicon-o-arrow-path'),
         ];
     }
 
-    #[On('processRelationships')]
     public function processRelationships(): void
     {
-        // Set processing flag
-        $this->processingRelationships = true;
-
         try {
-            // Show immediate feedback
-            Notification::make()
-                ->title('Processing Started')
-                ->body('Book relationships and translations are being processed. Please wait...')
-                ->info()
-                ->icon('heroicon-o-arrow-path')
-                ->iconColor('info')
-                ->send();
-
             // ===================================================================
-            // PREVENT TIMEOUTS FOR RELATIONSHIP PROCESSING (PHP-level solutions)
+            // PREVENT TIMEOUTS (same as CSV import)
             // ===================================================================
 
             // 1. Remove execution time limit (no timeout)
             @set_time_limit(0);
             @ini_set('max_execution_time', '0');
 
-            // 2. Increase memory limit if needed
+            // 2. Increase memory limit for large datasets
             $currentMemoryLimit = ini_get('memory_limit');
-            $memoryLimitBytes = $this->parseMemoryLimit($currentMemoryLimit);
-            if ($memoryLimitBytes < 512 * 1024 * 1024) {
+            if ($this->parseMemoryLimit($currentMemoryLimit) < 512 * 1024 * 1024) {
                 @ini_set('memory_limit', '512M');
             }
 
             // 3. Keep script running even if user closes browser
             @ignore_user_abort(true);
 
+            // 4. Disable output buffering to allow periodic flushing
+            while (ob_get_level()) {
+                ob_end_flush();
+            }
+
+            // 5. Send whitespace periodically to keep connection alive
+            echo str_repeat(' ', 4096); // Send 4KB of whitespace
+            flush();
+
+            // Process relationships synchronously (same as CSV import)
             $importService = app(BookCsvImportService::class);
             $importService->processBookRelationships();
 
@@ -422,9 +415,6 @@ The pipe separator can appear in ANY column EXCEPT single-value fields like Titl
                 ->danger()
                 ->persistent()
                 ->send();
-        } finally {
-            // Reset processing flag
-            $this->processingRelationships = false;
         }
     }
 

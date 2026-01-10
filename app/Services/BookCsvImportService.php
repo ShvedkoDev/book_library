@@ -546,9 +546,16 @@ class BookCsvImportService
 
         // Publisher
         if (!empty($data['publisher'])) {
-            $publisher = $this->resolvePublisher($data['publisher'], $data['publisher_program'] ?? null, $options);
+            $publisher = $this->resolvePublisher($data['publisher'], null, $options);
             if ($publisher) {
                 $book->publisher_id = $publisher->id;
+
+                // Store program/partner name in the book record (not in publisher)
+                // This allows different books from the same publisher to have different partners
+                if (!empty($data['publisher_program'])) {
+                    $book->program_partner_name = $data['publisher_program'];
+                }
+
                 $book->save();
             }
         }
@@ -1094,27 +1101,6 @@ class BookCsvImportService
                 'exception' => $e->getMessage(),
             ]);
         }
-    }
-
-    /**
-     * Attach book relationships (e.g., translations, supporting materials)
-     *
-     * @param Book $book
-     * @param array $data
-     * @param bool $isUpdate
-     * @return void
-     */
-    protected function attachBookRelationships(Book $book, array $data, bool $isUpdate = false): void
-    {
-        // Store translated_title for post-processing
-        // We'll process translation relationships after all books are imported
-        // to ensure all related books exist in the database
-
-        // For now, we just store the data - relationships will be created
-        // by running: php artisan books:generate-translations
-
-        // Future enhancement: Could queue translation relationship generation
-        // after import completes
     }
 
     /**

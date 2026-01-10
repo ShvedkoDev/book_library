@@ -48,13 +48,13 @@ trait BookCsvImportRelationships
         if (!$publisher && ($options['create_missing_relations'] ?? false)) {
             $publisher = Publisher::create([
                 'name' => $name,
-                'program_name' => $programName,
+                'program_name' => $programName,  // Only set on creation, never update
                 'is_active' => true,
             ]);
-        } elseif ($publisher && $programName) {
-            // Update program name if provided
-            $publisher->update(['program_name' => $programName]);
         }
+        // REMOVED: The program_name update logic that was causing the bug
+        // Program/partner names are now stored per-book in books.program_partner_name
+        // to allow different books from the same publisher to have different partners
 
         return $publisher;
     }
@@ -680,11 +680,29 @@ trait BookCsvImportRelationships
      */
     public function processBookRelationships(): void
     {
+        // Prevent timeout during relationship processing
+        @set_time_limit(0);
+        @ini_set('max_execution_time', '0');
+        @ini_set('memory_limit', '512M');
+        @ignore_user_abort(true);
+
+        // Send initial output to establish connection
+        echo str_repeat(' ', 4096);
+        if (function_exists('flush')) {
+            @flush();
+        }
+
+        Log::info('Starting book relationships processing...');
+
         // Step 1: Process coded relationships (same_version, supporting, omnibus)
+        Log::info('Processing coded relationships...');
         $this->processCodedRelationships();
 
         // Step 2: Generate translation relationships based on translated_title
+        Log::info('Generating translation relationships...');
         $this->generateTranslationRelationships();
+
+        Log::info('Book relationships processing completed.');
     }
 
     /**
@@ -701,7 +719,24 @@ trait BookCsvImportRelationships
                 return $item->relationship_type . '::' . $item->relationship_code;
             });
 
+        $totalGroups = $pendingRelationships->count();
+        $processedGroups = 0;
+        Log::info("Found {$totalGroups} relationship groups to process");
+
         foreach ($pendingRelationships as $groupKey => $relationships) {
+            $processedGroups++;
+
+            // Send whitespace every 5 groups to keep connection alive
+            if ($processedGroups % 5 === 0) {
+                echo str_repeat(' ', 1024);
+                if (function_exists('flush')) {
+                    @flush();
+                }
+            }
+
+            if ($processedGroups % 10 === 0) {
+                Log::info("Processing group {$processedGroups}/{$totalGroups}: {$groupKey}");
+            }
             // Skip invalid relationship codes (like "*TRUE if Translated-title identical*")
             $sampleCode = $relationships->first()->relationship_code;
             if (empty($sampleCode) ||
@@ -774,6 +809,8 @@ trait BookCsvImportRelationships
             ->with('languages')
             ->get();
 
+        Log::info("Found {$booksWithTranslations->count()} books with translated titles");
+
         // Group books by translated title (case-insensitive, trimmed)
         $translationGroups = $booksWithTranslations->groupBy(function ($book) {
             return strtolower(trim($book->translated_title));
@@ -782,8 +819,25 @@ trait BookCsvImportRelationships
             return $group->count() >= 2;
         });
 
+        $totalGroups = $translationGroups->count();
+        $processedGroups = 0;
+        Log::info("Found {$totalGroups} translation groups to process");
+
         // Create bidirectional relationships between all books in each group
         foreach ($translationGroups as $translatedTitle => $books) {
+            $processedGroups++;
+
+            // Send whitespace every 5 groups to keep connection alive
+            if ($processedGroups % 5 === 0) {
+                echo str_repeat(' ', 1024);
+                if (function_exists('flush')) {
+                    @flush();
+                }
+            }
+
+            if ($processedGroups % 10 === 0) {
+                Log::info("Processing translation group {$processedGroups}/{$totalGroups}");
+            }
             foreach ($books as $book1) {
                 foreach ($books as $book2) {
                     if ($book1->id === $book2->id) {

@@ -137,8 +137,8 @@
                             @endforeach
                         @endif
 
-                        <!-- Genre Filter (only shown if Purpose is selected) -->
-                        @if(!empty($filters['subjects']) && $availableGenres->isNotEmpty())
+                        <!-- Genre Filter -->
+                        @if($availableGenres->isNotEmpty())
                             @foreach($availableGenres as $genreType)
                                 @if($genreType->classificationValues->isNotEmpty())
                                     @php
@@ -205,6 +205,44 @@
                                                         onchange="submitFilterForm()"
                                                     >
                                                     &nbsp;{{ $classification->value }}
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        @endif
+
+                        <!-- Area Filter -->
+                        @if($availableAreas->isNotEmpty())
+                            @foreach($availableAreas as $areaType)
+                                @if($areaType->classificationValues->isNotEmpty())
+                                    @php
+                                        $activeAreasCount = count(array_intersect(
+                                            $areaType->classificationValues->pluck('id')->toArray(),
+                                            $filters['areas'] ?? []
+                                        ));
+                                        $isExpanded = $activeAreasCount > 0;
+                                    @endphp
+                                    <div class="filter-group {{ $activeAreasCount > 0 ? 'has-active-filters' : '' }}">
+                                        <h4 class="filter-toggle" onclick="toggleFilterGroup(this)">
+                                            <i class="fal {{ $isExpanded ? 'fa-chevron-down' : 'fa-chevron-right' }} toggle-icon"></i>
+                                            Area
+                                            @if($activeAreasCount > 0)
+                                                <span class="active-filter-badge">{{ $activeAreasCount }} selected</span>
+                                            @endif
+                                        </h4>
+                                        <div class="checkbox-group {{ $isExpanded ? '' : 'collapsed' }}">
+                                            @foreach($areaType->classificationValues as $area)
+                                                <label>
+                                                    <input
+                                                        type="checkbox"
+                                                        name="areas[]"
+                                                        value="{{ $area->id }}"
+                                                        {{ in_array($area->id, $filters['areas'] ?? []) ? 'checked' : '' }}
+                                                        onchange="submitFilterForm()"
+                                                    >
+                                                    &nbsp;{{ $area->value }}
                                                 </label>
                                             @endforeach
                                         </div>

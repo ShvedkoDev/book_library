@@ -118,6 +118,7 @@ class LibraryController extends Controller
             'subjects' => $request->input('subjects', []),
             'genres' => $request->input('genres', []),
             'subgenres' => $request->input('subgenres', []),
+            'areas' => $request->input('areas', []),
             'grades' => $request->input('grades', []),
             'types' => $request->input('types', []),
             'languages' => $request->input('languages', []),
@@ -235,6 +236,13 @@ class LibraryController extends Controller
             );
         }
 
+        // Area filter
+        if (!empty($filters['areas'])) {
+            $query->whereHas('areaClassifications', fn($q) =>
+                $q->whereIn('classification_values.id', $filters['areas'])
+            );
+        }
+
         // Physical Type filter (books.physical_type_id)
         if (!empty($filters['types'])) {
             $query->whereIn('physical_type_id', $filters['types']);
@@ -288,14 +296,10 @@ class LibraryController extends Controller
             }])
             ->get();
 
-        // Get Genre values (children of selected Purpose values)
+        // Get Genre values (always show all genres)
         $availableGenres = ClassificationType::where('slug', 'genre')
-            ->with(['classificationValues' => function($q) use ($filters) {
+            ->with(['classificationValues' => function($q) {
                 $q->whereHas('books', fn($bookQuery) => $bookQuery->where('is_active', true));
-                // If subjects are selected, only show genres that are children of those subjects
-                if (!empty($filters['subjects'])) {
-                    $q->whereIn('parent_id', $filters['subjects']);
-                }
             }])
             ->get();
 
@@ -307,6 +311,13 @@ class LibraryController extends Controller
                 if (!empty($filters['genres'])) {
                     $q->whereIn('parent_id', $filters['genres']);
                 }
+            }])
+            ->get();
+
+        // Get Area values
+        $availableAreas = ClassificationType::where('slug', 'area')
+            ->with(['classificationValues' => function($q) {
+                $q->whereHas('books', fn($bookQuery) => $bookQuery->where('is_active', true));
             }])
             ->get();
 
@@ -326,6 +337,7 @@ class LibraryController extends Controller
             'availableSubjects',
             'availableGenres',
             'availableSubgenres',
+            'availableAreas',
             'availablePhysicalTypes'
         ));
     }

@@ -2346,23 +2346,6 @@
                 </div>
             </div>
 
-            <!-- Subjects Section -->
-            @if($book->purposeClassifications->isNotEmpty() || $book->learnerLevelClassifications->isNotEmpty() || $book->keywords->isNotEmpty() || $book->authors->isNotEmpty() || $book->illustrators->isNotEmpty())
-                <div class="">
-                    <div class="subjects-content">
-
-                        @if($book->learnerLevelClassifications->isNotEmpty())
-                            <div class="link-box">
-                                <h3 class="details-subsection-title">Grade levels</h3>
-                                @foreach($book->learnerLevelClassifications as $classification)
-                                    <p class="details-value">{{ $classification->value }}</p>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            @endif
-
             <!-- Abstract and Table of Contents -->
             @if($book->abstract || $book->table_of_contents)
                 <div class="section-wrapper">
@@ -2464,11 +2447,11 @@
                                     <a href="{{ route('library.index', ['search' => $book->publisher->name]) }}" class="author-pill">{{ $book->publisher->name }}</a>
                                 </span>
                             </div>
-                            @if($book->publisher->program_name)
+                            @if($book->program_partner_name)
                                 <div class="details-row">
                                     <span class="details-label">Project/partner</span>
                                     <span class="details-value">
-                                        <a href="{{ route('library.index', ['search' => $book->publisher->program_name]) }}" class="author-pill">{{ $book->publisher->program_name }}</a>
+                                        <a href="{{ route('library.index', ['search' => $book->program_partner_name]) }}" class="author-pill">{{ $book->program_partner_name }}</a>
                                     </span>
                                 </div>
                             @endif
@@ -2537,12 +2520,6 @@
                                             <a href="{{ route('library.index', ['search' => $classification->value]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->themesClassifications->count() - 1 ? ', ' : '' }}
                                         @endforeach
                                     </span>
-                                </div>
-                            @endif
-                            @if($book->learnerLevelClassifications->isNotEmpty())
-                                <div class="details-row">
-                                    <span class="details-label">Grade level</span>
-                                    <span class="details-value">{{ $book->learnerLevelClassifications->pluck('value')->join(', ') }}</span>
                                 </div>
                             @endif
                             @if($book->keywords && $book->keywords->isNotEmpty())

@@ -20,6 +20,7 @@ class Book extends Model
         'physical_type_id',  // Changed from physical_type enum to FK
         'collection_id',
         'publisher_id',
+        'program_partner_name',  // NEW: Project/Partner organization (per-book)
         'publication_year',
         'pages',
         'description',
