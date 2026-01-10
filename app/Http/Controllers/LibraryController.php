@@ -449,8 +449,16 @@ class LibraryController extends Controller
                 ->get()
             : collect();
 
-        $relatedByLanguage = $book->languages->isNotEmpty()
-            ? Book::whereHas('languages', fn($q) => $q->whereIn('languages.id', $book->languages->pluck('id')))
+        // Filter out English from languages for "More books in the same language" section
+        $nonEnglishLanguages = $book->languages->filter(function($language) {
+            // Exclude English by checking common language codes or name
+            return !in_array(strtolower($language->code), ['en', 'eng'])
+                && stripos($language->name, 'English') === false;
+        });
+
+        // Only show related books if there are non-English languages
+        $relatedByLanguage = $nonEnglishLanguages->isNotEmpty()
+            ? Book::whereHas('languages', fn($q) => $q->whereIn('languages.id', $nonEnglishLanguages->pluck('id')))
                 ->where('id', '!=', $book->id)
                 ->where('is_active', true)
                 ->with(['files' => fn($q) => $q->where('file_type', 'thumbnail')->where('is_primary', true)])
