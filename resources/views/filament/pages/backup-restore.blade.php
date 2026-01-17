@@ -1,0 +1,41 @@
+<x-filament-panels::page>
+    <div class="space-y-6">
+        <x-filament::section>
+            <x-slot name="heading">Create Backup</x-slot>
+            <div class="filament-forms-component-wrapper">
+                <x-filament::button wire:click="createBackup" icon="heroicon-o-archive-box" size="lg">
+                    Create Backup Archive
+                </x-filament::button>
+                <x-filament::button color="gray" size="lg" wire:click="$refresh" class="ml-2" icon="heroicon-o-arrow-path">
+                    Refresh
+                </x-filament::button>
+            </div>
+            <div class="prose dark:prose-invert mt-4">
+                <p>This will:</p>
+                <ul class="list-disc pl-5">
+                    <li>Dump the MySQL database (fallback to pure PHP if mysqldump is unavailable).</li>
+                    <li>Archive storage files: <code>storage/app/public/</code> and <code>storage/app/uploads/</code>.</li>
+                    <li>Create a downloadable archive (.zip if available, otherwise .tar) in <code>storage/app/full-backups/</code>.</li>
+                </ul>
+            </div>
+        </x-filament::section>
+
+        <x-filament::section>
+            <x-slot name="heading">Restore Backup</x-slot>
+            <div class="filament-forms-component-wrapper">
+                <form wire:submit="restore">
+                    {{ $this->form }}
+                    <div class="mt-4">
+                        <x-filament::button type="submit" icon="heroicon-o-arrow-path" size="lg">
+                            Restore from ZIP
+                        </x-filament::button>
+                    </div>
+                </form>
+            </div>
+            <div class="prose dark:prose-invert mt-4">
+                <p>Upload a previously downloaded ZIP and restore files & database to the current environment.</p>
+                <p><strong>Note:</strong> Restoration uses the current <code>.env</code> database connection.</p>
+            </div>
+        </x-filament::section>
+    </div>
+</x-filament-panels::page>
