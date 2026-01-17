@@ -9,6 +9,7 @@ use App\Models\Language;
 use App\Models\ClassificationType;
 use App\Models\AccessRequest;
 use App\Services\AnalyticsService;
+use App\Services\PdfCoverService;
 use Illuminate\Http\Request;
 
 class LibraryController extends Controller
@@ -551,13 +552,32 @@ class LibraryController extends Controller
         // Get file path (use normalized path)
         $filePath = storage_path('app/public/' . $normalizedPath);
 
-        // Stream the PDF file for inline viewing with proper headers
-        return response()->file($filePath, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($normalizedPath)) . '"',
-            'Cache-Control' => 'public, max-age=3600',
-            'X-Content-Type-Options' => 'nosniff',
-        ]);
+        // Generate PDF with cover page
+        $coverService = new PdfCoverService();
+        $user = auth()->user();
+        
+        try {
+            $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user);
+            
+            // Stream the merged PDF
+            return response()->file($pdfWithCoverPath, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($normalizedPath)) . '"',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'X-Content-Type-Options' => 'nosniff',
+            ])->deleteFileAfterSend(true);
+        } catch (\Exception $e) {
+            // Log error and fall back to original PDF
+            \Log::error('PDF cover generation failed: ' . $e->getMessage());
+            
+            // Stream the original PDF file as fallback
+            return response()->file($filePath, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($normalizedPath)) . '"',
+                'Cache-Control' => 'public, max-age=3600',
+                'X-Content-Type-Options' => 'nosniff',
+            ]);
+        }
     }
 
     /**
@@ -584,11 +604,33 @@ class LibraryController extends Controller
         // Track the download
         $this->analytics->trackBookDownload($book, request());
 
-        // Return the file for download (use normalized path)
-        return \Storage::disk('public')->download(
-            $normalizedPath,
-            $file->filename ?? basename($normalizedPath)
-        );
+        // Get file path (use normalized path)
+        $filePath = storage_path('app/public/' . $normalizedPath);
+        $filename = $file->filename ?? basename($normalizedPath);
+
+        // For PDF files, add cover page
+        if ($file->file_type === 'pdf') {
+            $coverService = new PdfCoverService();
+            $user = auth()->user();
+            
+            try {
+                $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user);
+                
+                // Download the merged PDF
+                return response()->download($pdfWithCoverPath, $filename, [
+                    'Content-Type' => 'application/pdf',
+                ])->deleteFileAfterSend(true);
+            } catch (\Exception $e) {
+                // Log error and fall back to original file
+                \Log::error('PDF cover generation failed for download: ' . $e->getMessage());
+                
+                // Return the original file as fallback
+                return \Storage::disk('public')->download($normalizedPath, $filename);
+            }
+        }
+
+        // For non-PDF files, return as-is
+        return \Storage::disk('public')->download($normalizedPath, $filename);
     }
 
     /**

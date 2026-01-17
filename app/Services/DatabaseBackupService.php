@@ -43,30 +43,37 @@ class DatabaseBackupService
                 Storage::disk($this->disk)->makeDirectory($this->directory);
             }
 
-            // Get database configuration
-            $database = config('database.connections.' . config('database.default'));
-            $host = $database['host'];
-            $port = $database['port'] ?? 3306;
-            $dbName = $database['database'];
-            $username = $database['username'];
-            $password = $database['password'];
+            // Prefer mysqldump if available, otherwise fallback to pure PHP dump
+            $availability = $this->checkAvailability();
+            if ($availability['available']) {
+                // Get database configuration
+                $database = config('database.connections.' . config('database.default'));
+                $host = $database['host'];
+                $port = $database['port'] ?? 3306;
+                $dbName = $database['database'];
+                $username = $database['username'];
+                $password = $database['password'];
 
-            // Build mysqldump command
-            $command = sprintf(
-                'mysqldump --host=%s --port=%d --user=%s --password=%s --single-transaction --routines --triggers %s > %s 2>&1',
-                escapeshellarg($host),
-                $port,
-                escapeshellarg($username),
-                escapeshellarg($password),
-                escapeshellarg($dbName),
-                escapeshellarg($filepath)
-            );
+                // Build mysqldump command
+                $command = sprintf(
+                    'mysqldump --host=%s --port=%d --user=%s --password=%s --single-transaction --routines --triggers %s > %s 2>&1',
+                    escapeshellarg($host),
+                    $port,
+                    escapeshellarg($username),
+                    escapeshellarg($password),
+                    escapeshellarg($dbName),
+                    escapeshellarg($filepath)
+                );
 
-            // Execute backup
-            exec($command, $output, $returnCode);
+                // Execute backup
+                exec($command, $output, $returnCode);
 
-            if ($returnCode !== 0) {
-                throw new \Exception('Backup failed: ' . implode("\n", $output));
+                if ($returnCode !== 0) {
+                    throw new \Exception('Backup failed: ' . implode("\n", $output));
+                }
+            } else {
+                // Fallback: generate SQL dump via PHP only
+                $this->generatePhpDump($filepath);
             }
 
             // Get file size
@@ -139,30 +146,37 @@ class DatabaseBackupService
                 throw new \Exception("Backup file not found: {$filename}");
             }
 
-            // Get database configuration
-            $database = config('database.connections.' . config('database.default'));
-            $host = $database['host'];
-            $port = $database['port'] ?? 3306;
-            $dbName = $database['database'];
-            $username = $database['username'];
-            $password = $database['password'];
+            $availability = $this->checkAvailability();
+            if ($availability['available']) {
+                // Get database configuration
+                $database = config('database.connections.' . config('database.default'));
+                $host = $database['host'];
+                $port = $database['port'] ?? 3306;
+                $dbName = $database['database'];
+                $username = $database['username'];
+                $password = $database['password'];
 
-            // Build mysql restore command
-            $command = sprintf(
-                'mysql --host=%s --port=%d --user=%s --password=%s %s < %s 2>&1',
-                escapeshellarg($host),
-                $port,
-                escapeshellarg($username),
-                escapeshellarg($password),
-                escapeshellarg($dbName),
-                escapeshellarg($filepath)
-            );
+                // Build mysql restore command
+                $command = sprintf(
+                    'mysql --host=%s --port=%d --user=%s --password=%s %s < %s 2>&1',
+                    escapeshellarg($host),
+                    $port,
+                    escapeshellarg($username),
+                    escapeshellarg($password),
+                    escapeshellarg($dbName),
+                    escapeshellarg($filepath)
+                );
 
-            // Execute restore
-            exec($command, $output, $returnCode);
+                // Execute restore
+                exec($command, $output, $returnCode);
 
-            if ($returnCode !== 0) {
-                throw new \Exception('Restore failed: ' . implode("\n", $output));
+                if ($returnCode !== 0) {
+                    throw new \Exception('Restore failed: ' . implode("\n", $output));
+                }
+            } else {
+                // Fallback: restore via PHP
+                $sql = file_get_contents($filepath);
+                DB::unprepared($sql);
             }
 
             $duration = microtime(true) - $startTime;
@@ -322,7 +336,55 @@ class DatabaseBackupService
             'mysql_path' => trim($mysql ?? ''),
             'message' => $available
                 ? 'Backup functionality is available'
-                : 'mysqldump or mysql command not found. Install MySQL client tools.',
+                : 'mysqldump or mysql command not found. Falling back to pure PHP dump/restore.',
         ];
+    }
+
+    /**
+     * Generate SQL dump via PHP when mysqldump is unavailable
+     */
+    protected function generatePhpDump(string $filepath): void
+    {
+        // Ensure directory exists when falling back to PHP
+        $dir = dirname($filepath);
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+
+        $pdo = DB::connection()->getPdo();
+        $tables = [];
+        $stmt = $pdo->query('SHOW TABLES');
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
+            $tables[] = $row[0];
+        }
+
+        $fh = fopen($filepath, 'w');
+        if (!$fh) {
+            throw new \RuntimeException('Unable to open backup file for writing: ' . $filepath);
+        }
+        fwrite($fh, "SET FOREIGN_KEY_CHECKS=0;\n\n");
+
+        foreach ($tables as $table) {
+            // Table structure
+            $createStmt = $pdo->query('SHOW CREATE TABLE `'.$table.'`')->fetch(\PDO::FETCH_ASSOC);
+            $createSql = $createStmt['Create Table'] ?? '';
+            fwrite($fh, "DROP TABLE IF EXISTS `{$table}`;\n{$createSql};\n\n");
+
+            // Table data
+            $rows = $pdo->query('SELECT * FROM `'.$table.'`');
+            while ($row = $rows->fetch(\PDO::FETCH_ASSOC)) {
+                $columns = array_map(fn($c) => '`'.$c.'`', array_keys($row));
+                $values = array_map(function ($v) use ($pdo) {
+                    if ($v === null) return 'NULL';
+                    return $pdo->quote($v);
+                }, array_values($row));
+                $insert = 'INSERT INTO `'.$table.'` ('.implode(',', $columns).') VALUES ('.implode(',', $values).');';
+                fwrite($fh, $insert."\n");
+            }
+            fwrite($fh, "\n");
+        }
+
+        fwrite($fh, "SET FOREIGN_KEY_CHECKS=1;\n");
+        fclose($fh);
     }
 }

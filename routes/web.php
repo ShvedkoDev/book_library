@@ -9,6 +9,7 @@ use App\Http\Controllers\BookReviewController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Api\ShareTrackingController;
+use App\Services\TarStreamService;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -137,6 +138,23 @@ Route::middleware(['auth'])->group(function () {
 
         return Storage::disk('public')->download($path, basename($path));
     })->name('admin.media.download');
+
+    // Admin backup download route
+    Route::get('/admin/backups/download/{file}', function ($file) {
+        $filePath = storage_path('app/full-backups/' . $file);
+        if (file_exists($filePath)) {
+            return response()->download($filePath, $file);
+        }
+        // If requesting .tar that doesn't exist, stream from folder
+        if (str_ends_with($file, '.tar')) {
+            $base = basename($file, '.tar');
+            $dirPath = storage_path('app/full-backups/' . $base);
+            if (is_dir($dirPath)) {
+                return TarStreamService::streamDirectoryAsTar($dirPath, $file);
+            }
+        }
+        abort(404, 'Backup file not found');
+    })->name('admin.backups.download');
 });
 
 require __DIR__.'/auth.php';

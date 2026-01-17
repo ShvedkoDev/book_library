@@ -4,7 +4,7 @@
     "name": "xlsx"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CDHAsWyC.css",
+    "file": "assets/app-DujVMWCY.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "names": [
@@ -12,7 +12,7 @@
     ]
   },
   "resources/css/filament/admin/theme.css": {
-    "file": "assets/theme-Dm2LkqQz.css",
+    "file": "assets/theme-YOvkctfB.css",
     "src": "resources/css/filament/admin/theme.css",
     "isEntry": true,
     "names": [
