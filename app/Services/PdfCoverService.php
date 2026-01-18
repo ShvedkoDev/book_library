@@ -163,35 +163,53 @@ class PdfCoverService
      */
     protected function addCoverPage(Fpdi $pdf, Book $book, $user = null): void
     {
-        // Page setup: US Letter portrait - zero margins for full-width elements
-        $pdf->SetMargins(0, 0, 0);
-        $pdf->AddPage('P', [216, 279]);
-        $pdf->SetAutoPageBreak(false);
-        $pdf->SetFont('helvetica', '', 10);
+        // Import the template PDF as base
+        if (file_exists($this->templatePath)) {
+            $pageCount = $pdf->setSourceFile($this->templatePath);
+            $templateId = $pdf->importPage(1);
+            $templateSize = $pdf->getTemplateSize($templateId);
 
-        // Draw white background for entire page
-        $pdf->SetFillColor(255, 255, 255);
-        $pdf->Rect(0, 0, 216, 279, 'F');
+            // Add page with template's exact dimensions
+            $pdf->SetMargins(0, 0, 0);
+            $pdf->SetAutoPageBreak(false);
+            $pdf->AddPage($templateSize['orientation'], [$templateSize['width'], $templateSize['height']]);
 
-        // Draw header gradient (top) - linear-gradient(15deg, #1d496a, #8198b2)
-        $this->drawGradientRect($pdf, 0, 0, 216, 14, [29, 73, 106], [129, 152, 178]);
+            // Use the template as background
+            $pdf->useTemplate($templateId, 0, 0, $templateSize['width'], $templateSize['height']);
 
-        // Draw white background for content area (header to footer)
-        $pdf->SetFillColor(255, 255, 255);
-        $pdf->Rect(0, 14, 216, 250, 'F');
+            // Now overlay dynamic content
+            $data = $this->buildCoverData($book, $user);
+            $html = view('pdf.cover', $data)->render();
 
-        // Draw footer gradient (bottom) - same as header, exactly at bottom
-        $this->drawGradientRect($pdf, 0, 264, 216, 15, [29, 73, 106], [129, 152, 178]);
+            // Reset position for HTML overlay
+            $pdf->SetY(0);
+            $pdf->writeHTML($html, true, false, false, false, '');
+        } else {
+            // Fallback to manual generation if template not found
+            $pageWidth = 216;
+            $pageHeight = 279;
 
-        $data = $this->buildCoverData($book, $user);
-        $html = view('pdf.cover', $data)->render();
-        $pdf->writeHTML($html, true, false, true, false, '');
+            $pdf->SetMargins(0, 0, 0);
+            $pdf->SetAutoPageBreak(false);
+            $pdf->AddPage('P', [$pageWidth, $pageHeight]);
+            $pdf->SetFont('helvetica', '', 10);
 
-        // Add footer text over the gradient
-        $pdf->SetXY(0, 268);
-        $pdf->SetFont('marckscript', '', 11);
-        $pdf->SetTextColor(255, 255, 255);
-        $pdf->Cell(216, 8, 'Strengthening teaching and learning through the voices and languages of Micronesia.', 0, 0, 'C');
+            // Draw backgrounds and gradients
+            $pdf->SetFillColor(255, 255, 255);
+            $pdf->Rect(0, 0, $pageWidth, $pageHeight, 'F');
+            $this->drawGradientRect($pdf, 0, 0, $pageWidth, 14, [29, 73, 106], [129, 152, 178]);
+            $this->drawGradientRect($pdf, 0, 264, $pageWidth, 15, [29, 73, 106], [129, 152, 178]);
+
+            $data = $this->buildCoverData($book, $user);
+            $html = view('pdf.cover', $data)->render();
+            $pdf->SetY(0);
+            $pdf->writeHTML($html, true, false, false, false, '');
+
+            $pdf->SetXY(0, 269);
+            $pdf->SetFont('marckscript', '', 11);
+            $pdf->SetTextColor(255, 255, 255);
+            $pdf->Cell($pageWidth, 6, 'Strengthening teaching and learning through the voices and languages of Micronesia.', 0, 0, 'C');
+        }
     }
     
     /**
