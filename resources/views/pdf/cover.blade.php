@@ -35,7 +35,7 @@
 
 {{-- Content wrapper with padding --}}
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-<tr><td style="padding:10px 14px 6px 14px;">
+<tr><td style="padding:18px 35px 12px 35px;">
 
 {{-- Title block --}}
 <div style="font-size:8px; color:#888888; text-transform:uppercase; letter-spacing:1px; margin-bottom:2px;">{{ $publisherLabel }}</div>

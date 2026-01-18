@@ -181,7 +181,7 @@ class PdfCoverService
         
         // Add footer text over the gradient
         $pdf->SetXY(0, 267);
-        $pdf->SetFont('times', 'I', 11);
+        $pdf->SetFont('marckscript', '', 11);
         $pdf->SetTextColor(255, 255, 255);
         $pdf->Cell(216, 10, 'Strengthening teaching and learning through the voices and languages of Micronesia.', 0, 0, 'C');
     }
