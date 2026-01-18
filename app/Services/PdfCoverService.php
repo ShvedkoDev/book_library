@@ -168,22 +168,30 @@ class PdfCoverService
         $pdf->AddPage('P', [216, 279]);
         $pdf->SetAutoPageBreak(false);
         $pdf->SetFont('helvetica', '', 10);
-        
+
+        // Draw white background for entire page
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->Rect(0, 0, 216, 279, 'F');
+
         // Draw header gradient (top) - linear-gradient(15deg, #1d496a, #8198b2)
         $this->drawGradientRect($pdf, 0, 0, 216, 14, [29, 73, 106], [129, 152, 178]);
-        
-        // Draw footer gradient (bottom) - same as header
+
+        // Draw white background for content area (header to footer)
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->Rect(0, 14, 216, 250, 'F');
+
+        // Draw footer gradient (bottom) - same as header, exactly at bottom
         $this->drawGradientRect($pdf, 0, 264, 216, 15, [29, 73, 106], [129, 152, 178]);
 
         $data = $this->buildCoverData($book, $user);
         $html = view('pdf.cover', $data)->render();
         $pdf->writeHTML($html, true, false, true, false, '');
-        
+
         // Add footer text over the gradient
-        $pdf->SetXY(0, 267);
+        $pdf->SetXY(0, 268);
         $pdf->SetFont('marckscript', '', 11);
         $pdf->SetTextColor(255, 255, 255);
-        $pdf->Cell(216, 10, 'Strengthening teaching and learning through the voices and languages of Micronesia.', 0, 0, 'C');
+        $pdf->Cell(216, 8, 'Strengthening teaching and learning through the voices and languages of Micronesia.', 0, 0, 'C');
     }
     
     /**
