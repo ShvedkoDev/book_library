@@ -2,10 +2,19 @@
 {{-- Gradients are drawn by PHP service, HTML just overlays content --}}
 
 {{-- Header text over gradient (gradient drawn by service) --}}
-<table cellpadding="0" cellspacing="0" border="0" style="width:100%; height:14mm;">
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%; height:4mm;">
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+</table>
+
+{{-- Resource library banner --}}
+<table cellpadding="0" cellspacing="0" border="0" style="width:calc(100% + 12mm); margin-left:-12mm; height: 20mm; background-color:#c9d3e0;">
     <tr>
         <td style="color:#ffffff; vertical-align:middle; padding-left:12px;">
             <span style="font-size:9px; color:#e0e8f0;">National Vernacular Language Arts (VLA) curriculum</span>
+            <br>
+            <span style="font-size:18px; font-weight:bold; color:#1d496a;">Resource library</span>
         </td>
         <td style="text-align:right; vertical-align:middle; width:180px; padding-right:12px;">
             @foreach($logos as $logo)
@@ -15,17 +24,8 @@
     </tr>
 </table>
 
-{{-- Resource library banner --}}
-<table cellpadding="6" cellspacing="0" border="0" style="width:100%; background-color:#c9d3e0;">
-    <tr>
-        <td style="vertical-align:middle; padding-left:12px;">
-            <span style="font-size:14px; font-weight:bold; color:#1d496a;">Resource library</span>
-        </td>
-    </tr>
-</table>
-
 {{-- Generated date bar --}}
-<table cellpadding="3" cellspacing="0" border="0" style="width:100%; background-color:#f4f4f4; border-bottom:1px solid #e0e0e0;">
+<table cellpadding="3" cellspacing="0" style="width:100%; background-color:#f4f4f4; border-bottom:2px solid #1d496a;">
     <tr>
         <td style="text-align:right; font-size:8px; color:#888888; padding-right:12px;">
             Document generated on {{ $timestamp }} by {{ $generatedBy }}
