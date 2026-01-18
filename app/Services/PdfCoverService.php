@@ -170,12 +170,12 @@ class PdfCoverService
         // Set page width to US Letter standard (8.5 inches = 215.9mm)
         // This is the horizontal dimension of the page
         // Possible values: 210 (A4), 215.9 (US Letter), 216 (rounded US Letter)
-        $pageWidth = 215.9;  // millimeters
+        $pageWidth = 210;  // millimeters
 
         // Set page height to US Letter standard (11 inches = 279.4mm)
         // This is the vertical dimension of the page
         // Possible values: 297 (A4), 279.4 (US Letter)
-        $pageHeight = 279.4; // millimeters
+        $pageHeight = 297; // millimeters
 
         // ========================================================================
         // STEP 2: CONFIGURE PDF SETTINGS TO PREVENT AUTO-LAYOUT
@@ -185,7 +185,7 @@ class PdfCoverService
         // Sets page margins to zero to allow full-width/height elements
         // Parameters: left margin, top margin, right margin (all in mm)
         // Possible values: 0 (no margin), 10 (10mm margin), 15 (15mm margin)
-        $pdf->SetMargins(0, 0, 0);
+        $pdf->SetMargins(12, 0, 0);
 
         // SetAutoPageBreak(auto, margin)
         // Disables automatic page breaks that would create new pages when content exceeds height
@@ -261,7 +261,7 @@ class PdfCoverService
         // Calculate footer height dynamically to fill remaining space
         // Formula: total page height (279.4mm) - content end position (264mm)
         // Result: ~15.4mm footer height
-        $footerHeight = $pageHeight - 264;
+        $footerHeight = $pageHeight - 280;
 
         // drawGradientRect for footer (same gradient as header)
         // Parameter 2: X = 0 (left edge)
@@ -270,10 +270,34 @@ class PdfCoverService
         // Parameter 5: Height = 15.4mm (calculated footer height)
         // Parameter 6: Start color [29, 73, 106] = #1d496a (dark blue)
         // Parameter 7: End color [129, 152, 178] = #8198b2 (light blue)
-        $this->drawGradientRect($pdf, 0, 264, $pageWidth, $footerHeight, [29, 73, 106], [129, 152, 178]);
+        $this->drawGradientRect($pdf, 0, 270, $pageWidth, $footerHeight, [29, 73, 106], [129, 152, 178]);
 
         // ========================================================================
-        // LAYER 4: RENDER HTML CONTENT WITH BOOK METADATA
+        // LAYER 4: DRAW "RESOURCE LIBRARY" BANNER BACKGROUND (FULL WIDTH)
+        // ========================================================================
+
+        // Draw full-width background for "Resource library" banner
+        // This extends from x=0 (ignoring the 12mm left margin)
+        // Banner position: Y=14mm (after header) + 4mm (spacer) = Y=18mm
+        // Banner height: 20mm (as defined in template)
+        // Color: #c9d3e0 = RGB(201, 211, 224)
+
+        // SetFillColor(red, green, blue)
+        // Sets fill color for the banner background
+        // RGB values: [201, 211, 224] = #c9d3e0 (light blue-gray)
+        $pdf->SetFillColor(201, 211, 224);
+
+        // Rect(x, y, width, height, style)
+        // Draws a filled rectangle for the full-width banner background
+        // Parameter 1 (float): X = 0mm (left edge, ignores page margin)
+        // Parameter 2 (float): Y = 18mm (14mm header + 4mm spacer)
+        // Parameter 3 (float): Width = 210mm (full A4 page width)
+        // Parameter 4 (float): Height = 20mm (banner height from template)
+        // Parameter 5 (string): 'F' = Filled rectangle
+        $pdf->Rect(0, 18, $pageWidth, 20, 'F');
+
+        // ========================================================================
+        // LAYER 5: RENDER HTML CONTENT WITH BOOK METADATA
         // ========================================================================
 
         // buildCoverData(book, user)
@@ -303,17 +327,17 @@ class PdfCoverService
         $pdf->writeHTML($html, true, false, false, false, '');
 
         // ========================================================================
-        // LAYER 5: REDRAW FOOTER GRADIENT TO COVER ANY CONTENT OVERFLOW
+        // LAYER 6: REDRAW FOOTER GRADIENT TO COVER ANY CONTENT OVERFLOW
         // ========================================================================
 
         // Redraw the footer gradient on top of HTML content
-        // This acts as a "mask" to hide any content that renders below Y=264mm
+        // This acts as a "mask" to hide any content that renders below Y=270mm
         // Uses same parameters as Layer 3 to ensure perfect overlay
         // This is necessary because HTML content might overflow beyond intended boundaries
-        $this->drawGradientRect($pdf, 0, 264, $pageWidth, $footerHeight, [29, 73, 106], [129, 152, 178]);
+        $this->drawGradientRect($pdf, 0, 270, $pageWidth, $footerHeight, [29, 73, 106], [129, 152, 178]);
 
         // ========================================================================
-        // LAYER 6: ADD FOOTER TEXT (TAGLINE) OVER GRADIENT
+        // LAYER 7: ADD FOOTER TEXT (TAGLINE) OVER GRADIENT
         // ========================================================================
 
         // Calculate vertical center position for footer text
