@@ -1,20 +1,11 @@
 {{-- TCPDF-compatible cover page --}}
 {{-- Gradients are drawn by PHP service, HTML just overlays content --}}
 
-{{-- Header text over gradient (gradient drawn by service) --}}
-<table cellpadding="0" cellspacing="0" border="0" style="width:100%; height:4mm;">
+{{-- Header spacer over gradient (gradient drawn by service) --}}
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%; height:14mm;">
     <tr>
-        <td>&nbsp;</td>
-    </tr>
-</table>
-
-{{-- Resource library banner --}}
-<table cellpadding="0" cellspacing="0" border="0" style="width:calc(100% + 12mm); margin-left:-12mm; height: 20mm; background-color:#c9d3e0;">
-    <tr>
-        <td style="color:#ffffff; vertical-align:middle; padding-left:12px;">
+        <td style="color:#ffffff; vertical-align:middle; padding-left:0;">
             <span style="font-size:9px; color:#e0e8f0;">National Vernacular Language Arts (VLA) curriculum</span>
-            <br>
-            <span style="font-size:18px; font-weight:bold; color:#1d496a;">Resource library</span>
         </td>
         <td style="text-align:right; vertical-align:middle; width:180px; padding-right:12px;">
             @foreach($logos as $logo)
@@ -22,6 +13,14 @@
             @endforeach
         </td>
     </tr>
+</table>
+
+{{-- Resource library banner (full width, extends beyond left margin) --}}
+<div style="position:absolute; left:0; width:210mm; background-color:#c9d3e0; padding:6px 12px;">
+    <span style="font-size:14px; font-weight:bold; color:#1d496a;">Resource library</span>
+</div>
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%; height:8mm;">
+    <tr><td>&nbsp;</td></tr>
 </table>
 
 {{-- Generated date bar --}}
