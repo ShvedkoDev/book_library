@@ -51,18 +51,18 @@ class PdfCoverService
                 throw $e;
             }
         }
-        
+
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
             $templateId = $pdf->importPage($pageNo);
             $size = $pdf->getTemplateSize($templateId);
-            
+
             $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
             $pdf->useTemplate($templateId);
         }
 
         // Save to temporary file
         $tempPath = storage_path('app/temp/pdf_with_cover_' . uniqid() . '.pdf');
-        
+
         // Ensure temp directory exists
         if (!is_dir(storage_path('app/temp'))) {
             mkdir(storage_path('app/temp'), 0775, true);
@@ -87,7 +87,7 @@ class PdfCoverService
     protected function decompressPdf(string $pdfPath): ?string
     {
         $outputPath = storage_path('app/temp/decompressed_' . uniqid() . '.pdf');
-        
+
         // Ensure temp directory exists
         if (!is_dir(storage_path('app/temp'))) {
             mkdir(storage_path('app/temp'), 0775, true);
@@ -100,9 +100,9 @@ class PdfCoverService
                 escapeshellarg($outputPath),
                 escapeshellarg($pdfPath)
             );
-            
+
             exec($command, $output, $returnVar);
-            
+
             if ($returnVar === 0 && file_exists($outputPath)) {
                 \Log::info('PDF decompressed successfully using Ghostscript');
                 return $outputPath;
@@ -118,9 +118,9 @@ class PdfCoverService
                 escapeshellarg($pdfPath),
                 escapeshellarg($outputPath)
             );
-            
+
             exec($command, $output, $returnVar);
-            
+
             if ($returnVar === 0 && file_exists($outputPath)) {
                 \Log::info('PDF decompressed successfully using QPDF');
                 return $outputPath;
@@ -163,48 +163,197 @@ class PdfCoverService
      */
     protected function addCoverPage(Fpdi $pdf, Book $book, $user = null): void
     {
-        // Page dimensions: US Letter (8.5" x 11")
-        $pageWidth = 215.9;  // mm
-        $pageHeight = 279.4; // mm
+        // ========================================================================
+        // STEP 1: DEFINE PAGE DIMENSIONS
+        // ========================================================================
 
-        // CRITICAL: Disable all auto page breaks and set fixed page size
+        // Set page width to US Letter standard (8.5 inches = 215.9mm)
+        // This is the horizontal dimension of the page
+        // Possible values: 210 (A4), 215.9 (US Letter), 216 (rounded US Letter)
+        $pageWidth = 215.9;  // millimeters
+
+        // Set page height to US Letter standard (11 inches = 279.4mm)
+        // This is the vertical dimension of the page
+        // Possible values: 297 (A4), 279.4 (US Letter)
+        $pageHeight = 279.4; // millimeters
+
+        // ========================================================================
+        // STEP 2: CONFIGURE PDF SETTINGS TO PREVENT AUTO-LAYOUT
+        // ========================================================================
+
+        // SetMargins(left, top, right)
+        // Sets page margins to zero to allow full-width/height elements
+        // Parameters: left margin, top margin, right margin (all in mm)
+        // Possible values: 0 (no margin), 10 (10mm margin), 15 (15mm margin)
         $pdf->SetMargins(0, 0, 0);
+
+        // SetAutoPageBreak(auto, margin)
+        // Disables automatic page breaks that would create new pages when content exceeds height
+        // Parameter 1 (bool): false = disable auto page break, true = enable
+        // Parameter 2 (float): bottom margin in mm, set to 0 for no margin
         $pdf->SetAutoPageBreak(false, 0);
+
+        // setCellPaddings(left, top, right, bottom)
+        // Sets internal padding for table cells to zero
+        // All parameters in mm: left, top, right, bottom padding
+        // Possible values: 0 (no padding), 2 (2mm padding), 5 (5mm padding)
         $pdf->setCellPaddings(0, 0, 0, 0);
+
+        // setCellMargins(left, top, right, bottom)
+        // Sets external margins for table cells to zero
+        // All parameters in mm: left, top, right, bottom margin
+        // Possible values: 0 (no margin), 1 (1mm margin), 3 (3mm margin)
         $pdf->setCellMargins(0, 0, 0, 0);
 
+        // ========================================================================
+        // STEP 3: ADD NEW PAGE WITH EXACT DIMENSIONS
+        // ========================================================================
+
+        // AddPage(orientation, format)
+        // Creates a new page in the PDF document
+        // Parameter 1 (string): 'P' = Portrait orientation, 'L' = Landscape orientation
+        // Parameter 2 (array): [width, height] in millimeters
+        // Example values: 'P', [210, 297] for A4 portrait
         $pdf->AddPage('P', [$pageWidth, $pageHeight]);
 
-        // Layer 1: Header gradient (0 to 14mm) - linear-gradient(15deg, #1d496a, #8198b2)
+        // ========================================================================
+        // LAYER 1: DRAW HEADER GRADIENT BACKGROUND
+        // ========================================================================
+
+        // drawGradientRect(pdf, x, y, width, height, colorStart, colorEnd)
+        // Draws a horizontal linear gradient rectangle at the top of the page
+        // Mimics CSS: linear-gradient(15deg, #1d496a, #8198b2)
+        // Parameter 1: PDF object
+        // Parameter 2 (float): X position in mm (0 = left edge)
+        // Parameter 3 (float): Y position in mm (0 = top edge)
+        // Parameter 4 (float): Width in mm (215.9 = full page width)
+        // Parameter 5 (float): Height in mm (14 = header height)
+        // Parameter 6 (array): Start color RGB [R, G, B] where each value is 0-255
+        //                      [29, 73, 106] = #1d496a (dark blue)
+        // Parameter 7 (array): End color RGB [R, G, B]
+        //                      [129, 152, 178] = #8198b2 (light blue)
         $this->drawGradientRect($pdf, 0, 0, $pageWidth, 14, [29, 73, 106], [129, 152, 178]);
 
-        // Layer 2: White content area (14mm to 264mm = 250mm)
+        // ========================================================================
+        // LAYER 2: DRAW WHITE CONTENT AREA BACKGROUND
+        // ========================================================================
+
+        // SetFillColor(red, green, blue)
+        // Sets the fill color for subsequent drawing operations
+        // Parameters: RGB values from 0-255
+        // [255, 255, 255] = white
+        // Other examples: [0, 0, 0] = black, [255, 0, 0] = red
         $pdf->SetFillColor(255, 255, 255);
+
+        // Rect(x, y, width, height, style)
+        // Draws a filled rectangle for the white content area
+        // Parameter 1 (float): X position = 0mm (left edge)
+        // Parameter 2 (float): Y position = 14mm (below header)
+        // Parameter 3 (float): Width = 215.9mm (full page width)
+        // Parameter 4 (float): Height = 250mm (content area: from 14mm to 264mm)
+        // Parameter 5 (string): 'F' = Filled, 'D' = Draw outline, 'DF' = Both
         $pdf->Rect(0, 14, $pageWidth, 250, 'F');
 
-        // Layer 3: Footer gradient (264mm to 279.4mm = ~15mm) - same as header
+        // ========================================================================
+        // LAYER 3: DRAW FOOTER GRADIENT BACKGROUND
+        // ========================================================================
+
+        // Calculate footer height dynamically to fill remaining space
+        // Formula: total page height (279.4mm) - content end position (264mm)
+        // Result: ~15.4mm footer height
         $footerHeight = $pageHeight - 264;
+
+        // drawGradientRect for footer (same gradient as header)
+        // Parameter 2: X = 0 (left edge)
+        // Parameter 3: Y = 264mm (where footer starts, just below content)
+        // Parameter 4: Width = 215.9mm (full page width)
+        // Parameter 5: Height = 15.4mm (calculated footer height)
+        // Parameter 6: Start color [29, 73, 106] = #1d496a (dark blue)
+        // Parameter 7: End color [129, 152, 178] = #8198b2 (light blue)
         $this->drawGradientRect($pdf, 0, 264, $pageWidth, $footerHeight, [29, 73, 106], [129, 152, 178]);
 
-        // Layer 4: HTML content overlay
+        // ========================================================================
+        // LAYER 4: RENDER HTML CONTENT WITH BOOK METADATA
+        // ========================================================================
+
+        // buildCoverData(book, user)
+        // Prepares data array for the PDF cover template
+        // Returns array with: book object, metadata, contributors, timestamps, etc.
         $data = $this->buildCoverData($book, $user);
+
+        // view(template, data)->render()
+        // Renders the Blade template 'resources/views/pdf/cover.blade.php' with data
+        // Returns: HTML string with all book metadata formatted in tables
         $html = view('pdf.cover', $data)->render();
 
+        // SetY(y)
+        // Sets the current Y position for subsequent content
+        // Parameter (float): Y position in mm (0 = top of page)
+        // This ensures HTML rendering starts from the very top
         $pdf->SetY(0);
+
+        // writeHTML(html, ln, fill, reseth, cell, align)
+        // Renders HTML content onto the PDF page
+        // Parameter 1 (string): HTML content to render
+        // Parameter 2 (bool): true = add new line after, false = continue on same line
+        // Parameter 3 (bool): false = do not fill background, true = fill
+        // Parameter 4 (bool): false = do not reset height, true = reset
+        // Parameter 5 (bool): false = no cell mode, true = cell mode
+        // Parameter 6 (string): '' = left align, 'C' = center, 'R' = right
         $pdf->writeHTML($html, true, false, false, false, '');
 
-        // Layer 5: Cover footer gradient to hide any overflow
-        // Redraw the footer gradient to ensure it covers any content that leaked through
+        // ========================================================================
+        // LAYER 5: REDRAW FOOTER GRADIENT TO COVER ANY CONTENT OVERFLOW
+        // ========================================================================
+
+        // Redraw the footer gradient on top of HTML content
+        // This acts as a "mask" to hide any content that renders below Y=264mm
+        // Uses same parameters as Layer 3 to ensure perfect overlay
+        // This is necessary because HTML content might overflow beyond intended boundaries
         $this->drawGradientRect($pdf, 0, 264, $pageWidth, $footerHeight, [29, 73, 106], [129, 152, 178]);
 
-        // Layer 6: Footer text over the gradient (centered vertically in footer)
-        $footerTextY = 264 + ($footerHeight / 2) - 3; // Center in footer gradient
+        // ========================================================================
+        // LAYER 6: ADD FOOTER TEXT (TAGLINE) OVER GRADIENT
+        // ========================================================================
+
+        // Calculate vertical center position for footer text
+        // Formula: footer_start (264) + (footer_height / 2) - adjustment (3)
+        // Example: 264 + (15.4 / 2) - 3 = 264 + 7.7 - 3 = 268.7mm
+        // The -3 adjustment accounts for font height to achieve visual centering
+        $footerTextY = 264 + ($footerHeight / 2) - 3;
+
+        // SetXY(x, y)
+        // Sets the current X and Y position for the footer text
+        // Parameter 1 (float): X = 0mm (left edge, will be centered with Cell)
+        // Parameter 2 (float): Y = 268.7mm (calculated vertical center)
         $pdf->SetXY(0, $footerTextY);
+
+        // SetFont(family, style, size)
+        // Sets the font for the footer text to Marck Script (cursive)
+        // Parameter 1 (string): 'marckscript' = font family (installed via tcpdf_addfont)
+        // Parameter 2 (string): '' = regular style, 'B' = bold, 'I' = italic, 'BI' = bold italic
+        // Parameter 3 (int): 11 = font size in points
+        // Other common sizes: 8, 10, 12, 14, 16, 18
         $pdf->SetFont('marckscript', '', 11);
+
+        // SetTextColor(red, green, blue)
+        // Sets the text color to white for visibility on dark gradient
+        // Parameters: RGB values 0-255
+        // [255, 255, 255] = white
+        // Other examples: [0, 0, 0] = black, [100, 100, 100] = gray
         $pdf->SetTextColor(255, 255, 255);
+
+        // Cell(width, height, text, border, ln, align)
+        // Creates a single-line text cell for the tagline
+        // Parameter 1 (float): Width = 215.9mm (full page width for centering)
+        // Parameter 2 (float): Height = 6mm (cell height)
+        // Parameter 3 (string): The tagline text to display
+        // Parameter 4 (mixed): 0 = no border, 1 = border all sides, 'L'/'R'/'T'/'B' = specific sides
+        // Parameter 5 (int): 0 = continue on same line, 1 = move to next line, 2 = move below
+        // Parameter 6 (string): 'C' = center align, 'L' = left, 'R' = right, 'J' = justify
         $pdf->Cell($pageWidth, 6, 'Strengthening teaching and learning through the voices and languages of Micronesia.', 0, 0, 'C');
     }
-    
+
     /**
      * Draw a horizontal gradient rectangle
      *
@@ -228,9 +377,9 @@ class PdfCoverService
         $generatedBy = $user ? $user->name : "Guest";
 
         $logos = collect([
-            public_path('library-assets/images/C4GTS.png'),
-            public_path('library-assets/images/iREi-top.png'),
             public_path('library-assets/images/NDOE.png'),
+            public_path('library-assets/images/iREi-top.png'),
+            public_path('library-assets/images/C4GTS.png'),
         ])->filter(fn ($path) => file_exists($path))->values()->all();
 
         $meta = [
@@ -290,7 +439,7 @@ class PdfCoverService
         $pdf->SetXY(20, $yPos);
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->Cell(50, 6, $label . ':', 0, 0, 'L');
-        
+
         // Value (normal)
         $pdf->SetFont('helvetica', '', 10);
         $pdf->MultiCell(126, 6, $value, 0, 'L', false, 1, 70, $yPos);
