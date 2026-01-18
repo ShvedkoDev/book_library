@@ -167,8 +167,12 @@ class PdfCoverService
         $pageWidth = 215.9;  // mm
         $pageHeight = 279.4; // mm
 
+        // CRITICAL: Disable all auto page breaks and set fixed page size
         $pdf->SetMargins(0, 0, 0);
-        $pdf->SetAutoPageBreak(false);
+        $pdf->SetAutoPageBreak(false, 0);
+        $pdf->setCellPaddings(0, 0, 0, 0);
+        $pdf->setCellMargins(0, 0, 0, 0);
+
         $pdf->AddPage('P', [$pageWidth, $pageHeight]);
 
         // Layer 1: Header gradient (0 to 14mm) - linear-gradient(15deg, #1d496a, #8198b2)
@@ -182,11 +186,20 @@ class PdfCoverService
         $footerHeight = $pageHeight - 264;
         $this->drawGradientRect($pdf, 0, 264, $pageWidth, $footerHeight, [29, 73, 106], [129, 152, 178]);
 
-        // Layer 4: HTML content overlay
+        // Layer 4: HTML content overlay with clipping region
         $data = $this->buildCoverData($book, $user);
         $html = view('pdf.cover', $data)->render();
+
+        // Start clipping region - content should not render below y=264
+        $pdf->StartTransform();
+        $pdf->Rect(0, 0, $pageWidth, 264); // Clipping rectangle
+        $pdf->Clip();
+
         $pdf->SetY(0);
         $pdf->writeHTML($html, true, false, false, false, '');
+
+        // End clipping
+        $pdf->StopTransform();
 
         // Layer 5: Footer text over the gradient (centered vertically in footer)
         $footerTextY = 264 + ($footerHeight / 2) - 3; // Center in footer gradient
