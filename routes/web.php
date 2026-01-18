@@ -159,5 +159,24 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__.'/auth.php';
 
+// TEMPORARY DEBUG ROUTE - Remove after debugging
+Route::get('/debug-pdf-cover/{book}', function (\App\Models\Book $book) {
+    $pdfCoverService = new \App\Services\PdfCoverService();
+
+    // Use reflection to access the protected buildCoverData method
+    $reflection = new \ReflectionClass($pdfCoverService);
+    $method = $reflection->getMethod('buildCoverData');
+    $method->setAccessible(true);
+
+    // Get the user (if authenticated) or null
+    $user = auth()->user();
+
+    // Call the protected method
+    $data = $method->invoke($pdfCoverService, $book, $user);
+
+    // Render the view with the data
+    return view('pdf.cover', $data);
+})->name('debug.pdf.cover');
+
 // CMS Pages - Catch-all route (must be last to avoid conflicts with other routes)
 Route::get('/{slug}', [PageController::class, 'show'])->name('pages.show')->where('slug', '[a-z0-9\-]+');
