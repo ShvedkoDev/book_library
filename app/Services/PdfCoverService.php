@@ -368,12 +368,13 @@ class PdfCoverService
         $pdf->SetXY(0, $footerTextY);
 
         // SetFont(family, style, size)
-        // Sets the font for the footer text to Marck Script (cursive)
-        // Parameter 1 (string): 'marckscript' = font family (installed via tcpdf_addfont)
-        // Parameter 2 (string): '' = regular style, 'B' = bold, 'I' = italic, 'BI' = bold italic
+        // Sets the font for the footer tagline text
+        // Using FreeSans italic to distinguish from main content while ensuring compatibility
+        // Parameter 1 (string): 'freesans' = font family (built-in, Unicode-compatible)
+        // Parameter 2 (string): 'I' = italic style, 'B' = bold, 'BI' = bold italic, '' = regular
         // Parameter 3 (int): 11 = font size in points
-        // Other common sizes: 8, 10, 12, 14, 16, 18
-        $pdf->SetFont('marckscript', '', 11);
+        // Parameter 4/5: Unicode support enabled
+        $pdf->SetFont('freesans', 'I', 11, '', true);
 
         // SetTextColor(red, green, blue)
         // Sets the text color to white for visibility on dark gradient
