@@ -25,10 +25,17 @@ class PdfCoverService
      */
     public function generatePdfWithCover(Book $book, string $bookPdfPath, $user = null): string
     {
-        // Create new PDF document
-        $pdf = new Fpdi();
+        // Create new PDF document with UTF-8 encoding
+        // Parameters: orientation, unit, format, unicode=true, encoding='UTF-8'
+        $pdf = new Fpdi('P', 'mm', 'A4', true, 'UTF-8');
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
+
+        // Set Unicode font to support special characters (accented letters, etc.)
+        // FreeSans is visually similar to Arial/Helvetica (used on website)
+        // and provides full Unicode support for accented characters
+        // This is the closest match to "Proxima Nova, Helvetica, Arial" with Unicode
+        $pdf->SetFont('freesans', '', 10, '', true);
 
         // Add cover page
         $this->addCoverPage($pdf, $book, $user);
@@ -185,7 +192,7 @@ class PdfCoverService
         // Sets page margins to zero to allow full-width/height elements
         // Parameters: left margin, top margin, right margin (all in mm)
         // Possible values: 0 (no margin), 10 (10mm margin), 15 (15mm margin)
-        $pdf->SetMargins(12, 0, 0);
+        $pdf->SetMargins(0, 0, 0);
 
         // SetAutoPageBreak(auto, margin)
         // Disables automatic page breaks that would create new pages when content exceeds height
@@ -232,7 +239,7 @@ class PdfCoverService
         //                      [29, 73, 106] = #1d496a (dark blue)
         // Parameter 7 (array): End color RGB [R, G, B]
         //                      [129, 152, 178] = #8198b2 (light blue)
-        $this->drawGradientRect($pdf, 0, 0, $pageWidth, 14, [29, 73, 106], [129, 152, 178]);
+        $this->drawGradientRect($pdf, 0, 0, $pageWidth, 4, [29, 73, 106], [129, 152, 178]);
 
         // ========================================================================
         // LAYER 2: DRAW WHITE CONTENT AREA BACKGROUND
@@ -252,7 +259,7 @@ class PdfCoverService
         // Parameter 3 (float): Width = 215.9mm (full page width)
         // Parameter 4 (float): Height = 250mm (content area: from 14mm to 264mm)
         // Parameter 5 (string): 'F' = Filled, 'D' = Draw outline, 'DF' = Both
-        $pdf->Rect(0, 14, $pageWidth, 250, 'F');
+        $pdf->Rect(0, 4, $pageWidth, 250, 'F');
 
         // ========================================================================
         // LAYER 3: DRAW FOOTER GRADIENT BACKGROUND
@@ -294,7 +301,7 @@ class PdfCoverService
         // Parameter 3 (float): Width = 210mm (full A4 page width)
         // Parameter 4 (float): Height = 20mm (banner height from template)
         // Parameter 5 (string): 'F' = Filled rectangle
-        $pdf->Rect(0, 18, $pageWidth, 20, 'F');
+        $pdf->Rect(0, 4, $pageWidth, 20, 'F');
 
         // ========================================================================
         // LAYER 5: RENDER HTML CONTENT WITH BOOK METADATA
@@ -315,6 +322,14 @@ class PdfCoverService
         // Parameter (float): Y position in mm (0 = top of page)
         // This ensures HTML rendering starts from the very top
         $pdf->SetY(0);
+
+        // Ensure Unicode font is active for HTML rendering
+        // FreeSans: closest TCPDF built-in match to Arial/Helvetica/Proxima Nova
+        // - Visually similar to Arial and Helvetica
+        // - Full Unicode support (accented letters: é, ú, á, etc.)
+        // - Pre-installed with TCPDF (no custom font installation needed)
+        // The 'true' parameter enables Unicode subsetting for smaller file sizes
+        $pdf->SetFont('freesans', '', 10, '', true);
 
         // writeHTML(html, ln, fill, reseth, cell, align)
         // Renders HTML content onto the PDF page
@@ -406,12 +421,13 @@ class PdfCoverService
             public_path('library-assets/images/C4GTS.png'),
         ])->filter(fn ($path) => file_exists($path))->values()->all();
 
-        $meta = [
-            ['label' => 'Publication year', 'value' => $book->publication_year ?: '—'],
-            ['label' => 'Language(s)', 'value' => $book->languages->pluck('name')->filter()->join(', ') ?: '—'],
-            ['label' => 'Number of pages', 'value' => $book->pages ?: '—'],
-            ['label' => 'Type', 'value' => optional($book->physicalType)->name ?? ($book->typeClassifications->pluck('value')->first() ?? '—')],
-        ];
+        $metaFirstRowFirstCol = ['label' => 'Publication year', 'value' => $book->publication_year ?: '—'];
+
+        $metaFirstRowSecondCol = ['label' => 'Language(s)', 'value' => $book->languages->pluck('name')->filter()->join(', ') ?: '—'];
+
+        $metaSecondRowFirstCol = ['label' => 'Number of pages', 'value' => $book->pages ?: '—'];
+
+        $metaSecondRowSecondCol = ['label' => 'Type', 'value' => optional($book->physicalType)->name ?? ($book->typeClassifications->pluck('value')->first() ?? '—')];
 
         $contributors = [
             ['label' => 'Author(s)', 'value' => $book->authors->pluck('name')->filter()->join(', ') ?: '—'],
@@ -440,7 +456,10 @@ class PdfCoverService
             'book' => $book,
             'publisherLabel' => trim(optional($book->publisher)->name ?: 'Resource library'),
             'subtitle' => trim($book->subtitle ?: ($book->translated_title ?? '')),
-            'meta' => $meta,
+            'metaFirst' => $metaFirstRowFirstCol,
+            'metaSecond' => $metaFirstRowSecondCol,
+            'metaThird' => $metaSecondRowFirstCol,
+            'metaForth' => $metaSecondRowSecondCol,
             'contributors' => $contributors,
             'editionNotes' => $editionNotes,
             'classifications' => $classifications,
@@ -456,16 +475,17 @@ class PdfCoverService
 
     /**
      * Add a metadata row with label and value
+     * Note: This method is currently unused (cover uses HTML rendering)
      */
     protected function addMetadataRow(Fpdi $pdf, string $label, string $value, float $yPos): void
     {
         // Label (bold)
         $pdf->SetXY(20, $yPos);
-        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetFont('freesans', 'B', 10, '', true);
         $pdf->Cell(50, 6, $label . ':', 0, 0, 'L');
 
         // Value (normal)
-        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetFont('freesans', '', 10, '', true);
         $pdf->MultiCell(126, 6, $value, 0, 'L', false, 1, 70, $yPos);
     }
 }
