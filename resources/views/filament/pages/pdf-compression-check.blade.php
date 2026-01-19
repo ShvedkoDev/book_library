@@ -48,53 +48,69 @@
         {{-- Statistics Card --}}
         <x-filament::section>
             <x-slot name="heading">
-                Quick Statistics
+                Library-wide PDF Status
             </x-slot>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                @php
-                    $totalPdfs = \App\Models\BookFile::where('file_type', 'pdf')->count();
-                    $stats = [
-                        'total' => $totalPdfs,
-                        'normal' => 0,
-                        'compressed' => 0,
-                        'error' => 0,
-                    ];
+            @php
+                $stats = $this->pdfStatistics;
+                $total = max(1, $stats['total'] ?? 0);
+                $statusCards = [
+                    'normal' => ['label' => 'Normal (Can add cover)', 'color' => 'green'],
+                    'compressed' => ['label' => 'Compressed (Needs fix)', 'color' => 'red'],
+                    'error' => ['label' => 'Error (Unreadable)', 'color' => 'yellow'],
+                    'missing' => ['label' => 'Missing File', 'color' => 'gray'],
+                    'empty' => ['label' => 'Empty File', 'color' => 'gray'],
+                ];
+            @endphp
 
-                    // Quick sample check (first 50 to give an idea)
-                    \App\Models\BookFile::where('file_type', 'pdf')->limit(50)->each(function($file) use (&$stats) {
-                        $filePath = storage_path('app/public/' . $file->file_path);
-                        $result = \App\Filament\Pages\PdfCompressionCheck::checkPdfCompression($filePath);
-                        if (isset($stats[$result['status']])) {
-                            $stats[$result['status']]++;
-                        }
-                    });
-                @endphp
-
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $stats['total'] }}</div>
+                    <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ number_format($stats['total']) }}</div>
                     <div class="text-sm text-gray-600 dark:text-gray-400">Total PDF Files</div>
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Updated {{ optional($stats['last_updated'])->diffForHumans() }}</p>
                 </div>
 
-                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $stats['normal'] }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Normal (Sample of 50)</div>
-                </div>
-
-                <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ $stats['compressed'] }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Compressed (Sample of 50)</div>
-                </div>
-
-                <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                    <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ $stats['error'] }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Errors (Sample of 50)</div>
-                </div>
+                @foreach ($statusCards as $key => $card)
+                    <div class="p-4 bg-{{ $card['color'] }}-50 dark:bg-{{ $card['color'] }}-900/20 rounded-lg">
+                        <div class="text-2xl font-bold text-{{ $card['color'] }}-600 dark:text-{{ $card['color'] }}-400">
+                            {{ number_format($stats[$key] ?? 0) }}
+                        </div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">{{ $card['label'] }}</div>
+                        <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                            {{ number_format((($stats[$key] ?? 0) / $total) * 100, 1) }}%
+                        </div>
+                    </div>
+                @endforeach
             </div>
 
-            <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                Note: Statistics are based on a sample. Use the table below to check all files.
-            </p>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <h4 class="font-semibold text-sm text-gray-800 dark:text-gray-200 mb-2">Summary</h4>
+                    <dl class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <div class="flex justify-between">
+                            <dt>Can add covers now</dt>
+                            <dd class="font-semibold text-green-600 dark:text-green-400">{{ number_format($stats['normal'] ?? 0) }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt>Requires decompression</dt>
+                            <dd class="font-semibold text-red-600 dark:text-red-400">{{ number_format($stats['compressed'] ?? 0) }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt>Need investigation</dt>
+                            <dd class="font-semibold text-yellow-600 dark:text-yellow-400">{{ number_format(($stats['error'] ?? 0) + ($stats['missing'] ?? 0) + ($stats['empty'] ?? 0)) }}</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <h4 class="font-semibold text-sm text-gray-800 dark:text-gray-200 mb-2">Next Actions</h4>
+                    <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-disc list-inside">
+                        <li>Use the table below to filter and export problematic files.</li>
+                        <li>Click "Export Compressed List" to download the full list for processing.</li>
+                        <li>After fixing files, use “Clear Cache & Recheck All” to refresh these totals.</li>
+                    </ul>
+                </div>
+            </div>
         </x-filament::section>
 
         {{-- Table --}}

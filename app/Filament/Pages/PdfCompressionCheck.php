@@ -18,6 +18,8 @@ class PdfCompressionCheck extends Page implements HasTable
 {
     use InteractsWithTable;
 
+    private const STATS_CACHE_KEY = 'pdf_compression_full_stats';
+
     protected static ?string $navigationIcon = 'heroicon-o-document-magnifying-glass';
 
     protected static ?string $navigationLabel = 'PDF Compression Check';
@@ -197,7 +199,7 @@ class PdfCompressionCheck extends Page implements HasTable
                 \Filament\Tables\Actions\Action::make('view_file')
                     ->label('View')
                     ->icon('heroicon-o-eye')
-                    ->url(fn (BookFile $record) => route('library.viewer', [
+                    ->url(fn (BookFile $record) => route('library.view-pdf', [
                         'book' => $record->book_id,
                         'file' => $record->id
                     ]))
@@ -209,12 +211,52 @@ class PdfCompressionCheck extends Page implements HasTable
                     ->action(function (BookFile $record) {
                         Cache::forget("pdf_compression_check_{$record->id}");
                         Cache::forget("pdf_compression_check_{$record->id}_message");
+                         Cache::forget(self::STATS_CACHE_KEY);
                     })
                     ->requiresConfirmation(false),
             ])
             ->bulkActions([])
             ->defaultSort('id', 'desc')
             ->poll('30s');
+    }
+
+    public function getPdfStatisticsProperty(): array
+    {
+        return Cache::remember(self::STATS_CACHE_KEY, 600, function () {
+            $stats = [
+                'total' => 0,
+                'normal' => 0,
+                'compressed' => 0,
+                'error' => 0,
+                'missing' => 0,
+                'empty' => 0,
+            ];
+
+            BookFile::where('file_type', 'pdf')
+                ->orderBy('id')
+                ->chunk(200, function ($files) use (&$stats) {
+                    foreach ($files as $file) {
+                        $stats['total']++;
+
+                        $status = Cache::remember("pdf_compression_check_{$file->id}", 3600, function () use ($file) {
+                            $filePath = storage_path('app/public/' . $file->file_path);
+                            $result = self::checkPdfCompression($filePath);
+
+                            return $result['status'];
+                        });
+
+                        if (! array_key_exists($status, $stats)) {
+                            $stats[$status] = 0;
+                        }
+
+                        $stats[$status]++;
+                    }
+                });
+
+            $stats['last_updated'] = now();
+
+            return $stats;
+        });
     }
 
     protected function getHeaderActions(): array
