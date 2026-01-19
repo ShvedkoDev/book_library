@@ -416,11 +416,26 @@ class PdfCoverService
         $timestamp = now()->format('m/d/Y g:i a');
         $generatedBy = $user ? $user->name : "Guest";
 
-        $logos = collect([
-            public_path('library-assets/images/NDOE.png'),
-            public_path('library-assets/images/iREi-top.png'),
-            public_path('library-assets/images/C4GTS.png'),
-        ])->filter(fn ($path) => file_exists($path))->values()->all();
+        // Build logo paths - try multiple possible locations
+        $logoFiles = ['NDOE.png', 'iREi-top.png', 'C4GTS.png'];
+        $logos = collect($logoFiles)->map(function ($filename) {
+            // Try different path possibilities
+            $paths = [
+                public_path('library-assets/images/' . $filename),
+                base_path('public/library-assets/images/' . $filename),
+                storage_path('app/public/library-assets/images/' . $filename),
+            ];
+
+            foreach ($paths as $path) {
+                if (file_exists($path) && is_readable($path)) {
+                    \Log::info('Logo found: ' . $filename . ' at ' . $path);
+                    return $path;
+                }
+            }
+
+            \Log::warning('Logo not found: ' . $filename . ' - tried paths: ' . implode(', ', $paths));
+            return null;
+        })->filter()->values()->all();
 
         $metaFirstRowFirstCol = ['label' => 'Publication year', 'value' => $book->publication_year ?: '—'];
 
