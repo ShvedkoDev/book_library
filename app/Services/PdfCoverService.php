@@ -359,7 +359,7 @@ class PdfCoverService
         // Formula: footer_start (264) + (footer_height / 2) - adjustment (3)
         // Example: 264 + (15.4 / 2) - 3 = 264 + 7.7 - 3 = 268.7mm
         // The -3 adjustment accounts for font height to achieve visual centering
-        $footerTextY = 264 + ($footerHeight / 2) - 3;
+        $footerTextY = 270 + ($footerHeight / 2) - 3;
 
         // SetXY(x, y)
         // Sets the current X and Y position for the footer text
@@ -455,7 +455,8 @@ class PdfCoverService
         return [
             'book' => $book,
             'publisherLabel' => trim(optional($book->publisher)->name ?: 'Resource library'),
-            'subtitle' => trim($book->subtitle ?: ($book->translated_title ?? '')),
+            'subtitle' => trim($book->subtitle ?? ''),
+            'translated_title' => trim($book->translated_title ?? ''),
             'metaFirst' => $metaFirstRowFirstCol,
             'metaSecond' => $metaFirstRowSecondCol,
             'metaThird' => $metaSecondRowFirstCol,

@@ -11,6 +11,7 @@
 <br>
 {{-- Resource library banner (background drawn by service as full-width layer) --}}
 <table cellpadding="0" cellspacing="0" border="0" style="width:1000px; height:100px;">
+    <tr><td style="height: 1px"></td></tr>
     <tr>
         {{-- Left side with text (using table cellpadding for spacing instead of CSS padding) --}}
         <td style="color:#ffffff; width:435px">
@@ -27,7 +28,6 @@
                 <tr>
                     <td style="">
                         <br>
-                        <br>
                         @foreach($logos as $logo)
                             <img src="{{ $logo }}" style="height: 35px"/>
                         @endforeach
@@ -37,6 +37,7 @@
         </td>
     </tr>
 </table>
+<br>
 <br>
 {{-- Generated date bar --}}
 <table cellpadding="3" cellspacing="0" style="width:1000px; background-color:#f4f4f4;">
@@ -76,36 +77,44 @@
                         <td colspan="2" style="height:2px;"></td>
                     </tr>
                     <tr>
-                        <td style="font-size:14px; color:#888888; width: 100px">Translated title:</td>
                         <td style="font-size:14px;">{{ $subtitle }}</td>
+                    </tr>
+                @endif
+                @if($translated_title)
+                    <tr>
+                        <td colspan="2" style="height:2px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:14px; color:#888888; width: 120px">Translated title:</td>
+                        <td style="font-size:14px;">{{ $translated_title }}</td>
                     </tr>
                 @endif
             </table><br><br><table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr>
-                    <td  style="width: 100px">
+                    <td  style="width: 120px">
                         <table cellspacing="0" border="0">
-                            <tr><td><span style="color:#666666; font-size: 10px">{{ $metaFirst['label'] }}:</span></td></tr>
+                            <tr><td><span style="font-size:10px; color:#333333;"><strong>{{ $metaFirst['label'] }}:</strong></span></td></tr>
                             <tr><td><span style="color:#333333; font-size: 12px"><strong>{{ $metaFirst['value'] }}</strong></span></td></tr>
                         </table>
                     </td>
                     <td  style="width: 500px">
                         <table cellspacing="0" border="0">
-                            <tr><td><span style="color:#666666; font-size: 10px">{{ $metaSecond['label'] }}:</span></td></tr>
+                            <tr><td><span style="font-size:10px; color:#333333;"><strong>{{ $metaSecond['label'] }}:</strong></span></td></tr>
                             <tr><td><span style="color:#333333; font-size: 12px"><strong>{{ $metaSecond['value'] }}</strong></span></td></tr>
                         </table>
                     </td>
                 </tr>
             </table><br><br><table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr>
-                    <td  style="width: 100px">
+                    <td  style="width: 120px">
                         <table cellspacing="0" border="0">
-                            <tr><td><span style="color:#666666; font-size: 10px">{{ $metaThird['label'] }}:</span></td></tr>
+                            <tr><td><span style="font-size:10px; color:#333333;"><strong>{{ $metaThird['label'] }}:</strong></span></td></tr>
                             <tr><td><span style="color:#333333; font-size: 12px"><strong>{{ $metaThird['value'] }}</strong></span></td></tr>
                         </table>
                     </td>
                     <td  style="width: 500px">
                         <table cellspacing="0" border="0">
-                            <tr><td><span style="color:#666666; font-size: 10px">{{ $metaForth['label'] }}:</span></td></tr>
+                            <tr><td><span style="font-size:10px; color:#333333;"><strong>{{ $metaForth['label'] }}:</strong></span></td></tr>
                             <tr><td><span style="color:#333333; font-size: 12px"><strong>{{ $metaForth['value'] }}</strong></span></td></tr>
                         </table>
                     </td>
@@ -120,10 +129,10 @@
         <td style="width:12px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
-                <tr><td style="font-size:10px; color:#333333;width:100px"><strong>Contributors</strong></td></tr>
+                <tr><td style="font-size:10px; color:#333333;width:120px"><strong>Contributors</strong></td></tr>
             </table>
             <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
-                @foreach($contributors as $row)<tr><td style="font-size:8px; color:#666666; width:100px;">{{ $row['label'] }}:</td><td style="font-size:8px; color:#333333;">{{ $row['value'] }}</td></tr>@endforeach
+                @foreach($contributors as $row)<tr><td style="font-size:8px; color:#666666; width:120px;">{{ $row['label'] }}:</td><td style="font-size:8px; color:#333333;">{{ $row['value'] }}</td></tr>@endforeach
                 <tr><td colspan="3" style="height:10px;"></td></tr>
             </table>
         </td>
@@ -131,222 +140,124 @@
     <tr>
         <td style="width:12px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                <tr>
-                    <td style="font-size:10px; color:#333333;"><strong>Edition notes</strong></td>
-                </tr>
+            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+                <tr><td style="font-size:10px; color:#333333;width:120px"><strong>Edition notes</strong></td></tr>
             </table>
-            {{-- Border line (replaces border-bottom CSS) --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#cccccc;">
-                <tr>
-                    <td style="height:1px;"></td>
-                </tr>
-            </table>
-            {{-- Spacer row (replaces padding-bottom:2px) --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                <tr>
-                    <td style="height:2px;"></td>
-                </tr>
-            </table>
-            <table cellpadding="1" cellspacing="0" border="0" style="width:100%;">
+            <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
                 @foreach($editionNotes as $row)
                     <tr>
-                        <td style="font-size:8px; color:#666666; width:90px;">{{ $row['label'] }}:</td>
+                        <td style="font-size:8px; color:#666666; width:120px;">{{ $row['label'] }}:</td>
                         <td style="font-size:8px; color:#333333;">{{ $row['value'] }}</td>
                     </tr>
                 @endforeach
-                {{-- Spacer row (replaces margin-bottom:6px) --}}
-                <tr>
-                    <td colspan="2" style="height:6px;"></td>
-                </tr>
+                <tr><td colspan="3" style="height:10px;"></td></tr>
             </table>
-
-            {{-- Classification section --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                <tr>
-                    <td style="font-size:10px; color:#333333;"><strong>Classification</strong></td>
-                </tr>
+        </td>
+    </tr>
+    <tr>
+        <td style="width:12px;"></td>
+        <td>
+            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+                <tr><td style="font-size:10px; color:#333333;width:120px"><strong>Classification</strong></td></tr>
             </table>
-            {{-- Border line (replaces border-bottom CSS) --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#cccccc;">
-                <tr>
-                    <td style="height:1px;"></td>
-                </tr>
-            </table>
-            <table cellpadding="1" cellspacing="0" border="0" style="width:100%;">
+            <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
                 @foreach($classifications as $row)
                     <tr>
-                        <td style="font-size:8px; color:#666666; width:90px;">{{ $row['label'] }}:</td>
+                        <td style="font-size:8px; color:#666666; width:120px;">{{ $row['label'] }}:</td>
                         <td style="font-size:8px; color:#333333;">{{ $row['value'] }}</td>
                     </tr>
                 @endforeach
+                <tr><td colspan="3" style="height:10px;"></td></tr>
             </table>
-
-            {{-- Description section --}}
-            @if($description)
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                    <tr>
-                        <td style="font-size:10px; color:#333333;"><strong>Description</strong></td>
-                    </tr>
-                </table>
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                    <tr>
-                        <td style="font-size:8px; color:#333333; line-height:1.4;">{{ $description }}</td>
-                    </tr>
-                </table>
-            @endif
-
-            {{-- Abstract section --}}
-            @if($abstract)
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                    <tr>
-                        <td style="font-size:10px; color:#333333;"><strong>Abstract</strong></td>
-                    </tr>
-                </table>
-                {{-- Border line (replaces border-bottom CSS) --}}
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#cccccc;">
-                    <tr>
-                        <td style="height:1px;"></td>
-                    </tr>
-                </table>
-                {{-- Spacer row (replaces padding-bottom:2px) --}}
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                    <tr>
-                        <td style="height:2px;"></td>
-                    </tr>
-                </table>
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                    <tr>
-                        <td style="font-size:8px; color:#333333; line-height:1.4;">{{ $abstract }}</td>
-                    </tr>
-                    {{-- Spacer row (replaces margin-bottom:6px) --}}
-                    <tr>
-                        <td style="height:6px;"></td>
-                    </tr>
-                </table>
-            @endif
-
-            {{-- Notes section --}}
-            @if($notes)
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                    <tr>
-                        <td style="font-size:10px; color:#333333;"><strong>Notes</strong></td>
-                    </tr>
-                </table>
-                {{-- Border line (replaces border-bottom CSS) --}}
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#cccccc;">
-                    <tr>
-                        <td style="height:1px;"></td>
-                    </tr>
-                </table>
-                {{-- Spacer row (replaces padding-bottom:2px) --}}
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                    <tr>
-                        <td style="height:2px;"></td>
-                    </tr>
-                </table>
-                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                    <tr>
-                        <td style="font-size:8px; color:#333333; line-height:1.4;">{{ $notes }}</td>
-                    </tr>
-                    {{-- Spacer row (replaces margin-bottom:6px) --}}
-                    <tr>
-                        <td style="height:6px;"></td>
-                    </tr>
-                </table>
-            @endif
-
-            {{-- Direct download link section --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100px;">
-                <tr>
-                    <td style="font-size:10px; color:#333333;"><strong>Direct download link</strong></td>
-                </tr>
-            </table>
-            {{-- Border line (replaces border-bottom CSS) --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#cccccc;">
-                <tr>
-                    <td style="height:1px;"></td>
-                </tr>
-            </table>
-            {{-- Spacer row (replaces padding-bottom:2px) --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                <tr>
-                    <td style="height:2px;"></td>
-                </tr>
-            </table>
-            <table cellpadding="4" cellspacing="0" border="0" style="width:100%; background-color:#e8f0f5;">
-                <tr>
-                    <td style="font-size:7px; color:#1d496a;">{{ $downloadUrl }}</td>
-                </tr>
-                {{-- Spacer row (replaces margin-bottom:6px) --}}
-                <tr>
-                    <td style="height:6px; background-color:transparent;"></td>
-                </tr>
-            </table>
-
-            {{-- Source section --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                <tr>
-                    <td style="font-size:10px; color:#333333;"><strong>Source</strong></td>
-                </tr>
-            </table>
-            {{-- Border line (replaces border-bottom CSS) --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%; background-color:#cccccc;">
-                <tr>
-                    <td style="height:1px;"></td>
-                </tr>
-            </table>
-            {{-- Spacer row (replaces padding-bottom:2px) --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                <tr>
-                    <td style="height:2px;"></td>
-                </tr>
-            </table>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                <tr>
-                    <td style="font-size:8px; color:#333333; line-height:1.4;">Digital document added to the VLA
-                        resource library. If you have copyright concerns or need a hard copy, please email
-                        irei@islandresearch.org for more information.
-                    </td>
-                </tr>
-                {{-- Spacer row (replaces margin-bottom:5px) --}}
-                <tr>
-                    <td style="height:5px;"></td>
-                </tr>
-            </table>
-
-            {{-- Note box with simulated border --}}
-            {{-- Outer table creates 1px border effect with background color --}}
-            <table cellpadding="1" cellspacing="0" border="0" style="width:100%; background-color:#dddddd;">
-                <tr>
-                    <td>
-                        {{-- Inner table with actual content background --}}
-                        <table cellpadding="5" cellspacing="0" border="0" style="width:100%; background-color:#f5f5f5;">
-                            <tr>
-                                <td style="font-size:7px; color:#666666; line-height:1.4;">
-                                    This digital document is disseminated and preserved by the FSM National VLA Curriculum Resource
-                                    Library: https://micronesian.school<br/><br/>
-                                    It is protected by copyright law and remains the property of the rights-holders. Contact
-                                    irei@islandresearch.org for inquiries.
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-
-            {{-- Vertical spacer (replaces bottom padding) --}}
-            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-                <tr>
-                    <td style="height:12px;"></td>
-                </tr>
-            </table>
-
         </td>
-        <td style="width:35px;"></td>
+    </tr>
+@if($description)
+    <tr>
+        <td style="width:12px;"></td>
+        <td>
+            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+                <tr>
+                    <td style="font-size:10px; color:#333333;width:120px"><strong>Description</strong></td>
+                    <td style="font-size:8px; color:#666666; width:400px;">{{ $description }}</td>
+                </tr>
+            </table>
+            <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
+                <tr><td colspan="3" style="height:10px;"></td></tr>
+            </table>
+        </td>
+    </tr>
+@endif
+@if($abstract)
+    <tr>
+        <td style="width:12px;"></td>
+        <td>
+            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+                <tr>
+                    <td style="font-size:10px; color:#333333;width:120px"><strong>Abstract</strong></td>
+                    <td style="font-size:8px; color:#666666; width:400px;">{{ $abstract }}</td>
+                </tr>
+            </table>
+            <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
+                <tr><td colspan="3" style="height:10px;"></td></tr>
+            </table>
+        </td>
+    </tr>
+@endif
+@if($notes)
+    <tr>
+        <td style="width:12px;"></td>
+        <td>
+            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+                <tr>
+                    <td style="font-size:10px; color:#333333;width:120px"><strong>Notes</strong></td>
+                    <td style="font-size:8px; color:#666666; width:400px;">{{ $notes }}</td>
+                </tr>
+            </table>
+            <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
+                <tr><td colspan="3" style="height:10px;"></td></tr>
+            </table>
+        </td>
+    </tr>
+@endif
+    <tr>
+        <td style="width:12px;"></td>
+        <td>
+            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+                <tr>
+                    <td style="font-size:10px; color:#333333;width:120px"><strong>Direct download link</strong></td>
+                    <td style="font-size:8px; color:#666666; width:400px;"><a href="{{ $downloadUrl }}" style="color:#1d496a;">{{ $downloadUrl }}</a></td>
+                </tr>
+            </table>
+            <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
+                <tr><td colspan="3" style="height:10px;"></td></tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="width:12px;"></td>
+        <td>
+            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+                <tr>
+                    <td style="font-size:10px; color:#333333;width:120px"><strong>Source</strong></td>
+                    <td style="font-size:8px; color:#666666; width:400px;">Digital document added to the VLA resource library. If you have copyright concerns or need a hard copy, please email irei@islandresearch.org for more information.</td>
+                </tr>
+            </table>
+            <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
+                <tr><td colspan="3" style="height:100px;"></td></tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="width:12px;"></td>
+        <td style="text-align: center">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:800px;">
+                <tr>
+                    <td style="font-size:8px; color:#666666; width:550px; text-align: center">This digital document is disseminated and preserved by the FSM National VLA Curriculum Resource Library: https://micronesian.school<br/> It is protected by copyright law and remains the property of the rights-holders. Contact irei@islandresearch.org for inquiries.</td>
+                </tr>
+            </table>
+            <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
+                <tr><td colspan="3" style="height:10px;"></td></tr>
+            </table>
+        </td>
     </tr>
 </table>
-
-{{-- Footer text over gradient (gradient drawn by service at y=264) --}}
-{{-- This needs absolute positioning which TCPDF doesn't support well in HTML --}}
-{{-- Footer gradient and text will be added via service --}}
