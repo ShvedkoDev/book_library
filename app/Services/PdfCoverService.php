@@ -52,7 +52,10 @@ class PdfCoverService
                     $pageCount = $pdf->setSourceFile($decompressedPath);
                     $bookPdfPath = $decompressedPath; // Use decompressed version
                 } else {
-                    throw $e; // Re-throw if decompression failed
+                    // Decompression failed (likely exec() disabled on shared hosting)
+                    // Fall back to serving original PDF without cover
+                    \Log::warning('Cannot add cover to compressed PDF - exec() disabled. Serving original PDF: ' . basename($bookPdfPath));
+                    return $bookPdfPath; // Return original PDF path without cover
                 }
             } else {
                 throw $e;

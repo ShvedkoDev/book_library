@@ -555,17 +555,20 @@ class LibraryController extends Controller
         // Generate PDF with cover page
         $coverService = new PdfCoverService();
         $user = auth()->user();
-        
+
         try {
             $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user);
-            
-            // Stream the merged PDF
+
+            // Check if a new PDF was generated (with cover) or if original was returned
+            $isTemporaryFile = $pdfWithCoverPath !== $filePath;
+
+            // Stream the PDF (merged with cover or original)
             return response()->file($pdfWithCoverPath, [
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($normalizedPath)) . '"',
                 'Cache-Control' => 'no-cache, no-store, must-revalidate',
                 'X-Content-Type-Options' => 'nosniff',
-            ])->deleteFileAfterSend(true);
+            ])->deleteFileAfterSend($isTemporaryFile); // Only delete temp files, not originals
         } catch (\Exception $e) {
             // Log error and fall back to original PDF
             \Log::error('PDF cover generation failed: ' . $e->getMessage());
@@ -612,14 +615,17 @@ class LibraryController extends Controller
         if ($file->file_type === 'pdf') {
             $coverService = new PdfCoverService();
             $user = auth()->user();
-            
+
             try {
                 $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user);
-                
-                // Download the merged PDF
+
+                // Check if a new PDF was generated (with cover) or if original was returned
+                $isTemporaryFile = $pdfWithCoverPath !== $filePath;
+
+                // Download the PDF (merged with cover or original)
                 return response()->download($pdfWithCoverPath, $filename, [
                     'Content-Type' => 'application/pdf',
-                ])->deleteFileAfterSend(true);
+                ])->deleteFileAfterSend($isTemporaryFile); // Only delete temp files, not originals
             } catch (\Exception $e) {
                 // Log error and fall back to original file
                 \Log::error('PDF cover generation failed for download: ' . $e->getMessage());
