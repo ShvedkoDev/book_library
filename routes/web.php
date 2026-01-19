@@ -25,6 +25,40 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Temporary debug route - check logo paths on production
+Route::get('/debug/pdf-logos', function () {
+    $logoFiles = ['NDOE.png', 'iREi-top.png', 'C4GTS.png'];
+    $results = [];
+
+    foreach ($logoFiles as $filename) {
+        $paths = [
+            'public_path' => public_path('library-assets/images/' . $filename),
+            'base_path' => base_path('public/library-assets/images/' . $filename),
+            'storage_path' => storage_path('app/public/library-assets/images/' . $filename),
+        ];
+
+        $results[$filename] = [];
+        foreach ($paths as $label => $path) {
+            $results[$filename][$label] = [
+                'path' => $path,
+                'exists' => file_exists($path),
+                'readable' => file_exists($path) && is_readable($path),
+                'filesize' => file_exists($path) ? filesize($path) : null,
+            ];
+        }
+    }
+
+    return response()->json([
+        'php_sapi' => php_sapi_name(),
+        'base_path' => base_path(),
+        'public_path' => public_path(),
+        'storage_path' => storage_path(),
+        'document_root' => $_SERVER['DOCUMENT_ROOT'] ?? 'not set',
+        'script_filename' => $_SERVER['SCRIPT_FILENAME'] ?? 'not set',
+        'results' => $results,
+    ], 200, [], JSON_PRETTY_PRINT);
+})->name('debug.pdf-logos');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
