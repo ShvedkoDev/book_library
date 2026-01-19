@@ -86,6 +86,21 @@ class PdfCoverService
     }
 
     /**
+     * Check if exec() function is available
+     * Production shared hosting often disables exec() for security
+     */
+    protected function isExecAvailable(): bool
+    {
+        static $available = null;
+
+        if ($available === null) {
+            $available = function_exists('exec') && !in_array('exec', array_map('trim', explode(',', ini_get('disable_functions'))));
+        }
+
+        return $available;
+    }
+
+    /**
      * Decompress a PDF using Ghostscript or PHP fallback
      *
      * @param string $pdfPath
@@ -93,6 +108,12 @@ class PdfCoverService
      */
     protected function decompressPdf(string $pdfPath): ?string
     {
+        // Check if exec() is available (often disabled on shared hosting)
+        if (!$this->isExecAvailable()) {
+            \Log::warning('PDF decompression skipped - exec() function is disabled on this server');
+            return null;
+        }
+
         $outputPath = storage_path('app/temp/decompressed_' . uniqid() . '.pdf');
 
         // Ensure temp directory exists
@@ -143,6 +164,10 @@ class PdfCoverService
      */
     protected function isGhostscriptAvailable(): bool
     {
+        if (!$this->isExecAvailable()) {
+            return false;
+        }
+
         exec('which gs 2>&1', $output, $returnVar);
         return $returnVar === 0;
     }
@@ -155,6 +180,10 @@ class PdfCoverService
         $bundled = storage_path('tools/qpdf/bin/qpdf');
         if (is_file($bundled) && is_executable($bundled)) {
             return $bundled;
+        }
+
+        if (!$this->isExecAvailable()) {
+            return null;
         }
 
         exec('which qpdf 2>&1', $output, $returnVar);
