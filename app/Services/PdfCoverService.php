@@ -416,7 +416,8 @@ class PdfCoverService
         $timestamp = now()->format('m/d/Y g:i a');
         $generatedBy = $user ? $user->name : "Guest";
 
-        // Build logo paths - try multiple possible locations
+        // Build logo paths and convert to base64 data URIs for TCPDF compatibility
+        // TCPDF's writeHTML() doesn't handle local file paths well, but works with base64
         $logoFiles = ['NDOE.png', 'iREi-top.png', 'C4GTS.png'];
         $logos = collect($logoFiles)->map(function ($filename) {
             // Try different path possibilities
@@ -428,8 +429,13 @@ class PdfCoverService
 
             foreach ($paths as $path) {
                 if (file_exists($path) && is_readable($path)) {
-                    \Log::info('Logo found: ' . $filename . ' at ' . $path);
-                    return $path;
+                    // Convert to base64 data URI for TCPDF compatibility
+                    $imageData = base64_encode(file_get_contents($path));
+                    $mimeType = mime_content_type($path);
+                    $dataUri = "data:{$mimeType};base64,{$imageData}";
+
+                    \Log::info('Logo found and converted to base64: ' . $filename . ' at ' . $path);
+                    return $dataUri;
                 }
             }
 
