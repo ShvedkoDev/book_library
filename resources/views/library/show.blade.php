@@ -2451,7 +2451,12 @@
                                 <div class="details-row">
                                     <span class="details-label">Project/partner</span>
                                     <span class="details-value">
-                                        <a href="{{ route('library.index', ['search' => $book->program_partner_name]) }}" class="author-pill">{{ $book->program_partner_name }}</a>
+                                        @php
+                                            $partners = array_map('trim', explode('|', $book->program_partner_name));
+                                        @endphp
+                                        @foreach($partners as $index => $partner)
+                                            <a href="{{ route('library.index', ['search' => $partner]) }}" class="author-pill">{{ $partner }}</a>{{ $index < count($partners) - 1 ? ', ' : '' }}
+                                        @endforeach
                                     </span>
                                 </div>
                             @endif
@@ -2468,6 +2473,16 @@
                                     <span class="details-value">
                                         @foreach($book->purposeClassifications as $index => $classification)
                                             <a href="{{ route('library.index', ['subjects' => [$classification->id]]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->purposeClassifications->count() - 1 ? ', ' : '' }}
+                                        @endforeach
+                                    </span>
+                                </div>
+                            @endif
+                            @if($book->areaClassifications->isNotEmpty())
+                                <div class="details-row">
+                                    <span class="details-label">Area</span>
+                                    <span class="details-value">
+                                        @foreach($book->areaClassifications as $index => $classification)
+                                            <a href="{{ route('library.index', ['search' => $classification->value]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->areaClassifications->count() - 1 ? ', ' : '' }}
                                         @endforeach
                                     </span>
                                 </div>
@@ -2492,32 +2507,12 @@
                                     </span>
                                 </div>
                             @endif
-                            @if($book->areaClassifications->isNotEmpty())
-                                <div class="details-row">
-                                    <span class="details-label">Area</span>
-                                    <span class="details-value">
-                                        @foreach($book->areaClassifications as $index => $classification)
-                                            <a href="{{ route('library.index', ['search' => $classification->value]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->areaClassifications->count() - 1 ? ', ' : '' }}
-                                        @endforeach
-                                    </span>
-                                </div>
-                            @endif
                             @if($book->subjectClassifications->isNotEmpty())
                                 <div class="details-row">
                                     <span class="details-label">Subject</span>
                                     <span class="details-value">
                                         @foreach($book->subjectClassifications as $index => $classification)
                                             <a href="{{ route('library.index', ['search' => $classification->value]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->subjectClassifications->count() - 1 ? ', ' : '' }}
-                                        @endforeach
-                                    </span>
-                                </div>
-                            @endif
-                            @if($book->themesClassifications->isNotEmpty())
-                                <div class="details-row">
-                                    <span class="details-label">Themes/Uses</span>
-                                    <span class="details-value">
-                                        @foreach($book->themesClassifications as $index => $classification)
-                                            <a href="{{ route('library.index', ['search' => $classification->value]) }}" class="author-pill">{{ $classification->value }}</a>{{ $index < $book->themesClassifications->count() - 1 ? ', ' : '' }}
                                         @endforeach
                                     </span>
                                 </div>

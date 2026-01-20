@@ -152,67 +152,108 @@ class LibraryController extends Controller
 
         // Apply search with diacritics and apostrophe insensitivity
         if ($search) {
-            // Normalize the search term (remove apostrophes and diacritics)
+            // Normalize the search term and split into keywords
             $normalizedSearch = $this->normalizeSearchTerm($search);
+            $keywords = array_filter(explode(' ', $normalizedSearch)); // Split by space and remove empty strings
 
-            $query->where(function($q) use ($normalizedSearch) {
-                // Define all book fields to search (including ALL metadata fields)
-                $bookFields = [
-                    'books.title',
-                    'books.subtitle',
-                    'books.translated_title',
-                    'books.description',
-                    'books.abstract',
-                    'books.toc',
-                    'books.notes_issue',
-                    'books.notes_version',
-                    'books.notes_content',
-                    'books.internal_id',
-                    'books.palm_code',
-                ];
+            // Each keyword must be found in at least one field (AND logic for keywords)
+            foreach ($keywords as $keyword) {
+                $keyword = trim($keyword);
+                if (empty($keyword)) continue;
 
-                // Search in all book fields with normalization
-                foreach ($bookFields as $field) {
-                    $normalizedField = $this->getNormalizedFieldExpression($field);
-                    $q->orWhereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
-                }
+                $query->where(function($q) use ($keyword) {
+                    // Define all book fields to search (including ALL metadata fields)
+                    $bookFields = [
+                        'books.title',
+                        'books.subtitle',
+                        'books.translated_title',
+                        'books.description',
+                        'books.abstract',
+                        'books.toc',
+                        'books.notes_issue',
+                        'books.notes_version',
+                        'books.notes_content',
+                        'books.internal_id',
+                        'books.palm_code',
+                    ];
 
-                // Search in creators' names (with normalization)
-                $q->orWhereHas('creators', function($creatorQuery) use ($normalizedSearch) {
-                    $normalizedField = $this->getNormalizedFieldExpression('name');
-                    $creatorQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
+                    // Search in all book fields with normalization
+                    foreach ($bookFields as $field) {
+                        $normalizedField = $this->getNormalizedFieldExpression($field);
+                        $q->orWhereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    }
+
+                    // Search in creators' names (with normalization)
+                    $q->orWhereHas('creators', function($creatorQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('name');
+                        $creatorQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in publisher name (with normalization)
+                    $q->orWhereHas('publisher', function($publisherQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('name');
+                        $publisherQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in collection title (with normalization)
+                    $q->orWhereHas('collection', function($collectionQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('title');
+                        $collectionQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in keywords
+                    $q->orWhereHas('keywords', function($keywordQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('keyword');
+                        $keywordQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in themes
+                    $q->orWhereHas('themesClassifications', function($themeQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('value');
+                        $themeQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in languages
+                    $q->orWhereHas('languages', function($languageQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('name');
+                        $languageQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in program/partner name
+                    $normalizedField = $this->getNormalizedFieldExpression('books.program_partner_name');
+                    $q->orWhereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+
+                    // Search in purpose classifications (subjects)
+                    $q->orWhereHas('purposeClassifications', function($purposeQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('value');
+                        $purposeQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in area classifications
+                    $q->orWhereHas('areaClassifications', function($areaQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('value');
+                        $areaQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in genre classifications
+                    $q->orWhereHas('genreClassifications', function($genreQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('value');
+                        $genreQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in sub-genre classifications
+                    $q->orWhereHas('subgenreClassifications', function($subgenreQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('value');
+                        $subgenreQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
+
+                    // Search in subject classifications
+                    $q->orWhereHas('subjectClassifications', function($subjectQuery) use ($keyword) {
+                        $normalizedField = $this->getNormalizedFieldExpression('value');
+                        $subjectQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$keyword}%"]);
+                    });
                 });
-
-                // Search in publisher name (with normalization)
-                $q->orWhereHas('publisher', function($publisherQuery) use ($normalizedSearch) {
-                    $normalizedField = $this->getNormalizedFieldExpression('name');
-                    $publisherQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
-                });
-
-                // Search in collection title (with normalization)
-                $q->orWhereHas('collection', function($collectionQuery) use ($normalizedSearch) {
-                    $normalizedField = $this->getNormalizedFieldExpression('title');
-                    $collectionQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
-                });
-
-                // Search in keywords
-                $q->orWhereHas('keywords', function($keywordQuery) use ($normalizedSearch) {
-                    $normalizedField = $this->getNormalizedFieldExpression('keyword');
-                    $keywordQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
-                });
-
-                // Search in themes
-                $q->orWhereHas('themesClassifications', function($themeQuery) use ($normalizedSearch) {
-                    $normalizedField = $this->getNormalizedFieldExpression('value');
-                    $themeQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
-                });
-
-                // Search in languages
-                $q->orWhereHas('languages', function($languageQuery) use ($normalizedSearch) {
-                    $normalizedField = $this->getNormalizedFieldExpression('name');
-                    $languageQuery->whereRaw("{$normalizedField} LIKE ?", ["%{$normalizedSearch}%"]);
-                });
-            });
+            }
         }
 
         // Apply filters

@@ -392,22 +392,23 @@
                 <div class="sidebar_item text-sidebar">
                     <h2>How to use?</h2>
                     <p>To make the most out of this site, please review our user guides:</p>
-                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('pages.show', 'introduction') }}"><strong>How to use the<br><em>Resource guide</em></strong></a></p>
-                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('pages.show', 'introduction') }}"><strong>How to use the<br><em>Resource library</em></strong></a></p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="https://micronesian.school/library/book/125/download/231"><strong>How to use the<br><em>Resource guide</em></strong></a></p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="https://micronesian.school/library/book/126/download/233"><strong>How to use the<br><em>Resource library</em></strong></a></p>
                 </div>
                 <!-- Ready to Explore -->
                 <div class="sidebar_item text-sidebar">
                     <h2>Ready to explore?</h2>
                     <p>Once you have reviewed this guide, you are ready to explore the available resources:</p>
                     <p><a class="button-line-color button-line library-entry-sidebar-btn" href="{{ route('library.index') }}"><strong>Access the<br><em>Resource library</em></strong></a></p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" href="https://micronesian.school/library/book/127/download/235"><strong>Download the <br><em>Template toolkit for teachers</em></strong></a></p>
                 </div>
 
                 <!-- Ready to Explore -->
                 <div class="sidebar_item text-sidebar">
                     <h2>Back to the basics?</h2>
                     <p>If you wish to refer to the underlying policy and curriculum, please check these links:</p>
-                    <p><a class="button-line-color button-line library-entry-sidebar-btn" target="_blank" href="https://www.national.doe.fm/wp-content/uploads/2023/03/FSM-language-Policy.pdf"><strong>FSM Language Policy</strong></a></p>
-                    <p><a class="button-line-color button-line library-entry-sidebar-btn" target="_blank" href="https://www.national.doe.fm/language-arts-vernacular-curriculum/"><strong>FSM VLA Curriculum</strong></a></p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" target="_blank" href="https://micronesian.school/library/book/124/download/229"><strong>FSM Language Policy</strong></a></p>
+                    <p><a class="button-line-color button-line library-entry-sidebar-btn" target="_blank" href="https://micronesian.school/library/book/123/download/227"><strong>FSM VLA Curriculum</strong></a></p>
                 </div>
             </aside>
         </div>
