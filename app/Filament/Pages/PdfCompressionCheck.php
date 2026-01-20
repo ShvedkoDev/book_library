@@ -56,6 +56,25 @@ class PdfCompressionCheck extends Page implements HasTable
             ];
         }
 
+        // Read PDF content for analysis
+        $content = @file_get_contents($filePath, false, null, 0, min($fileSize, 1024 * 1024)); // Read first 1MB max
+        $pdfVersion = null;
+        $hasObjectStreams = false;
+        $hasXRefStreams = false;
+
+        if ($content !== false) {
+            // Extract PDF version
+            if (preg_match('/%PDF-(\d\.\d)/', $content, $matches)) {
+                $pdfVersion = $matches[1];
+            }
+
+            // Check for Object Streams (PDF 1.5+)
+            $hasObjectStreams = (bool)preg_match('/\/ObjStm/', $content);
+
+            // Check for XRef Streams (PDF 1.5+)
+            $hasXRefStreams = (bool)preg_match('/\/XRefStm/', $content);
+        }
+
         // Try to read with FPDI
         try {
             $pdf = new \setasign\Fpdi\Tcpdf\Fpdi();
@@ -63,12 +82,26 @@ class PdfCompressionCheck extends Page implements HasTable
 
             return [
                 'status' => 'normal',
-                'message' => "OK ({$pageCount} pages)",
+                'message' => "OK ({$pageCount} pages)" . ($pdfVersion ? " - PDF {$pdfVersion}" : ''),
                 'can_add_cover' => true,
                 'pages' => $pageCount,
+                'pdf_version' => $pdfVersion,
             ];
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
+
+            // Check for Object Streams (most common issue with free FPDI parser)
+            if ($hasObjectStreams || $hasXRefStreams) {
+                return [
+                    'status' => 'object_streams',
+                    'message' => "PDF {$pdfVersion} - Uses Object Streams (needs paid parser or conversion)",
+                    'can_add_cover' => false,
+                    'error' => $errorMessage,
+                    'pdf_version' => $pdfVersion,
+                    'has_object_streams' => $hasObjectStreams,
+                    'has_xref_streams' => $hasXRefStreams,
+                ];
+            }
 
             // Check if it's a compression issue
             if (stripos($errorMessage, 'compression') !== false ||
@@ -76,9 +109,10 @@ class PdfCompressionCheck extends Page implements HasTable
                 stripos($errorMessage, 'flate') !== false) {
                 return [
                     'status' => 'compressed',
-                    'message' => 'Compressed - needs decompression',
+                    'message' => 'Compressed - ' . substr($errorMessage, 0, 60),
                     'can_add_cover' => false,
                     'error' => $errorMessage,
+                    'pdf_version' => $pdfVersion,
                 ];
             }
 
@@ -88,6 +122,7 @@ class PdfCompressionCheck extends Page implements HasTable
                 'message' => 'Read error: ' . substr($errorMessage, 0, 100),
                 'can_add_cover' => false,
                 'error' => $errorMessage,
+                'pdf_version' => $pdfVersion,
             ];
         }
     }
@@ -127,18 +162,34 @@ class PdfCompressionCheck extends Page implements HasTable
                     })
                     ->colors([
                         'success' => 'normal',
-                        'danger' => 'compressed',
+                        'danger' => 'object_streams',
+                        'warning' => 'compressed',
                         'warning' => 'error',
                         'secondary' => 'missing',
                         'secondary' => 'empty',
                     ])
                     ->icons([
                         'heroicon-o-check-circle' => 'normal',
+                        'heroicon-o-exclamation-circle' => 'object_streams',
                         'heroicon-o-exclamation-triangle' => 'compressed',
                         'heroicon-o-x-circle' => 'error',
                         'heroicon-o-question-mark-circle' => 'missing',
                         'heroicon-o-document' => 'empty',
                     ]),
+
+                TextColumn::make('pdf_version')
+                    ->label('PDF Ver')
+                    ->getStateUsing(function (BookFile $record): string {
+                        $cacheKey = "pdf_compression_check_{$record->id}";
+
+                        return Cache::remember($cacheKey . '_version', 3600, function () use ($record) {
+                            $filePath = storage_path('app/public/' . $record->file_path);
+                            $result = self::checkPdfCompression($filePath);
+                            return $result['pdf_version'] ?? '—';
+                        });
+                    })
+                    ->sortable()
+                    ->searchable(),
 
                 TextColumn::make('details')
                     ->label('Details')
@@ -182,9 +233,10 @@ class PdfCompressionCheck extends Page implements HasTable
                 SelectFilter::make('status')
                     ->label('Compression Status')
                     ->options([
-                        'normal' => 'Normal (Can add cover)',
-                        'compressed' => 'Compressed (Needs fix)',
-                        'error' => 'Error',
+                        'normal' => '✅ Normal (Can add cover)',
+                        'object_streams' => '❌ Object Streams (PDF 1.5+) - Needs conversion',
+                        'compressed' => '⚠️ Other compression issue',
+                        'error' => '⚠️ Read error',
                         'missing' => 'Missing File',
                     ])
                     ->query(function (Builder $query, array $data) {
@@ -226,6 +278,7 @@ class PdfCompressionCheck extends Page implements HasTable
             $stats = [
                 'total' => 0,
                 'normal' => 0,
+                'object_streams' => 0,
                 'compressed' => 0,
                 'error' => 0,
                 'missing' => 0,
@@ -272,47 +325,96 @@ class PdfCompressionCheck extends Page implements HasTable
                 })
                 ->requiresConfirmation(),
 
-            Action::make('export_compressed')
-                ->label('Export Compressed List')
+            Action::make('export_object_streams')
+                ->label('Export Object Streams List (PDF 1.5+)')
                 ->icon('heroicon-o-document-arrow-down')
                 ->color('danger')
                 ->action(function () {
-                    $compressed = [];
+                    $objectStreams = [];
 
-                    BookFile::where('file_type', 'pdf')->with('book')->chunk(100, function ($files) use (&$compressed) {
+                    BookFile::where('file_type', 'pdf')->with('book')->chunk(100, function ($files) use (&$objectStreams) {
                         foreach ($files as $file) {
                             $filePath = storage_path('app/public/' . $file->file_path);
                             $result = self::checkPdfCompression($filePath);
 
-                            if ($result['status'] === 'compressed') {
-                                $compressed[] = [
+                            if ($result['status'] === 'object_streams') {
+                                $objectStreams[] = [
                                     'id' => $file->id,
                                     'book_id' => $file->book_id,
                                     'book_title' => $file->book?->title,
                                     'filename' => $file->filename,
                                     'file_path' => $file->file_path,
+                                    'pdf_version' => $result['pdf_version'] ?? 'Unknown',
                                     'message' => $result['message'],
                                 ];
                             }
                         }
                     });
 
-                    $csv = "ID,Book ID,Book Title,Filename,File Path,Status\n";
-                    foreach ($compressed as $item) {
+                    $csv = "ID,Book ID,Book Title,Filename,File Path,PDF Version,Status\n";
+                    foreach ($objectStreams as $item) {
                         $csv .= sprintf(
-                            '"%s","%s","%s","%s","%s","%s"' . "\n",
+                            '"%s","%s","%s","%s","%s","%s","%s"' . "\n",
                             $item['id'],
                             $item['book_id'],
                             str_replace('"', '""', $item['book_title'] ?? ''),
                             str_replace('"', '""', $item['filename']),
                             $item['file_path'],
+                            $item['pdf_version'],
                             $item['message']
                         );
                     }
 
                     return response()->streamDownload(function () use ($csv) {
                         echo $csv;
-                    }, 'compressed-pdfs-' . date('Y-m-d') . '.csv');
+                    }, 'object-streams-pdfs-' . date('Y-m-d') . '.csv');
+                }),
+
+            Action::make('export_all_issues')
+                ->label('Export All Problem PDFs')
+                ->icon('heroicon-o-document-text')
+                ->color('warning')
+                ->action(function () {
+                    $problems = [];
+
+                    BookFile::where('file_type', 'pdf')->with('book')->chunk(100, function ($files) use (&$problems) {
+                        foreach ($files as $file) {
+                            $filePath = storage_path('app/public/' . $file->file_path);
+                            $result = self::checkPdfCompression($filePath);
+
+                            if (in_array($result['status'], ['object_streams', 'compressed', 'error'])) {
+                                $problems[] = [
+                                    'id' => $file->id,
+                                    'book_id' => $file->book_id,
+                                    'book_title' => $file->book?->title,
+                                    'filename' => $file->filename,
+                                    'file_path' => $file->file_path,
+                                    'status' => $result['status'],
+                                    'pdf_version' => $result['pdf_version'] ?? 'Unknown',
+                                    'message' => $result['message'],
+                                ];
+                            }
+                        }
+                    });
+
+                    $csv = "ID,Book ID,Book Title,Filename,File Path,Issue Type,PDF Version,Details\n";
+                    foreach ($problems as $item) {
+                        $csv .= sprintf(
+                            '"%s","%s","%s","%s","%s","%s","%s","%s"' . "\n",
+                            $item['id'],
+                            $item['book_id'],
+                            str_replace('"', '""', $item['book_title'] ?? ''),
+                            str_replace('"', '""', $item['filename']),
+                            $item['file_path'],
+                            $item['status'],
+                            $item['pdf_version'],
+                            str_replace('"', '""', $item['message'])
+                        );
+                    }
+
+                    return response()->streamDownload(function () use ($csv) {
+                        echo $csv;
+                    }, 'all-problem-pdfs-' . date('Y-m-d') . '.csv');
                 }),
         ];
     }

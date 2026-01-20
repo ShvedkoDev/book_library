@@ -7,7 +7,7 @@
             </x-slot>
 
             <x-slot name="description">
-                This tool checks all PDF files in your library to determine if they can have cover pages added.
+                This tool checks all PDF files in your library to determine if they can have cover pages added. It specifically identifies PDFs using Object Streams (PDF 1.5+) which require conversion or paid parser.
             </x-slot>
 
             <div class="space-y-3 text-sm">
@@ -19,9 +19,20 @@
                 </div>
 
                 <div class="flex items-start space-x-2">
-                    <x-heroicon-o-exclamation-triangle class="w-5 h-5 text-danger-500 flex-shrink-0 mt-0.5"/>
+                    <x-heroicon-o-exclamation-circle class="w-5 h-5 text-danger-500 flex-shrink-0 mt-0.5"/>
                     <div>
-                        <strong>Compressed PDFs:</strong> Cannot have covers added when <code>exec()</code> is disabled on the server. These PDFs need to be decompressed locally and re-uploaded, or the server needs <code>exec()</code> enabled.
+                        <strong>Object Streams (PDF 1.5+):</strong> Most common issue (~70% of PDFs). These use advanced compression that requires either:
+                        <ul class="list-disc list-inside ml-4 mt-1">
+                            <li>Batch conversion to PDF 1.4 using Ghostscript</li>
+                            <li>Purchasing the paid FPDI PDF-Parser (~€150-200)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-2">
+                    <x-heroicon-o-exclamation-triangle class="w-5 h-5 text-warning-500 flex-shrink-0 mt-0.5"/>
+                    <div>
+                        <strong>Other Compression Issues:</strong> Rare compression filters that need investigation.
                     </div>
                 </div>
 
@@ -33,14 +44,12 @@
                 </div>
 
                 <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <p class="font-semibold mb-2">How to Fix Compressed PDFs:</p>
-                    <ol class="list-decimal list-inside space-y-1 text-gray-700 dark:text-gray-300">
-                        <li>Export the list using the "Export Compressed List" button above</li>
-                        <li>Download the problematic PDF files</li>
-                        <li>Decompress them locally using: <code class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">qpdf --stream-data=uncompress input.pdf output.pdf</code></li>
-                        <li>Re-upload the decompressed versions</li>
-                        <li>Recheck to verify they now show as "Normal"</li>
-                    </ol>
+                    <p class="font-semibold mb-2">How to Fix Object Streams PDFs (PDF 1.5+):</p>
+                    <p class="text-sm mb-2 text-gray-600 dark:text-gray-400">Convert PDF 1.5/1.6 → PDF 1.4 using Ghostscript (removes Object Streams):</p>
+                    <pre class="bg-gray-200 dark:bg-gray-700 p-2 rounded text-xs overflow-x-auto"><code>gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 \
+   -dNOPAUSE -dQUIET -dBATCH \
+   -sOutputFile=output.pdf input.pdf</code></pre>
+                    <p class="text-sm mt-2 text-gray-600 dark:text-gray-400">After conversion, re-upload the files and recheck.</p>
                 </div>
             </div>
         </x-filament::section>
@@ -56,10 +65,10 @@
                 $total = max(1, $stats['total'] ?? 0);
                 $statusCards = [
                     'normal' => ['label' => 'Normal (Can add cover)', 'color' => 'green'],
-                    'compressed' => ['label' => 'Compressed (Needs fix)', 'color' => 'red'],
+                    'object_streams' => ['label' => 'Object Streams (PDF 1.5+)', 'color' => 'red'],
+                    'compressed' => ['label' => 'Other Compression', 'color' => 'orange'],
                     'error' => ['label' => 'Error (Unreadable)', 'color' => 'yellow'],
                     'missing' => ['label' => 'Missing File', 'color' => 'gray'],
-                    'empty' => ['label' => 'Empty File', 'color' => 'gray'],
                 ];
             @endphp
 
@@ -92,12 +101,16 @@
                             <dd class="font-semibold text-green-600 dark:text-green-400">{{ number_format($stats['normal'] ?? 0) }}</dd>
                         </div>
                         <div class="flex justify-between">
-                            <dt>Requires decompression</dt>
-                            <dd class="font-semibold text-red-600 dark:text-red-400">{{ number_format($stats['compressed'] ?? 0) }}</dd>
+                            <dt>Object Streams (PDF 1.5+)</dt>
+                            <dd class="font-semibold text-red-600 dark:text-red-400">{{ number_format($stats['object_streams'] ?? 0) }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt>Other compression issues</dt>
+                            <dd class="font-semibold text-orange-600 dark:text-orange-400">{{ number_format($stats['compressed'] ?? 0) }}</dd>
                         </div>
                         <div class="flex justify-between">
                             <dt>Need investigation</dt>
-                            <dd class="font-semibold text-yellow-600 dark:text-yellow-400">{{ number_format(($stats['error'] ?? 0) + ($stats['missing'] ?? 0) + ($stats['empty'] ?? 0)) }}</dd>
+                            <dd class="font-semibold text-yellow-600 dark:text-yellow-400">{{ number_format(($stats['error'] ?? 0) + ($stats['missing'] ?? 0)) }}</dd>
                         </div>
                     </dl>
                 </div>
