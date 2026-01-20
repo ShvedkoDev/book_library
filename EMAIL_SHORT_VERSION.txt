@@ -1,0 +1,43 @@
+Subject: Digital Library: Cover Page Feature Update
+
+Dear [Customer Name],
+
+Quick update on the automatic cover page feature for your PDFs.
+
+CURRENT SITUATION:
+• 50% of your PDFs (750 files) work great with automatic cover pages ✓
+• 50% use a newer format that needs adjustment
+• All PDFs download normally - cover pages are just an enhancement
+
+YOUR OPTIONS:
+
+1) CONVERT FILES (Free, 2-4 hours work)
+   - I provide conversion tools
+   - One-time fix for all 750 files
+   - Small file size increase (~6%)
+
+2) BUY SOFTWARE (~€150-200, no work needed)
+   - Automatic handling forever
+   - Works with future uploads too
+
+3) KEEP AS-IS (Free, no work)
+   - Half of PDFs won't have cover pages
+   - Everything else works normally
+
+HELP ME CHOOSE - Answer 3 quick questions:
+
+1. Do you add new PDFs often? (monthly / sometimes / rarely)
+
+2. How important are cover pages? (very / nice-to-have / not important)
+
+3. Is server storage limited? (yes / no)
+
+QUICK GUIDE:
+• Add PDFs often + covers important = Buy software
+• Rarely add PDFs + covers important = Convert files
+• Covers nice-to-have = Keep current system
+
+Let me know your preference or if you'd like to discuss!
+
+Best regards,
+[Your Name]
