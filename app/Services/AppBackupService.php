@@ -11,6 +11,11 @@ class AppBackupService
 
     public function createFullBackup(?string $reason = null): array
     {
+        // Prevent timeout on shared hosting
+        @set_time_limit(0);
+        @ini_set('max_execution_time', '0');
+        @ini_set('memory_limit', '512M');
+
         $timestamp = now()->format('Y-m-d_H-i-s');
         $label = $reason ? '_'.$reason : '';
         $baseName = "app_backup_{$timestamp}{$label}";
@@ -66,6 +71,11 @@ class AppBackupService
 
     public function createFilesOnlyBackup(?string $reason = null): array
     {
+        // Prevent timeout on shared hosting
+        @set_time_limit(0);
+        @ini_set('max_execution_time', '0');
+        @ini_set('memory_limit', '512M');
+
         $timestamp = now()->format('Y-m-d_H-i-s');
         $label = $reason ? '_'.$reason : '';
         $baseName = "files_backup_{$timestamp}{$label}";
@@ -114,6 +124,11 @@ class AppBackupService
 
     public function restoreFromZip(string $zipPath): array
     {
+        // Prevent timeout on shared hosting
+        @set_time_limit(0);
+        @ini_set('max_execution_time', '0');
+        @ini_set('memory_limit', '512M');
+
         if (!file_exists($zipPath)) {
             return ['success' => false, 'error' => 'Archive file not found'];
         }

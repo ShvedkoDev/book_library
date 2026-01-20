@@ -32,6 +32,11 @@ class DatabaseBackupService
      */
     public function createBackup(?string $reason = null): array
     {
+        // Prevent timeout on shared hosting
+        @set_time_limit(0);
+        @ini_set('max_execution_time', '0');
+        @ini_set('memory_limit', '512M');
+
         $startTime = microtime(true);
         $timestamp = now()->format('Y-m-d_H-i-s');
         $filename = "backup_{$timestamp}" . ($reason ? "_{$reason}" : '') . '.sql';
@@ -138,6 +143,11 @@ class DatabaseBackupService
      */
     public function restoreBackup(string $filename): array
     {
+        // Prevent timeout on shared hosting
+        @set_time_limit(0);
+        @ini_set('max_execution_time', '0');
+        @ini_set('memory_limit', '512M');
+
         $startTime = microtime(true);
         $filepath = storage_path("app/{$this->directory}/{$filename}");
 
@@ -393,18 +403,45 @@ class DatabaseBackupService
             $createSql = $createStmt['Create Table'] ?? '';
             fwrite($fh, "DROP TABLE IF EXISTS `{$table}`;\n{$createSql};\n\n");
 
-            // Table data
+            // Table data - batch inserts for better performance
             $rows = $pdo->query('SELECT * FROM `'.$table.'`');
+            $batchSize = 100;
+            $batch = [];
+            $columns = null;
+
             while ($row = $rows->fetch(\PDO::FETCH_ASSOC)) {
-                $columns = array_map(fn($c) => '`'.$c.'`', array_keys($row));
+                if ($columns === null) {
+                    $columns = array_map(fn($c) => '`'.$c.'`', array_keys($row));
+                }
+
                 $values = array_map(function ($v) use ($pdo) {
                     if ($v === null) return 'NULL';
                     return $pdo->quote($v);
                 }, array_values($row));
-                $insert = 'INSERT INTO `'.$table.'` ('.implode(',', $columns).') VALUES ('.implode(',', $values).');';
+
+                $batch[] = '('.implode(',', $values).')';
+
+                // Write batch when size reached
+                if (count($batch) >= $batchSize) {
+                    $insert = 'INSERT INTO `'.$table.'` ('.implode(',', $columns).') VALUES '.implode(',', $batch).';';
+                    fwrite($fh, $insert."\n");
+                    $batch = [];
+
+                    // Flush to disk periodically to reduce memory usage
+                    if (ftell($fh) % (1024 * 1024) < 1000) { // Every ~1MB
+                        fflush($fh);
+                    }
+                }
+            }
+
+            // Write remaining batch
+            if (!empty($batch) && $columns !== null) {
+                $insert = 'INSERT INTO `'.$table.'` ('.implode(',', $columns).') VALUES '.implode(',', $batch).';';
                 fwrite($fh, $insert."\n");
             }
+
             fwrite($fh, "\n");
+            fflush($fh); // Flush after each table
         }
 
         fwrite($fh, "SET FOREIGN_KEY_CHECKS=1;\n");
