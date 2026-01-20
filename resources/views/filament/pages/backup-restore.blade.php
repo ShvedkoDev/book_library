@@ -1,10 +1,10 @@
 <x-filament-panels::page>
     <div class="space-y-6">
         <x-filament::section>
-            <x-slot name="heading">Create Backup</x-slot>
+            <x-slot name="heading">Create Full Backup</x-slot>
             <div class="filament-forms-component-wrapper">
                 <x-filament::button wire:click="createBackup" icon="heroicon-o-archive-box" size="lg">
-                    Create Backup Archive
+                    Create Full Backup
                 </x-filament::button>
                 <x-filament::button color="gray" size="lg" wire:click="$refresh" class="ml-2" icon="heroicon-o-arrow-path">
                     Refresh
@@ -17,6 +17,24 @@
                     <li>Archive storage files: <code>storage/app/public/</code> and <code>storage/app/uploads/</code>.</li>
                     <li>Create a downloadable archive (.zip if available, otherwise .tar) in <code>storage/app/full-backups/</code>.</li>
                 </ul>
+            </div>
+        </x-filament::section>
+
+        <x-filament::section>
+            <x-slot name="heading">Create Files-Only Backup</x-slot>
+            <div class="filament-forms-component-wrapper">
+                <x-filament::button wire:click="createFilesBackup" icon="heroicon-o-folder" size="lg" color="info">
+                    Create Files Backup
+                </x-filament::button>
+            </div>
+            <div class="prose dark:prose-invert mt-4">
+                <p>This will:</p>
+                <ul class="list-disc pl-5">
+                    <li><strong>Skip</strong> the database dump (faster, smaller).</li>
+                    <li>Archive only storage files: <code>storage/app/public/</code> and <code>storage/app/uploads/</code>.</li>
+                    <li>Create a downloadable archive (.zip if available, otherwise .tar) in <code>storage/app/full-backups/</code>.</li>
+                </ul>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Use this for quick file backups without database overhead.</p>
             </div>
         </x-filament::section>
 

@@ -35,11 +35,18 @@ class BackupRestore extends Page implements HasForms
     {
         return $form
             ->schema([
-                Section::make('Create Backup')
+                Section::make('Create Full Backup')
                     ->description('Archive storage files and database dump into a single ZIP.')
                     ->schema([
                         Placeholder::make('info')
-                            ->content('Click "Create Backup ZIP" to generate and download the archive.'),
+                            ->content('Click "Create Full Backup" to generate and download the complete archive including database.'),
+                    ]),
+
+                Section::make('Create Files-Only Backup')
+                    ->description('Archive only storage files (no database) into a ZIP.')
+                    ->schema([
+                        Placeholder::make('files_info')
+                            ->content('Click "Create Files Backup" to generate and download file storage only (faster, smaller).'),
                     ]),
 
                 Section::make('Restore Backup')
@@ -69,8 +76,26 @@ class BackupRestore extends Page implements HasForms
 
         $downloadName = $result['download_name'] ?? 'app_backup.tar';
         $url = route('admin.backups.download', ['file' => $downloadName]);
-        Notification::make()->success()->title('Backup created')
-            ->body("Backup archive is ready. Click to download.")
+        Notification::make()->success()->title('Full backup created')
+            ->body("Full backup archive (files + database) is ready. Click to download.")
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('download')->button()->url($url)->openUrlInNewTab(),
+            ])->persistent()->send();
+    }
+
+    public function createFilesBackup(): void
+    {
+        $service = new AppBackupService();
+        $result = $service->createFilesOnlyBackup('manual');
+        if (!($result['success'] ?? false)) {
+            Notification::make()->danger()->title('Files backup failed')->body($result['error'] ?? 'Unknown error')->send();
+            return;
+        }
+
+        $downloadName = $result['download_name'] ?? 'files_backup.tar';
+        $url = route('admin.backups.download', ['file' => $downloadName]);
+        Notification::make()->success()->title('Files backup created')
+            ->body("File storage backup (no database) is ready. Click to download.")
             ->actions([
                 \Filament\Notifications\Actions\Action::make('download')->button()->url($url)->openUrlInNewTab(),
             ])->persistent()->send();

@@ -64,6 +64,54 @@ class AppBackupService
         ];
     }
 
+    public function createFilesOnlyBackup(?string $reason = null): array
+    {
+        $timestamp = now()->format('Y-m-d_H-i-s');
+        $label = $reason ? '_'.$reason : '';
+        $baseName = "files_backup_{$timestamp}{$label}";
+        $zipName = $baseName . '.zip';
+        $zipPath = storage_path('app/'.$this->baseDir.'/'.$zipName);
+        $dirPath = storage_path('app/'.$this->baseDir.'/'.$baseName);
+
+        // Ensure backup root and folder exist
+        if (!Storage::disk($this->disk)->exists($this->baseDir)) {
+            Storage::disk($this->disk)->makeDirectory($this->baseDir);
+        }
+        if (!is_dir($dirPath)) {
+            @mkdir($dirPath, 0775, true);
+        }
+
+        // Build folder structure (files only, no database)
+        $this->copyDirectory(storage_path('app/public'), $dirPath.'/storage/public');
+        $this->copyDirectory(storage_path('app/uploads'), $dirPath.'/storage/uploads');
+        if (file_exists(base_path('.env.example'))) $this->copyIntoDir(base_path('.env.example'), $dirPath.'/config/env.example');
+        if (file_exists(base_path('composer.json'))) $this->copyIntoDir(base_path('composer.json'), $dirPath.'/config/composer.json');
+        if (file_exists(base_path('composer.lock'))) $this->copyIntoDir(base_path('composer.lock'), $dirPath.'/config/composer.lock');
+
+        // If ZipArchive exists, also build a zip for convenience
+        if (class_exists('ZipArchive')) {
+            $zip = new \ZipArchive();
+            if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+                $this->addDirectoryToZip($zip, $dirPath, $baseName);
+                $zip->close();
+                return [
+                    'success' => true,
+                    'download_name' => $zipName,
+                    'zip_path' => $zipPath,
+                    'dir_path' => $dirPath,
+                ];
+            }
+        }
+
+        // Fall back to returning the folder; download route will stream a TAR on-the-fly
+        return [
+            'success' => true,
+            'download_name' => $baseName . '.tar',
+            'zip_path' => null,
+            'dir_path' => $dirPath,
+        ];
+    }
+
     public function restoreFromZip(string $zipPath): array
     {
         if (!file_exists($zipPath)) {

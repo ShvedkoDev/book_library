@@ -66,7 +66,7 @@ class DatabaseBackupService
                 );
 
                 // Execute backup
-                exec($command, $output, $returnCode);
+                @exec($command, $output, $returnCode);
 
                 if ($returnCode !== 0) {
                     throw new \Exception('Backup failed: ' . implode("\n", $output));
@@ -168,7 +168,7 @@ class DatabaseBackupService
                 );
 
                 // Execute restore
-                exec($command, $output, $returnCode);
+                @exec($command, $output, $returnCode);
 
                 if ($returnCode !== 0) {
                     throw new \Exception('Restore failed: ' . implode("\n", $output));
@@ -325,8 +325,31 @@ class DatabaseBackupService
      */
     public function checkAvailability(): array
     {
-        $mysqldump = shell_exec('which mysqldump');
-        $mysql = shell_exec('which mysql');
+        // First check if shell_exec is available
+        if (!function_exists('shell_exec') || !is_callable('shell_exec')) {
+            return [
+                'available' => false,
+                'mysqldump_path' => '',
+                'mysql_path' => '',
+                'message' => 'shell_exec() is disabled on this server. Using pure PHP dump/restore.',
+            ];
+        }
+
+        // Check if shell_exec is in disabled functions
+        $disabled = explode(',', ini_get('disable_functions'));
+        $disabled = array_map('trim', $disabled);
+        if (in_array('shell_exec', $disabled) || in_array('exec', $disabled)) {
+            return [
+                'available' => false,
+                'mysqldump_path' => '',
+                'mysql_path' => '',
+                'message' => 'shell_exec() or exec() is disabled. Using pure PHP dump/restore.',
+            ];
+        }
+
+        // Now it's safe to call shell_exec
+        $mysqldump = @shell_exec('which mysqldump 2>/dev/null');
+        $mysql = @shell_exec('which mysql 2>/dev/null');
 
         $available = !empty($mysqldump) && !empty($mysql);
 
