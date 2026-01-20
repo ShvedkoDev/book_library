@@ -101,6 +101,24 @@ class BackupRestore extends Page implements HasForms
             ])->persistent()->send();
     }
 
+    public function createSplitBackup(): void
+    {
+        $service = new AppBackupService();
+        $result = $service->createSplitBackup('manual');
+        if (!($result['success'] ?? false)) {
+            Notification::make()->danger()->title('Split backup failed')->body($result['error'] ?? 'Unknown error')->send();
+            return;
+        }
+
+        $totalParts = $result['total_parts'] ?? 0;
+        $totalSizeGB = $result['total_size_gb'] ?? 0;
+        $backupDir = $result['backup_dir'] ?? '';
+
+        Notification::make()->success()->title('Split backup created')
+            ->body("Created {$totalParts} archive parts ({$totalSizeGB} GB total). Backup stored in: {$backupDir}")
+            ->persistent()->send();
+    }
+
     public function restore(): void
     {
         $zip = $this->data['backup_zip'] ?? null;
