@@ -373,7 +373,7 @@ class PdfCompressionCheck extends Page implements HasTable
                 }),
 
             Action::make('prepare_all_issues')
-                ->label('Prepare All Problem PDFs Export')
+                ->label('Prepare Other Problem PDFs Export')
                 ->icon('heroicon-o-document-text')
                 ->color('warning')
                 ->action(function () {
@@ -385,7 +385,9 @@ class PdfCompressionCheck extends Page implements HasTable
                             $filePath = storage_path('app/public/' . $file->file_path);
                             $result = self::checkPdfCompression($filePath);
 
-                            if (in_array($result['status'], ['object_streams', 'compressed', 'error'])) {
+                            // Only include PDFs with 'compressed' or 'error' status
+                            // Exclude 'normal' (can add cover) and 'object_streams' (already in separate export)
+                            if (in_array($result['status'], ['compressed', 'error'])) {
                                 // Get file size
                                 $fileSize = file_exists($filePath) ? filesize($filePath) : 0;
                                 
