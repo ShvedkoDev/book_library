@@ -331,6 +331,7 @@ class PdfCompressionCheck extends Page implements HasTable
                 ->color('danger')
                 ->action(function () {
                     $objectStreams = [];
+                    $maxBatchSize = 100 * 1024 * 1024; // 100MB in bytes
 
                     BookFile::where('file_type', 'pdf')->with('book')->chunk(100, function ($files) use (&$objectStreams) {
                         foreach ($files as $file) {
@@ -338,6 +339,9 @@ class PdfCompressionCheck extends Page implements HasTable
                             $result = self::checkPdfCompression($filePath);
 
                             if ($result['status'] === 'object_streams') {
+                                // Get file size
+                                $fileSize = file_exists($filePath) ? filesize($filePath) : 0;
+                                
                                 $objectStreams[] = [
                                     'id' => $file->id,
                                     'book_id' => $file->book_id,
@@ -346,28 +350,25 @@ class PdfCompressionCheck extends Page implements HasTable
                                     'file_path' => $file->file_path,
                                     'pdf_version' => $result['pdf_version'] ?? 'Unknown',
                                     'message' => $result['message'],
+                                    'file_size' => $fileSize,
                                 ];
                             }
                         }
                     });
 
-                    $csv = "ID,Book ID,Book Title,Filename,File Path,PDF Version,Status\n";
-                    foreach ($objectStreams as $item) {
-                        $csv .= sprintf(
-                            '"%s","%s","%s","%s","%s","%s","%s"' . "\n",
-                            $item['id'],
-                            $item['book_id'],
-                            str_replace('"', '""', $item['book_title'] ?? ''),
-                            str_replace('"', '""', $item['filename']),
-                            $item['file_path'],
-                            $item['pdf_version'],
-                            $item['message']
-                        );
+                    // Split into batches based on file size
+                    $batches = $this->splitIntoBatches($objectStreams, $maxBatchSize);
+                    
+                    // If only one batch, return single CSV
+                    if (count($batches) === 1) {
+                        $csv = $this->generateCsvForBatch($batches[0], 'object_streams');
+                        return response()->streamDownload(function () use ($csv) {
+                            echo $csv;
+                        }, 'object-streams-pdfs-' . date('Y-m-d') . '.csv');
                     }
-
-                    return response()->streamDownload(function () use ($csv) {
-                        echo $csv;
-                    }, 'object-streams-pdfs-' . date('Y-m-d') . '.csv');
+                    
+                    // Multiple batches - create zip file
+                    return $this->createBatchedZipDownload($batches, 'object-streams-pdfs', 'object_streams');
                 }),
 
             Action::make('export_all_issues')
@@ -376,6 +377,7 @@ class PdfCompressionCheck extends Page implements HasTable
                 ->color('warning')
                 ->action(function () {
                     $problems = [];
+                    $maxBatchSize = 100 * 1024 * 1024; // 100MB in bytes
 
                     BookFile::where('file_type', 'pdf')->with('book')->chunk(100, function ($files) use (&$problems) {
                         foreach ($files as $file) {
@@ -383,6 +385,9 @@ class PdfCompressionCheck extends Page implements HasTable
                             $result = self::checkPdfCompression($filePath);
 
                             if (in_array($result['status'], ['object_streams', 'compressed', 'error'])) {
+                                // Get file size
+                                $fileSize = file_exists($filePath) ? filesize($filePath) : 0;
+                                
                                 $problems[] = [
                                     'id' => $file->id,
                                     'book_id' => $file->book_id,
@@ -392,30 +397,168 @@ class PdfCompressionCheck extends Page implements HasTable
                                     'status' => $result['status'],
                                     'pdf_version' => $result['pdf_version'] ?? 'Unknown',
                                     'message' => $result['message'],
+                                    'file_size' => $fileSize,
                                 ];
                             }
                         }
                     });
 
-                    $csv = "ID,Book ID,Book Title,Filename,File Path,Issue Type,PDF Version,Details\n";
-                    foreach ($problems as $item) {
-                        $csv .= sprintf(
-                            '"%s","%s","%s","%s","%s","%s","%s","%s"' . "\n",
-                            $item['id'],
-                            $item['book_id'],
-                            str_replace('"', '""', $item['book_title'] ?? ''),
-                            str_replace('"', '""', $item['filename']),
-                            $item['file_path'],
-                            $item['status'],
-                            $item['pdf_version'],
-                            str_replace('"', '""', $item['message'])
-                        );
+                    // Split into batches based on file size
+                    $batches = $this->splitIntoBatches($problems, $maxBatchSize);
+                    
+                    // If only one batch, return single CSV
+                    if (count($batches) === 1) {
+                        $csv = $this->generateCsvForBatch($batches[0], 'all_issues');
+                        return response()->streamDownload(function () use ($csv) {
+                            echo $csv;
+                        }, 'all-problem-pdfs-' . date('Y-m-d') . '.csv');
                     }
-
-                    return response()->streamDownload(function () use ($csv) {
-                        echo $csv;
-                    }, 'all-problem-pdfs-' . date('Y-m-d') . '.csv');
+                    
+                    // Multiple batches - create zip file
+                    return $this->createBatchedZipDownload($batches, 'all-problem-pdfs', 'all_issues');
                 }),
         ];
+    }
+
+    /**
+     * Split items into batches based on file size (max 100MB per batch)
+     */
+    protected function splitIntoBatches(array $items, int $maxBatchSize): array
+    {
+        $batches = [];
+        $currentBatch = [];
+        $currentBatchSize = 0;
+
+        foreach ($items as $item) {
+            $fileSize = $item['file_size'] ?? 0;
+
+            // If adding this item exceeds max size, start new batch
+            if ($currentBatchSize + $fileSize > $maxBatchSize && !empty($currentBatch)) {
+                $batches[] = $currentBatch;
+                $currentBatch = [];
+                $currentBatchSize = 0;
+            }
+
+            $currentBatch[] = $item;
+            $currentBatchSize += $fileSize;
+        }
+
+        // Add last batch if not empty
+        if (!empty($currentBatch)) {
+            $batches[] = $currentBatch;
+        }
+
+        return $batches;
+    }
+
+    /**
+     * Generate CSV content for a batch of items
+     */
+    protected function generateCsvForBatch(array $items, string $type): string
+    {
+        if ($type === 'object_streams') {
+            $csv = "ID,Book ID,Book Title,Filename,File Path,PDF Version,Status,File Size (MB)\n";
+            foreach ($items as $item) {
+                $csv .= sprintf(
+                    '"%s","%s","%s","%s","%s","%s","%s","%s"' . "\n",
+                    $item['id'],
+                    $item['book_id'],
+                    str_replace('"', '""', $item['book_title'] ?? ''),
+                    str_replace('"', '""', $item['filename']),
+                    $item['file_path'],
+                    $item['pdf_version'],
+                    $item['message'],
+                    number_format(($item['file_size'] ?? 0) / 1024 / 1024, 2)
+                );
+            }
+        } else {
+            $csv = "ID,Book ID,Book Title,Filename,File Path,Issue Type,PDF Version,Details,File Size (MB)\n";
+            foreach ($items as $item) {
+                $csv .= sprintf(
+                    '"%s","%s","%s","%s","%s","%s","%s","%s","%s"' . "\n",
+                    $item['id'],
+                    $item['book_id'],
+                    str_replace('"', '""', $item['book_title'] ?? ''),
+                    str_replace('"', '""', $item['filename']),
+                    $item['file_path'],
+                    $item['status'],
+                    $item['pdf_version'],
+                    str_replace('"', '""', $item['message']),
+                    number_format(($item['file_size'] ?? 0) / 1024 / 1024, 2)
+                );
+            }
+        }
+
+        return $csv;
+    }
+
+    /**
+     * Create a ZIP file with multiple CSV batches
+     */
+    protected function createBatchedZipDownload(array $batches, string $prefix, string $type)
+    {
+        $zipFilename = $prefix . '-batched-' . date('Y-m-d') . '.zip';
+        $tempZipPath = storage_path('app/temp/' . $zipFilename);
+
+        // Ensure temp directory exists
+        if (!is_dir(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0775, true);
+        }
+
+        // Create ZIP archive
+        $zip = new \ZipArchive();
+        if ($zip->open($tempZipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            throw new \Exception('Could not create ZIP file');
+        }
+
+        // Add README file explaining the batches
+        $totalFiles = array_sum(array_map('count', $batches));
+        $totalSize = 0;
+        foreach ($batches as $batch) {
+            foreach ($batch as $item) {
+                $totalSize += $item['file_size'] ?? 0;
+            }
+        }
+
+        $readme = "PDF Export Batches - " . date('Y-m-d H:i:s') . "\n";
+        $readme .= str_repeat("=", 60) . "\n\n";
+        $readme .= "This export has been split into " . count($batches) . " batches to avoid timeout issues.\n";
+        $readme .= "Total files: " . $totalFiles . "\n";
+        $readme .= "Total size: " . number_format($totalSize / 1024 / 1024, 2) . " MB\n\n";
+        $readme .= "Each batch contains up to 100MB of PDFs.\n\n";
+        $readme .= "Batch Details:\n";
+        $readme .= str_repeat("-", 60) . "\n";
+
+        foreach ($batches as $index => $batch) {
+            $batchNum = $index + 1;
+            $batchSize = 0;
+            foreach ($batch as $item) {
+                $batchSize += $item['file_size'] ?? 0;
+            }
+            $readme .= sprintf("Batch %d: %d files, %.2f MB\n", $batchNum, count($batch), $batchSize / 1024 / 1024);
+        }
+
+        $readme .= "\nInstructions:\n";
+        $readme .= str_repeat("-", 60) . "\n";
+        $readme .= "1. Open each CSV file to see which PDFs are in that batch\n";
+        $readme .= "2. Download PDFs from your server based on the 'File Path' column\n";
+        $readme .= "3. Convert PDFs using the batch conversion scripts\n";
+        $readme .= "4. Upload converted PDFs back to server\n\n";
+        $readme .= "For detailed instructions, see: BATCH_PDF_CONVERSION_GUIDE.md\n";
+
+        $zip->addFromString('README.txt', $readme);
+
+        // Add each batch as a separate CSV file
+        foreach ($batches as $index => $batch) {
+            $batchNum = $index + 1;
+            $csv = $this->generateCsvForBatch($batch, $type);
+            $csvFilename = sprintf('%s-batch-%02d-of-%02d.csv', $prefix, $batchNum, count($batches));
+            $zip->addFromString($csvFilename, $csv);
+        }
+
+        $zip->close();
+
+        // Return the ZIP file and delete after sending
+        return response()->download($tempZipPath, $zipFilename)->deleteFileAfterSend(true);
     }
 }

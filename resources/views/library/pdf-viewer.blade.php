@@ -185,11 +185,7 @@
             <button id="zoom-in" class="pdf-btn">
                 <i class="fal fa-plus"></i>
             </button>
-            @if($book->access_level === 'full')
-            <a href="{{ route('library.download', ['book' => $book->id, 'file' => $file->id]) }}" class="pdf-btn">
-                <i class="fal fa-download"></i> Download
-            </a>
-            @endif
+            {{-- REMOVED: Download button - downloads are only available from the book detail page --}}
         </div>
     </div>
 

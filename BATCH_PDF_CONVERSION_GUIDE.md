@@ -120,7 +120,10 @@ Then run as normal.
 ### 1. Export Object Streams List
 1. Visit `/admin/pdf-compression-check`
 2. Click **"Export Object Streams List (PDF 1.5+)"**
-3. Save CSV file
+3. Download file (CSV or ZIP depending on size)
+4. **If ZIP file:** Extract and read `README.txt` for batch information
+
+**Note:** The export is now automatically batched into 100MB chunks to prevent timeout errors on shared hosting. See `PDF_EXPORT_BATCHING_GUIDE.md` for details.
 
 ### 2. Download PDFs from Server
 
