@@ -34,26 +34,6 @@ class PdfCompressionCheck extends Page implements HasTable
     protected static string $view = 'filament.pages.pdf-compression-check';
 
     /**
-     * Register custom routes for this page
-     */
-    public static function getRoutes(): array
-    {
-        return [
-            \Illuminate\Support\Facades\Route::get('/download-batch/{type}/{batch}', [static::class, 'handleDownloadBatch'])
-                ->name('.download-batch'),
-        ];
-    }
-
-    /**
-     * Handle download batch request from route
-     */
-    public static function handleDownloadBatch(string $type, int $batch)
-    {
-        $instance = new static();
-        return $instance->downloadBatch($type, $batch);
-    }
-
-    /**
      * Check if a PDF is compressed/readable by FPDI
      */
     public static function checkPdfCompression(string $filePath): array

@@ -189,6 +189,12 @@ Route::middleware(['auth'])->group(function () {
         }
         abort(404, 'Backup file not found');
     })->name('admin.backups.download');
+    
+    // PDF Compression Check - Batch Downloads
+    Route::get('/pdf-compression-check/download-batch/{type}/{batch}', function (string $type, int $batch) {
+        $page = new \App\Filament\Pages\PdfCompressionCheck();
+        return $page->downloadBatch($type, $batch);
+    })->name('admin.pdf-compression-check.download-batch');
 });
 
 require __DIR__.'/auth.php';

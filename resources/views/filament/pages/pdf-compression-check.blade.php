@@ -89,7 +89,7 @@
                                 $fileCount = count($batch);
                             @endphp
                             <a 
-                                href="{{ route('filament.admin.pages.pdf-compression-check.download-batch', [
+                                href="{{ route('admin.pdf-compression-check.download-batch', [
                                     'type' => 'object_streams',
                                     'batch' => $batchNum
                                 ]) }}"
@@ -127,7 +127,7 @@
                                 $fileCount = count($batch);
                             @endphp
                             <a 
-                                href="{{ route('filament.admin.pages.pdf-compression-check.download-batch', [
+                                href="{{ route('admin.pdf-compression-check.download-batch', [
                                     'type' => 'all_issues',
                                     'batch' => $batchNum
                                 ]) }}"
