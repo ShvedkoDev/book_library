@@ -19,6 +19,7 @@ class PdfCompressionCheck extends Page implements HasTable
     use InteractsWithTable;
 
     private const STATS_CACHE_KEY = 'pdf_compression_full_stats';
+    private const BATCHES_CACHE_KEY = 'pdf_export_batches';
 
     protected static ?string $navigationIcon = 'heroicon-o-document-magnifying-glass';
 
@@ -314,7 +315,7 @@ class PdfCompressionCheck extends Page implements HasTable
 
     protected function getHeaderActions(): array
     {
-        return [
+        $actions = [
             Action::make('clear_cache')
                 ->label('Clear Cache & Recheck All')
                 ->icon('heroicon-o-arrow-path')
@@ -325,8 +326,8 @@ class PdfCompressionCheck extends Page implements HasTable
                 })
                 ->requiresConfirmation(),
 
-            Action::make('export_object_streams')
-                ->label('Export Object Streams List (PDF 1.5+)')
+            Action::make('prepare_object_streams')
+                ->label('Prepare Object Streams Export')
                 ->icon('heroicon-o-document-arrow-down')
                 ->color('danger')
                 ->action(function () {
@@ -359,12 +360,20 @@ class PdfCompressionCheck extends Page implements HasTable
                     // Split into batches based on file size
                     $batches = $this->splitIntoBatches($objectStreams, $maxBatchSize);
                     
-                    // Always create ZIP with actual PDF files (not CSV)
-                    return $this->createBatchedZipDownload($batches, 'object-streams-pdfs', 'object_streams');
+                    // Store batches in cache for download buttons
+                    Cache::put(self::BATCHES_CACHE_KEY . '_object_streams', $batches, 3600);
+                    
+                    \Filament\Notifications\Notification::make()
+                        ->title('Export Prepared')
+                        ->body(count($batches) . ' batches ready (' . count($objectStreams) . ' files total). Download buttons will appear below.')
+                        ->success()
+                        ->send();
+                        
+                    $this->dispatch('$refresh');
                 }),
 
-            Action::make('export_all_issues')
-                ->label('Export All Problem PDFs')
+            Action::make('prepare_all_issues')
+                ->label('Prepare All Problem PDFs Export')
                 ->icon('heroicon-o-document-text')
                 ->color('warning')
                 ->action(function () {
@@ -398,10 +407,108 @@ class PdfCompressionCheck extends Page implements HasTable
                     // Split into batches based on file size
                     $batches = $this->splitIntoBatches($problems, $maxBatchSize);
                     
-                    // Always create ZIP with actual PDF files (not CSV)
-                    return $this->createBatchedZipDownload($batches, 'all-problem-pdfs', 'all_issues');
+                    // Store batches in cache for download buttons
+                    Cache::put(self::BATCHES_CACHE_KEY . '_all_issues', $batches, 3600);
+                    
+                    \Filament\Notifications\Notification::make()
+                        ->title('Export Prepared')
+                        ->body(count($batches) . ' batches ready (' . count($problems) . ' files total). Download buttons will appear below.')
+                        ->success()
+                        ->send();
+                        
+                    $this->dispatch('$refresh');
                 }),
         ];
+
+        // Add download buttons for prepared batches
+        $objectStreamBatches = Cache::get(self::BATCHES_CACHE_KEY . '_object_streams', []);
+        if (!empty($objectStreamBatches)) {
+            foreach ($objectStreamBatches as $index => $batch) {
+                $batchNum = $index + 1;
+                $batchSize = 0;
+                foreach ($batch as $item) {
+                    $batchSize += $item['file_size'] ?? 0;
+                }
+                
+                $actions[] = Action::make('download_object_streams_batch_' . $batchNum)
+                    ->label(sprintf('📥 Object Streams Batch %d/%d (%.1f MB)', 
+                        $batchNum, 
+                        count($objectStreamBatches), 
+                        $batchSize / 1024 / 1024
+                    ))
+                    ->color('success')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->action(function () use ($batch, $batchNum, $objectStreamBatches) {
+                        return $this->downloadSingleBatch($batch, $batchNum, count($objectStreamBatches), 'object-streams', 'object_streams');
+                    });
+            }
+        }
+
+        $allIssuesBatches = Cache::get(self::BATCHES_CACHE_KEY . '_all_issues', []);
+        if (!empty($allIssuesBatches)) {
+            foreach ($allIssuesBatches as $index => $batch) {
+                $batchNum = $index + 1;
+                $batchSize = 0;
+                foreach ($batch as $item) {
+                    $batchSize += $item['file_size'] ?? 0;
+                }
+                
+                $actions[] = Action::make('download_all_issues_batch_' . $batchNum)
+                    ->label(sprintf('📥 All Problems Batch %d/%d (%.1f MB)', 
+                        $batchNum, 
+                        count($allIssuesBatches), 
+                        $batchSize / 1024 / 1024
+                    ))
+                    ->color('info')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->action(function () use ($batch, $batchNum, $allIssuesBatches) {
+                        return $this->downloadSingleBatch($batch, $batchNum, count($allIssuesBatches), 'all-problems', 'all_issues');
+                    });
+            }
+        }
+
+        return $actions;
+    }
+
+    /**
+     * Download a single batch as ZIP file
+     */
+    protected function downloadSingleBatch(array $batch, int $batchNum, int $totalBatches, string $prefix, string $type)
+    {
+        $zipFilename = sprintf('%s-batch-%02d-of-%02d-%s.zip', $prefix, $batchNum, $totalBatches, date('Y-m-d'));
+        $tempZipPath = storage_path('app/temp/' . $zipFilename);
+
+        // Ensure temp directory exists
+        if (!is_dir(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0775, true);
+        }
+
+        // Create ZIP archive
+        $zip = new \ZipArchive();
+        if ($zip->open($tempZipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            throw new \Exception('Could not create ZIP file');
+        }
+
+        // Add batch README
+        $batchReadme = $this->generateBatchReadme($batch, $batchNum, $totalBatches);
+        $zip->addFromString('README.txt', $batchReadme);
+
+        // Add CSV file list
+        $csv = $this->generateCsvForBatch($batch, $type);
+        $zip->addFromString('file-list.csv', $csv);
+
+        // Add actual PDF files
+        foreach ($batch as $item) {
+            $filePath = storage_path('app/public/' . $item['file_path']);
+            if (file_exists($filePath)) {
+                $zip->addFile($filePath, basename($item['file_path']));
+            }
+        }
+
+        $zip->close();
+
+        // Return the ZIP file and delete after sending
+        return response()->download($tempZipPath, $zipFilename)->deleteFileAfterSend(true);
     }
 
     /**
@@ -480,166 +587,6 @@ class PdfCompressionCheck extends Page implements HasTable
      * Create a ZIP file with actual PDF files (batched by size)
      * Each batch ZIP contains up to 100MB of PDF files
      */
-    protected function createBatchedZipDownload(array $batches, string $prefix, string $type)
-    {
-        // For multiple batches, create separate ZIP files
-        if (count($batches) > 1) {
-            return $this->createMultipleBatchZips($batches, $prefix, $type);
-        }
-
-        // Single batch - create one ZIP with PDFs
-        $zipFilename = $prefix . '-' . date('Y-m-d') . '.zip';
-        $tempZipPath = storage_path('app/temp/' . $zipFilename);
-
-        // Ensure temp directory exists
-        if (!is_dir(storage_path('app/temp'))) {
-            mkdir(storage_path('app/temp'), 0775, true);
-        }
-
-        // Create ZIP archive
-        $zip = new \ZipArchive();
-        if ($zip->open($tempZipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
-            throw new \Exception('Could not create ZIP file');
-        }
-
-        // Add README
-        $batch = $batches[0];
-        $readme = $this->generateBatchReadme($batch, 1, 1);
-        $zip->addFromString('README.txt', $readme);
-
-        // Add CSV index file
-        $csv = $this->generateCsvForBatch($batch, $type);
-        $zip->addFromString('file-list.csv', $csv);
-
-        // Add actual PDF files
-        foreach ($batch as $item) {
-            $filePath = storage_path('app/public/' . $item['file_path']);
-            if (file_exists($filePath)) {
-                $zip->addFile($filePath, basename($item['file_path']));
-            }
-        }
-
-        $zip->close();
-
-        // Return the ZIP file and delete after sending
-        return response()->download($tempZipPath, $zipFilename)->deleteFileAfterSend(true);
-    }
-
-    /**
-     * Create multiple batch ZIP files and package them in a master ZIP
-     */
-    protected function createMultipleBatchZips(array $batches, string $prefix, string $type)
-    {
-        $masterZipFilename = $prefix . '-all-batches-' . date('Y-m-d') . '.zip';
-        $tempMasterZipPath = storage_path('app/temp/' . $masterZipFilename);
-
-        // Ensure temp directory exists
-        if (!is_dir(storage_path('app/temp'))) {
-            mkdir(storage_path('app/temp'), 0775, true);
-        }
-
-        // Create master ZIP
-        $masterZip = new \ZipArchive();
-        if ($masterZip->open($tempMasterZipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
-            throw new \Exception('Could not create master ZIP file');
-        }
-
-        // Add master README
-        $totalFiles = array_sum(array_map('count', $batches));
-        $totalSize = 0;
-        foreach ($batches as $batch) {
-            foreach ($batch as $item) {
-                $totalSize += $item['file_size'] ?? 0;
-            }
-        }
-
-        $masterReadme = "PDF Export - Multiple Batches\n";
-        $masterReadme .= str_repeat("=", 60) . "\n\n";
-        $masterReadme .= "Export Date: " . date('Y-m-d H:i:s') . "\n";
-        $masterReadme .= "Total Batches: " . count($batches) . "\n";
-        $masterReadme .= "Total Files: " . $totalFiles . "\n";
-        $masterReadme .= "Total Size: " . number_format($totalSize / 1024 / 1024, 2) . " MB\n\n";
-        $masterReadme .= "IMPORTANT: This archive has been split into " . count($batches) . " separate ZIP files\n";
-        $masterReadme .= "to avoid timeout issues on shared hosting (max 100MB per batch).\n\n";
-        $masterReadme .= "Instructions:\n";
-        $masterReadme .= str_repeat("-", 60) . "\n";
-        $masterReadme .= "1. Extract this master ZIP file\n";
-        $masterReadme .= "2. You will find " . count($batches) . " batch ZIP files inside\n";
-        $masterReadme .= "3. Extract each batch ZIP to get the PDF files\n";
-        $masterReadme .= "4. Convert PDFs using: ./convert_pdfs_batch.sh\n";
-        $masterReadme .= "5. Upload converted PDFs back to server\n\n";
-        $masterReadme .= "Batch Details:\n";
-        $masterReadme .= str_repeat("-", 60) . "\n";
-
-        foreach ($batches as $index => $batch) {
-            $batchNum = $index + 1;
-            $batchSize = 0;
-            foreach ($batch as $item) {
-                $batchSize += $item['file_size'] ?? 0;
-            }
-            $masterReadme .= sprintf("batch-%02d.zip: %d files, %.2f MB\n", $batchNum, count($batch), $batchSize / 1024 / 1024);
-        }
-
-        $masterReadme .= "\nConversion Workflow:\n";
-        $masterReadme .= str_repeat("-", 60) . "\n";
-        $masterReadme .= "For each batch:\n";
-        $masterReadme .= "  1. Extract batch-XX.zip to a folder\n";
-        $masterReadme .= "  2. cd into that folder\n";
-        $masterReadme .= "  3. Run: ../convert_pdfs_batch.sh\n";
-        $masterReadme .= "  4. Converted files will be in ./converted/ folder\n";
-        $masterReadme .= "  5. Upload files from ./converted/ back to server\n\n";
-        $masterReadme .= "See: BATCH_PDF_CONVERSION_GUIDE.md for detailed instructions\n";
-
-        $masterZip->addFromString('README.txt', $masterReadme);
-
-        // Create each batch ZIP and add to master
-        $tempBatchZips = [];
-        foreach ($batches as $index => $batch) {
-            $batchNum = $index + 1;
-            $batchZipFilename = sprintf('batch-%02d.zip', $batchNum);
-            $tempBatchZipPath = storage_path('app/temp/' . $batchZipFilename);
-            $tempBatchZips[] = $tempBatchZipPath;
-
-            // Create batch ZIP
-            $batchZip = new \ZipArchive();
-            if ($batchZip->open($tempBatchZipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
-                throw new \Exception('Could not create batch ZIP file');
-            }
-
-            // Add batch README
-            $batchReadme = $this->generateBatchReadme($batch, $batchNum, count($batches));
-            $batchZip->addFromString('README.txt', $batchReadme);
-
-            // Add CSV file list
-            $csv = $this->generateCsvForBatch($batch, $type);
-            $batchZip->addFromString('file-list.csv', $csv);
-
-            // Add actual PDF files
-            foreach ($batch as $item) {
-                $filePath = storage_path('app/public/' . $item['file_path']);
-                if (file_exists($filePath)) {
-                    $batchZip->addFile($filePath, basename($item['file_path']));
-                }
-            }
-
-            $batchZip->close();
-
-            // Add batch ZIP to master ZIP
-            $masterZip->addFile($tempBatchZipPath, $batchZipFilename);
-        }
-
-        $masterZip->close();
-
-        // Clean up temporary batch ZIPs
-        foreach ($tempBatchZips as $tempZip) {
-            if (file_exists($tempZip)) {
-                @unlink($tempZip);
-            }
-        }
-
-        // Return the master ZIP file and delete after sending
-        return response()->download($tempMasterZipPath, $masterZipFilename)->deleteFileAfterSend(true);
-    }
 
     /**
      * Generate README content for a single batch
