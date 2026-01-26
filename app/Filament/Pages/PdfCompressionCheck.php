@@ -359,15 +359,7 @@ class PdfCompressionCheck extends Page implements HasTable
                     // Split into batches based on file size
                     $batches = $this->splitIntoBatches($objectStreams, $maxBatchSize);
                     
-                    // If only one batch, return single CSV
-                    if (count($batches) === 1) {
-                        $csv = $this->generateCsvForBatch($batches[0], 'object_streams');
-                        return response()->streamDownload(function () use ($csv) {
-                            echo $csv;
-                        }, 'object-streams-pdfs-' . date('Y-m-d') . '.csv');
-                    }
-                    
-                    // Multiple batches - create zip file
+                    // Always create ZIP with actual PDF files (not CSV)
                     return $this->createBatchedZipDownload($batches, 'object-streams-pdfs', 'object_streams');
                 }),
 
@@ -406,15 +398,7 @@ class PdfCompressionCheck extends Page implements HasTable
                     // Split into batches based on file size
                     $batches = $this->splitIntoBatches($problems, $maxBatchSize);
                     
-                    // If only one batch, return single CSV
-                    if (count($batches) === 1) {
-                        $csv = $this->generateCsvForBatch($batches[0], 'all_issues');
-                        return response()->streamDownload(function () use ($csv) {
-                            echo $csv;
-                        }, 'all-problem-pdfs-' . date('Y-m-d') . '.csv');
-                    }
-                    
-                    // Multiple batches - create zip file
+                    // Always create ZIP with actual PDF files (not CSV)
                     return $this->createBatchedZipDownload($batches, 'all-problem-pdfs', 'all_issues');
                 }),
         ];
@@ -493,11 +477,18 @@ class PdfCompressionCheck extends Page implements HasTable
     }
 
     /**
-     * Create a ZIP file with multiple CSV batches
+     * Create a ZIP file with actual PDF files (batched by size)
+     * Each batch ZIP contains up to 100MB of PDF files
      */
     protected function createBatchedZipDownload(array $batches, string $prefix, string $type)
     {
-        $zipFilename = $prefix . '-batched-' . date('Y-m-d') . '.zip';
+        // For multiple batches, create separate ZIP files
+        if (count($batches) > 1) {
+            return $this->createMultipleBatchZips($batches, $prefix, $type);
+        }
+
+        // Single batch - create one ZIP with PDFs
+        $zipFilename = $prefix . '-' . date('Y-m-d') . '.zip';
         $tempZipPath = storage_path('app/temp/' . $zipFilename);
 
         // Ensure temp directory exists
@@ -511,7 +502,49 @@ class PdfCompressionCheck extends Page implements HasTable
             throw new \Exception('Could not create ZIP file');
         }
 
-        // Add README file explaining the batches
+        // Add README
+        $batch = $batches[0];
+        $readme = $this->generateBatchReadme($batch, 1, 1);
+        $zip->addFromString('README.txt', $readme);
+
+        // Add CSV index file
+        $csv = $this->generateCsvForBatch($batch, $type);
+        $zip->addFromString('file-list.csv', $csv);
+
+        // Add actual PDF files
+        foreach ($batch as $item) {
+            $filePath = storage_path('app/public/' . $item['file_path']);
+            if (file_exists($filePath)) {
+                $zip->addFile($filePath, basename($item['file_path']));
+            }
+        }
+
+        $zip->close();
+
+        // Return the ZIP file and delete after sending
+        return response()->download($tempZipPath, $zipFilename)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Create multiple batch ZIP files and package them in a master ZIP
+     */
+    protected function createMultipleBatchZips(array $batches, string $prefix, string $type)
+    {
+        $masterZipFilename = $prefix . '-all-batches-' . date('Y-m-d') . '.zip';
+        $tempMasterZipPath = storage_path('app/temp/' . $masterZipFilename);
+
+        // Ensure temp directory exists
+        if (!is_dir(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0775, true);
+        }
+
+        // Create master ZIP
+        $masterZip = new \ZipArchive();
+        if ($masterZip->open($tempMasterZipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            throw new \Exception('Could not create master ZIP file');
+        }
+
+        // Add master README
         $totalFiles = array_sum(array_map('count', $batches));
         $totalSize = 0;
         foreach ($batches as $batch) {
@@ -520,14 +553,23 @@ class PdfCompressionCheck extends Page implements HasTable
             }
         }
 
-        $readme = "PDF Export Batches - " . date('Y-m-d H:i:s') . "\n";
-        $readme .= str_repeat("=", 60) . "\n\n";
-        $readme .= "This export has been split into " . count($batches) . " batches to avoid timeout issues.\n";
-        $readme .= "Total files: " . $totalFiles . "\n";
-        $readme .= "Total size: " . number_format($totalSize / 1024 / 1024, 2) . " MB\n\n";
-        $readme .= "Each batch contains up to 100MB of PDFs.\n\n";
-        $readme .= "Batch Details:\n";
-        $readme .= str_repeat("-", 60) . "\n";
+        $masterReadme = "PDF Export - Multiple Batches\n";
+        $masterReadme .= str_repeat("=", 60) . "\n\n";
+        $masterReadme .= "Export Date: " . date('Y-m-d H:i:s') . "\n";
+        $masterReadme .= "Total Batches: " . count($batches) . "\n";
+        $masterReadme .= "Total Files: " . $totalFiles . "\n";
+        $masterReadme .= "Total Size: " . number_format($totalSize / 1024 / 1024, 2) . " MB\n\n";
+        $masterReadme .= "IMPORTANT: This archive has been split into " . count($batches) . " separate ZIP files\n";
+        $masterReadme .= "to avoid timeout issues on shared hosting (max 100MB per batch).\n\n";
+        $masterReadme .= "Instructions:\n";
+        $masterReadme .= str_repeat("-", 60) . "\n";
+        $masterReadme .= "1. Extract this master ZIP file\n";
+        $masterReadme .= "2. You will find " . count($batches) . " batch ZIP files inside\n";
+        $masterReadme .= "3. Extract each batch ZIP to get the PDF files\n";
+        $masterReadme .= "4. Convert PDFs using: ./convert_pdfs_batch.sh\n";
+        $masterReadme .= "5. Upload converted PDFs back to server\n\n";
+        $masterReadme .= "Batch Details:\n";
+        $masterReadme .= str_repeat("-", 60) . "\n";
 
         foreach ($batches as $index => $batch) {
             $batchNum = $index + 1;
@@ -535,30 +577,104 @@ class PdfCompressionCheck extends Page implements HasTable
             foreach ($batch as $item) {
                 $batchSize += $item['file_size'] ?? 0;
             }
-            $readme .= sprintf("Batch %d: %d files, %.2f MB\n", $batchNum, count($batch), $batchSize / 1024 / 1024);
+            $masterReadme .= sprintf("batch-%02d.zip: %d files, %.2f MB\n", $batchNum, count($batch), $batchSize / 1024 / 1024);
         }
 
-        $readme .= "\nInstructions:\n";
-        $readme .= str_repeat("-", 60) . "\n";
-        $readme .= "1. Open each CSV file to see which PDFs are in that batch\n";
-        $readme .= "2. Download PDFs from your server based on the 'File Path' column\n";
-        $readme .= "3. Convert PDFs using the batch conversion scripts\n";
-        $readme .= "4. Upload converted PDFs back to server\n\n";
-        $readme .= "For detailed instructions, see: BATCH_PDF_CONVERSION_GUIDE.md\n";
+        $masterReadme .= "\nConversion Workflow:\n";
+        $masterReadme .= str_repeat("-", 60) . "\n";
+        $masterReadme .= "For each batch:\n";
+        $masterReadme .= "  1. Extract batch-XX.zip to a folder\n";
+        $masterReadme .= "  2. cd into that folder\n";
+        $masterReadme .= "  3. Run: ../convert_pdfs_batch.sh\n";
+        $masterReadme .= "  4. Converted files will be in ./converted/ folder\n";
+        $masterReadme .= "  5. Upload files from ./converted/ back to server\n\n";
+        $masterReadme .= "See: BATCH_PDF_CONVERSION_GUIDE.md for detailed instructions\n";
 
-        $zip->addFromString('README.txt', $readme);
+        $masterZip->addFromString('README.txt', $masterReadme);
 
-        // Add each batch as a separate CSV file
+        // Create each batch ZIP and add to master
+        $tempBatchZips = [];
         foreach ($batches as $index => $batch) {
             $batchNum = $index + 1;
+            $batchZipFilename = sprintf('batch-%02d.zip', $batchNum);
+            $tempBatchZipPath = storage_path('app/temp/' . $batchZipFilename);
+            $tempBatchZips[] = $tempBatchZipPath;
+
+            // Create batch ZIP
+            $batchZip = new \ZipArchive();
+            if ($batchZip->open($tempBatchZipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+                throw new \Exception('Could not create batch ZIP file');
+            }
+
+            // Add batch README
+            $batchReadme = $this->generateBatchReadme($batch, $batchNum, count($batches));
+            $batchZip->addFromString('README.txt', $batchReadme);
+
+            // Add CSV file list
             $csv = $this->generateCsvForBatch($batch, $type);
-            $csvFilename = sprintf('%s-batch-%02d-of-%02d.csv', $prefix, $batchNum, count($batches));
-            $zip->addFromString($csvFilename, $csv);
+            $batchZip->addFromString('file-list.csv', $csv);
+
+            // Add actual PDF files
+            foreach ($batch as $item) {
+                $filePath = storage_path('app/public/' . $item['file_path']);
+                if (file_exists($filePath)) {
+                    $batchZip->addFile($filePath, basename($item['file_path']));
+                }
+            }
+
+            $batchZip->close();
+
+            // Add batch ZIP to master ZIP
+            $masterZip->addFile($tempBatchZipPath, $batchZipFilename);
         }
 
-        $zip->close();
+        $masterZip->close();
 
-        // Return the ZIP file and delete after sending
-        return response()->download($tempZipPath, $zipFilename)->deleteFileAfterSend(true);
+        // Clean up temporary batch ZIPs
+        foreach ($tempBatchZips as $tempZip) {
+            if (file_exists($tempZip)) {
+                @unlink($tempZip);
+            }
+        }
+
+        // Return the master ZIP file and delete after sending
+        return response()->download($tempMasterZipPath, $masterZipFilename)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Generate README content for a single batch
+     */
+    protected function generateBatchReadme(array $batch, int $batchNum, int $totalBatches): string
+    {
+        $batchSize = 0;
+        foreach ($batch as $item) {
+            $batchSize += $item['file_size'] ?? 0;
+        }
+
+        $readme = "PDF Batch " . $batchNum . " of " . $totalBatches . "\n";
+        $readme .= str_repeat("=", 60) . "\n\n";
+        $readme .= "Batch Number: " . $batchNum . " / " . $totalBatches . "\n";
+        $readme .= "Files in this batch: " . count($batch) . "\n";
+        $readme .= "Total size: " . number_format($batchSize / 1024 / 1024, 2) . " MB\n";
+        $readme .= "Export Date: " . date('Y-m-d H:i:s') . "\n\n";
+        $readme .= "Contents:\n";
+        $readme .= str_repeat("-", 60) . "\n";
+        $readme .= "- README.txt (this file)\n";
+        $readme .= "- file-list.csv (list of all PDFs with metadata)\n";
+        $readme .= "- " . count($batch) . " PDF files ready to convert\n\n";
+        $readme .= "Conversion Instructions:\n";
+        $readme .= str_repeat("-", 60) . "\n";
+        $readme .= "1. Place convert_pdfs_batch.sh in the parent directory\n";
+        $readme .= "2. Open terminal and cd to this batch folder\n";
+        $readme .= "3. Run: chmod +x ../convert_pdfs_batch.sh\n";
+        $readme .= "4. Run: ../convert_pdfs_batch.sh\n";
+        $readme .= "5. Wait for conversion to complete\n";
+        $readme .= "6. Converted files will be in ./converted/ folder\n";
+        $readme .= "7. Upload files from ./converted/ back to server\n\n";
+        $readme .= "Windows Users:\n";
+        $readme .= "Use convert_pdfs_batch.bat instead\n\n";
+        $readme .= "For detailed instructions, see: BATCH_PDF_CONVERSION_GUIDE.md\n";
+
+        return $readme;
     }
 }
