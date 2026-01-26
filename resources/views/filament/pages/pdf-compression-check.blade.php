@@ -21,11 +21,8 @@
                 <div class="flex items-start space-x-2">
                     <x-heroicon-o-exclamation-circle class="w-5 h-5 text-danger-500 flex-shrink-0 mt-0.5"/>
                     <div>
-                        <strong>Object Streams (PDF 1.5+):</strong> Most common issue (~70% of PDFs). These use advanced compression that requires either:
-                        <ul class="list-disc list-inside ml-4 mt-1">
-                            <li>Batch conversion to PDF 1.4 using Ghostscript</li>
-                            <li>Purchasing the paid FPDI PDF-Parser (~€150-200)</li>
-                        </ul>
+                        <strong>Object Streams (PDF 1.5+):</strong> Most common issue (~70% of PDFs).
+
                     </div>
                 </div>
 
@@ -88,7 +85,7 @@
                                 $batchSizeMB = number_format($batchSize / 1024 / 1024, 1);
                                 $fileCount = count($batch);
                             @endphp
-                            <a 
+                            <a
                                 href="{{ route('admin.pdf-compression-check.download-batch', [
                                     'type' => 'object_streams',
                                     'batch' => $batchNum
@@ -126,7 +123,7 @@
                                 $batchSizeMB = number_format($batchSize / 1024 / 1024, 1);
                                 $fileCount = count($batch);
                             @endphp
-                            <a 
+                            <a
                                 href="{{ route('admin.pdf-compression-check.download-batch', [
                                     'type' => 'all_issues',
                                     'batch' => $batchNum

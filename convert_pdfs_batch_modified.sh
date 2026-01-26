@@ -98,7 +98,8 @@ for pdf in "$INPUT_DIR"/*.pdf; do
     # Convert based on method
     if [ "$METHOD" = "qpdf" ]; then
         # QPDF method - fast, minimal size increase
-        if qpdf --object-streams=disable "$pdf" "$OUTPUT_FILE" 2>&1 | tee -a "$LOG_FILE"; then
+        # Modified to include --force-version=1.4 for FPDI compatibility
+        if qpdf --object-streams=disable "$pdf" "$OUTPUT_FILE" --force-version=1.4 2>&1 | tee -a "$LOG_FILE"; then
             SUCCESS=$((SUCCESS + 1))
             SIZE_AFTER=$(stat -f%z "$OUTPUT_FILE" 2>/dev/null || stat -c%s "$OUTPUT_FILE" 2>/dev/null)
             TOTAL_SIZE_AFTER=$((TOTAL_SIZE_AFTER + SIZE_AFTER))
