@@ -34,6 +34,26 @@ class PdfCompressionCheck extends Page implements HasTable
     protected static string $view = 'filament.pages.pdf-compression-check';
 
     /**
+     * Register custom routes for this page
+     */
+    public static function getRoutes(): array
+    {
+        return [
+            \Illuminate\Support\Facades\Route::get('/download-batch/{type}/{batch}', [static::class, 'handleDownloadBatch'])
+                ->name('.download-batch'),
+        ];
+    }
+
+    /**
+     * Handle download batch request from route
+     */
+    public static function handleDownloadBatch(string $type, int $batch)
+    {
+        $instance = new static();
+        return $instance->downloadBatch($type, $batch);
+    }
+
+    /**
      * Check if a PDF is compressed/readable by FPDI
      */
     public static function checkPdfCompression(string $filePath): array
@@ -420,54 +440,32 @@ class PdfCompressionCheck extends Page implements HasTable
                 }),
         ];
 
-        // Add download buttons for prepared batches
-        $objectStreamBatches = Cache::get(self::BATCHES_CACHE_KEY . '_object_streams', []);
-        if (!empty($objectStreamBatches)) {
-            foreach ($objectStreamBatches as $index => $batch) {
-                $batchNum = $index + 1;
-                $batchSize = 0;
-                foreach ($batch as $item) {
-                    $batchSize += $item['file_size'] ?? 0;
-                }
-                
-                $actions[] = Action::make('download_object_streams_batch_' . $batchNum)
-                    ->label(sprintf('📥 Object Streams Batch %d/%d (%.1f MB)', 
-                        $batchNum, 
-                        count($objectStreamBatches), 
-                        $batchSize / 1024 / 1024
-                    ))
-                    ->color('success')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->action(function () use ($batch, $batchNum, $objectStreamBatches) {
-                        return $this->downloadSingleBatch($batch, $batchNum, count($objectStreamBatches), 'object-streams', 'object_streams');
-                    });
-            }
-        }
-
-        $allIssuesBatches = Cache::get(self::BATCHES_CACHE_KEY . '_all_issues', []);
-        if (!empty($allIssuesBatches)) {
-            foreach ($allIssuesBatches as $index => $batch) {
-                $batchNum = $index + 1;
-                $batchSize = 0;
-                foreach ($batch as $item) {
-                    $batchSize += $item['file_size'] ?? 0;
-                }
-                
-                $actions[] = Action::make('download_all_issues_batch_' . $batchNum)
-                    ->label(sprintf('📥 All Problems Batch %d/%d (%.1f MB)', 
-                        $batchNum, 
-                        count($allIssuesBatches), 
-                        $batchSize / 1024 / 1024
-                    ))
-                    ->color('info')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->action(function () use ($batch, $batchNum, $allIssuesBatches) {
-                        return $this->downloadSingleBatch($batch, $batchNum, count($allIssuesBatches), 'all-problems', 'all_issues');
-                    });
-            }
-        }
-
         return $actions;
+    }
+
+    /**
+     * Public method to download a batch (called from view links)
+     */
+    public function downloadBatch(string $type, int $batch)
+    {
+        $cacheKey = self::BATCHES_CACHE_KEY . '_' . $type;
+        $batches = Cache::get($cacheKey, []);
+        
+        if (empty($batches) || !isset($batches[$batch - 1])) {
+            \Filament\Notifications\Notification::make()
+                ->title('Batch Not Found')
+                ->body('This batch has expired or does not exist. Please prepare the export again.')
+                ->danger()
+                ->send();
+                
+            return redirect()->route('filament.admin.pages.pdf-compression-check');
+        }
+        
+        $batchData = $batches[$batch - 1];
+        $totalBatches = count($batches);
+        $prefix = $type === 'object_streams' ? 'object-streams' : 'all-problems';
+        
+        return $this->downloadSingleBatch($batchData, $batch, $totalBatches, $prefix, $type);
     }
 
     /**

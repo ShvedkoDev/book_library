@@ -54,6 +54,112 @@
             </div>
         </x-filament::section>
 
+        {{-- Batch Download Buttons Section --}}
+        @php
+            $objectStreamBatches = Cache::get('pdf_export_batches_object_streams', []);
+            $allIssuesBatches = Cache::get('pdf_export_batches_all_issues', []);
+            $hasBatches = !empty($objectStreamBatches) || !empty($allIssuesBatches);
+        @endphp
+
+        @if($hasBatches)
+        <x-filament::section>
+            <x-slot name="heading">
+                📥 Prepared Batch Downloads
+            </x-slot>
+
+            <x-slot name="description">
+                Click individual batch buttons below to download. Each batch contains up to 100MB of PDFs to avoid timeout errors.
+            </x-slot>
+
+            <div class="space-y-6">
+                @if(!empty($objectStreamBatches))
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                        Object Streams PDFs ({{ count($objectStreamBatches) }} batches)
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        @foreach($objectStreamBatches as $index => $batch)
+                            @php
+                                $batchNum = $index + 1;
+                                $batchSize = 0;
+                                foreach ($batch as $item) {
+                                    $batchSize += $item['file_size'] ?? 0;
+                                }
+                                $batchSizeMB = number_format($batchSize / 1024 / 1024, 1);
+                                $fileCount = count($batch);
+                            @endphp
+                            <a 
+                                href="{{ route('filament.admin.pages.pdf-compression-check.download-batch', [
+                                    'type' => 'object_streams',
+                                    'batch' => $batchNum
+                                ]) }}"
+                                class="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
+                            >
+                                <div class="flex-1">
+                                    <div class="font-semibold text-green-700 dark:text-green-400">
+                                        Batch {{ $batchNum }}/{{ count($objectStreamBatches) }}
+                                    </div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                                        {{ $fileCount }} files • {{ $batchSizeMB }} MB
+                                    </div>
+                                </div>
+                                <x-heroicon-o-arrow-down-tray class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 ml-2"/>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                @if(!empty($allIssuesBatches))
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                        All Problem PDFs ({{ count($allIssuesBatches) }} batches)
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        @foreach($allIssuesBatches as $index => $batch)
+                            @php
+                                $batchNum = $index + 1;
+                                $batchSize = 0;
+                                foreach ($batch as $item) {
+                                    $batchSize += $item['file_size'] ?? 0;
+                                }
+                                $batchSizeMB = number_format($batchSize / 1024 / 1024, 1);
+                                $fileCount = count($batch);
+                            @endphp
+                            <a 
+                                href="{{ route('filament.admin.pages.pdf-compression-check.download-batch', [
+                                    'type' => 'all_issues',
+                                    'batch' => $batchNum
+                                ]) }}"
+                                class="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                            >
+                                <div class="flex-1">
+                                    <div class="font-semibold text-blue-700 dark:text-blue-400">
+                                        Batch {{ $batchNum }}/{{ count($allIssuesBatches) }}
+                                    </div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                                        {{ $fileCount }} files • {{ $batchSizeMB }} MB
+                                    </div>
+                                </div>
+                                <x-heroicon-o-arrow-down-tray class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 ml-2"/>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                <div class="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                    <div class="flex items-start space-x-2">
+                        <x-heroicon-o-information-circle class="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5"/>
+                        <div class="text-sm text-gray-700 dark:text-gray-300">
+                            <strong>Note:</strong> Batch downloads are cached for 1 hour. If buttons disappear, click "Prepare..." button again to regenerate them.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </x-filament::section>
+        @endif
+
         {{-- Statistics Card --}}
         <x-filament::section>
             <x-slot name="heading">
