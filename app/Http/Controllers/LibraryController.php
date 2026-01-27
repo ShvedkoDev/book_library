@@ -525,6 +525,9 @@ class LibraryController extends Controller
 
         $hasRelatedBookSections = $hasAdvancedRelatedBookSections || $hasLegacyRelatedBookSections;
 
+        // Check if PDF cover can be generated
+        $canGenerateCover = $book->canGeneratePdfCover();
+
         return view('library.show', compact(
             'book',
             'averageRating',
@@ -540,7 +543,8 @@ class LibraryController extends Controller
             'relatedByLanguage',
             'relatedByCreator',
             'hasAdvancedRelatedBookSections',
-            'hasRelatedBookSections'
+            'hasRelatedBookSections',
+            'canGenerateCover'
         ));
     }
 

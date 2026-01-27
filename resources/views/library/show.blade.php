@@ -2036,16 +2036,18 @@
                     <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">
                         <i class="fal fa-eye"></i> View PDF
                     </a>
-                    <!-- Download PDF - Blue when logged in, grey when not -->
-                    @auth
-                        <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-primary">
-                            <i class="fal fa-download"></i> Download PDF
-                        </a>
-                    @else
-                        <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to download">
-                            <i class="fal fa-download"></i> Download PDF
-                        </a>
-                    @endauth
+                    <!-- Download PDF - Only show if cover can be generated -->
+                    @if($canGenerateCover)
+                        @auth
+                            <a href="{{ route('library.download', ['book' => $book->id, 'file' => $pdfFile->id]) }}" class="book-action-btn btn-primary">
+                                <i class="fal fa-download"></i> Download PDF
+                            </a>
+                        @else
+                            <a href="{{ route('login', ['redirect' => url()->current()]) }}" class="book-action-btn btn-secondary" title="Please log in to download">
+                                <i class="fal fa-download"></i> Download PDF
+                            </a>
+                        @endauth
+                    @endif
                 @elseif($book->access_level === 'limited' && $pdfFile)
                     <!-- View PDF - Always accessible, always blue -->
                     <a href="{{ route('library.view-pdf', ['book' => $book->id, 'file' => $pdfFile->id]) }}" target="_blank" class="book-action-btn btn-primary">

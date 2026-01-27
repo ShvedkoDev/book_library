@@ -339,6 +339,29 @@ class Book extends Model
         return $this->hasMany(BookFile::class)->where('file_type', 'video');
     }
 
+    /**
+     * Check if PDF cover can be generated for this book
+     */
+    public function canGeneratePdfCover(): bool
+    {
+        $pdfFile = $this->primaryPdf ?: $this->files()->where('file_type', 'pdf')->first();
+        
+        if (!$pdfFile) {
+            return false;
+        }
+
+        $filePath = storage_path('app/public/' . $pdfFile->file_path);
+        
+        if (!file_exists($filePath)) {
+            return false;
+        }
+
+        // Use the existing checkPdfCompression method from PdfCompressionCheck
+        $result = \App\Filament\Pages\PdfCompressionCheck::checkPdfCompression($filePath);
+        
+        return $result['can_add_cover'] ?? false;
+    }
+
     // Relationships - Library References
 
     public function libraryReferences()
