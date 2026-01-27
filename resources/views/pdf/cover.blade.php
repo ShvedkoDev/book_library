@@ -58,11 +58,11 @@
         <td>&nbsp;</td>
     </tr>
 </table>
-<table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+<table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
     <tr>
         <td style="width:48px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr>
                     <td colspan="2" style="font-size:12px; color:#888888; text-transform:uppercase; letter-spacing:1px;"><strong>{{ $publisherLabel }}</strong></td>
                 </tr>
@@ -89,7 +89,7 @@
                         <td style="font-size:14px;">{{ $translated_title }}</td>
                     </tr>
                 @endif
-            </table><br><br><table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            </table><br><br><table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr>
                     <td  style="width: 120px">
                         <table cellspacing="0" border="0">
@@ -104,7 +104,7 @@
                         </table>
                     </td>
                 </tr>
-            </table><br><br><table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            </table><br><br><table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr>
                     <td  style="width: 120px">
                         <table cellspacing="0" border="0">
@@ -128,7 +128,7 @@
     <tr>
         <td style="width:48px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr><td style="font-size:10px; color:#333333;width:120px"><strong>Contributors</strong></td></tr>
             </table>
             <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
@@ -140,10 +140,10 @@
     <tr>
         <td style="width:48px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr><td style="font-size:10px; color:#333333;width:120px"><strong>Edition notes</strong></td></tr>
             </table>
-            <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
+            <table cellpadding="1" cellspacing="0" border="0" style="width:550px;">
                 @foreach($editionNotes as $row)
                     <tr>
                         <td style="font-size:8px; color:#666666; width:120px;">{{ $row['label'] }}:</td>
@@ -157,7 +157,7 @@
     <tr>
         <td style="width:48px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr><td style="font-size:10px; color:#333333;width:120px"><strong>Classification</strong></td></tr>
             </table>
             <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">
@@ -175,7 +175,7 @@
     <tr>
         <td style="width:48px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr>
                     <td style="font-size:10px; color:#333333;width:120px"><strong>Description</strong></td>
                     <td style="font-size:8px; color:#666666; width:400px;">{{ $description }}</td>
@@ -191,7 +191,7 @@
     <tr>
         <td style="width:48px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr>
                     <td style="font-size:10px; color:#333333;width:120px"><strong>Abstract</strong></td>
                     <td style="font-size:8px; color:#666666; width:400px;">{{ $abstract }}</td>
@@ -207,7 +207,7 @@
     <tr>
         <td style="width:48px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr>
                     <td style="font-size:10px; color:#333333;width:120px"><strong>Notes</strong></td>
                     <td style="font-size:8px; color:#666666; width:400px;">{{ $notes }}</td>
@@ -222,7 +222,7 @@
     <tr>
         <td style="width:48px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr>
                     <td style="font-size:10px; color:#333333;width:120px"><strong>Direct download link</strong></td>
                     <td style="font-size:8px; color:#666666; width:400px;"><a href="{{ $downloadUrl }}" style="color:#1d496a;">{{ $downloadUrl }}</a></td>
@@ -236,7 +236,7 @@
     <tr>
         <td style="width:48px;"></td>
         <td>
-            <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:550px;">
                 <tr>
                     <td style="font-size:10px; color:#333333;width:120px"><strong>Source</strong></td>
                     <td style="font-size:8px; color:#666666; width:400px;">{{ $digital_source }}</td>
