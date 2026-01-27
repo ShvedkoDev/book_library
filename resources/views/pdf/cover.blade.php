@@ -17,7 +17,7 @@
         <td style="color:#ffffff; width:435px">
             <table cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td style="width:12px;"></td>
+                    <td style="width:48px;"></td>
                     <td><span style="font-size:9px; color:#888888;">National Vernacular Language Arts (VLA) curriculum</span><br><span style="font-size:20px; color:#1d496a;"><strong>Resource library</strong></span></td>
                 </tr>
             </table>
@@ -45,7 +45,7 @@
         <td style="text-align:left; font-size:8px; color:#888888;">
             <table cellpadding="0" cellspacing="0" border="0" style="width:1000px;">
                 <tr>
-                    <td style="width:12px;"></td>
+                    <td style="width:48px;"></td>
                     <td style="text-align:left;">Document generated on {{ $timestamp }} by {{ $generatedBy }}</td>
                 </tr>
             </table>
@@ -60,7 +60,7 @@
 </table>
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr>
@@ -126,7 +126,7 @@
         </td>
     </tr>
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr><td style="font-size:10px; color:#333333;width:120px"><strong>Contributors</strong></td></tr>
@@ -138,7 +138,7 @@
         </td>
     </tr>
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr><td style="font-size:10px; color:#333333;width:120px"><strong>Edition notes</strong></td></tr>
@@ -155,7 +155,7 @@
         </td>
     </tr>
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr><td style="font-size:10px; color:#333333;width:120px"><strong>Classification</strong></td></tr>
@@ -173,7 +173,7 @@
     </tr>
 @if($description)
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr>
@@ -189,7 +189,7 @@
 @endif
 @if($abstract)
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr>
@@ -205,7 +205,7 @@
 @endif
 @if($notes)
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr>
@@ -220,7 +220,7 @@
     </tr>
 @endif
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr>
@@ -234,7 +234,7 @@
         </td>
     </tr>
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td>
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr>
@@ -248,7 +248,7 @@
         </td>
     </tr>
     <tr>
-        <td style="width:12px;"></td>
+        <td style="width:48px;"></td>
         <td style="text-align: center">
             <table cellpadding="0" cellspacing="0" border="0" style="width:800px;">
                 <tr>

@@ -95,20 +95,15 @@ class PdfCoverService
         // Possible values: 297 (A4), 279.4 (US Letter)
         $pageHeight = 297; // millimeters
 
-        // Define left and right margins (in millimeters)
-        // These margins provide white space on the sides of the cover page
-        $leftMargin = 10;   // 10mm left margin
-        $rightMargin = 10;  // 10mm right margin
-
         // ========================================================================
         // STEP 2: CONFIGURE PDF SETTINGS TO PREVENT AUTO-LAYOUT
         // ========================================================================
 
         // SetMargins(left, top, right)
-        // Sets page margins for content area
+        // Sets page margins to zero to allow full-width/height elements
         // Parameters: left margin, top margin, right margin (all in mm)
-        // Left/right margins create white space on sides
-        $pdf->SetMargins($leftMargin, 0, $rightMargin);
+        // Possible values: 0 (no margin), 10 (10mm margin), 15 (15mm margin)
+        $pdf->SetMargins(0, 0, 0);
 
         // SetAutoPageBreak(auto, margin)
         // Disables automatic page breaks that would create new pages when content exceeds height
@@ -139,57 +134,85 @@ class PdfCoverService
         // Example values: 'P', [210, 297] for A4 portrait
         $pdf->AddPage('P', [$pageWidth, $pageHeight]);
 
-        // Calculate content width (page width minus left and right margins)
-        $contentWidth = $pageWidth - $leftMargin - $rightMargin;
-
         // ========================================================================
-        // LAYER 1: DRAW HEADER GRADIENT BACKGROUND (FULL WIDTH)
+        // LAYER 1: DRAW HEADER GRADIENT BACKGROUND
         // ========================================================================
 
         // drawGradientRect(pdf, x, y, width, height, colorStart, colorEnd)
         // Draws a horizontal linear gradient rectangle at the top of the page
         // Mimics CSS: linear-gradient(15deg, #1d496a, #8198b2)
-        // Header gradient extends full width for visual impact
+        // Parameter 1: PDF object
+        // Parameter 2 (float): X position in mm (0 = left edge)
+        // Parameter 3 (float): Y position in mm (0 = top edge)
+        // Parameter 4 (float): Width in mm (215.9 = full page width)
+        // Parameter 5 (float): Height in mm (14 = header height)
+        // Parameter 6 (array): Start color RGB [R, G, B] where each value is 0-255
+        //                      [29, 73, 106] = #1d496a (dark blue)
+        // Parameter 7 (array): End color RGB [R, G, B]
+        //                      [129, 152, 178] = #8198b2 (light blue)
         $this->drawGradientRect($pdf, 0, 0, $pageWidth, 4, [29, 73, 106], [129, 152, 178]);
 
         // ========================================================================
-        // LAYER 2: DRAW WHITE CONTENT AREA BACKGROUND (RESPECTS MARGINS)
+        // LAYER 2: DRAW WHITE CONTENT AREA BACKGROUND
         // ========================================================================
 
         // SetFillColor(red, green, blue)
         // Sets the fill color for subsequent drawing operations
         // Parameters: RGB values from 0-255
         // [255, 255, 255] = white
+        // Other examples: [0, 0, 0] = black, [255, 0, 0] = red
         $pdf->SetFillColor(255, 255, 255);
 
         // Rect(x, y, width, height, style)
-        // Draws a filled rectangle for the white content area with margins
-        // Starts at left margin, reduced width to account for both margins
-        $pdf->Rect($leftMargin, 4, $contentWidth, 250, 'F');
+        // Draws a filled rectangle for the white content area
+        // Parameter 1 (float): X position = 0mm (left edge)
+        // Parameter 2 (float): Y position = 14mm (below header)
+        // Parameter 3 (float): Width = 215.9mm (full page width)
+        // Parameter 4 (float): Height = 250mm (content area: from 14mm to 264mm)
+        // Parameter 5 (string): 'F' = Filled, 'D' = Draw outline, 'DF' = Both
+        $pdf->Rect(0, 4, $pageWidth, 250, 'F');
 
         // ========================================================================
-        // LAYER 3: DRAW FOOTER GRADIENT BACKGROUND (FULL WIDTH)
+        // LAYER 3: DRAW FOOTER GRADIENT BACKGROUND
         // ========================================================================
 
         // Calculate footer height dynamically to fill remaining space
+        // Formula: total page height (279.4mm) - content end position (264mm)
+        // Result: ~15.4mm footer height
         $footerHeight = $pageHeight - 280;
 
         // drawGradientRect for footer (same gradient as header)
-        // Footer gradient extends full width for visual consistency
+        // Parameter 2: X = 0 (left edge)
+        // Parameter 3: Y = 264mm (where footer starts, just below content)
+        // Parameter 4: Width = 215.9mm (full page width)
+        // Parameter 5: Height = 15.4mm (calculated footer height)
+        // Parameter 6: Start color [29, 73, 106] = #1d496a (dark blue)
+        // Parameter 7: End color [129, 152, 178] = #8198b2 (light blue)
         $this->drawGradientRect($pdf, 0, 270, $pageWidth, $footerHeight, [29, 73, 106], [129, 152, 178]);
 
         // ========================================================================
-        // LAYER 4: DRAW "RESOURCE LIBRARY" BANNER BACKGROUND (RESPECTS MARGINS)
+        // LAYER 4: DRAW "RESOURCE LIBRARY" BANNER BACKGROUND (FULL WIDTH)
         // ========================================================================
 
-        // Draw background for "Resource library" banner with margins
-        // Banner respects left/right margins for content alignment
+        // Draw full-width background for "Resource library" banner
+        // This extends from x=0 (ignoring the 12mm left margin)
+        // Banner position: Y=14mm (after header) + 4mm (spacer) = Y=18mm
+        // Banner height: 20mm (as defined in template)
         // Color: #c9d3e0 = RGB(201, 211, 224)
+
+        // SetFillColor(red, green, blue)
+        // Sets fill color for the banner background
+        // RGB values: [201, 211, 224] = #c9d3e0 (light blue-gray)
         $pdf->SetFillColor(201, 211, 224);
 
         // Rect(x, y, width, height, style)
-        // Draws a filled rectangle for the banner background with margins
-        $pdf->Rect($leftMargin, 4, $contentWidth, 20, 'F');
+        // Draws a filled rectangle for the full-width banner background
+        // Parameter 1 (float): X = 0mm (left edge, ignores page margin)
+        // Parameter 2 (float): Y = 18mm (14mm header + 4mm spacer)
+        // Parameter 3 (float): Width = 210mm (full A4 page width)
+        // Parameter 4 (float): Height = 20mm (banner height from template)
+        // Parameter 5 (string): 'F' = Filled rectangle
+        $pdf->Rect(0, 4, $pageWidth, 20, 'F');
 
         // ========================================================================
         // LAYER 5: RENDER HTML CONTENT WITH BOOK METADATA
