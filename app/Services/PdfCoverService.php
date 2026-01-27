@@ -67,6 +67,9 @@ class PdfCoverService
 
         $pdf->Output($tempPath, 'F');
 
+        return $tempPath;
+    }
+
     /**
      * Add cover page with book metadata
      *
