@@ -575,9 +575,6 @@ class LibraryController extends Controller
      * Stream PDF file directly (used by PDF.js viewer and full access)
      * Note: Book page views are tracked in show() method, not here.
      * This only serves the PDF file for the viewer.
-     * 
-     * IMPORTANT: NO COVER PAGE on preview - only serve original PDF
-     * Cover pages are only added when user downloads the PDF
      */
     public function viewPdf(Book $book, $fileId)
     {
@@ -600,8 +597,39 @@ class LibraryController extends Controller
         // Get file path (use normalized path)
         $filePath = storage_path('app/public/' . $normalizedPath);
 
-        // Stream the original PDF file WITHOUT cover page
-        // Cover pages are only added during download, not preview
+        // Check if PDF cover for preview is enabled
+        $coverEnabled = \App\Models\Setting::get('pdf_cover_preview_enabled', false);
+        
+        if ($coverEnabled) {
+            $coverService = new PdfCoverService();
+            $user = auth()->user();
+
+            try {
+                $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user);
+                
+                // Check if a new PDF was generated (with cover) or if original was returned
+                $isTemporaryFile = $pdfWithCoverPath !== $filePath;
+                
+                $response = response()->file($pdfWithCoverPath, [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($normalizedPath)) . '"',
+                    'Cache-Control' => 'public, max-age=3600',
+                    'X-Content-Type-Options' => 'nosniff',
+                ]);
+                
+                // Clean up temporary file after response is sent
+                if ($isTemporaryFile) {
+                    $response->deleteFileAfterSend(true);
+                }
+                
+                return $response;
+            } catch (\Exception $e) {
+                // Log error and fall back to original file
+                \Log::error('PDF cover generation failed for preview: ' . $e->getMessage());
+            }
+        }
+
+        // Stream the original PDF file (default or fallback)
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="' . ($file->filename ?? basename($normalizedPath)) . '"',
@@ -638,28 +666,35 @@ class LibraryController extends Controller
         $filePath = storage_path('app/public/' . $normalizedPath);
         $filename = $file->filename ?? basename($normalizedPath);
 
-        // For PDF files, add cover page
+        // For PDF files, check if cover page is enabled
         if ($file->file_type === 'pdf') {
-            $coverService = new PdfCoverService();
-            $user = auth()->user();
+            $coverEnabled = \App\Models\Setting::get('pdf_cover_download_enabled', true);
+            
+            if ($coverEnabled) {
+                $coverService = new PdfCoverService();
+                $user = auth()->user();
 
-            try {
-                $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user);
+                try {
+                    $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user);
 
-                // Check if a new PDF was generated (with cover) or if original was returned
-                $isTemporaryFile = $pdfWithCoverPath !== $filePath;
+                    // Check if a new PDF was generated (with cover) or if original was returned
+                    $isTemporaryFile = $pdfWithCoverPath !== $filePath;
 
-                // Download the PDF (merged with cover or original)
-                return response()->download($pdfWithCoverPath, $filename, [
-                    'Content-Type' => 'application/pdf',
-                ])->deleteFileAfterSend($isTemporaryFile); // Only delete temp files, not originals
-            } catch (\Exception $e) {
-                // Log error and fall back to original file
-                \Log::error('PDF cover generation failed for download: ' . $e->getMessage());
-                
-                // Return the original file as fallback
-                return \Storage::disk('public')->download($normalizedPath, $filename);
+                    // Download the PDF (merged with cover or original)
+                    return response()->download($pdfWithCoverPath, $filename, [
+                        'Content-Type' => 'application/pdf',
+                    ])->deleteFileAfterSend($isTemporaryFile); // Only delete temp files, not originals
+                } catch (\Exception $e) {
+                    // Log error and fall back to original file
+                    \Log::error('PDF cover generation failed for download: ' . $e->getMessage());
+                    
+                    // Return the original file as fallback
+                    return \Storage::disk('public')->download($normalizedPath, $filename);
+                }
             }
+            
+            // Cover disabled - return original PDF
+            return \Storage::disk('public')->download($normalizedPath, $filename);
         }
 
         // For non-PDF files, return as-is
