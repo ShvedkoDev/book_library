@@ -40,26 +40,13 @@ class PdfCoverService
         // Add cover page
         $this->addCoverPage($pdf, $book, $user);
 
-        // Try to import the book PDF, decompress if needed
+        // Try to import the book PDF directly. If it fails, we fall back to serving the original.
         try {
             $pageCount = $pdf->setSourceFile($bookPdfPath);
         } catch (\Exception $e) {
-            // If FPDI can't read it due to compression, try to decompress first
-            if (strpos($e->getMessage(), 'compression') !== false) {
-                \Log::info('PDF compression detected, attempting to decompress: ' . basename($bookPdfPath));
-                $decompressedPath = $this->decompressPdf($bookPdfPath);
-                if ($decompressedPath) {
-                    $pageCount = $pdf->setSourceFile($decompressedPath);
-                    $bookPdfPath = $decompressedPath; // Use decompressed version
-                } else {
-                    // Decompression failed (likely exec() disabled on shared hosting)
-                    // Fall back to serving original PDF without cover
-                    \Log::warning('Cannot add cover to compressed PDF - exec() disabled. Serving original PDF: ' . basename($bookPdfPath));
-                    return $bookPdfPath; // Return original PDF path without cover
-                }
-            } else {
-                throw $e;
-            }
+            \Log::error('FPDI failed to read PDF for cover generation: ' . $e->getMessage() . ' - File: ' . basename($bookPdfPath));
+            // Fall back to serving original PDF without cover
+            return $bookPdfPath;
         }
 
         for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -79,119 +66,6 @@ class PdfCoverService
         }
 
         $pdf->Output($tempPath, 'F');
-
-        // Clean up decompressed file if we created one
-        if (isset($decompressedPath) && file_exists($decompressedPath)) {
-            @unlink($decompressedPath);
-        }
-
-        return $tempPath;
-    }
-
-    /**
-     * Check if exec() function is available
-     * Production shared hosting often disables exec() for security
-     */
-    protected function isExecAvailable(): bool
-    {
-        static $available = null;
-
-        if ($available === null) {
-            $available = function_exists('exec') && !in_array('exec', array_map('trim', explode(',', ini_get('disable_functions'))));
-        }
-
-        return $available;
-    }
-
-    /**
-     * Decompress a PDF using Ghostscript or PHP fallback
-     *
-     * @param string $pdfPath
-     * @return string|null Path to decompressed PDF, or null if failed
-     */
-    protected function decompressPdf(string $pdfPath): ?string
-    {
-        // Check if exec() is available (often disabled on shared hosting)
-        if (!$this->isExecAvailable()) {
-            \Log::warning('PDF decompression skipped - exec() function is disabled on this server');
-            return null;
-        }
-
-        $outputPath = storage_path('app/temp/decompressed_' . uniqid() . '.pdf');
-
-        // Ensure temp directory exists
-        if (!is_dir(storage_path('app/temp'))) {
-            mkdir(storage_path('app/temp'), 0775, true);
-        }
-
-        // Method 1: Try Ghostscript (if available on server)
-        if ($this->isGhostscriptAvailable()) {
-            $command = sprintf(
-                'gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=%s %s 2>&1',
-                escapeshellarg($outputPath),
-                escapeshellarg($pdfPath)
-            );
-
-            exec($command, $output, $returnVar);
-
-            if ($returnVar === 0 && file_exists($outputPath)) {
-                \Log::info('PDF decompressed successfully using Ghostscript');
-                return $outputPath;
-            }
-        }
-
-        // Method 2: Try bundled QPDF (pure-PHP deployment safe) or system qpdf
-        if ($qpdfBinary = $this->getQpdfBinary()) {
-            $command = sprintf(
-                'LD_LIBRARY_PATH=%s %s --stream-data=uncompress %s %s 2>&1',
-                escapeshellarg(dirname($qpdfBinary, 2) . '/lib'),
-                escapeshellarg($qpdfBinary),
-                escapeshellarg($pdfPath),
-                escapeshellarg($outputPath)
-            );
-
-            exec($command, $output, $returnVar);
-
-            if ($returnVar === 0 && file_exists($outputPath)) {
-                \Log::info('PDF decompressed successfully using QPDF');
-                return $outputPath;
-            }
-        }
-
-        \Log::warning('PDF decompression failed - no suitable tools available');
-        return null;
-    }
-
-    /**
-     * Check if Ghostscript is available
-     */
-    protected function isGhostscriptAvailable(): bool
-    {
-        if (!$this->isExecAvailable()) {
-            return false;
-        }
-
-        exec('which gs 2>&1', $output, $returnVar);
-        return $returnVar === 0;
-    }
-
-    /**
-     * Get QPDF binary path (bundled first, then system)
-     */
-    protected function getQpdfBinary(): ?string
-    {
-        $bundled = storage_path('tools/qpdf/bin/qpdf');
-        if (is_file($bundled) && is_executable($bundled)) {
-            return $bundled;
-        }
-
-        if (!$this->isExecAvailable()) {
-            return null;
-        }
-
-        exec('which qpdf 2>&1', $output, $returnVar);
-        return $returnVar === 0 ? trim($output[0] ?? '') : null;
-    }
 
     /**
      * Add cover page with book metadata

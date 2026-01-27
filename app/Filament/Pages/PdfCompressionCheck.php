@@ -188,9 +188,7 @@ class PdfCompressionCheck extends Page implements HasTable
                             $result = self::checkPdfCompression($filePath);
                             return $result['pdf_version'] ?? '—';
                         });
-                    })
-                    ->sortable()
-                    ->searchable(),
+                    }),
 
                 TextColumn::make('details')
                     ->label('Details')
