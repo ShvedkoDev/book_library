@@ -605,7 +605,7 @@ class LibraryController extends Controller
             $user = auth()->user();
 
             try {
-                $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user);
+                $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user, $file);
                 
                 // Check if a new PDF was generated (with cover) or if original was returned
                 $isTemporaryFile = $pdfWithCoverPath !== $filePath;
@@ -675,7 +675,7 @@ class LibraryController extends Controller
                 $user = auth()->user();
 
                 try {
-                    $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user);
+                    $pdfWithCoverPath = $coverService->generatePdfWithCover($book, $filePath, $user, $file);
 
                     // Check if a new PDF was generated (with cover) or if original was returned
                     $isTemporaryFile = $pdfWithCoverPath !== $filePath;

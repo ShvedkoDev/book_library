@@ -239,7 +239,7 @@
             <table cellpadding="0" cellspacing="0" border="0" style="width:600px;">
                 <tr>
                     <td style="font-size:10px; color:#333333;width:120px"><strong>Source</strong></td>
-                    <td style="font-size:8px; color:#666666; width:400px;">Digital document added to the VLA resource library. If you have copyright concerns or need a hard copy, please email irei@islandresearch.org for more information.</td>
+                    <td style="font-size:8px; color:#666666; width:400px;">{{ $digital_source }}</td>
                 </tr>
             </table>
             <table cellpadding="1" cellspacing="0" border="0" style="width:500px;">

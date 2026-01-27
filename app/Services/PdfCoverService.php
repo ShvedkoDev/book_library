@@ -21,9 +21,10 @@ class PdfCoverService
      * @param Book $book
      * @param string $bookPdfPath Full path to the book PDF file
      * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
+     * @param \App\Models\BookFile|null $bookFile The book file record (for digital_source)
      * @return string Temporary path to the merged PDF
      */
-    public function generatePdfWithCover(Book $book, string $bookPdfPath, $user = null): string
+    public function generatePdfWithCover(Book $book, string $bookPdfPath, $user = null, $bookFile = null): string
     {
         // Create new PDF document with UTF-8 encoding
         // Parameters: orientation, unit, format, unicode=true, encoding='UTF-8'
@@ -38,7 +39,7 @@ class PdfCoverService
         $pdf->SetFont('freesans', '', 10, '', true);
 
         // Add cover page
-        $this->addCoverPage($pdf, $book, $user);
+        $this->addCoverPage($pdf, $book, $user, $bookFile);
 
         // Try to import the book PDF directly. If it fails, we fall back to serving the original.
         try {
@@ -76,8 +77,9 @@ class PdfCoverService
      * @param Fpdi $pdf
      * @param Book $book
      * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
+     * @param \App\Models\BookFile|null $bookFile
      */
-    protected function addCoverPage(Fpdi $pdf, Book $book, $user = null): void
+    protected function addCoverPage(Fpdi $pdf, Book $book, $user = null, $bookFile = null): void
     {
         // ========================================================================
         // STEP 1: DEFINE PAGE DIMENSIONS
@@ -216,10 +218,10 @@ class PdfCoverService
         // LAYER 5: RENDER HTML CONTENT WITH BOOK METADATA
         // ========================================================================
 
-        // buildCoverData(book, user)
+        // buildCoverData(book, user, bookFile)
         // Prepares data array for the PDF cover template
         // Returns array with: book object, metadata, contributors, timestamps, etc.
-        $data = $this->buildCoverData($book, $user);
+        $data = $this->buildCoverData($book, $user, $bookFile);
 
         // view(template, data)->render()
         // Renders the Blade template 'resources/views/pdf/cover.blade.php' with data
@@ -320,7 +322,7 @@ class PdfCoverService
         $pdf->LinearGradient($x, $y, $width, $height, $colorStart, $colorEnd, [0, 0, 1, 0]);
     }
 
-    protected function buildCoverData(Book $book, $user = null): array
+    protected function buildCoverData(Book $book, $user = null, $bookFile = null): array
     {
         $timestamp = now()->format('m/d/Y g:i a');
         $generatedBy = $user ? $user->name : "Guest";
@@ -402,6 +404,7 @@ class PdfCoverService
             'timestamp' => $timestamp,
             'generatedBy' => $generatedBy,
             'logos' => $logos,
+            'digital_source' => $bookFile ? $bookFile->digital_source : '',
         ];
     }
 
