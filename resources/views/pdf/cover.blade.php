@@ -125,6 +125,7 @@
             </table>
         </td>
     </tr>
+    @if(count($contributors) > 0)
     <tr>
         <td style="width:48px;"></td>
         <td>
@@ -137,6 +138,7 @@
             </table>
         </td>
     </tr>
+    @endif
     <tr>
         <td style="width:48px;"></td>
         <td>

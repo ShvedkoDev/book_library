@@ -362,10 +362,34 @@ class PdfCoverService
 
         $metaSecondRowSecondCol = ['label' => 'Type', 'value' => optional($book->physicalType)->name ?? ($book->typeClassifications->pluck('value')->first() ?? '—')];
 
-        $contributors = [
-            ['label' => 'Author(s)', 'value' => $book->authors->pluck('name')->filter()->join('; ') ?: '—'],
-            ['label' => 'Illustrator(s)', 'value' => $book->illustrators->pluck('name')->filter()->join('; ') ?: '—'],
-        ];
+        // Build contributors array with all creator types
+        // Only include roles that have actual values (not empty)
+        $contributors = [];
+        
+        $authorNames = $book->authors->pluck('name')->filter()->join('; ');
+        if ($authorNames) {
+            $contributors[] = ['label' => 'Author(s)', 'value' => $authorNames];
+        }
+        
+        $illustratorNames = $book->illustrators->pluck('name')->filter()->join('; ');
+        if ($illustratorNames) {
+            $contributors[] = ['label' => 'Illustrator(s)', 'value' => $illustratorNames];
+        }
+        
+        $editorNames = $book->editors->pluck('name')->filter()->join('; ');
+        if ($editorNames) {
+            $contributors[] = ['label' => 'Editor(s)', 'value' => $editorNames];
+        }
+        
+        $translatorNames = $book->translators->pluck('name')->filter()->join('; ');
+        if ($translatorNames) {
+            $contributors[] = ['label' => 'Translator(s)', 'value' => $translatorNames];
+        }
+        
+        $contributorNames = $book->contributors->pluck('name')->filter()->join('; ');
+        if ($contributorNames) {
+            $contributors[] = ['label' => 'Contributor(s)', 'value' => $contributorNames];
+        }
 
         $editionNotes = [
             ['label' => 'Publisher', 'value' => optional($book->publisher)->name ?: '—'],

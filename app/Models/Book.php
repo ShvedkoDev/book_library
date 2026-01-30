@@ -171,6 +171,22 @@ class Book extends Model
             ->orderByPivot('sort_order');
     }
 
+    public function translators()
+    {
+        return $this->belongsToMany(Creator::class, 'book_creators')
+            ->wherePivot('creator_type', 'translator')
+            ->withPivot('sort_order')
+            ->orderByPivot('sort_order');
+    }
+
+    public function contributors()
+    {
+        return $this->belongsToMany(Creator::class, 'book_creators')
+            ->wherePivot('creator_type', 'contributor')
+            ->withPivot('sort_order')
+            ->orderByPivot('sort_order');
+    }
+
     // Relationships - Languages
 
     public function bookLanguages()
