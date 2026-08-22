@@ -20,8 +20,10 @@ class AdminAccessCheck
             return $next($request);
         }
 
-        // Check if user is authenticated and is an admin
-        if (auth()->check() && auth()->user()->is_admin && auth()->user()->is_active) {
+        // Check if user is authenticated and is an active admin.
+        // Note: use isAdmin() (role === 'admin'), NOT an is_admin attribute -
+        // there is no is_admin column, so $user->is_admin is always null.
+        if (auth()->check() && auth()->user()->isAdmin() && auth()->user()->is_active) {
             return $next($request);
         }
 

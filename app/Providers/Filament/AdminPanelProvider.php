@@ -8,6 +8,7 @@ use App\Filament\Widgets\UserActivityWidget;
 use App\Filament\Widgets\DownloadsChartWidget;
 use App\Filament\Widgets\RecentActivityWidget;
 use App\Filament\Widgets\PopularBooksWidget;
+use App\Http\Middleware\SecurityHeaders;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -74,6 +75,9 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,  // Disabled - requires authenticated user
             ])
             ->middleware([
+                // The admin panel registers its own stack and never passes through
+                // the "web" group, so the security headers must be added here too.
+                SecurityHeaders::class,
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,

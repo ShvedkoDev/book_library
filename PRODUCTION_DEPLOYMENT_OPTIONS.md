@@ -8,10 +8,34 @@
 
 ## 📋 STEP 1: Check What's Already Available
 
-1. Upload `public/check_production.php` to your production server
-2. Access it: `https://your-domain.com/check_production.php`
-3. Check the results
-4. **DELETE the file immediately** (security risk)
+> ⚠️ **NEVER** place a diagnostic script in `public/` (or any web-accessible
+> folder). Anything in the web root can be opened by whoever guesses the URL, and an
+> environment check leaks your PHP version, loaded extensions and whether `exec()` /
+> `shell_exec()` / `system()` are enabled — exactly what an attacker needs. Run the
+> checks below over SSH or from your hosting control panel instead.
+
+**Over SSH (preferred):**
+```bash
+php artisan about                   # Laravel env, drivers, cache + PHP version
+php -m                              # loaded PHP extensions (gd, imagick, zip, ...)
+which gs qpdf pdftk convert magick  # system PDF/image tools (prints only what exists)
+composer show | grep -E 'fpdi|tcpdf'   # installed PDF packages
+```
+
+> ⚠️ **Check disabled functions from the WEB SAPI, not the CLI.** On Hostinger the
+> shared-hosting web requests run under LiteSpeed's LSPHP with a *different* `php.ini`
+> and a *different* `disable_functions` list than the SSH `php` binary — and the default
+> SSH `php` is often not even the version hPanel assigns to the site. `exec()` routinely
+> shows as enabled on CLI while being disabled for web requests, so a CLI check answers
+> the wrong question. Read the real list from hPanel (below), or inspect
+> `ini_get('disable_functions')` from within a web request — see
+> `app/Services/DatabaseBackupService.php` for how the app already does this at runtime.
+
+**No SSH access?** Use your hosting control panel:
+- Hostinger **hPanel** → *Websites* → *Advanced* → **PHP Configuration**: the
+  *PHP version* tab, the *PHP extensions* tab, and *PHP options* for the disabled-functions list
+- hPanel also provides a browser terminal under *Advanced* → *SSH Access*
+- Otherwise ask your hosting provider's support which of the tools above are installed
 
 This will tell us what tools are **ALREADY** on your server.
 
@@ -20,7 +44,7 @@ This will tell us what tools are **ALREADY** on your server.
 ## 💡 SOLUTION OPTIONS (Based on what you have)
 
 ### Option A: Production Server Already Has Ghostscript ✅
-**If check shows:** `gs: ✅ AVAILABLE`
+**If `which gs` printed a path** (e.g. `/usr/bin/gs`)
 
 **Action:** NOTHING! Just deploy your code. It will work automatically.
 
@@ -69,7 +93,7 @@ composer require setasign/fpdf-pdf-parser
 ## 🚀 RECOMMENDED APPROACH
 
 ### Phase 1: Deploy & Check (NOW)
-1. Run check script on production
+1. Run the Step 1 environment checks on production (SSH or hosting panel)
 2. Deploy current code with `deploy-quick.sh`
 3. Test a few PDFs from library
 4. Check logs: `tail -f storage/logs/laravel.log | grep PDF`
@@ -148,13 +172,13 @@ if (false && $this->isGhostscriptAvailable()) {
 
 ### Immediate Actions:
 1. ✅ Deploy current code (it's safe, has fallback)
-2. ✅ Upload and run `check_production.php`
+2. ✅ Run the Step 1 environment checks over SSH (or via your hosting panel)
 3. ✅ Test a few PDFs
 4. ✅ Check what percentage get covers
 
 ### Then Report Back:
 Tell me:
-- What does `check_production.php` show?
+- What does `which gs qpdf pdftk convert magick` print, and what PHP version does hPanel report?
 - What percentage of PDFs work?
 - Do you want to ask hosting about Ghostscript?
 - Or should we go with "works for some PDFs" approach?
@@ -192,7 +216,7 @@ Tell me:
 
 ## 🤔 QUESTIONS FOR YOU
 
-1. Can you run the check script and tell me what it shows?
+1. Can you run the Step 1 environment checks and tell me what they show?
 2. Do you have a way to ask your hosting provider about Ghostscript?
 3. What's your preference:
    - A) Try to get Ghostscript installed (free)

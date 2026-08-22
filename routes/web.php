@@ -25,8 +25,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Temporary debug route - check logo paths on production
-Route::get('/debug/pdf-logos', function () {
+// Admin-only diagnostics - reports where the PDF cover logos live on the server.
+// Restricted to authenticated, active admins because it exposes absolute filesystem paths.
+Route::middleware(['auth', \App\Http\Middleware\AdminAccessCheck::class])->get('/debug/pdf-logos', function () {
     $logoFiles = ['NDOE.png', 'iREi-top.png', 'C4GTS.png'];
     $results = [];
 
@@ -164,7 +165,23 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin media download route
     Route::get('/admin/media/download/{file}', function ($file) {
-        $path = base64_decode($file);
+        $path = base64_decode($file, true);
+
+        // The decoded value must be a plain, relative path inside the public disk
+        if ($path === false || $path === '' || str_contains($path, "\0")) {
+            abort(400, 'Invalid file reference');
+        }
+
+        $path = str_replace('\\', '/', $path);
+
+        if (
+            str_starts_with($path, '/')                                  // absolute path
+            || preg_match('/^[a-zA-Z]:/', $path)                         // Windows drive prefix
+            || preg_match('#^[a-zA-Z][a-zA-Z0-9+.\-]*://#', $path)       // stream wrapper, e.g. phar://
+            || in_array('..', explode('/', $path), true)                 // directory traversal
+        ) {
+            abort(400, 'Invalid file reference');
+        }
 
         if (!Storage::disk('public')->exists($path)) {
             abort(404, 'File not found');
@@ -199,8 +216,10 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__.'/auth.php';
 
-// TEMPORARY DEBUG ROUTE - Remove after debugging
-Route::get('/debug-pdf-cover/{book}', function (\App\Models\Book $book) {
+// Admin-only diagnostics - renders the generated PDF cover for a book.
+// Restricted to authenticated, active admins: it is expensive to render and leaks book data.
+// NOTE: must stay defined BEFORE the catch-all '/{slug}' route at the bottom of this file.
+Route::middleware(['auth', \App\Http\Middleware\AdminAccessCheck::class])->get('/debug-pdf-cover/{book}', function (\App\Models\Book $book) {
     $pdfCoverService = new \App\Services\PdfCoverService();
 
     // Use reflection to access the protected buildCoverData method

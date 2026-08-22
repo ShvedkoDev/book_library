@@ -23,3 +23,28 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# Security response headers for STATIC files only.
+#
+# Everything that goes through PHP - the whole site plus the Filament admin
+# panel - gets its headers from App\Http\Middleware\SecurityHeaders, which is
+# registered on both the "web" group (bootstrap/app.php) and the admin panel
+# stack (AdminPanelProvider). This block is deliberately scoped by file
+# extension so it only touches assets the web server serves straight off disk
+# and never a PHP response: mod_headers merges err_headers_out into headers_out
+# by concatenation, so an unscoped "Header always set" would emit a SECOND copy
+# of any header the middleware had already set.
+#
+# Strict-Transport-Security is never set here - it stays opt-in via
+# SECURITY_HSTS_ENABLED, see config/security.php for the TLS-inspection
+# trade-off. Content-Security-Policy is left to the middleware.
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|mjs|map|json|xml|txt|svg|png|jpe?g|gif|webp|avif|ico|woff2?|ttf|otf|eot|pdf)$">
+        Header always set X-Content-Type-Options "nosniff"
+        Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    </FilesMatch>
+
+    # Do not advertise the PHP version, on any response.
+    Header unset X-Powered-By
+    Header always unset X-Powered-By
+</IfModule>
